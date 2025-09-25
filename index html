@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Expert HVAC Services in Livonia & Metro Detroit | Mechanical Temp</title>
+    <meta name="description" content="Mechanical Temp offers expert residential and commercial HVAC services in Livonia, MI and Metro Detroit. 24/7 emergency repair, installation, and maintenance for furnaces & AC.">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "HVACBusiness",
+      "name": "Mechanical Temp",
+      "image": "https://i.imgur.com/YJvJw7V.png",
+      "@id": "https://www.mechanicaltemp.com/",
+      "url": "https://www.mechanicaltemp.com/",
+      "telephone": "+1-734-555-1234",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "33449 W 7 Mile Rd",
+        "addressLocality": "Livonia",
+        "addressRegion": "MI",
+        "postalCode": "48152",
+        "addressCountry": "US"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 42.428580,
+        "longitude": -83.367200
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+        "opens": "00:00",
+        "closes": "23:59"
+      },
+      "sameAs": [
+        "https://www.facebook.com/your-profile",
+        "https://www.yelp.com/biz/your-biz-name"
+      ],
+      "areaServed": {
+        "@type": "GeoCircle",
+        "geoMidpoint": {
+          "@type": "GeoCoordinates",
+          "latitude": "42.428580",
+          "longitude": "-83.367200"
+        },
+        "geoRadius": "40233"
+      } 
+    }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Lighter background for the body */
+        }
+        .hero-section-container {
+            background-image: url('https://images.squarespace-cdn.com/content/v1/64b8ce7983e67906ccb6616f/ad1eb7df-a94c-4108-a72b-9868d33fb7cf/truck.jpg?format=2500w');
+            background-size: cover;
+            background-position: center;
+        }
+        .hero-overlay {
+            background-color: rgba(12, 26, 62, 0.85);
+        }
+        /* Style for the offer card price */
+        .offer-price {
+            background-color: #eff6ff;
+            color: #1d4ed8;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- HEADER & NAVIGATION -->
+    <header class="bg-gray-900/50 absolute top-0 left-0 w-full z-10 p-4">
+        <nav class="container mx-auto flex justify-between items-center text-white">
+            <a href="/" class="block">
+                <img src="https://i.imgur.com/YJvJw7V.png" alt="Mechanical Temp Logo" class="h-12 w-auto">
+            </a>
+            <ul class="hidden md:flex space-x-6">
+                <li><a href="#services" class="hover:text-sky-400">Services</a></li>
+                <li><a href="service-plan.html" class="hover:text-sky-400">Service Plan</a></li>
+                <li><a href="#offers" class="hover:text-sky-400">Offers</a></li>
+                <li><a href="#about" class="hover:text-sky-400">About Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="min-h-screen hero-section-container">
+        <div class="min-h-screen hero-overlay flex items-center justify-center text-center p-6 text-white">
+            <div>
+                <h1 class="text-4xl md:text-6xl font-black uppercase tracking-wider mb-4">
+                    Premier HVAC Services in Livonia & Metro Detroit
+                </h1>
+                <p class="max-w-3xl mx-auto text-lg md:text-xl text-slate-300 mb-8">
+                    Your trusted local experts for <strong>furnace and air conditioner repair, installation, and maintenance</strong>. We provide reliable residential and commercial solutions to keep you comfortable year-round.
+                </p>
+                <a href="https://www.mechanicaltemp.com/schedule-service" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-8 rounded-lg text-lg inline-block transition-transform hover:scale-105">
+                    Get a Free Estimate
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section id="services" class="bg-white py-20 px-6">
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-2">Our Core HVAC Services</h2>
+            <p class="max-w-2xl mx-auto text-slate-600 mb-12">From emergency repairs to new system installations, we have you covered.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Service 1: Heating -->
+                <div class="bg-slate-50 p-8 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                    <h3 class="text-2xl font-bold mb-3">Heating & Furnace Services</h3>
+                    <p class="text-slate-600 mb-4">Expert furnace repair, maintenance, and installation to keep your Michigan home warm all winter.</p>
+                    <a href="/furnace-services" class="text-sky-600 font-bold hover:underline">Learn More →</a>
+                </div>
+                <!-- Service 2: Cooling -->
+                <div class="bg-slate-50 p-8 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                    <h3 class="text-2xl font-bold mb-3">Air Conditioning Services</h3>
+                    <p class="text-slate-600 mb-4">Fast AC repair, tune-ups, and new air conditioner installation for total summer comfort.</p>
+                    <a href="/ac-services" class="text-sky-600 font-bold hover:underline">Learn More →</a>
+                </div>
+                <!-- Service 3: Commercial -->
+                <div class="bg-slate-50 p-8 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                    <h3 class="text-2xl font-bold mb-3">Commercial HVAC</h3>
+                    <p class="text-slate-600 mb-4">Reliable and efficient HVAC solutions for businesses, offices, and commercial properties in Metro Detroit.</p>
+                    <a href="/commercial-hvac" class="text-sky-600 font-bold hover:underline">Learn More →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY CHOOSE US SECTION -->
+    <section id="about" class="bg-gray-800 py-20 px-6 text-white">
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12">The Mechanical Temp Difference</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <div>
+                    <h3 class="text-xl font-bold text-sky-400 mb-2">24/7 Emergency Service</h3>
+                    <p class="text-slate-300">HVAC emergencies don't wait. We're here for you day or night for urgent furnace and AC repairs.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-sky-400 mb-2">Certified Technicians</h3>
+                    <p class="text-slate-300">Our team is licensed, insured, and highly trained to service all major brands and models.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-sky-400 mb-2">Local & Trusted</h3>
+                    <p class="text-slate-300">As a Livonia-based company, we're proud to serve our neighbors throughout Metro Detroit with honesty and integrity.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- NEW "TESTIMONIALS" SECTION                                          -->
+    <!-- This section builds trust and provides social proof.                -->
+    <!-- "TESTIMONIALS" SECTION -->
+    <section id="testimonials" class="bg-white py-20 px-6">
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-2">What Our Customers Are Saying</h2>
+            <p class="max-w-2xl mx-auto text-slate-600 mb-12">We're proud to have earned the trust of homeowners and businesses across Metro Detroit.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                
+                <!-- Testimonial 1 (From Image) -->
+                <div class="bg-slate-50 p-8 rounded-lg shadow-md flex flex-col text-left">
+                    <div class="flex mb-4">
+                        <!-- 5 Star Rating -->
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                    </div>
+                    <p class="text-slate-600 italic flex-grow">"Mechanical Temp is a lifesaver! Our AC went out during the hottest week of the year. They were at our house within 2 hours of our call and had it fixed the same day. Professional, fast, and fair pricing. Highly recommend!"</p>
+                    <p class="font-bold text-gray-800 mt-4">- Sarah P., Livonia, MI</p>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="bg-slate-50 p-8 rounded-lg shadow-md flex flex-col text-left">
+                    <div class="flex mb-4">
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                    </div>
+                    <p class="text-slate-600 italic flex-grow">"Our furnace went out in the middle of a January night. We called their 24/7 number and were so relieved when someone answered. The technician was friendly, diagnosed the issue quickly, and got our heat back on. Can't thank them enough!"</p>
+                    <p class="font-bold text-gray-800 mt-4">- Mike D., Novi, MI</p>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="bg-slate-50 p-8 rounded-lg shadow-md flex flex-col text-left">
+                    <div class="flex mb-4">
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                    </div>
+                    <p class="text-slate-600 italic flex-grow">"We needed a full HVAC system replacement for our older home. The team at Mechanical Temp walked us through all our options and helped us find an energy-efficient unit that fit our budget. The installation was seamless. Great experience."</p>
+                    <p class="font-bold text-gray-800 mt-4">- David R., Canton, MI</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- NEW "SERVICE PLAN" CTA SECTION                                      -->
+    <!-- This introduces the plan and links to the dedicated landing page.   -->
+    <!-- =================================================================== -->
+    <section id="service-plan" class="bg-gray-800 py-20 px-6 text-white">
+        <div class="container mx-auto text-center max-w-4xl">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Total Peace of Mind is Here</h2>
+            <p class="text-sky-400 font-semibold text-lg uppercase tracking-wider mb-4">Introducing The Mechanical Temp Service Plan</p>
+            <p class="max-w-2xl mx-auto text-slate-300 mb-8 text-lg">
+                For just $55/month, you can stop worrying about unexpected HVAC breakdowns. Our comprehensive plan covers preventative maintenance, basic parts, and gives you priority service when you need it most.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+                <div class="bg-gray-700 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold mb-2">Priority Service</h3>
+                    <p class="text-slate-400">Jump to the front of the line with guaranteed faster service calls.</p>
+                </div>
+                <div class="bg-gray-700 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold mb-2">Save Money</h3>
+                    <p class="text-slate-400">Includes two annual tune-ups and covers many common parts at no extra cost.</p>
+                </div>
+                <div class="bg-gray-700 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold mb-2">No Worries</h3>
+                    <p class="text-slate-400">Enjoy year-round comfort knowing your system is professionally maintained.</p>
+                </div>
+            </div>
+            <a href="service-plan.html" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-4 px-10 rounded-lg text-xl inline-block transition-transform hover:scale-105">
+                Learn More & Sign Up
+            </a>
+        </div>
+    </section>
+
+    <!-- "CURRENT OFFERS" SECTION -->
+    <section id="offers" class="bg-slate-50 py-20 px-6">
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-2">Current HVAC Offers</h2>
+            <p class="max-w-2xl mx-auto text-slate-600 mb-12">Save on your next service. Mention the offer when you call to book!</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                
+                <!-- Offer 1: AC Tune-Up -->
+                <div class="bg-white rounded-lg shadow-lg border-2 border-sky-500 text-center p-8 flex flex-col">
+                    <div class="w-16 h-16 mx-auto bg-sky-100 rounded-full flex items-center justify-center mb-4">
+                        <!-- SVG Icon for Air Conditioning -->
+                        <svg class="w-8 h-8 text-sky-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800">AC Tune-Up Special</h3>
+                    <p class="text-5xl font-black text-sky-600 my-3">$99</p>
+                    <p class="text-slate-600 flex-grow">Get your air conditioner ready for summer with our comprehensive 21-point inspection and tune-up.</p>
+                    <a href="https://www.mechanicaltemp.com/schedule-service" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-6 rounded-lg text-lg inline-block mt-6 transition-transform hover:scale-105">
+                        Schedule My Tune-Up
+                    </a>
+                </div>
+
+                <!-- Offer 2: New System Discount -->
+                <div class="bg-white rounded-lg shadow-lg border-2 border-orange-500 text-center p-8 flex flex-col">
+                    <div class="w-16 h-16 mx-auto bg-orange-100 rounded-full flex items-center justify-center mb-4">
+                        <!-- SVG Icon for Heating -->
+                        <svg class="w-8 h-8 text-orange-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.362-1.44m3.362-2.946V7.5a2.25 2.25 0 00-2.25-2.25H12A2.25 2.25 0 009.75 7.5v1.138M15.362 5.214a2.252 2.252 0 01-1.232 2.146l-2.25.75a2.25 2.25 0 01-2.332 0l-2.25-.75a2.252 2.252 0 01-1.232-2.146V6.75A2.25 2.25 0 016.75 4.5h.75a2.25 2.25 0 012.25 2.25v.375m3.362 2.946a2.25 2.25 0 012.25-2.25h.75a2.25 2.25 0 012.25 2.25v.375m-3.362 2.946a2.25 2.25 0 01-2.25.75h-1.5a2.25 2.25 0 01-2.25-.75" /></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800">New System Discount</h3>
+                    <p class="text-5xl font-black text-orange-600 my-3">$500 OFF</p>
+                    <p class="text-slate-600 flex-grow">Save big on a new high-efficiency furnace or air conditioner installation. Free estimate included.</p>
+                     <a href="https://www.mechanicaltemp.com/schedule-service" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg text-lg inline-block mt-6 transition-transform hover:scale-105">
+                        Get My Free Estimate
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICE AREA SECTION -->
+    <section id="locations" class="bg-white py-20 px-6">
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Proudly Serving Metro Detroit</h2>
+            <p class="max-w-2xl mx-auto text-slate-600 mb-8">We provide fast and reliable heating and cooling services to the following communities and more:</p>
+            <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 max-w-3xl mx-auto font-medium text-slate-700">
+                <span>Livonia</span> •
+                <span>Novi</span> •
+                <span>Canton</span> •
+                <span>Plymouth</span> •
+                <span>Northville</span> •
+                <span>Westland</span> •
+                <span>Farmington Hills</span> •
+                <span>Redford</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 pt-16 pb-8 px-6 text-white">
+        <div class="container mx-auto text-center text-slate-400">
+            <h3 class="text-2xl font-bold text-white mb-4">Ready for Total Comfort?</h3>
+            <p class="mb-6">Contact Mechanical Temp today for a free, no-obligation estimate on your HVAC needs.</p>
+            <a href="https://www.mechanicaltemp.com/schedule-service" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-8 rounded-lg text-lg inline-block transition-transform hover:scale-105 mb-10">
+                Schedule Service Now
+            </a>
+            <div class="border-t border-slate-700 pt-6">
+                <p class="font-bold text-white">Mechanical Temp</p>
+                <p>33449 W 7 Mile Rd, Livonia, MI 48152</p>
+                <p>Call Us: (734) 555-1234</p>
+                <p class="mt-4 text-sm">&copy; 2025 Mechanical Temp. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
+
+
+
+
+
+
