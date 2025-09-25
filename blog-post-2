@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO METADATA: Focused on the blog post topic -->
+    <title>3 Tips to Get Your AC Ready for Summer | Mechanical Temp</title>
+    <meta name="description" content="Prepare your air conditioner for the Michigan summer heat. Follow these essential spring AC maintenance tips to ensure efficiency and prevent breakdowns.">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .post-header {
+             background: linear-gradient(rgba(12, 26, 62, 0.8), rgba(12, 26, 62, 0.8)), url('https://images.unsplash.com/photo-1593954286992-53c07335552b?q=80&w=2070&auto=format&fit=crop') center center / cover no-repeat;
+        }
+        /* Styles for the blog content area */
+        .blog-content h2 {
+            font-size: 1.875rem; /* text-3xl */
+            font-weight: 700; /* font-bold */
+            margin-top: 2.5rem; /* mt-10 */
+            margin-bottom: 1rem; /* mb-4 */
+        }
+        .blog-content p {
+            font-size: 1.125rem; /* text-lg */
+            line-height: 1.75; /* leading-relaxed */
+            margin-bottom: 1.5rem; /* mb-6 */
+            color: #475569; /* slate-600 */
+        }
+        .blog-content a {
+            color: #0ea5e9; /* sky-500 */
+            text-decoration: underline;
+        }
+        .blog-content strong {
+            font-weight: 700; /* font-bold */
+            color: #1e293b; /* slate-800 */
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- HEADER & NAVIGATION -->
+    <header class="bg-gray-900/80 sticky top-0 z-20 p-4">
+        <nav class="container mx-auto flex justify-between items-center text-white">
+            <a href="index.html" class="block">
+                <img src="https://i.imgur.com/YJvJw7V.png" alt="Mechanical Temp Logo" class="h-12 w-auto">
+            </a>
+            <ul class="hidden md:flex space-x-6">
+                <li><a href="index.html#services" class="hover:text-sky-400">Services</a></li>
+                <li><a href="service-plan.html" class="hover:text-sky-400">Service Plan</a></li>
+                <li><a href="index.html#offers" class="hover:text-sky-400">Offers</a></li>
+                <li><a href="index.html#about" class="hover:text-sky-400">About Us</a></li>
+                <li><a href="blog.html" class="hover:text-sky-400">Blog</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- BLOG POST HEADER -->
+        <section class="post-header text-white py-20 px-6">
+            <div class="container mx-auto text-center">
+                <h1 class="text-4xl md:text-5xl font-black mb-4">
+                    3 Early-Spring Tips to Get Your AC Ready for Summer
+                </h1>
+                <p class="max-w-3xl mx-auto text-lg text-slate-300">
+                    Don't wait for the first heatwave. A little preparation now ensures a cool and comfortable home all season long.
+                </p>
+            </div>
+        </section>
+
+        <!-- BLOG CONTENT SECTION -->
+        <section class="bg-white py-20 px-6">
+            <div class="container mx-auto max-w-3xl">
+                <div class="blog-content">
+                    <p class="text-slate-500 text-lg mb-8">April 10, 2026 • AC Maintenance</p>
+                    <p class="text-xl text-slate-700">As the last traces of Michigan's winter melt away, it’s easy to forget about the summer heat that’s just around the corner. But early spring is the perfect time to prepare your air conditioning system. Taking a few simple steps now can prevent a stressful and expensive breakdown during the first real heatwave.</p>
+
+                    <p>Here are three essential tips to get your AC unit in top shape for the cooling season.</p>
+
+                    <h2>1. Clean Around Your Outdoor Unit</h2>
+                    <p>Your outdoor AC unit, the condenser, needs to breathe. Over the fall and winter, leaves, dirt, twigs, and other debris can accumulate around and on top of it, restricting airflow. This forces the system to work harder, reducing efficiency and increasing the risk of overheating. Take a few minutes to:
+                        <br>• Clear away any leaves, grass clippings, or branches in at least a two-foot radius around the unit.
+                        <br>• Gently hose down the exterior fins with a garden hose (not a pressure washer) to remove packed-in dirt and dust.
+                    </p>
+                    
+                    
+                    <img src="https://i.imgur.com/vHqB0yS.jpeg" alt="A clean and well-maintained outdoor AC unit ready for summer." class="rounded-lg shadow-lg my-8">
+
+                    <h2>2. Change the Indoor Air Filter</h2>
+                    <p>This is a familiar tip for a reason—it’s crucial for both heating and cooling. A clogged air filter is the number one cause of HVAC system failure. It restricts airflow, making your AC struggle to circulate cool air through your home. This not only drives up your energy bills but also puts unnecessary strain on the system's components. Start the season fresh with a <strong>new, clean filter</strong>.</p>
+
+                    <h2>3. Schedule a Professional Tune-Up</h2>
+                    <p>While the first two steps are great DIY tasks, nothing replaces a professional inspection. An annual AC tune-up is the best way to ensure your system is running safely, efficiently, and reliably. During a maintenance visit, a certified technician will:
+                        <br>• Check for proper refrigerant levels.
+                        <br>• Clean the indoor evaporator and outdoor condenser coils.
+                        <br>• Inspect and tighten all electrical connections.
+                        <br>• Lubricate moving parts to reduce friction.
+                        <br>• Ensure the thermostat is calibrated correctly.
+                    </p>
+                    <p>This preventative service catches small issues before they become major problems, saving you from an inconvenient mid-summer breakdown.</p>
+                    
+                    <h2>Beat the Rush and Be Ready for Summer</h2>
+                    <p>By preparing your AC in the spring, you ensure your family’s comfort and help your system run more efficiently all summer long. The team at <strong>Mechanical Temp</strong> is here to provide expert <a href="#">AC maintenance and repair services</a>. <a href="#" onclick="openScheduler(); return false;">Schedule your professional AC tune-up today</a> and relax knowing you're ready for the heat.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER and MODAL -->
+    <footer class="bg-gray-900 pt-16 pb-8 px-6 text-white">
+        <!-- Footer content from previous files... -->
+    </footer>
+    <div id="scheduler-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4 hidden">
+       <!-- Modal content from previous files... -->
+    </div>
+    <script>
+        // Scheduler script from previous files...
+    </script>
+
+</body>
+</html>
