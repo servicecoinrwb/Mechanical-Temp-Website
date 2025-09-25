@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>Expert HVAC Services in Livonia & Metro Detroit | Mechanical Temp</title>
-    <meta name="description" content="Mechanical Temp offers expert residential and commercial HVAC services in Livonia, MI and Metro Detroit. 24/7 emergency repair, installation, and maintenance for furnaces & AC.">
+    <title>Expert HVAC Services in Southfield & Metro Detroit | Mechanical Temp</title>
+    <meta name="description" content="Mechanical Temp offers expert residential and commercial HVAC services in Southfield, MI and Metro Detroit. 24/7 emergency repair, installation, and maintenance for furnaces & AC.">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,20 +20,20 @@
       "image": "https://i.imgur.com/YJvJw7V.png",
       "@id": "https://www.mechanicaltemp.com/",
       "url": "https://www.mechanicaltemp.com/",
-      "telephone": "+1-734-555-1234",
+      "telephone": "+1-313-282-4758",
       "priceRange": "$$",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "33449 W 7 Mile Rd",
-        "addressLocality": "Livonia",
+        "streetAddress": "23093 Telegraph Rd",
+        "addressLocality": "Southfield",
         "addressRegion": "MI",
-        "postalCode": "48152",
+        "postalCode": "48033",
         "addressCountry": "US"
       },
       "geo": {
         "@type": "GeoCoordinates",
-        "latitude": 42.428580,
-        "longitude": -83.367200
+        "latitude": 42.4982,
+        "longitude": -83.2882
       },
       "openingHoursSpecification": {
         "@type": "OpeningHoursSpecification",
@@ -49,8 +49,8 @@
         "@type": "GeoCircle",
         "geoMidpoint": {
           "@type": "GeoCoordinates",
-          "latitude": "42.428580",
-          "longitude": "-83.367200"
+          "latitude": "42.4982",
+          "longitude": "-83.2882"
         },
         "geoRadius": "40233"
       } 
@@ -113,7 +113,7 @@
         <div class="min-h-screen hero-overlay flex items-center justify-center text-center p-6 text-white">
             <div>
                 <h1 class="text-4xl md:text-6xl font-black uppercase tracking-wider mb-4">
-                    Premier HVAC Services in Livonia & Metro Detroit
+                    Premier HVAC Services in Southfield & Metro Detroit
                 </h1>
                 <p class="max-w-3xl mx-auto text-lg md:text-xl text-slate-300 mb-8">
                     Your trusted local experts for <strong>furnace and air conditioner repair, installation, and maintenance</strong>. We provide reliable residential and commercial solutions to keep you comfortable year-round.
@@ -168,7 +168,7 @@
                 </div>
                 <div>
                     <h3 class="text-xl font-bold text-sky-400 mb-2">Local & Trusted</h3>
-                    <p class="text-slate-300">As a Livonia-based company, we're proud to serve our neighbors throughout Metro Detroit with honesty and integrity.</p>
+                    <p class="text-slate-300">As a Southfield-based company, we're proud to serve our neighbors throughout Metro Detroit with honesty and integrity.</p>
                 </div>
             </div>
         </div>
@@ -275,7 +275,7 @@
             <h2 class="text-3xl md:text-4xl font-bold mb-4">Proudly Serving Metro Detroit</h2>
             <p class="max-w-2xl mx-auto text-slate-600 mb-8">We provide fast and reliable heating and cooling services to the following communities and more:</p>
             <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 max-w-3xl mx-auto font-medium text-slate-700">
-                <span>Livonia</span> • <span>Novi</span> • <span>Canton</span> • <span>Plymouth</span> • <span>Northville</span> • <span>Westland</span> • <span>Farmington Hills</span> • <span>Redford</span>
+                <span>Southfield</span> • <span>Livonia</span> • <span>Novi</span> • <span>Canton</span> • <span>Plymouth</span> • <span>Northville</span> • <span>Westland</span> • <span>Farmington Hills</span> • <span>Redford</span>
             </div>
         </div>
     </section>
@@ -290,8 +290,8 @@
             </button>
             <div class="border-t border-slate-700 pt-6">
                 <p class="font-bold text-white">Mechanical Temp</p>
-                <p>33449 W 7 Mile Rd, Livonia, MI 48152</p>
-                <p>Call Us: (734) 555-1234</p>
+                <p>23093 Telegraph Rd, Southfield, MI 48033</p>
+                <p>Call Us: (313) 282-4758</p>
                 <p class="mt-4 text-sm">&copy; 2025 Mechanical Temp. All Rights Reserved.</p>
             </div>
         </div>
