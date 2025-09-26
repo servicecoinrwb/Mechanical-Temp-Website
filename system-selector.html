@@ -395,13 +395,10 @@
             const chatData = {
                 from_name: 'Website Visitor',
                 message: message,
-                subject: '💬 New Website Chat Message'
             };
             
-            // ACTION REQUIRED: To make the chat work, create a NEW, simple template in EmailJS.
-            // It should only use the {{from_name}} and {{message}} variables.
-            // Then, replace the placeholder ID below with your new chat template ID.
-            const chatTemplateID = 'YOUR_NEW_CHAT_TEMPLATE_ID';
+            // **FINAL FIX**: The code now uses the verified Template ID you provided for the chat.
+            const chatTemplateID = 'template_j68qyhk';
 
             emailjs.send('service_ziwf1pg', chatTemplateID, chatData)
                 .then(function(response) {
