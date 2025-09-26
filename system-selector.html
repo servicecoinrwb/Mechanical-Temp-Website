@@ -26,6 +26,110 @@
             transform: translateY(-4px);
             box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
         }
+        /* Chat Widget Styles */
+        #chat-bubble {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            cursor: pointer;
+            background-color: #0ea5e9; /* sky-500 */
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: transform 0.2s ease-in-out;
+        }
+        #chat-bubble:hover {
+            transform: scale(1.1);
+            background-color: #0284c7; /* sky-600 */
+        }
+        #chat-widget {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            z-index: 999;
+            width: 350px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            transform-origin: bottom right;
+        }
+         #chat-widget.hidden {
+            opacity: 0;
+            transform: scale(0.9);
+            pointer-events: none;
+        }
+        .chat-header {
+            background-color: #0c4a6e; /* sky-900 */
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chat-header h3 {
+            font-weight: bold;
+            font-size: 1.125rem;
+        }
+        #close-chat-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .chat-body {
+            padding: 1rem;
+            background-color: #f1f5f9; /* slate-100 */
+            color: #475569; /* slate-600 */
+            font-size: 0.9rem;
+        }
+        .chat-footer {
+            padding: 1rem;
+            border-top: 1px solid #e2e8f0; /* slate-200 */
+        }
+        #chat-input {
+            width: 100%;
+            border: 1px solid #cbd5e1; /* slate-300 */
+            border-radius: 8px;
+            padding: 0.75rem;
+            resize: none;
+        }
+        #send-chat-btn {
+            width: 100%;
+            margin-top: 0.5rem;
+            background-color: #0ea5e9; /* sky-500 */
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        #send-chat-btn:hover {
+            background-color: #0284c7; /* sky-600 */
+        }
+        #send-chat-btn:disabled {
+            background-color: #94a3b8; /* slate-400 */
+            cursor: not-allowed;
+        }
+        #chat-confirmation {
+            text-align: center;
+            font-weight: bold;
+            color: #16a34a; /* green-600 */
+            padding: 0.5rem;
+            background-color: #dcfce7; /* green-100 */
+            border-radius: 6px;
+        }
     </style>
 </head>
 <body class="text-gray-800">
@@ -153,6 +257,28 @@
             <p class="mt-4 text-sm">&copy; 2025 Mechanical Temp. All Rights Reserved.</p>
         </div>
     </footer>
+
+    <!-- CHAT BUBBLE & WIDGET -->
+    <div id="chat-bubble">
+        <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-3.04 8.25-6.75 8.25-1.425 0-2.756-.382-3.937-1.043a.75.75 0 01-.263-.761l.574-2.286a.75.75 0 00-.534-.686 8.25 8.25 0 01-3.243-5.468C3.04 12.25 6 4.5 10.5 4.5c4.634 0 8.25 3.04 8.25 6.75z" />
+        </svg>      
+    </div>
+
+    <div id="chat-widget" class="hidden">
+        <div class="chat-header">
+            <h3>Chat with Us</h3>
+            <button id="close-chat-btn">&times;</button>
+        </div>
+        <div class="chat-body">
+            <p>Questions? Send us a message and we'll text you back shortly!</p>
+            <div id="chat-confirmation" class="hidden mt-2">Message Sent! ✔️</div>
+        </div>
+        <div class="chat-footer">
+            <textarea id="chat-input" placeholder="Type your message..." rows="3"></textarea>
+            <button id="send-chat-btn">Send</button>
+        </div>
+    </div>
     
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
@@ -301,6 +427,58 @@
     
         // Initialize
         updateUI();
+
+        // --- CHAT WIDGET SCRIPT ---
+        const chatBubble = document.getElementById('chat-bubble');
+        const chatWidget = document.getElementById('chat-widget');
+        const closeChatBtn = document.getElementById('close-chat-btn');
+        const sendChatBtn = document.getElementById('send-chat-btn');
+        const chatInput = document.getElementById('chat-input');
+        const chatConfirmation = document.getElementById('chat-confirmation');
+
+        function toggleChatWidget() {
+            chatWidget.classList.toggle('hidden');
+        }
+
+        chatBubble.addEventListener('click', toggleChatWidget);
+        closeChatBtn.addEventListener('click', toggleChatWidget);
+        
+        function sendChatMessage() {
+            const message = chatInput.value.trim();
+            if (message === '') return;
+
+            sendChatBtn.disabled = true;
+            sendChatBtn.textContent = 'Sending...';
+
+            const chatData = {
+                from_name: 'Website Visitor (System Selector)',
+                message: message,
+                subject: '💬 New Chat Message from System Selector',
+                // Using the same SMS gateways as the main form
+                bcc_email: '3132824758@vtext.com,3136004012@vtext.com' 
+            };
+
+            emailjs.send('service_ziwf1pg', 'template_q5fbhd8', chatData)
+                .then(function(response) {
+                    console.log('Chat message sent successfully:', response);
+                    chatInput.value = '';
+                    chatConfirmation.classList.remove('hidden');
+                    setTimeout(() => {
+                        chatConfirmation.classList.add('hidden');
+                        toggleChatWidget(); // Close widget after sending
+                    }, 3000); // Hide confirmation and close widget after 3 seconds
+                }, function(error) {
+                    console.log('Chat message failed:', error);
+                    alert('Sorry, the message could not be sent. Please try again.');
+                })
+                .finally(function() {
+                    sendChatBtn.disabled = false;
+                    sendChatBtn.textContent = 'Send';
+                });
+        }
+
+        sendChatBtn.addEventListener('click', sendChatMessage);
     </script>
 </body>
 </html>
+
