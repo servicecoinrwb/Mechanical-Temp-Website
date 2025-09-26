@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>HVAC System Selector Tool | Mechanical Temp</title>
+    <meta name="description" content="Use our interactive tool to find the perfect new furnace, AC, or full HVAC system for your home in Metro Detroit. Get a free, personalized estimate today.">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9; /* A slightly different background to distinguish the tool */
+        }
+        .option-card {
+            transition: all 0.2s ease-in-out;
+        }
+        .option-card.selected {
+            border-color: #0ea5e9; /* sky-500 */
+            background-color: #f0f9ff; /* sky-50 */
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- HEADER & NAVIGATION -->
+    <header class="bg-gray-900/80 sticky top-0 z-20 p-4">
+        <nav class="container mx-auto flex justify-between items-center text-white">
+            <a href="index.html" class="block">
+                <img src="https://i.imgur.com/YJvJw7V.png" alt="Mechanical Temp Logo" class="h-12 w-auto">
+            </a>
+            <ul class="hidden md:flex space-x-6">
+                <li><a href="index.html#services" class="hover:text-sky-400">Services</a></li>
+                <li><a href="service-plan.html" class="hover:text-sky-400">Service Plan</a></li>
+                <li><a href="index.html#offers" class="hover:text-sky-400">Offers</a></li>
+                <li><a href="index.html#about" class="hover:text-sky-400">About Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container mx-auto py-12 px-4">
+        <div id="system-selector-widget" class="bg-white rounded-2xl shadow-xl max-w-4xl mx-auto overflow-hidden">
+            <!-- Header -->
+            <div class="p-8 text-center border-b">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Find Your Perfect HVAC System</h1>
+                <p class="text-slate-600 mt-2">Answer a few simple questions to get a personalized recommendation and a free estimate.</p>
+            </div>
+
+            <div class="p-8">
+                <!-- Progress Bar -->
+                <div class="flex items-center mb-8">
+                    <div id="progress-1" class="w-8 h-8 rounded-full flex items-center justify-center font-bold bg-sky-600 text-white z-10">1</div>
+                    <div class="flex-auto h-1 bg-gray-200"><div id="progress-line-1" class="h-1 bg-sky-600 w-0 transition-all duration-300"></div></div>
+                    <div id="progress-2" class="w-8 h-8 rounded-full flex items-center justify-center font-bold bg-gray-200 text-gray-500 z-10">2</div>
+                    <div class="flex-auto h-1 bg-gray-200"><div id="progress-line-2" class="h-1 bg-sky-600 w-0 transition-all duration-300"></div></div>
+                    <div id="progress-3" class="w-8 h-8 rounded-full flex items-center justify-center font-bold bg-gray-200 text-gray-500 z-10">3</div>
+                    <div class="flex-auto h-1 bg-gray-200"><div id="progress-line-3" class="h-1 bg-sky-600 w-0 transition-all duration-300"></div></div>
+                    <div id="progress-4" class="w-8 h-8 rounded-full flex items-center justify-center font-bold bg-gray-200 text-gray-500 z-10">4</div>
+                </div>
+
+                <!-- Step 1: System Type -->
+                <div id="step-1">
+                    <h2 class="text-2xl font-bold text-center mb-6">What type of system do you need?</h2>
+                    <div class="grid md:grid-cols-3 gap-6" data-step="1" data-selection-key="systemType">
+                        <div class="option-card border-2 rounded-lg p-6 text-center cursor-pointer" data-value="Full System (Furnace & AC)">
+                            <div class="text-3xl mb-2">🌬️🔥</div><h3 class="font-bold">Full System</h3><p class="text-sm text-slate-500">Furnace & AC</p>
+                        </div>
+                        <div class="option-card border-2 rounded-lg p-6 text-center cursor-pointer" data-value="Furnace Only">
+                            <div class="text-3xl mb-2">🔥</div><h3 class="font-bold">Furnace Only</h3><p class="text-sm text-slate-500">Heating System</p>
+                        </div>
+                        <div class="option-card border-2 rounded-lg p-6 text-center cursor-pointer" data-value="AC Only">
+                            <div class="text-3xl mb-2">❄️</div><h3 class="font-bold">AC Only</h3><p class="text-sm text-slate-500">Cooling System</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Home Size -->
+                <div id="step-2" class="hidden">
+                    <h2 class="text-2xl font-bold text-center mb-6">What is your approximate home size?</h2>
+                    <div class="grid md:grid-cols-3 gap-6" data-step="2" data-selection-key="homeSize">
+                        <div class="option-card border-2 rounded-lg p-6 text-center cursor-pointer" data-value="Under 1,500 sq ft"><h3 class="font-bold">Under 1,500</h3><p class="text-sm text-slate-500">sq ft</p></div>
+                        <div class="option-card border-2 rounded-lg p-6 text-center cursor-pointer" data-value="1,500 - 2,500 sq ft"><h3 class="font-bold">1,500 - 2,500</h3><p class="text-sm text-slate-500">sq ft</p></div>
+                        <div class="option-card border-2 rounded-lg p-6 text-center cursor-pointer" data-value="Over 2,500 sq ft"><h3 class="font-bold">Over 2,500</h3><p class="text-sm text-slate-500">sq ft</p></div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Efficiency/Tier -->
+                <div id="step-3" class="hidden">
+                    <h2 class="text-2xl font-bold text-center mb-6">Which level of efficiency are you interested in?</h2>
+                    <div class="grid md:grid-cols-3 gap-6" data-step="3" data-selection-key="efficiencyTier">
+                        <div class="option-card border-2 rounded-lg p-6 text-center cursor-pointer" data-value="Good (Standard Efficiency)">
+                            <h3 class="font-bold">Good</h3><p class="text-sm text-slate-500">Standard efficiency, budget-friendly.</p>
+                        </div>
+                        <div class="option-card border-2 rounded-lg p-6 text-center cursor-pointer" data-value="Better (High Efficiency)">
+                            <h3 class="font-bold">Better</h3><p class="text-sm text-slate-500">High efficiency, great energy savings.</p>
+                        </div>
+                        <div class="option-card border-2 rounded-lg p-6 text-center cursor-pointer" data-value="Best (Premium Efficiency)">
+                            <h3 class="font-bold">Best</h3><p class="text-sm text-slate-500">Premium efficiency, maximum savings.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 4: Contact Form -->
+                <div id="step-4" class="hidden">
+                    <h2 class="text-2xl font-bold text-center mb-6">Almost there! Where should we send your estimate?</h2>
+                    <div class="bg-slate-50 p-4 rounded-lg mb-6 text-center text-sm">
+                        <p><strong>Your Selections:</strong> <span id="summary-text"></span></p>
+                    </div>
+                    <form id="contact-form" class="space-y-4 max-w-lg mx-auto">
+                        <div><label class="font-semibold">Full Name *</label><input type="text" id="name" name="name" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg"></div>
+                        <div><label class="font-semibold">Email Address *</label><input type="email" id="email" name="email" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg"></div>
+                        <div><label class="font-semibold">Phone Number *</label><input type="tel" id="phone" name="phone" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg"></div>
+                        <div><label class="font-semibold">Service Address *</label><input type="text" id="address" name="address" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg"></div>
+                    </form>
+                </div>
+                
+                <!-- Step 5: Confirmation -->
+                <div id="step-5" class="hidden">
+                    <div class="text-center p-6">
+                        <div class="text-6xl text-green-500 mb-4">✓</div>
+                        <h2 class="text-2xl font-bold">Thank You!</h2>
+                        <p class="text-slate-600 mt-2 max-w-md mx-auto">We've received your request. A comfort specialist will review your selections and contact you shortly with a personalized estimate.</p>
+                        <div class="mt-6">
+                            <a href="index.html" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-10 rounded-lg">Back to Homepage</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div id="nav-buttons" class="flex justify-center gap-4 mt-8">
+                    <button id="prev-btn" onclick="prevStep()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-10 rounded-lg hidden">Back</button>
+                    <button id="next-btn" onclick="nextStep()" class="bg-sky-500 text-white font-bold py-3 px-10 rounded-lg disabled:bg-gray-300" disabled>Next</button>
+                    <button id="submit-btn" onclick="submitQuoteRequest()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-10 rounded-lg hidden">Get My Free Estimate</button>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 mt-12 pt-16 pb-8 px-6 text-white">
+        <div class="container mx-auto text-center text-slate-400">
+            <p class="font-bold text-white">Mechanical Temp</p>
+            <p>23093 Telegraph Rd, Southfield, MI 48033</p>
+            <p>Call Us: (313) 282-4758</p>
+            <p class="mt-4 text-sm">&copy; 2025 Mechanical Temp. All Rights Reserved.</p>
+        </div>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        emailjs.init("IJHcoSxlSQ9OPOJGS");
+    
+        let currentStep = 1;
+        const totalSteps = 4;
+        const selections = {};
+    
+        const optionCards = document.querySelectorAll('.option-card');
+        optionCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const parent = card.parentElement;
+                const step = parent.dataset.step;
+                const key = parent.dataset.selectionKey;
+                const value = card.dataset.value;
+    
+                // Store selection
+                selections[key] = value;
+    
+                // Update visuals
+                parent.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+    
+                // Enable next button
+                document.getElementById('next-btn').disabled = false;
+            });
+        });
+    
+        function updateUI() {
+            // Update progress bar
+            for (let i = 1; i <= totalSteps; i++) {
+                const step = document.getElementById(`progress-${i}`);
+                const line = document.getElementById(`progress-line-${i - 1}`);
+                step.classList.remove('bg-sky-600', 'text-white', 'bg-green-500');
+                step.classList.add('bg-gray-200', 'text-gray-500');
+                if(line) {
+                    line.classList.remove('w-full', 'bg-green-500');
+                    line.classList.add('w-0');
+                }
+    
+                if (i < currentStep) {
+                    step.classList.remove('bg-gray-200', 'text-gray-500');
+                    step.classList.add('bg-green-500', 'text-white');
+                    if(line) {
+                         line.classList.add('w-full', 'bg-green-500');
+                         line.classList.remove('w-0');
+                    }
+                } else if (i === currentStep) {
+                    step.classList.remove('bg-gray-200', 'text-gray-500');
+                    step.classList.add('bg-sky-600', 'text-white');
+                }
+            }
+    
+            // Show/hide steps
+            for (let i = 1; i <= totalSteps + 1; i++) {
+                document.getElementById(`step-${i}`).classList.add('hidden');
+            }
+            document.getElementById(`step-${currentStep}`).classList.remove('hidden');
+    
+            // Show/hide buttons
+            document.getElementById('prev-btn').classList.toggle('hidden', currentStep === 1);
+            document.getElementById('next-btn').classList.toggle('hidden', currentStep === totalSteps);
+            document.getElementById('submit-btn').classList.toggle('hidden', currentStep !== totalSteps);
+    
+            // Disable next button for next step
+            if(currentStep < totalSteps) {
+                 document.getElementById('next-btn').disabled = true;
+            }
+
+            // Update summary
+            if(currentStep === totalSteps) {
+                document.getElementById('summary-text').textContent = `${selections.systemType}, ${selections.homeSize}, ${selections.efficiencyTier}`;
+            }
+        }
+    
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateUI();
+            }
+        }
+    
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateUI();
+                // Re-enable next button since selection is already made
+                document.getElementById('next-btn').disabled = false;
+            }
+        }
+    
+        function submitQuoteRequest() {
+            const form = document.getElementById('contact-form');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+    
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+    
+            const formData = new FormData(form);
+            const quoteData = {
+                ...selections,
+                name: formData.get('name'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                address: formData.get('address'),
+            };
+    
+            sendQuoteEmail(quoteData);
+        }
+    
+        function sendQuoteEmail(data) {
+            const emailData = {
+                to_email: 'office@mechanicaltemp.com',
+                cc_email: 'mthvacr@gmail.com',
+                from_name: data.name,
+                from_email: data.email,
+                phone: data.phone,
+                service_address: data.address,
+                system_type: data.systemType,
+                home_size: data.homeSize,
+                efficiency_tier: data.efficiencyTier,
+                subject: `New System Quote Request from ${data.name}`
+            };
+    
+            // NOTE: You will need a DIFFERENT EmailJS template for this form
+            // that includes the new fields (system_type, home_size, etc.)
+            emailjs.send('service_ziwf1pg', 'template_new_system_quote', emailData) // IMPORTANT: Use a new template ID
+                .then(function(response) {
+                    console.log('Email sent successfully:', response);
+                    currentStep++;
+                    updateUI();
+                    document.getElementById('nav-buttons').classList.add('hidden');
+                }, function(error) {
+                    console.log('Email failed:', error);
+                    alert('There was an error submitting your request. Please try again.');
+                    const submitBtn = document.getElementById('submit-btn');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Get My Free Estimate';
+                });
+        }
+    
+        // Initialize
+        updateUI();
+    </script>
+</body>
+</html>
