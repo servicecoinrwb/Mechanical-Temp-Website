@@ -1,105 +1,87 @@
-Mechanical Temp HVAC Website
-📌 Project Overview
+# Mechanical Temp HVAC Website
 
-This repository contains the complete source code for the Mechanical Temp website — a multi-page static site designed for a local HVAC (Heating, Ventilation, and Air Conditioning) service company based in Southfield, MI.
+A fast, mobile-first static website for **Mechanical Temp**, a local HVAC company based in **Southfield, MI**.  
+Built for **lead generation, SEO visibility, and ease of deployment** with no backend required.
 
-The site is built to be a high-performance lead generation asset. It is fast, fully responsive, and optimized for local SEO. Because it’s a static site (backend-free), it can be deployed easily and at no cost to modern platforms like GitHub Pages or Netlify.
+---
 
-📂 Website Structure
+## 📌 Project Overview
+The site is designed as a **high-performance lead machine** with:
+- Multiple **lead capture flows** (scheduler, system selector, chat-to-text)
+- **Responsive design** across desktop and mobile
+- **Local SEO optimization** for Metro Detroit HVAC services
 
-The website is organized into several core HTML files for both customer-facing pages and internal tools:
+Because it’s static HTML + JS, it can be deployed easily to GitHub Pages, Netlify, Vercel, or any web host.
 
-index.html — The main homepage with a comprehensive overview of services, testimonials, offers, and multiple lead-capture points.
+---
 
-ac-services.html — A dedicated landing page for air conditioning repair, installation, and maintenance.
+## 📂 Website Structure
+Core HTML files:
 
-furnace-services.html — A dedicated landing page for heating and furnace services.
+- `index.html` — Homepage (services overview, testimonials, offers, lead forms)
+- `ac-services.html` — Air conditioning services
+- `furnace-services.html` — Heating/furnace services
+- `commercial-hvac.html` — Commercial services + national accounts
+- `service-plan.html` — Monthly maintenance plan
+- `system-selector.html` — Interactive system estimate tool
+- `lead-funnel.html` — Internal office training/reference page
 
-commercial-hvac.html — A dedicated landing page for commercial clients and national accounts.
+---
 
-service-plan.html — A sales page detailing the monthly maintenance plan.
+## ⭐ Key Features
+- **Appointment Scheduler** → Customers book service in 4 steps  
+- **System Selector** → Multi-step tool for qualified system quotes  
+- **Chat Widget** → Lightweight form that enables text follow-up  
+- **SEO Ready** → JSON-LD schema, custom metadata, sitemap  
+- **Responsive UI** → Mobile-first with sticky header + hamburger menu  
 
-system-selector.html — An interactive, multi-step tool for customers to get a personalized new system estimate.
+---
 
-lead-funnel.html — An internal training and reference tool for office staff to handle incoming website leads.
+## 🛠️ Technologies Used
+- **HTML5** — Site structure  
+- **Tailwind CSS** — Utility-first styling via CDN  
+- **Vanilla JavaScript** — Interactivity (menus, modals, forms)  
+- **EmailJS** — Client-side form handling (emails + SMS)  
 
-⭐ Key Features
-Advanced Lead Generation Tools
+---
 
-Interactive Appointment Scheduler: A 4-step modal that allows customers to select an exact date and time for service, describe their issue, and provide their contact details.
+## ⚙️ Setup & Customization
+1. **Update business info**  
+   - Edit `.html` files (footer + JSON-LD schema in `<head>`)  
 
-Interactive System Selector: An e-commerce-style tool that guides customers through choosing a new HVAC system based on their home size and desired efficiency, generating a highly qualified sales lead.
+2. **Configure EmailJS**  
+   - Sign up at [EmailJS](https://www.emailjs.com/)  
+   - Create templates for Scheduler, System Selector, Chat Widget  
+   - Replace Service/Template IDs in `<script>` tags  
 
-Direct-to-Text Chat Widget: A floating chat bubble opens a lightweight form for customers to enter their name, phone number, and question, enabling immediate follow-up via text message.
+3. **Verify with Google Search Console**  
+   - Add site → choose HTML tag verification  
+   - Paste meta tag into `<head>` of `index.html`  
 
-SEO & Local Business Optimization
+---
 
-Schema.org Markup: Rich JSON-LD schema is included on all relevant pages to define the business as an HVACBusiness, improving local search visibility.
+## 🚀 Deployment
+No backend setup required — just static hosting. Options:
+- [GitHub Pages](https://pages.github.com/)  
+- [Netlify](https://www.netlify.com/)  
+- [Vercel](https://vercel.com/)  
+- Standard web hosting providers  
 
-Unique Metadata: Every page has a custom <title> and <meta name="description"> tag, optimized with relevant keywords.
+---
 
-Google-Friendly: The site includes a sitemap.xml for fast indexing, a placeholder for the Google Search Console verification tag, and links to a Google Business Profile for reviews.
+## 📖 Documentation
+More details are available in the **[Wiki](../../wiki)**:
+- Project Overview  
+- Website Structure  
+- Key Features  
+- Technologies  
+- Customization & Setup  
+- Deployment  
 
-Modern, Responsive Design
+---
 
-Mobile-first build to ensure a seamless experience on all devices.
-
-Sticky, responsive header with a mobile “hamburger” menu for easy navigation.
-
-🛠️ Technologies Used
-
-HTML5 — Core structure and content.
-
-Tailwind CSS — Utility-first styling framework, loaded via CDN for simplicity.
-
-Vanilla JavaScript — Powers interactive features (responsive menu, pop-up modals, form logic).
-
-EmailJS — Client-side service powering all lead-generation forms without a backend (emails and SMS via gateways).
-
-⚙️ Customization & Setup
-1) Update Business Information
-
-In each .html file, update the address, phone number, and service areas in:
-
-Visible content (e.g., footer)
-
-Hidden JSON-LD schema in the <head>
-
-2) Configure EmailJS
-
-Create an account at EmailJS.com.
-
-Create three Email Templates to handle the different forms:
-
-Scheduler Template — Main appointment booking
-
-System Selector Template — New system quote requests
-
-Chat Widget Template — Simple chat messages
-
-In each .html file, find the <script> tag at the bottom and replace the placeholder Service ID and Template IDs with your own.
-
-3) Verify with Google Search Console
-
-Add your site to Google Search Console.
-
-Choose the HTML tag verification method and copy your unique verification code.
-
-Paste this code into the placeholder
-
-<meta name="google-site-verification" content="YOUR_CODE_HERE">
-
-
-in the <head> of index.html.
-
-🚀 Deployment
-
-This is a static website, so no backend setup is required. It can be deployed directly to any provider that serves static HTML files, including:
-
-GitHub Pages
-
-Netlify
-
-Vercel
-
-Standard web hosting
+## 📞 Contact
+**Mechanical Temp HVAC**  
+Southfield, MI  
+🌐 [www.mechanicaltemp.com](https://www.mechanicaltemp.com)  
+📞 313-282-4758
