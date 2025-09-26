@@ -279,7 +279,6 @@
             document.querySelectorAll('[id^="step-"]').forEach(step => step.classList.add('hidden'));
             document.getElementById(`step-${stepNum}`).classList.remove('hidden');
             
-            // Update indicators
             for (let i = 1; i <= 4; i++) {
                 const indicator = document.getElementById(`step-indicator-${i}`);
                 indicator.classList.remove('active', 'complete');
@@ -294,7 +293,6 @@
                 }
             }
 
-            // Update buttons
             document.getElementById('back-btn').classList.toggle('hidden', stepNum === 1 || stepNum === 5);
             document.getElementById('submit-btn').classList.toggle('hidden', stepNum !== 4);
         }
@@ -319,7 +317,6 @@
                 const value = card.dataset.value;
                 selections[group] = value;
                 
-                // Update visuals
                 card.parentElement.querySelectorAll('.selection-card').forEach(c => c.classList.remove('selected'));
                 card.classList.add('selected');
 
@@ -343,7 +340,6 @@
             submitBtn.textContent = 'Sending...';
 
             const formData = new FormData(form);
-            // **PERMANENT FIX**: This data object now matches the cleaned EmailJS template.
             const quoteData = {
                 full_name: formData.get('full_name'),
                 email: formData.get('email'),
@@ -352,20 +348,18 @@
                 system_type: selections.system_type,
                 home_size: selections.home_size,
                 efficiency_level: selections.efficiency_level,
-                bcc_email: '3132824758@vtext.com,3136004012@vtext.com'
             };
 
             sendQuoteRequest(quoteData);
         }
 
         function sendQuoteRequest(data) {
-            // This is your template ID from the screenshot. This should now work correctly.
             const systemSelectorTemplateID = 'template_558f4ko'; 
 
             emailjs.send('service_ziwf1pg', systemSelectorTemplateID, data)
                 .then(function(response) {
                     console.log('Quote request sent successfully:', response);
-                    nextStep(); // Move to confirmation
+                    nextStep(); 
                 }, function(error) {
                     console.log('Email failed:', error);
                     alert('There was an error submitting your request. Please try again.');
@@ -400,8 +394,7 @@
             const chatData = {
                 from_name: 'Website Visitor',
                 message: message,
-                subject: '💬 New Website Chat Message',
-                bcc_email: '3132824758@vtext.com,3136004012@vtext.com' 
+                subject: '💬 New Website Chat Message'
             };
             
             // ACTION REQUIRED: Create a new, simple template in EmailJS for chat messages.
