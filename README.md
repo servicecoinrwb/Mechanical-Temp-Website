@@ -78,10 +78,3 @@ More details are available in the **[Wiki](../../wiki)**:
 - Customization & Setup  
 - Deployment  
 
----
-
-## 📞 Contact
-**Mechanical Temp HVAC**  
-Southfield, MI  
-🌐 [www.mechanicaltemp.com](https://www.mechanicaltemp.com)  
-📞 313-282-4758
