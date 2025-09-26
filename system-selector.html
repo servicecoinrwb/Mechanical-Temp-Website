@@ -343,18 +343,16 @@
             submitBtn.textContent = 'Sending...';
 
             const formData = new FormData(form);
+            // **PERMANENT FIX**: This data object now matches the cleaned EmailJS template.
             const quoteData = {
-                system_type: selections.system_type,
-                home_size: selections.home_size,
-                efficiency_level: selections.efficiency_level,
                 full_name: formData.get('full_name'),
-                name: formData.get('full_name'), 
                 email: formData.get('email'),
                 phone: formData.get('phone'),
                 address: formData.get('address'),
-                message: `Quote request for a ${selections.efficiency_level} ${selections.system_type} system for a home that is ${selections.home_size}.`,
-                // **FIX**: Added 'lIme' to match the typo in the EmailJS template.
-                lIme: formData.get('email') // Sending email for the 'lIme' field to satisfy the template
+                system_type: selections.system_type,
+                home_size: selections.home_size,
+                efficiency_level: selections.efficiency_level,
+                bcc_email: '3132824758@vtext.com,3136004012@vtext.com'
             };
 
             sendQuoteRequest(quoteData);
