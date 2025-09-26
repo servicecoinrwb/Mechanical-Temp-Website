@@ -348,12 +348,13 @@
                 home_size: selections.home_size,
                 efficiency_level: selections.efficiency_level,
                 full_name: formData.get('full_name'),
-                name: formData.get('full_name'), // **FIX**: Added 'name' to match template
+                name: formData.get('full_name'), 
                 email: formData.get('email'),
                 phone: formData.get('phone'),
                 address: formData.get('address'),
-                 // **FIX**: Added 'message' to match template
-                message: `Quote request for a ${selections.efficiency_level} ${selections.system_type} system for a home that is ${selections.home_size}.`
+                message: `Quote request for a ${selections.efficiency_level} ${selections.system_type} system for a home that is ${selections.home_size}.`,
+                // **FIX**: Added 'lIme' to match the typo in the EmailJS template.
+                lIme: formData.get('email') // Sending email for the 'lIme' field to satisfy the template
             };
 
             sendQuoteRequest(quoteData);
