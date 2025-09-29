@@ -7,34 +7,88 @@
 
 <url>
   <loc>https://www.mechanicaltemp.com/index.html</loc>
-  <lastmod>2025-09-26T17:44:00+00:00</lastmod>
+  <lastmod>2025-09-29T11:18:00+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 <url>
   <loc>https://www.mechanicaltemp.com/service-plan.html</loc>
-  <lastmod>2025-09-26T17:44:00+00:00</lastmod>
+  <lastmod>2025-09-29T11:18:00+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://www.mechanicaltemp.com/furnace-services.html</loc>
-  <lastmod>2025-09-26T17:44:00+00:00</lastmod>
-  <priority>0.80</priority>
+  <lastmod>2025-09-29T11:18:00+00:00</lastmod>
+  <priority>0.90</priority>
 </url>
 <url>
   <loc>https://www.mechanicaltemp.com/ac-services.html</loc>
-  <lastmod>2025-09-26T17:44:00+00:00</lastmod>
-  <priority>0.80</priority>
+  <lastmod>2025-09-29T11:18:00+00:00</lastmod>
+  <priority>0.90</priority>
 </url>
 <url>
   <loc>https://www.mechanicaltemp.com/commercial-hvac.html</loc>
-  <lastmod>2025-09-26T17:44:00+00:00</lastmod>
+  <lastmod>2025-09-29T11:18:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://www.mechanicaltemp.com/blog.html</loc>
+  <lastmod>2025-09-29T11:18:00+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://www.mechanicaltemp.com/system-selector.html</loc>
-  <lastmod>2025-09-26T17:44:00+00:00</lastmod>
-  <priority>0.80</priority>
+  <loc>https://www.mechanicaltemp.com/blog-post-1.html</loc>
+  <lastmod>2025-09-29T11:18:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://www.mechanicaltemp.com/southfield.html</loc>
+  <lastmod>2025-09-29T11:18:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://www.mechanicaltemp.com/dearborn.html</loc>
+  <lastmod>2025-09-29T11:18:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://www.mechanicaltemp.com/livonia.html</loc>
+  <lastmod>2025-09-29T11:18:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://www.mechanicaltemp.com/novi.html</loc>
+  <lastmod>2025-09-29T11:18:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://www.mechanicaltemp.com/canton.html</loc>
+  <lastmod>2025-09-29T11:18:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://www.mechanicaltemp.com/plymouth.html</loc>
+  <lastmod>2025-09-29T11:18:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://www.mechanicaltemp.com/northville.html</loc>
+  <lastmod>2025-09-29T11:18:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://www.mechanicaltemp.com/westland.html</loc>
+  <lastmod>2025-09-29T11:18:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://www.mechanicaltemp.com/farmington-hills.html</loc>
+  <lastmod>2025-09-29T11:18:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://www.mechanicaltemp.com/redford.html</loc>
+  <lastmod>2025-09-29T11:18:00+00:00</lastmod>
+  <priority>0.90</priority>
 </url>
 
 </urlset>
-
