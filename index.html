@@ -6,13 +6,6 @@
     
     <title>Expert HVAC Services in Southfield & Metro Detroit | Mechanical Temp</title>
     <meta name="description" content="Mechanical Temp offers expert residential and commercial HVAC services in Southfield, MI and Metro Detroit. 24/7 emergency repair, installation, and maintenance for furnaces & AC.">
-    
-    <!-- =================================================================== -->
-    <!-- GOOGLE SEARCH CONSOLE VERIFICATION TAG                            -->
-    <!-- 1. Go to Google Search Console and get your HTML tag.             -->
-    <!-- 2. Paste it here, replacing this entire line.                     -->
-    <!-- =================================================================== -->
-    <meta name="google-site-verification" content="YOUR_UNIQUE_CODE_HERE" />
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -280,17 +273,6 @@
         </div>
     </section>
 
-    <!-- NEW SYSTEM SELECTOR CTA -->
-    <section id="system-selector-cta" class="bg-slate-50 py-20 px-6">
-        <div class="container mx-auto text-center max-w-3xl">
-            <h2 class="text-3xl md:text-4xl font-bold">Time for a New System?</h2>
-            <p class="max-w-2xl mx-auto text-slate-600 mt-4 mb-8 text-lg">Use our interactive System Selector tool to find the perfect furnace or air conditioner for your home's unique needs and get a free, personalized estimate.</p>
-            <a href="system-selector.html" class="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-10 rounded-lg text-xl inline-block transition-transform hover:scale-105">
-                Find My Perfect System
-            </a>
-        </div>
-    </section>
-
     <!-- WHY CHOOSE US SECTION -->
     <section id="about" class="bg-gray-800 py-20 px-6 text-white">
         <div class="container mx-auto text-center">
@@ -368,6 +350,30 @@
         </div>
     </section>
 
+    <!-- FROM OUR BLOG SECTION -->
+    <section id="blog-preview" class="bg-slate-50 py-20 px-6">
+        <div class="container mx-auto text-center max-w-4xl">
+            <h2 class="text-3xl md:text-4xl font-bold">From Our Blog</h2>
+            <p class="max-w-2xl mx-auto text-slate-600 mt-2 mb-12">Expert advice to keep your home comfortable and your system running efficiently.</p>
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col md:flex-row max-w-3xl mx-auto group">
+                <a href="blog-post-1.html" class="block md:w-1/3">
+                   <img src="https://i.imgur.com/PbsVZ0K.jpeg" alt="A happy family enjoying their comfortable home thanks to a well-maintained furnace" class="w-full h-full object-cover group-hover:opacity-90 transition-opacity">
+                </a>
+                <div class="p-8 flex flex-col flex-grow text-left">
+                     <p class="text-sm text-slate-500 mb-2">September 24, 2025 • Furnace Maintenance</p>
+                     <h3 class="text-2xl font-bold mb-3">
+                        <a href="blog-post-1.html" class="hover:text-sky-600 transition-colors">5 Signs Your Furnace Needs Repair This Fall</a>
+                     </h3>
+                     <p class="text-slate-600 mb-6 flex-grow">
+                        As the leaves start to change color, it’s crucial to make sure your furnace is in top working condition. Ignoring small warning signs now can lead to a complete breakdown...
+                     </p>
+                     <a href="blog-post-1.html" class="text-sky-600 font-bold hover:underline self-start">Read Full Article →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
     <!-- "SERVICE PLAN" CTA SECTION -->
     <section id="service-plan" class="bg-gray-800 py-20 px-6 text-white">
         <div class="container mx-auto text-center max-w-4xl">
@@ -397,7 +403,7 @@
     </section>
 
     <!-- "CURRENT OFFERS" SECTION -->
-    <section id="offers" class="bg-slate-50 py-20 px-6">
+    <section id="offers" class="bg-white py-20 px-6">
         <div class="container mx-auto text-center">
             <h2 class="text-3xl md:text-4xl font-bold mb-2">Current HVAC Offers</h2>
             <p class="max-w-2xl mx-auto text-slate-600 mb-12">Save on your next service. Mention the offer when you call to book!</p>
@@ -418,9 +424,9 @@
                     <h3 class="text-2xl font-bold text-gray-800">New System Discount</h3>
                     <p class="text-5xl font-black text-orange-600 my-3">$500 OFF</p>
                     <p class="text-slate-600 flex-grow">Save big on a new high-efficiency furnace or air conditioner installation. Free estimate included.</p>
-                     <a href="system-selector.html" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg text-lg inline-block mt-6 transition-transform hover:scale-105">
+                     <button onclick="openScheduler()" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg text-lg inline-block mt-6 transition-transform hover:scale-105">
                         Get My Free Estimate
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -431,8 +437,17 @@
         <div class="container mx-auto text-center">
             <h2 class="text-3xl md:text-4xl font-bold mb-4">Proudly Serving Metro Detroit</h2>
             <p class="max-w-2xl mx-auto text-slate-600 mb-8">We provide fast and reliable heating and cooling services to the following communities and more:</p>
-            <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 max-w-3xl mx-auto font-medium text-slate-700">
-                <span>Southfield</span> • <span>Livonia</span> • <span>Novi</span> • <span>Canton</span> • <span>Plymouth</span> • <span>Northville</span> • <span>Westland</span> • <span>Farmington Hills</span> • <span>Redford</span>
+            <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 max-w-4xl mx-auto font-medium text-slate-700">
+                <span>Southfield</span> • 
+                <a href="dearborn.html" class="hover:text-sky-500 underline">Dearborn</a> • 
+                <a href="livonia.html" class="hover:text-sky-500 underline">Livonia</a> • 
+                <span>Novi</span> • 
+                <a href="canton.html" class="hover:text-sky-500 underline">Canton</a> • 
+                <a href="plymouth.html" class="hover:text-sky-500 underline">Plymouth</a> • 
+                <a href="northville.html" class="hover:text-sky-500 underline">Northville</a> • 
+                <a href="westland.html" class="hover:text-sky-500 underline">Westland</a> • 
+                <a href="farmington-hills.html" class="hover:text-sky-500 underline">Farmington Hills</a> • 
+                <a href="redford.html" class="hover:text-sky-500 underline">Redford</a>
             </div>
         </div>
     </section>
@@ -469,7 +484,7 @@
     <div id="chat-bubble">
         <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-3.04 8.25-6.75 8.25-1.425 0-2.756-.382-3.937-1.043a.75.75 0 01-.263-.761l.574-2.286a.75.75 0 00-.534-.686 8.25 8.25 0 01-3.243-5.468C3.04 12.25 6 4.5 10.5 4.5c4.634 0 8.25 3.04 8.25 6.75z" />
-        </svg>      
+        </svg>          
     </div>
 
     <div id="chat-widget" class="hidden">
@@ -599,67 +614,67 @@
     <script>
     // SCHEDULER MODAL LOGIC
     const schedulerModal=document.getElementById("scheduler-modal");function openScheduler(){schedulerModal.classList.remove("hidden"),document.body.style.overflow="hidden"}function closeScheduler(e=!1){schedulerModal.classList.add("hidden"),document.body.style.overflow="auto",e&&resetForm()}schedulerModal.addEventListener("click",function(e){e.target===schedulerModal&&closeScheduler()}),emailjs.init("IJHcoSxlSQ9OPOJGS");let currentStep=1,selectedDate=null,selectedTime=null,appointmentData={},mathAnswer=0;const weekdayTimeSlots=["8:00 AM","9:00 AM","10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM"],weekendTimeSlots=["10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM"],unavailableDates=[];function generateCalendar(){const e=document.getElementById("calendar");e.innerHTML="";const t=new Date;t.setHours(0,0,0,0);["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(t=>{e.innerHTML+=`<div class="text-center font-semibold text-sm text-gray-500 p-2">${t}</div>`});const n=new Date(t.getFullYear(),t.getMonth(),1),o=n.getDay();for(let l=0;l<o;l++)e.insertAdjacentHTML("beforeend","<div></div>");for(let d=0;d<42;d++){const c=new Date(n);c.setDate(n.getDate()+d);const a=c.toISOString().split("T")[0],s=unavailableDates.includes(a)||c<t,r=document.createElement("div");r.className="text-center p-2 rounded-lg cursor-pointer transition-all duration-200",s?(r.classList.add("bg-gray-100","text-gray-300","cursor-not-allowed"),r.innerHTML=`<div class="font-bold text-lg">${c.getDate()}</div>`):(r.classList.add("border","border-gray-200","hover:bg-sky-100","hover:border-sky-500"),r.onclick=()=>selectDate(c,r),r.innerHTML=`<div class="text-xs text-gray-400">${c.toLocaleDateString("en",{month:"short"})}</div><div class="font-bold text-lg">${c.getDate()}</div>`),e.appendChild(r)}}function selectDate(e,t){document.querySelectorAll("#calendar .bg-sky-500").forEach(e=>{e.classList.remove("bg-sky-500","text-white","border-sky-500"),e.classList.add("border-gray-200")}),t.classList.add("bg-sky-500","text-white","border-sky-500"),t.classList.remove("border-gray-200"),selectedDate=e,document.getElementById("next-btn-1").disabled=!1,document.getElementById("selected-date").textContent=e.toLocaleDateString("en",{weekday:"long",year:"numeric",month:"long",day:"numeric"})}function generateTimeSlots(){const e=document.getElementById("time-slots");e.innerHTML="";const t=selectedDate.getDay(),n=0===t||6===t?weekendTimeSlots:weekdayTimeSlots;n.forEach(t=>{const o=document.createElement("div");o.className="p-3 text-center border-2 border-gray-300 rounded-lg cursor-pointer hover:border-sky-500 hover:bg-sky-100 font-semibold",o.textContent=t,o.onclick=()=>selectTime(t,o),e.appendChild(o)})}function selectTime(e,t){document.querySelectorAll("#time-slots .bg-sky-500").forEach(e=>{e.classList.remove("bg-sky-500","text-white","border-sky-500"),e.classList.add("border-gray-300")}),t.classList.add("bg-sky-500","text-white","border-sky-500"),t.classList.remove("border-gray-300"),selectedTime=e,document.getElementById("next-btn-2").disabled=!1,document.getElementById("confirm-date").textContent=selectedDate.toLocaleDateString("en",{weekday:"long",year:"numeric",month:"long",day:"numeric"}),document.getElementById("confirm-time").textContent=e}function updateProgress(){for(let e=1;e<=4;e++){const t=document.getElementById(`progress-${e}`),n=document.getElementById(`progress-line-${e-1}`);t.classList.remove("bg-sky-600","text-white","bg-green-500"),t.classList.add("bg-gray-200","text-gray-500"),e<currentStep?(t.classList.remove("bg-gray-200","text-gray-500"),t.classList.add("bg-green-500","text-white"),n&&n.classList.add("w-full","bg-green-500")):e===currentStep?(t.classList.remove("bg-gray-200","text-gray-500"),t.classList.add("bg-sky-600","text-white"),n&&n.classList.remove("w-full","bg-green-500")):n&&n.classList.remove("w-full","bg-green-500")}}function showStep(e){document.getElementById("step-1").classList.add("hidden"),document.getElementById("step-2").classList.add("hidden"),document.getElementById("step-3").classList.add("hidden"),document.getElementById("step-4").classList.add("hidden"),document.getElementById(`step-${e}`).classList.remove("hidden")}function nextStep(){(1!==currentStep||selectedDate)&&(2!==currentStep||selectedTime)&&(currentStep++,showStep(currentStep),updateProgress(),2===currentStep&&generateTimeSlots())}function prevStep(){1!==currentStep&&(currentStep--,showStep(currentStep),updateProgress())}function generateMathCaptcha(){const e=Math.floor(10*Math.random())+1,t=Math.floor(10*Math.random())+1;document.getElementById("math-question").textContent=`${e} + ${t}`,mathAnswer=e+t}function validateCaptcha(){const e=parseInt(document.getElementById("captcha").value);return e!==mathAnswer?(alert("Security check failed. Please solve the math problem correctly."),generateMathCaptcha(),document.getElementById("captcha").value="",!1):!0}function submitAppointment(){const e=document.getElementById("contact-form");if(!e.checkValidity()||!validateCaptcha())return void e.reportValidity();const t=new FormData(e);appointmentData={date:selectedDate.toLocaleDateString("en",{weekday:"long",year:"numeric",month:"long",day:"numeric"}),time:selectedTime,serviceType:t.get("service-type"),name:t.get("name"),email:t.get("email"),phone:t.get("phone"),address:t.get("address"),message:t.get("message")||"No additional notes"};const n=document.getElementById("submit-btn");n.disabled=!0,n.textContent="Sending...",sendAppointmentEmail(appointmentData)}function sendAppointmentEmail(e){const t="template_q5fbhd8";emailjs.send("service_ziwf1pg",t,e).then(function(e){console.log("Email sent successfully:",e),showConfirmation()},function(e){console.log("Email failed:",e),alert("There was an error submitting your request. Please try again.");const t=document.getElementById("submit-btn");t.disabled=!1,t.textContent="Book Appointment"})}function showConfirmation(){document.getElementById("final-service").textContent=appointmentData.serviceType,document.getElementById("final-date").textContent=appointmentData.date,document.getElementById("final-time").textContent=appointmentData.time,document.getElementById("final-address").textContent=appointmentData.address,document.getElementById("final-name").textContent=appointmentData.name,document.getElementById("final-email").textContent=appointmentData.email,document.getElementById("final-phone").textContent=appointmentData.phone,nextStep()}function resetForm(){currentStep=1,selectedDate=null,selectedTime=null,document.getElementById("contact-form").reset(),showStep(1),updateProgress(),document.getElementById("next-btn-1").disabled=!0,document.getElementById("next-btn-2").disabled=!0;const e=document.getElementById("submit-btn");e.disabled=!1,e.textContent="Book Appointment",generateCalendar(),generateMathCaptcha()}document.addEventListener("DOMContentLoaded",function(){generateCalendar(),generateMathCaptcha()});
-    
-    // --- RESPONSIVE HEADER & CHAT WIDGET SCRIPT ---
-    const chatBubble = document.getElementById('chat-bubble');
-    const chatWidget = document.getElementById('chat-widget');
-    const closeChatBtn = document.getElementById('close-chat-btn');
-    const chatForm = document.getElementById('chat-form');
-    const chatConfirmation = document.getElementById('chat-confirmation');
-    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
+    
+    // --- RESPONSIVE HEADER & CHAT WIDGET SCRIPT ---
+    const chatBubble = document.getElementById('chat-bubble');
+    const chatWidget = document.getElementById('chat-widget');
+    const closeChatBtn = document.getElementById('close-chat-btn');
+    const chatForm = document.getElementById('chat-form');
+    const chatConfirmation = document.getElementById('chat-confirmation');
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
 
-    mobileMenuBtn.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
-    });
+    mobileMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
 
-    document.querySelectorAll('.mobile-link').forEach(link => {
-        link.addEventListener('click', () => {
-            mobileMenu.classList.add('hidden');
-        });
-    });
+    document.querySelectorAll('.mobile-link').forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+        });
+    });
 
-    function toggleChatWidget() {
-        chatWidget.classList.toggle('hidden');
-        if (!chatWidget.classList.contains('hidden')) {
-            chatConfirmation.classList.add('hidden');
-            chatForm.reset();
-        }
-    }
+    function toggleChatWidget() {
+        chatWidget.classList.toggle('hidden');
+        if (!chatWidget.classList.contains('hidden')) {
+            chatConfirmation.classList.add('hidden');
+            chatForm.reset();
+        }
+    }
 
-    chatBubble.addEventListener('click', toggleChatWidget);
-    closeChatBtn.addEventListener('click', toggleChatWidget);
-    
-    chatForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const sendChatBtn = document.getElementById('send-chat-btn');
-        sendChatBtn.disabled = true;
-        sendChatBtn.textContent = 'Sending...';
+    chatBubble.addEventListener('click', toggleChatWidget);
+    closeChatBtn.addEventListener('click', toggleChatWidget);
+    
+    chatForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const sendChatBtn = document.getElementById('send-chat-btn');
+        sendChatBtn.disabled = true;
+        sendChatBtn.textContent = 'Sending...';
 
-        const chatData = {
-            from_name: document.getElementById('chat-name').value,
-            phone: document.getElementById('chat-phone').value,
-            message: document.getElementById('chat-input').value,
-        };
-        
-        // **FINAL FIX**: The chat widget now uses its own dedicated template ID.
-        const chatTemplateID = 'template_j68qyhk';
+        const chatData = {
+            from_name: document.getElementById('chat-name').value,
+            phone: document.getElementById('chat-phone').value,
+            message: document.getElementById('chat-input').value,
+        };
+        
+        // **FINAL FIX**: The chat widget now uses its own dedicated template ID.
+        const chatTemplateID = 'template_j68qyhk';
 
-        emailjs.send('service_ziwf1pg', chatTemplateID, chatData)
-            .then(function(response) {
-                console.log('Chat message sent successfully:', response);
-                chatConfirmation.classList.remove('hidden');
-                // Don't close the widget automatically, let the user close it.
-            }, function(error) {
-                console.log('Chat message failed:', error);
-                alert('Sorry, the message could not be sent. Please try again.');
-            })
-            .finally(function() {
-                sendChatBtn.disabled = false;
-                sendChatBtn.textContent = 'Send Message';
-            });
-    });
-    </script>
+        emailjs.send('service_ziwf1pg', chatTemplateID, chatData)
+            .then(function(response) {
+                console.log('Chat message sent successfully:', response);
+                chatConfirmation.classList.remove('hidden');
+                // Don't close the widget automatically, let the user close it.
+            }, function(error) {
+                console.log('Chat message failed:', error);
+                alert('Sorry, the message could not be sent. Please try again.');
+            })
+            .finally(function() {
+                sendChatBtn.disabled = false;
+                sendChatBtn.textContent = 'Send Message';
+            });
+    });
+    </script>
 </body>
 </html>
 
