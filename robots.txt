@@ -3,4 +3,4 @@ User-agent: *
 Disallow:
 
 Provide the location of the sitemap.
-Sitemap: https://www.mechanicaltemp.com/sitemap.xml
+Sitemap: https://www.google.com/url?sa=E&source=gmail&q=https://www.mechanicaltemp.com/sitemap.xml
