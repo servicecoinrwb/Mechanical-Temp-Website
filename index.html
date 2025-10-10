@@ -862,9 +862,7 @@
         document.getElementById("final-email").textContent = appointmentData.email;
         document.getElementById("final-phone").textContent = appointmentData.phone;
         
-        // --- THIS IS THE NEW LINE FOR GOOGLE ANALYTICS TRACKING ---
         gtag('event', 'schedule_appointment', { 'event_category': 'conversion' });
-        // -----------------------------------------------------------
 
         nextStep();
     }
@@ -884,10 +882,6 @@
         generateCalendar();
         generateMathCaptcha();
     }
-    document.addEventListener("DOMContentLoaded", function() {
-        generateCalendar();
-        generateMathCaptcha();
-    });
 
     // --- RESPONSIVE HEADER & CHAT WIDGET SCRIPT ---
     const chatBubble = document.getElementById('chat-bubble');
@@ -938,9 +932,7 @@
                 console.log('Chat message sent successfully:', response);
                 chatConfirmation.classList.remove('hidden');
 
-                // --- ADD THIS LINE FOR CHAT CONVERSION TRACKING ---
                 gtag('event', 'chat_lead', { 'event_category': 'conversion' });
-                // ----------------------------------------------------
 
             }, function(error) {
                 console.log('Chat message failed:', error);
@@ -950,6 +942,56 @@
                 sendChatBtn.disabled = false;
                 sendChatBtn.textContent = 'Send Message';
             });
+    });
+
+    // --- ALL INITIALIZATION AND EVENT LISTENERS ---
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize scheduler calendar and captcha
+        generateCalendar();
+        generateMathCaptcha();
+
+        // Track phone link clicks
+        const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
+        phoneLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                gtag('event', 'phone_call_click', {
+                    'event_category': 'conversion'
+                });
+            });
+        });
+
+        // Track system selector link click
+        const systemSelectorLink = document.querySelector('#system-selector-cta a');
+        if (systemSelectorLink) {
+            systemSelectorLink.addEventListener('click', function() {
+                gtag('event', 'system_selector_click', {
+                    'event_category': 'engagement'
+                });
+            });
+        }
+
+        // Track specific offer and service plan clicks
+        const offerButtons = document.querySelectorAll('#offers button[onclick="openScheduler()"]');
+        offerButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const buttonText = button.textContent.trim();
+                if (buttonText.includes('Tune-Up')) {
+                    gtag('event', 'click_tuneup_offer', { 'event_category': 'engagement' });
+                } else if (buttonText.includes('Estimate')) {
+                    gtag('event', 'click_estimate_offer', { 'event_category': 'engagement' });
+                }
+            });
+        });
+
+        // Track service plan link click
+        const servicePlanLink = document.querySelector('#service-plan a[href="service-plan.html"]');
+        if (servicePlanLink) {
+            servicePlanLink.addEventListener('click', function() {
+                gtag('event', 'click_service_plan_cta', {
+                    'event_category': 'engagement'
+                });
+            });
+        }
     });
 </script>
 
