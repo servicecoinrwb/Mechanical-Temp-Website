@@ -639,10 +639,256 @@
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script>
-    // SCHEDULER MODAL LOGIC (Identical to other pages)
-    const schedulerModal=document.getElementById("scheduler-modal");function openScheduler(){schedulerModal.classList.remove("hidden"),document.body.style.overflow="hidden"}function closeScheduler(e=!1){schedulerModal.classList.add("hidden"),document.body.style.overflow="auto",e&&resetForm()}schedulerModal.addEventListener("click",function(e){e.target===schedulerModal&&closeScheduler()}),emailjs.init("IJHcoSxlSQ9OPOJGS");let currentStep=1,selectedDate=null,selectedTime=null,appointmentData={},mathAnswer=0;const weekdayTimeSlots=["8:00 AM","9:00 AM","10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM"],weekendTimeSlots=["10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM"],unavailableDates=[];function generateCalendar(){const e=document.getElementById("calendar");e.innerHTML="";const t=new Date;t.setHours(0,0,0,0);["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(t=>{e.innerHTML+=`<div class="text-center font-semibold text-sm text-gray-500 p-2">${t}</div>`});const n=new Date(t.getFullYear(),t.getMonth(),1),o=n.getDay();for(let l=0;l<o;l++)e.insertAdjacentHTML("beforeend","<div></div>");for(let d=0;d<42;d++){const c=new Date(n);c.setDate(n.getDate()+d);const a=c.toISOString().split("T")[0],s=unavailableDates.includes(a)||c<t,r=document.createElement("div");r.className="text-center p-2 rounded-lg cursor-pointer transition-all duration-200",s?(r.classList.add("bg-gray-100","text-gray-300","cursor-not-allowed"),r.innerHTML=`<div class="font-bold text-lg">${c.getDate()}</div>`):(r.classList.add("border","border-gray-200","hover:bg-sky-100","hover:border-sky-500"),r.onclick=()=>selectDate(c,r),r.innerHTML=`<div class="text-xs text-gray-400">${c.toLocaleDateString("en",{month:"short"})}</div><div class="font-bold text-lg">${c.getDate()}</div>`),e.appendChild(r)}}function selectDate(e,t){document.querySelectorAll("#calendar .bg-sky-500").forEach(e=>{e.classList.remove("bg-sky-500","text-white","border-sky-500"),e.classList.add("border-gray-200")}),t.classList.add("bg-sky-500","text-white","border-sky-500"),t.classList.remove("border-gray-200"),selectedDate=e,document.getElementById("next-btn-1").disabled=!1,document.getElementById("selected-date").textContent=e.toLocaleDateString("en",{weekday:"long",year:"numeric",month:"long",day:"numeric"})}function generateTimeSlots(){const e=document.getElementById("time-slots");e.innerHTML="";const t=selectedDate.getDay(),n=0===t||6===t?weekendTimeSlots:weekdayTimeSlots;n.forEach(t=>{const o=document.createElement("div");o.className="p-3 text-center border-2 border-gray-300 rounded-lg cursor-pointer hover:border-sky-500 hover:bg-sky-100 font-semibold",o.textContent=t,o.onclick=()=>selectTime(t,o),e.appendChild(o)})}function selectTime(e,t){document.querySelectorAll("#time-slots .bg-sky-500").forEach(e=>{e.classList.remove("bg-sky-500","text-white","border-sky-500"),e.classList.add("border-gray-300")}),t.classList.add("bg-sky-500","text-white","border-sky-500"),t.classList.remove("border-gray-300"),selectedTime=e,document.getElementById("next-btn-2").disabled=!1,document.getElementById("confirm-date").textContent=selectedDate.toLocaleDateString("en",{weekday:"long",year:"numeric",month:"long",day:"numeric"}),document.getElementById("confirm-time").textContent=e}function updateProgress(){for(let e=1;e<=4;e++){const t=document.getElementById(`progress-${e}`),n=document.getElementById(`progress-line-${e-1}`);t.classList.remove("bg-sky-600","text-white","bg-green-500"),t.classList.add("bg-gray-200","text-gray-500"),e<currentStep?(t.classList.remove("bg-gray-200","text-gray-500"),t.classList.add("bg-green-500","text-white"),n&&n.classList.add("w-full","bg-green-500")):e===currentStep?(t.classList.remove("bg-gray-200","text-gray-500"),t.classList.add("bg-sky-600","text-white"),n&&n.classList.remove("w-full","bg-green-500")):n&&n.classList.remove("w-full","bg-green-500")}}function showStep(e){document.getElementById("step-1").classList.add("hidden"),document.getElementById("step-2").classList.add("hidden"),document.getElementById("step-3").classList.add("hidden"),document.getElementById("step-4").classList.add("hidden"),document.getElementById(`step-${e}`).classList.remove("hidden")}function nextStep(){(1!==currentStep||selectedDate)&&(2!==currentStep||selectedTime)&&(currentStep++,showStep(currentStep),updateProgress(),2===currentStep&&generateTimeSlots())}function prevStep(){1!==currentStep&&(currentStep--,showStep(currentStep),updateProgress())}function generateMathCaptcha(){const e=Math.floor(10*Math.random())+1,t=Math.floor(10*Math.random())+1;document.getElementById("math-question").textContent=`${e} + ${t}`,mathAnswer=e+t}function validateCaptcha(){const e=parseInt(document.getElementById("captcha").value);return e!==mathAnswer?(alert("Security check failed. Please solve the math problem correctly."),generateMathCaptcha(),document.getElementById("captcha").value="",!1):!0}function submitAppointment(){const e=document.getElementById("contact-form");if(!e.checkValidity()||!validateCaptcha())return void e.reportValidity();const t=new FormData(e);appointmentData={date:selectedDate.toLocaleDateString("en",{weekday:"long",year:"numeric",month:"long",day:"numeric"}),time:selectedTime,serviceType:t.get("service-type"),name:t.get("name"),email:t.get("email"),phone:t.get("phone"),address:t.get("address"),message:t.get("message")||"No additional notes"};const n=document.getElementById("submit-btn");n.disabled=!0,n.textContent="Sending...",sendAppointmentEmail(appointmentData)}function sendAppointmentEmail(e){const t="template_q5fbhd8";emailjs.send("service_ziwf1pg",t,e).then(function(e){console.log("Email sent successfully:",e),showConfirmation()},function(e){console.log("Email failed:",e),alert("There was an error submitting your request. Please try again.");const t=document.getElementById("submit-btn");t.disabled=!1,t.textContent="Book Appointment"})}function showConfirmation(){document.getElementById("final-service").textContent=appointmentData.serviceType,document.getElementById("final-date").textContent=appointmentData.date,document.getElementById("final-time").textContent=appointmentData.time,document.getElementById("final-address").textContent=appointmentData.address,document.getElementById("final-name").textContent=appointmentData.name,document.getElementById("final-email").textContent=appointmentData.email,document.getElementById("final-phone").textContent=appointmentData.phone,nextStep()}function resetForm(){currentStep=1,selectedDate=null,selectedTime=null,document.getElementById("contact-form").reset(),showStep(1),updateProgress(),document.getElementById("next-btn-1").disabled=!0,document.getElementById("next-btn-2").disabled=!0;const e=document.getElementById("submit-btn");e.disabled=!1,e.textContent="Book Appointment",generateCalendar(),generateMathCaptcha()}document.addEventListener("DOMContentLoaded",function(){generateCalendar(),generateMathCaptcha()});
-    
+<script>
+    // SCHEDULER MODAL LOGIC
+    const schedulerModal = document.getElementById("scheduler-modal");
+
+    function openScheduler() {
+        schedulerModal.classList.remove("hidden");
+        document.body.style.overflow = "hidden";
+    }
+
+    function closeScheduler(reset = false) {
+        schedulerModal.classList.add("hidden");
+        document.body.style.overflow = "auto";
+        if (reset) {
+            resetForm();
+        }
+    }
+    schedulerModal.addEventListener("click", function(e) {
+        if (e.target === schedulerModal) {
+            closeScheduler();
+        }
+    });
+    emailjs.init("IJHcoSxlSQ9OPOJGS");
+    let currentStep = 1;
+    let selectedDate = null;
+    let selectedTime = null;
+    let appointmentData = {};
+    let mathAnswer = 0;
+    const weekdayTimeSlots = ["8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM"];
+    const weekendTimeSlots = ["10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM"];
+    const unavailableDates = [];
+
+    function generateCalendar() {
+        const e = document.getElementById("calendar");
+        e.innerHTML = "";
+        const t = new Date;
+        t.setHours(0, 0, 0, 0);
+        ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].forEach(t => {
+            e.innerHTML += `<div class="text-center font-semibold text-sm text-gray-500 p-2">${t}</div>`
+        });
+        const n = new Date(t.getFullYear(), t.getMonth(), 1);
+        const o = n.getDay();
+        for (let l = 0; l < o; l++) e.insertAdjacentHTML("beforeend", "<div></div>");
+        for (let d = 0; d < 42; d++) {
+            const c = new Date(n);
+            c.setDate(n.getDate() + d);
+            const a = c.toISOString().split("T")[0];
+            const s = unavailableDates.includes(a) || c < t;
+            const r = document.createElement("div");
+            r.className = "text-center p-2 rounded-lg cursor-pointer transition-all duration-200";
+            if (s) {
+                r.classList.add("bg-gray-100", "text-gray-300", "cursor-not-allowed");
+                r.innerHTML = `<div class="font-bold text-lg">${c.getDate()}</div>`;
+            } else {
+                r.classList.add("border", "border-gray-200", "hover:bg-sky-100", "hover:border-sky-500");
+                r.onclick = () => selectDate(c, r);
+                r.innerHTML = `<div class="text-xs text-gray-400">${c.toLocaleDateString("en",{month:"short"})}</div><div class="font-bold text-lg">${c.getDate()}</div>`;
+            }
+            e.appendChild(r);
+        }
+    }
+
+    function selectDate(e, t) {
+        document.querySelectorAll("#calendar .bg-sky-500").forEach(e => {
+            e.classList.remove("bg-sky-500", "text-white", "border-sky-500");
+            e.classList.add("border-gray-200");
+        });
+        t.classList.add("bg-sky-500", "text-white", "border-sky-500");
+        t.classList.remove("border-gray-200");
+        selectedDate = e;
+        document.getElementById("next-btn-1").disabled = false;
+        document.getElementById("selected-date").textContent = e.toLocaleDateString("en", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        });
+    }
+
+    function generateTimeSlots() {
+        const e = document.getElementById("time-slots");
+        e.innerHTML = "";
+        const t = selectedDate.getDay();
+        const n = t === 0 || t === 6 ? weekendTimeSlots : weekdayTimeSlots;
+        n.forEach(t => {
+            const o = document.createElement("div");
+            o.className = "p-3 text-center border-2 border-gray-300 rounded-lg cursor-pointer hover:border-sky-500 hover:bg-sky-100 font-semibold";
+            o.textContent = t;
+            o.onclick = () => selectTime(t, o);
+            e.appendChild(o);
+        });
+    }
+
+    function selectTime(e, t) {
+        document.querySelectorAll("#time-slots .bg-sky-500").forEach(e => {
+            e.classList.remove("bg-sky-500", "text-white", "border-sky-500");
+            e.classList.add("border-gray-300");
+        });
+        t.classList.add("bg-sky-500", "text-white", "border-sky-500");
+        t.classList.remove("border-gray-300");
+        selectedTime = e;
+        document.getElementById("next-btn-2").disabled = false;
+        document.getElementById("confirm-date").textContent = selectedDate.toLocaleDateString("en", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        });
+        document.getElementById("confirm-time").textContent = e;
+    }
+
+    function updateProgress() {
+        for (let e = 1; e <= 4; e++) {
+            const t = document.getElementById(`progress-${e}`);
+            const n = document.getElementById(`progress-line-${e-1}`);
+            t.classList.remove("bg-sky-600", "text-white", "bg-green-500");
+            t.classList.add("bg-gray-200", "text-gray-500");
+            if (e < currentStep) {
+                t.classList.remove("bg-gray-200", "text-gray-500");
+                t.classList.add("bg-green-500", "text-white");
+                if (n) n.classList.add("w-full", "bg-green-500");
+            } else if (e === currentStep) {
+                t.classList.remove("bg-gray-200", "text-gray-500");
+                t.classList.add("bg-sky-600", "text-white");
+                if (n) n.classList.remove("w-full", "bg-green-500");
+            } else {
+                if (n) n.classList.remove("w-full", "bg-green-500");
+            }
+        }
+    }
+
+    function showStep(e) {
+        document.getElementById("step-1").classList.add("hidden");
+        document.getElementById("step-2").classList.add("hidden");
+        document.getElementById("step-3").classList.add("hidden");
+        document.getElementById("step-4").classList.add("hidden");
+        document.getElementById(`step-${e}`).classList.remove("hidden");
+    }
+
+    function nextStep() {
+        if (currentStep === 1 && !selectedDate) return;
+        if (currentStep === 2 && !selectedTime) return;
+        currentStep++;
+        showStep(currentStep);
+        updateProgress();
+        if (currentStep === 2) generateTimeSlots();
+    }
+
+    function prevStep() {
+        if (currentStep === 1) return;
+        currentStep--;
+        showStep(currentStep);
+        updateProgress();
+    }
+
+    function generateMathCaptcha() {
+        const e = Math.floor(10 * Math.random()) + 1;
+        const t = Math.floor(10 * Math.random()) + 1;
+        document.getElementById("math-question").textContent = `${e} + ${t}`;
+        mathAnswer = e + t;
+    }
+
+    function validateCaptcha() {
+        const e = parseInt(document.getElementById("captcha").value);
+        if (e !== mathAnswer) {
+            alert("Security check failed. Please solve the math problem correctly.");
+            generateMathCaptcha();
+            document.getElementById("captcha").value = "";
+            return false;
+        }
+        return true;
+    }
+
+    function submitAppointment() {
+        const e = document.getElementById("contact-form");
+        if (!e.checkValidity() || !validateCaptcha()) {
+            e.reportValidity();
+            return;
+        }
+        const t = new FormData(e);
+        appointmentData = {
+            date: selectedDate.toLocaleDateString("en", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+            }),
+            time: selectedTime,
+            serviceType: t.get("service-type"),
+            name: t.get("name"),
+            email: t.get("email"),
+            phone: t.get("phone"),
+            address: t.get("address"),
+            message: t.get("message") || "No additional notes"
+        };
+        const n = document.getElementById("submit-btn");
+        n.disabled = true;
+        n.textContent = "Sending...";
+        sendAppointmentEmail(appointmentData);
+    }
+
+    function sendAppointmentEmail(e) {
+        const t = "template_q5fbhd8";
+        emailjs.send("service_ziwf1pg", t, e).then(function(e) {
+            console.log("Email sent successfully:", e);
+            showConfirmation();
+        }, function(e) {
+            console.log("Email failed:", e);
+            alert("There was an error submitting your request. Please try again.");
+            const t = document.getElementById("submit-btn");
+            t.disabled = false;
+            t.textContent = "Book Appointment";
+        });
+    }
+
+    function showConfirmation() {
+        document.getElementById("final-service").textContent = appointmentData.serviceType;
+        document.getElementById("final-date").textContent = appointmentData.date;
+        document.getElementById("final-time").textContent = appointmentData.time;
+        document.getElementById("final-address").textContent = appointmentData.address;
+        document.getElementById("final-name").textContent = appointmentData.name;
+        document.getElementById("final-email").textContent = appointmentData.email;
+        document.getElementById("final-phone").textContent = appointmentData.phone;
+        
+        // --- THIS IS THE NEW LINE FOR GOOGLE ANALYTICS TRACKING ---
+        gtag('event', 'schedule_appointment', { 'event_category': 'conversion' });
+        // -----------------------------------------------------------
+
+        nextStep();
+    }
+
+    function resetForm() {
+        currentStep = 1;
+        selectedDate = null;
+        selectedTime = null;
+        document.getElementById("contact-form").reset();
+        showStep(1);
+        updateProgress();
+        document.getElementById("next-btn-1").disabled = true;
+        document.getElementById("next-btn-2").disabled = true;
+        const e = document.getElementById("submit-btn");
+        e.disabled = false;
+        e.textContent = "Book Appointment";
+        generateCalendar();
+        generateMathCaptcha();
+    }
+    document.addEventListener("DOMContentLoaded", function() {
+        generateCalendar();
+        generateMathCaptcha();
+    });
+
     // --- RESPONSIVE HEADER & CHAT WIDGET SCRIPT ---
     const chatBubble = document.getElementById('chat-bubble');
     const chatWidget = document.getElementById('chat-widget');
@@ -685,14 +931,12 @@
             message: document.getElementById('chat-input').value,
         };
         
-        // **FINAL FIX**: The chat widget now uses its own dedicated template ID.
         const chatTemplateID = 'template_j68qyhk';
 
         emailjs.send('service_ziwf1pg', chatTemplateID, chatData)
             .then(function(response) {
                 console.log('Chat message sent successfully:', response);
                 chatConfirmation.classList.remove('hidden');
-                // Don't close the widget automatically, let the user close it.
             }, function(error) {
                 console.log('Chat message failed:', error);
                 alert('Sorry, the message could not be sent. Please try again.');
@@ -702,6 +946,4 @@
                 sendChatBtn.textContent = 'Send Message';
             });
     });
-    </script>
-</body>
-</html>
+</script>
