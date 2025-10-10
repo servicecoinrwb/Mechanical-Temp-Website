@@ -937,6 +937,11 @@
             .then(function(response) {
                 console.log('Chat message sent successfully:', response);
                 chatConfirmation.classList.remove('hidden');
+
+                // --- ADD THIS LINE FOR CHAT CONVERSION TRACKING ---
+                gtag('event', 'chat_lead', { 'event_category': 'conversion' });
+                // ----------------------------------------------------
+
             }, function(error) {
                 console.log('Chat message failed:', error);
                 alert('Sorry, the message could not be sent. Please try again.');
@@ -947,3 +952,4 @@
             });
     });
 </script>
+
