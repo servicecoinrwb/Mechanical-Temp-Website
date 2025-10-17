@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0G63KLB2B0"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-0G63KLB2B0');
+    </script>
+    
     <!-- SEO METADATA: Focused on the blog main page -->
     <title>HVAC Blog & Pro Tips | Mechanical Temp | Southfield, MI</title>
     <meta name="description" content="The official blog for Mechanical Temp. Find expert tips, maintenance advice, and HVAC industry news for homeowners in Southfield and Metro Detroit.">
@@ -59,11 +69,28 @@
             <div class="container mx-auto max-w-5xl">
                 <!-- Main Content: Blog Posts Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                
+                    
+                    <!-- Blog Post Card 4 -->
+                    <div class="bg-slate-50 rounded-lg shadow-md overflow-hidden flex flex-col group">
+                        <a href="blog-post-4.html" class="block">
+                            <img src="https://imageview.replit.app/objects/uploads/9877a0cc-885d-45be-a327-4be971c52a41" alt="A clean furnace filter being installed." class="w-full h-56 object-cover group-hover:opacity-90 transition-opacity">
+                        </a>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <p class="text-sm text-slate-500 mb-2">October 17, 2025 • Furnace Maintenance</p>
+                            <h2 class="text-2xl font-bold mb-3">
+                                <a href="blog-post-4.html" class="hover:text-sky-600 transition-colors">The Ultimate Checklist Before Turning On Your Michigan Furnace</a>
+                            </h2>
+                            <p class="text-slate-600 mb-6 flex-grow">
+                                Don't just flip the switch. Follow these simple steps to ensure a safe, efficient, and warm start to the heating season.
+                            </p>
+                            <a href="blog-post-4.html" class="text-sky-600 font-bold hover:underline self-start">Read Full Article →</a>
+                        </div>
+                    </div>
+
                     <!-- Blog Post Card 3 -->
                     <div class="bg-slate-50 rounded-lg shadow-md overflow-hidden flex flex-col group">
                         <a href="blog-post-3.html" class="block">
-                            <img src="https://imageview.replit.app/objects/uploads/1af5b5f4-bea1-407c-a73b-d3b7238755a7" alt="Commercial Building in Autumn" class="w-full h-56 object-cover group-hover:opacity-90 transition-opacity">
+                            <img src="https://imageview.replit.app/objects/uploads/18760a22-ba03-4078-b450-6c4bf99cea98" alt="Commercial HVAC units on a rooftop." class="w-full h-56 object-cover group-hover:opacity-90 transition-opacity">
                         </a>
                         <div class="p-6 flex flex-col flex-grow">
                             <p class="text-sm text-slate-500 mb-2">October 14, 2025 • Commercial HVAC</p>
@@ -121,7 +148,7 @@
         <div class="container mx-auto text-center text-slate-400">
             <h3 class="text-2xl font-bold text-white mb-4">Ready for Total Comfort?</h3>
             <p class="mb-6">Contact Mechanical Temp today for a free, no-obligation estimate on your HVAC needs.</p>
-            <a href="index.html#scheduler-modal" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-8 rounded-lg text-lg inline-block transition-transform hover:scale-105 mb-10">
+            <a href="index.html#scheduler-modal" onclick="openScheduler()" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-8 rounded-lg text-lg inline-block transition-transform hover:scale-105 mb-10">
                 Schedule Service Now
             </a>
             <div class="border-t border-slate-700 pt-6">
@@ -129,6 +156,15 @@
                 <p>23093 Telegraph Rd, Southfield, MI 48033</p>
                  <div class="space-y-1 my-2">
                      <p>Call Us: <a href="tel:+13132824758" class="hover:text-sky-400">(313) 282-4758</a></p>
+                     <p>
+                         <a href="https://buy.stripe.com/bIY01kg5K3zD5I4fYY" target="_blank" rel="noopener noreferrer" class="text-sky-400 hover:text-sky-300 font-semibold inline-flex items-center">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
+                                <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm3 0a1 1 0 011-1h1a1 1 0 110 2H8a1 1 0 01-1-1z" clip-rule="evenodd" />
+                              </svg>
+                             Make a Payment Online
+                         </a>
+                     </p>
                  </div>
                 <p class="mt-4 text-sm">&copy; 2025 Mechanical Temp. All Rights Reserved.</p>
             </div>
