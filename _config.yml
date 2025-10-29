@@ -1,3 +1,5 @@
 # _config.yml
-title: Mechanical Temp
-# Other settings like theme, plugins, etc.
+
+# Enable the 'jekyll-redirect-from' plugin
+plugins:
+  - jekyll-redirect-from
