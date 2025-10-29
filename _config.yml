@@ -1,6 +1,0 @@
-# _config.yml
-title: Mechanical Temp
-description: Premier HVAC Services in Southfield & Metro Detroit
-# This list is CRITICAL for GitHub Pages to enable the redirect plugin
-plugins:
-  - jekyll-redirect-from 
