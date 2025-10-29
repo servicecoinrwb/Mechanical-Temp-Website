@@ -1,6 +1,4 @@
-# Allow all search engine crawlers to access the entire site.
 User-agent: *
-Disallow:
+Allow: /
 
-# Provide the location of the sitemap.
 Sitemap: https://www.mechanicaltemp.com/sitemap.xml
