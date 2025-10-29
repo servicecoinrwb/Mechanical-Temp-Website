@@ -1,9 +1,7 @@
-# Gemfile
 source "https://rubygems.org"
 
-# Use the official GitHub Pages dependency group
-# This includes the correct Jekyll version and other default plugins
+# Use the official GitHub Pages gem to keep dependencies aligned with the server
 gem "github-pages", group: :jekyll_plugins
 
-# Add the specific redirect plugin you need
+# Add the specific redirect plugin
 gem "jekyll-redirect-from"
