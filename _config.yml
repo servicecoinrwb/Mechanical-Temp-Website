@@ -1,5 +1,6 @@
 # _config.yml
-
-# Enable the 'jekyll-redirect-from' plugin
+title: Mechanical Temp
+description: Premier HVAC Services in Southfield & Metro Detroit
+# This list is CRITICAL for GitHub Pages to enable the redirect plugin
 plugins:
-  - jekyll-redirect-from
+  - jekyll-redirect-from 
