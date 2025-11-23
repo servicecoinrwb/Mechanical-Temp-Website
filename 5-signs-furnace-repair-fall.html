@@ -13,10 +13,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- SEO METADATA: Focused on the blog post topic -->
+    <!-- SEO METADATA -->
     <title>5 Signs Your Furnace Needs Repair This Fall | Mechanical Temp</title>
     <meta name="description" content="Is your furnace ready for a Michigan winter? Learn 5 common warning signs that you need a professional furnace repair service before the cold weather hits.">
 
+    <!-- ✅ CANONICAL LINK (Master Copy Signal) -->
+    <link rel="canonical" href="https://mechanicaltemp.com/5-signs-furnace-repair-fall.html" />
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,6 +39,7 @@
             font-weight: 700; /* font-bold */
             margin-top: 2.5rem; /* mt-10 */
             margin-bottom: 1rem; /* mb-4 */
+            color: #1e293b;
         }
         .blog-content p {
             font-size: 1.125rem; /* text-lg */
@@ -62,73 +66,123 @@
             color: #1e293b; /* slate-800 */
         }
     </style>
+
+    <!-- ✅ SCHEMA MARKUP (For Rich Snippets) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://mechanicaltemp.com/5-signs-furnace-repair-fall.html"
+      },
+      "headline": "5 Signs Your Furnace Needs Repair This Fall",
+      "description": "Is your furnace ready for a Michigan winter? Learn 5 common warning signs that you need a professional furnace repair service before the cold weather hits.",
+      "image": "https://images.unsplash.com/photo-1583373869925-50d4f7b6a166?q=80&w=2070",  
+      "author": {
+        "@type": "Organization",
+        "name": "Mechanical Temp",
+        "url": "https://mechanicaltemp.com"
+      },  
+      "publisher": {
+        "@type": "Organization",
+        "name": "Mechanical Temp",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://i.imgur.com/YJvJw7V.png"
+        }
+      },
+      "datePublished": "2025-09-24",
+      "dateModified": "2025-09-24"
+    }
+    </script>
 </head>
 <body class="text-gray-800">
 
     <!-- HEADER & NAVIGATION -->
-    <header class="bg-gray-900/80 sticky top-0 z-20 p-4">
+    <header class="bg-gray-900/80 sticky top-0 z-20 p-4 backdrop-blur-md">
         <nav class="container mx-auto flex justify-between items-center text-white">
             <a href="index.html" class="block">
                 <img src="https://i.imgur.com/YJvJw7V.png" alt="Mechanical Temp Logo" class="h-12 w-auto">
             </a>
-            <ul class="hidden md:flex space-x-6">
-                <li><a href="index.html#services" class="hover:text-sky-400">Services</a></li>
-                <li><a href="service-plan.html" class="hover:text-sky-400">Service Plan</a></li>
-                <li><a href="index.html#offers" class="hover:text-sky-400">Offers</a></li>
-                <li><a href="index.html#about" class="hover:text-sky-400">About Us</a></li>
-                <li><a href="blog.html" class="hover:text-sky-400">Blog</a></li>
+            <ul class="hidden md:flex space-x-6 text-sm font-semibold">
+                <li><a href="index.html#services" class="hover:text-sky-400 transition-colors">Services</a></li>
+                <li><a href="service-plan.html" class="hover:text-sky-400 transition-colors">Service Plan</a></li>
+                <li><a href="index.html#offers" class="hover:text-sky-400 transition-colors">Offers</a></li>
+                <li><a href="index.html#about" class="hover:text-sky-400 transition-colors">About Us</a></li>
+                <li><a href="blog.html" class="text-sky-400">Blog</a></li>
             </ul>
+             <!-- Mobile Book Button -->
+            <button onclick="openScheduler()" class="md:hidden bg-sky-600 text-white px-4 py-2 rounded font-bold text-sm">Book Now</button>
         </nav>
     </header>
 
     <main>
-        <!-- BLOG POST HEADER -->
-        <section class="post-header text-white py-20 px-6">
+        <!-- BLOG POST HERO SECTION -->
+        <section class="post-header text-white py-24 px-6">
             <div class="container mx-auto text-center">
-                <h1 class="text-4xl md:text-5xl font-black mb-4">
+                <h1 class="text-4xl md:text-5xl font-black mb-4 drop-shadow-lg">
                     5 Signs Your Furnace Needs Repair This Fall
                 </h1>
-                <p class="max-w-3xl mx-auto text-lg text-slate-300">
+                <p class="max-w-3xl mx-auto text-lg text-slate-100 font-medium drop-shadow-md">
                     Don't get caught in the cold. Here's how to spot trouble before a Michigan winter hits.
                 </p>
             </div>
         </section>
 
-        <!-- BLOG CONTENT SECTION -->
-        <section class="bg-white py-20 px-6">
+        <!-- MAIN ARTICLE CONTENT -->
+        <section class="bg-white py-16 px-6">
             <div class="container mx-auto max-w-3xl">
                 <div class="blog-content">
-                    <p class="text-slate-500 text-lg mb-8">September 24, 2025 • Furnace Maintenance</p>
-                    <p class="text-xl text-slate-700">As the leaves start to change color and a crisp chill fills the air, every homeowner in Metro Detroit knows what’s coming next: a long, cold Michigan winter. Before you need to rely on your furnace 24/7, it’s crucial to make sure it’s in top working condition. Ignoring small warning signs now can lead to a complete breakdown when you need heat the most.</p>
+                    <div class="flex items-center gap-2 text-slate-400 text-sm mb-8">
+                        <span>September 24, 2025</span>
+                        <span>•</span>
+                        <span class="text-sky-600 font-bold uppercase tracking-wider">Furnace Maintenance</span>
+                    </div>
+
+                    <p class="text-xl text-slate-700 leading-relaxed">As the leaves start to change color and a crisp chill fills the air, every homeowner in Metro Detroit knows what’s coming next: a long, cold Michigan winter. Before you need to rely on your furnace 24/7, it’s crucial to make sure it’s in top working condition. Ignoring small warning signs now can lead to a complete breakdown when you need heat the most.</p>
 
                     <p>Here are five common signs that your furnace is calling out for a professional repair service.</p>
+
+                    <hr class="my-8 border-slate-200" />
 
                     <h2>1. Strange Noises</h2>
                     <p>Your furnace should operate relatively quietly. If you start hearing new or unusual sounds, it's a clear sign that something is wrong. Listen for:</p>
                     <ul>
-                        <li><strong>Banging or Popping:</strong> This could indicate an issue with your burners or ductwork.</li>
-                        <li><strong>Squealing or Whining:</strong> Often points to a problem with the blower motor or a belt.</li>
-                        <li><strong>Grinding or Scraping:</strong> This is a serious sound that could mean worn-out motor bearings. Turn off your furnace immediately and call a professional to prevent further damage.</li>
+                        <li><strong>Banging or Popping:</strong> This could indicate an issue with your burners or ductwork expanding too quickly.</li>
+                        <li><strong>Squealing or Whining:</strong> Often points to a problem with the blower motor or a loose belt.</li>
+                        <li><strong>Grinding or Scraping:</strong> This is a "Turn it off NOW" sound. It usually means worn-out motor bearings. Call a professional immediately to prevent permanent damage.</li>
                     </ul>
 
                     <h2>2. Unusually High Energy Bills</h2>
                     <p>Have your heating bills suddenly spiked without a change in your usage? A furnace that is struggling to operate efficiently will run longer and work harder to heat your home, driving up your energy consumption. A professional tune-up or repair can often restore its efficiency and bring your bills back down to normal.</p>
 
                     <h2>3. The Pilot Light is Yellow</h2>
-                    <p>If you have an older furnace with a pilot light, take a quick look at the flame. A healthy pilot light should be a steady, blue color. If the flame is yellow, flickering, or weak, it could be a sign of a ventilation problem or an issue with the gas mixture. This is not just an efficiency problem—it can be a potential carbon monoxide hazard and needs to be inspected right away.</p>
+                    <p>If you have an older furnace with a pilot light, take a quick look at the flame. A healthy pilot light should be a <strong>steady, blue color</strong>.</p> 
+                    <p>If the flame is yellow, flickering, or weak, it could be a sign of a ventilation problem or an issue with the gas mixture. This is not just an efficiency problem—it can be a potential carbon monoxide hazard and needs to be inspected right away.</p>
 
                     <h2>4. Your Home Isn't Heating Evenly</h2>
                     <p>Are some rooms in your house warm and cozy while others feel like an icebox? If your furnace is running but failing to distribute heat evenly, the problem could be with the furnace itself or with your ductwork. A weak blower motor or leaky ducts can prevent warm air from reaching every part of your home.</p>
 
                     <h2>5. The System Turns On and Off Frequently</h2>
-                    <p>This is known as "short cycling." Your furnace should run for a consistent period to bring your home to the desired temperature and then shut off. If it's turning on and off every few minutes, it could be caused by a clogged filter, an oversized system, or a faulty thermostat. This constant starting and stopping puts major stress on the components and can lead to a premature breakdown.</p>
+                    <p>This is known as "short cycling." Your furnace should run for a consistent period to bring your home to the desired temperature and then shut off. If it's turning on and off every few minutes, it could be caused by a clogged filter, an oversized system, or a faulty thermostat.</p>
+
+                    <!-- ✅ IMAGE WITH LOCAL SEO ALT TEXT -->
+                    <img src="https://i.imgur.com/ChkEIoQ.jpeg" alt="Furnace repair technician inspecting a heating system in Southfield, MI" class="rounded-xl shadow-lg my-10 w-full h-auto object-cover">
 
                     <h2>Don't Wait for a Breakdown</h2>
                     <p>If you've noticed any of these signs, don't wait for a small problem to become a major, expensive repair in the middle of winter. The best time to address furnace issues is in the fall, before the heavy heating season begins.</p>
                     
-                    <img src="https://i.imgur.com/ChkEIoQ.jpeg" alt="A Mechanical Temp technician performing a furnace repair." class="rounded-lg shadow-lg my-8">
-
-                    <p>The certified technicians at <strong>Mechanical Temp</strong> are here to help. We provide expert <a href="furnace-services.html">furnace repair and maintenance services</a> throughout Southfield and the entire Metro Detroit area. <a href="#" onclick="openScheduler(); return false;">Schedule a furnace inspection today</a> and ensure your home stays warm and comfortable all season long.</p>
+                    <div class="bg-sky-50 p-6 rounded-lg border border-sky-100 mt-8">
+                        <p class="mb-4 text-slate-800">The certified technicians at <strong>Mechanical Temp</strong> are here to help. We provide expert <a href="index.html#services">furnace repair and maintenance services</a> throughout Southfield and the entire Metro Detroit area.</p>
+                        
+                        <p class="font-bold text-sky-700">
+                            <a href="#" onclick="openScheduler(); return false;" class="underline hover:text-sky-500">
+                                Click here to schedule a furnace inspection today
+                            </a> 
+                            and ensure your home stays warm all season long.
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -162,7 +216,6 @@
         </div>
     </footer>
     
-    <!-- NOTE: The scheduler modal and its script are needed for the "Schedule... today" link in the blog post -->
     <!-- SCHEDULER MODAL -->
     <div id="scheduler-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4 hidden">
         <div id="hvac-scheduler-widget" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
@@ -223,9 +276,8 @@
     
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
-    // SCHEDULER MODAL LOGIC (Identical to other pages)
+    // SCHEDULER WIDGET LOGIC
     const schedulerModal=document.getElementById("scheduler-modal");function openScheduler(){schedulerModal.classList.remove("hidden"),document.body.style.overflow="hidden"}function closeScheduler(e=!1){schedulerModal.classList.add("hidden"),document.body.style.overflow="auto",e&&resetForm()}schedulerModal.addEventListener("click",function(e){e.target===schedulerModal&&closeScheduler()}),emailjs.init("IJHcoSxlSQ9OPOJGS");let currentStep=1,selectedDate=null,selectedTime=null,appointmentData={},mathAnswer=0;const weekdayTimeSlots=["8:00 AM","9:00 AM","10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM"],weekendTimeSlots=["10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM"],unavailableDates=[];function generateCalendar(){const e=document.getElementById("calendar");e.innerHTML="";const t=new Date;t.setHours(0,0,0,0);["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(t=>{e.innerHTML+=`<div class="text-center font-semibold text-sm text-gray-500 p-2">${t}</div>`});const n=new Date(t.getFullYear(),t.getMonth(),1),o=n.getDay();for(let l=0;l<o;l++)e.insertAdjacentHTML("beforeend","<div></div>");for(let d=0;d<42;d++){const c=new Date(n);c.setDate(n.getDate()+d);const a=c.toISOString().split("T")[0],s=unavailableDates.includes(a)||c<t,r=document.createElement("div");r.className="text-center p-2 rounded-lg cursor-pointer transition-all duration-200",s?(r.classList.add("bg-gray-100","text-gray-300","cursor-not-allowed"),r.innerHTML=`<div class="font-bold text-lg">${c.getDate()}</div>`):(r.classList.add("border","border-gray-200","hover:bg-sky-100","hover:border-sky-500"),r.onclick=()=>selectDate(c,r),r.innerHTML=`<div class="text-xs text-gray-400">${c.toLocaleDateString("en",{month:"short"})}</div><div class="font-bold text-lg">${c.getDate()}</div>`),e.appendChild(r)}}function selectDate(e,t){document.querySelectorAll("#calendar .bg-sky-500").forEach(e=>{e.classList.remove("bg-sky-500","text-white","border-sky-500"),e.classList.add("border-gray-200")}),t.classList.add("bg-sky-500","text-white","border-sky-500"),t.classList.remove("border-gray-200"),selectedDate=e,document.getElementById("next-btn-1").disabled=!1,document.getElementById("selected-date").textContent=e.toLocaleDateString("en",{weekday:"long",year:"numeric",month:"long",day:"numeric"})}function generateTimeSlots(){const e=document.getElementById("time-slots");e.innerHTML="";const t=selectedDate.getDay(),n=0===t||6===t?weekendTimeSlots:weekdayTimeSlots;n.forEach(t=>{const o=document.createElement("div");o.className="p-3 text-center border-2 border-gray-300 rounded-lg cursor-pointer hover:border-sky-500 hover:bg-sky-100 font-semibold",o.textContent=t,o.onclick=()=>selectTime(t,o),e.appendChild(o)})}function selectTime(e,t){document.querySelectorAll("#time-slots .bg-sky-500").forEach(e=>{e.classList.remove("bg-sky-500","text-white","border-sky-500"),e.classList.add("border-gray-300")}),t.classList.add("bg-sky-500","text-white","border-sky-500"),t.classList.remove("border-gray-300"),selectedTime=e,document.getElementById("next-btn-2").disabled=!1,document.getElementById("confirm-date").textContent=selectedDate.toLocaleDateString("en",{weekday:"long",year:"numeric",month:"long",day:"numeric"}),document.getElementById("confirm-time").textContent=e}function updateProgress(){for(let e=1;e<=4;e++){const t=document.getElementById(`progress-${e}`),n=document.getElementById(`progress-line-${e-1}`);t.classList.remove("bg-sky-600","text-white","bg-green-500"),t.classList.add("bg-gray-200","text-gray-500"),e<currentStep?(t.classList.remove("bg-gray-200","text-gray-500"),t.classList.add("bg-green-500","text-white"),n&&n.classList.add("w-full","bg-green-500")):e===currentStep?(t.classList.remove("bg-gray-200","text-gray-500"),t.classList.add("bg-sky-600","text-white"),n&&n.classList.remove("w-full","bg-green-500")):n&&n.classList.remove("w-full","bg-green-500")}}function showStep(e){document.getElementById("step-1").classList.add("hidden"),document.getElementById("step-2").classList.add("hidden"),document.getElementById("step-3").classList.add("hidden"),document.getElementById("step-4").classList.add("hidden"),document.getElementById(`step-${e}`).classList.remove("hidden")}function nextStep(){(1!==currentStep||selectedDate)&&(2!==currentStep||selectedTime)&&(currentStep++,showStep(currentStep),updateProgress(),2===currentStep&&generateTimeSlots())}function prevStep(){1!==currentStep&&(currentStep--,showStep(currentStep),updateProgress())}function generateMathCaptcha(){const e=Math.floor(10*Math.random())+1,t=Math.floor(10*Math.random())+1;document.getElementById("math-question").textContent=`${e} + ${t}`,mathAnswer=e+t}function validateCaptcha(){const e=parseInt(document.getElementById("captcha").value);return e!==mathAnswer?(alert("Security check failed. Please solve the math problem correctly."),generateMathCaptcha(),document.getElementById("captcha").value="",!1):!0}function submitAppointment(){const e=document.getElementById("contact-form");if(!e.checkValidity()||!validateCaptcha())return void e.reportValidity();const t=new FormData(e);appointmentData={date:selectedDate.toLocaleDateString("en",{weekday:"long",year:"numeric",month:"long",day:"numeric"}),time:selectedTime,serviceType:t.get("service-type"),name:t.get("name"),email:t.get("email"),phone:t.get("phone"),address:t.get("address"),message:t.get("message")||"No additional notes"};const n=document.getElementById("submit-btn");n.disabled=!0,n.textContent="Sending...",sendAppointmentEmail(appointmentData)}function sendAppointmentEmail(e){const t={to_email:"office@mechanicaltemp.com",cc_email:"mthvacr@gmail.com",bcc_email:"3132824758@vtext.com,3136004012@vtext.com",from_name:e.name,from_email:e.email,phone:e.phone,service_type:e.serviceType,service_address:e.address,appointment_date:e.date,appointment_time:e.time,message:e.message,subject:`🔧 HVAC Service: ${e.serviceType} - ${e.date} ${e.time}`};emailjs.send("service_ziwf1pg","template_q5fbhd8",t).then(function(e){console.log("Email sent successfully:",e),showConfirmation()},function(e){console.log("Email failed:",e),alert("There was an error submitting your request. Please try again.");const t=document.getElementById("submit-btn");t.disabled=!1,t.textContent="Book Appointment"})}function showConfirmation(){document.getElementById("final-service").textContent=appointmentData.serviceType,document.getElementById("final-date").textContent=appointmentData.date,document.getElementById("final-time").textContent=appointmentData.time,document.getElementById("final-address").textContent=appointmentData.address,document.getElementById("final-name").textContent=appointmentData.name,document.getElementById("final-email").textContent=appointmentData.email,document.getElementById("final-phone").textContent=appointmentData.phone,nextStep()}function resetForm(){currentStep=1,selectedDate=null,selectedTime=null,document.getElementById("contact-form").reset(),showStep(1),updateProgress(),document.getElementById("next-btn-1").disabled=!0,document.getElementById("next-btn-2").disabled=!0;const e=document.getElementById("submit-btn");e.disabled=!1,e.textContent="Book Appointment",generateCalendar(),generateMathCaptcha()}document.addEventListener("DOMContentLoaded",function(){generateCalendar(),generateMathCaptcha()});
     </script>
 </body>
 </html>
-
