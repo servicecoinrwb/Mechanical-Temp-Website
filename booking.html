@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mechanical Temp - Express Booking</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Google Tags -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0G63KLB2B0"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-0G63KLB2B0');
+      gtag('config', 'AW-11260644372');
+      gtag('config', 'AW-11260644372/N24jCJH83M4YEJSYv_kp', { 'phone_conversion_number': '(313) 282-4758' });
+    </script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* Smooth scrolling */
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useRef, useEffect } = React;
+
+        // --- ICONS (Inlined for standalone usage) ---
+        const IconBase = ({ children, size = 24, className = "", ...props }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} {...props}>{children}</svg>
+        );
+        const Flame = (props) => <IconBase {...props}><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-2.246-3.664-4.97-6.08a9.856 9.856 0 0 1 5.071 2.449c.5.5.5 1.5 1.5 2 2 1 2.5 3.5 2.5 5a4.5 4.5 0 0 1-4.5 4.5c-2.485 0-4.5-2.015-4.5-4.5a3.5 3.5 0 0 1 3.5-3.5c.958 0 1.5.5 1.5 1.5"/></IconBase>;
+        const Snowflake = (props) => <IconBase {...props}><line x1="2" y1="12" x2="22" y2="12"></line><line x1="12" y1="2" x2="12" y2="22"></line><path d="M20 16l-4-4 4-4"></path><path d="M4 8l4 4-4 4"></path><path d="M16 4l-4 4-4-4"></path><path d="M8 20l4-4 4 4"></path></IconBase>;
+        const Wind = (props) => <IconBase {...props}><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/></IconBase>;
+        const ShoppingCart = (props) => <IconBase {...props}><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></IconBase>;
+        const ChevronLeft = (props) => <IconBase {...props}><polyline points="15 18 9 12 15 6"></polyline></IconBase>;
+        const Plus = (props) => <IconBase {...props}><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></IconBase>;
+        const Check = (props) => <IconBase {...props}><polyline points="20 6 9 17 4 12"></polyline></IconBase>;
+        const Clock = (props) => <IconBase {...props}><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></IconBase>;
+        const X = (props) => <IconBase {...props}><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></IconBase>;
+        const MenuIcon = (props) => <IconBase {...props}><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></IconBase>;
+        const Phone = (props) => <IconBase {...props}><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></IconBase>;
+        const ArrowRight = (props) => <IconBase {...props}><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></IconBase>;
+        const Info = (props) => <IconBase {...props}><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></IconBase>;
+        const ShieldCheck = (props) => <IconBase {...props}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></IconBase>;
+
+
+        const HVACBookingPage = () => {
+          const [view, setView] = useState('home'); 
+          const [activeCategory, setActiveCategory] = useState(null);
+          const [cart, setCart] = useState([]);
+          const [isOrderPlaced, setIsOrderPlaced] = useState(false);
+          const [isSubmitting, setIsSubmitting] = useState(false);
+          const [showItemDetails, setShowItemDetails] = useState(null);
+          const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+          
+          const menuSectionRef = useRef(null);
+
+          const scrollToMenu = () => {
+            menuSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+          };
+
+          // --- DATA ---
+          const categories = [
+            {
+              id: 'heating',
+              title: 'Heating',
+              subtitle: 'Furnaces, Boilers & Heat Pumps',
+              icon: <Flame size={40} className="text-orange-500" />,
+              color: 'bg-orange-50',
+              accent: 'border-orange-500',
+              textAccent: 'text-orange-600',
+              items: [
+                { id: 'h1', name: 'The "No Heat" Diagnostic', description: 'System down? We find the problem. Includes trip & 1hr labor.', price: 89, popular: true, details: 'Expert troubleshooting to identify the root cause. Upfront pricing for any further repairs.', duration: '60-90 mins' },
+                { id: 'h2', name: 'Seasonal Furnace Tune-Up', description: '21-point safety check, cleaning, and calibration.', price: 69, details: 'Includes flame sensor cleaning, filter check, and efficiency analysis.', duration: '60 mins' },
+                { id: 'h3', name: 'Smart Thermostat Install', description: 'Install of your Nest or Ecobee + WiFi setup.', price: 149, details: 'We handle the C-wire, mounting, and phone app connection.', duration: '45 mins' }
+              ]
+            },
+            {
+              id: 'cooling',
+              title: 'Cooling',
+              subtitle: 'A/C Units & Mini Splits',
+              icon: <Snowflake size={40} className="text-sky-500" />,
+              color: 'bg-sky-50',
+              accent: 'border-sky-500',
+              textAccent: 'text-sky-600',
+              items: [
+                { id: 'c1', name: 'The "No Cool" Diagnostic', description: 'Blowing warm air? We will diagnose the issue fast.', price: 89, popular: true, details: 'Comprehensive testing of refrigerant, capacitor, and compressor.', duration: '60-90 mins' },
+                { id: 'c2', name: 'A/C Chemical Wash', description: 'Deep clean of outdoor condenser coil.', price: 199, details: 'Restores efficiency by removing deep-set dirt and debris.', duration: '90 mins' }
+              ]
+            },
+            {
+              id: 'iaq',
+              title: 'Air Quality',
+              subtitle: 'Humidifiers & Filters',
+              icon: <Wind size={40} className="text-green-500" />,
+              color: 'bg-green-50',
+              accent: 'border-green-500',
+              textAccent: 'text-green-600',
+              items: [
+                { id: 'a1', name: 'Whole Home Humidifier', description: 'Installation of bypass humidifier.', price: 550, details: 'Stop dry winter air. Includes unit and installation.', duration: '3 hours' },
+                { id: 'a2', name: 'Humidifier Pad Refresh', description: 'Replace old water panel and clean tray.', price: 65, details: 'Ensures safe and effective moisture output.', duration: '30 mins' }
+              ]
+            },
+            {
+              id: 'plans',
+              title: 'Service Plans',
+              subtitle: 'Maintenance Memberships',
+              icon: <ShieldCheck size={40} className="text-purple-500" />,
+              color: 'bg-purple-50',
+              accent: 'border-purple-500',
+              textAccent: 'text-purple-600',
+              items: [
+                { id: 'p1', name: 'Mechanical Temp Service Plan', description: '2 Visits/Yr + Priority Status + Discounts.', price: 55, isSubscription: true, popular: true, details: 'Total peace of mind. Includes Fall and Spring tune-ups and 15% off repairs.', duration: 'Monthly' }
+              ]
+            }
+          ];
+
+          // --- LOGIC ---
+          const addToCart = (item) => setCart([...cart, item]);
+          const removeFromCart = (index) => setCart(cart.filter((_, i) => i !== index));
+          const calculateTotal = () => cart.reduce((total, item) => total + item.price, 0);
+          
+          const handlePlaceOrder = async (e) => {
+            e.preventDefault();
+            setIsSubmitting(true);
+            const formData = new FormData(e.target);
+            try {
+              const response = await fetch("https://formspree.io/f/xldwzbal", {
+                method: "POST", body: formData, headers: { 'Accept': 'application/json' }
+              });
+              if (response.ok) {
+                setIsOrderPlaced(true);
+                setIsSubmitting(false);
+                setCart([]);
+                setTimeout(() => { setIsOrderPlaced(false); setView('home'); }, 5000);
+              } else {
+                alert("Issue submitting. Please call (313) 282-4758.");
+                setIsSubmitting(false);
+              }
+            } catch {
+              alert("Network error. Please call (313) 282-4758.");
+              setIsSubmitting(false);
+            }
+          };
+
+          // --- UI COMPONENTS ---
+          const Navbar = () => (
+            <nav className="bg-gray-900/95 sticky top-0 z-50 p-4 shadow-md backdrop-blur-sm">
+              <div className="container mx-auto flex justify-between items-center text-white">
+                <div className="flex items-center gap-2 cursor-pointer" onClick={() => setView('home')}>
+                   <img 
+                     src="https://images.squarespace-cdn.com/content/v1/64b8ce7983e67906ccb6616f/5b6094f5-caee-47d6-8b5e-9b762773f4c0/white_logo_transparent_background.png?format=1500w" 
+                     alt="Mechanical Temp" 
+                     className="h-10 md:h-12 w-auto" 
+                   />
+                </div>
+                
+                <ul className="hidden md:flex items-center space-x-6 text-sm font-semibold">
+                  <li><a href="https://www.mechanicaltemp.com/#services" className="hover:text-sky-400 transition-colors">Services</a></li>
+                  <li><a href="https://www.mechanicaltemp.com/service-plan.html" className="hover:text-sky-400 transition-colors">Service Plan</a></li>
+                  <li><a href="https://www.mechanicaltemp.com/#offers" className="hover:text-sky-400 transition-colors">Offers</a></li>
+                  <li><a href="tel:313-282-4758" className="bg-sky-600 hover:bg-sky-500 px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
+                    <Phone size={16} /> (313) 282-4758
+                  </a></li>
+                </ul>
+
+                <button className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                  <MenuIcon size={24} />
+                </button>
+              </div>
+              
+              {mobileMenuOpen && (
+                <div className="md:hidden absolute top-full left-0 w-full bg-gray-900 border-t border-gray-800 p-4 flex flex-col gap-4 text-center">
+                  <a href="https://www.mechanicaltemp.com" className="text-white font-bold">Return to Main Site</a>
+                  <a href="tel:313-282-4758" className="text-sky-400 font-bold">Call Now</a>
+                </div>
+              )}
+            </nav>
+          );
+
+          const Footer = () => (
+            <footer className="bg-gray-900 pt-16 pb-8 px-6 text-white text-center mt-12">
+              <h3 className="text-2xl font-bold text-white mb-4">Mechanical Temp</h3>
+              <p className="text-slate-400 mb-6">23093 Telegraph Rd, Southfield, MI 48033</p>
+              <div className="space-y-2 text-slate-300">
+                 <p><a href="tel:3132824758" className="hover:text-sky-400">Call Us: (313) 282-4758</a></p>
+                 <p className="text-sm opacity-75">&copy; 2025 Mechanical Temp. All Rights Reserved.</p>
+              </div>
+            </footer>
+          );
+
+          // --- VIEWS ---
+          if (isOrderPlaced) {
+            return (
+              <div className="min-h-screen bg-green-500 flex flex-col items-center justify-center text-white p-8 text-center animate-in fade-in duration-500 font-sans">
+                <div className="bg-white text-green-500 p-6 rounded-full mb-6 shadow-lg animate-bounce">
+                  <Check size={64} strokeWidth={3} />
+                </div>
+                <h1 className="text-3xl font-bold mb-4">Request Confirmed!</h1>
+                <p className="text-xl opacity-90 mb-8">We have received your booking details.</p>
+                <div className="bg-white/20 p-4 rounded-xl backdrop-blur-sm w-full max-w-sm">
+                  <p className="text-sm font-medium">Estimated Call Back</p>
+                  <p className="text-2xl font-bold">Within 10 Mins</p>
+                </div>
+                <button onClick={() => setView('home')} className="mt-8 text-sm underline opacity-75 hover:opacity-100">Book Another Service</button>
+              </div>
+            );
+          }
+
+          return (
+            <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-20 md:pb-0">
+              <Navbar />
+
+              {showItemDetails && (
+                <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+                  <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
+                    <div className="p-6">
+                      <div className="flex justify-between items-start mb-4">
+                        <h3 className="text-xl font-bold text-slate-900">{showItemDetails.name}</h3>
+                        <button onClick={() => setShowItemDetails(null)}><X className="text-slate-400 hover:text-slate-600" /></button>
+                      </div>
+                      <div className="flex items-center gap-2 text-slate-500 text-sm mb-4 bg-slate-50 p-2 rounded-lg inline-block">
+                        <Clock size={16} /> <span>Est. Time: {showItemDetails.duration}</span>
+                      </div>
+                      <p className="text-slate-600 mb-6 leading-relaxed">{showItemDetails.details}</p>
+                      <button onClick={() => { addToCart(showItemDetails); setShowItemDetails(null); }} className="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 rounded-xl transition-colors">
+                        Add to Order - ${showItemDetails.price}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {view === 'home' && (
+                <div className="animate-in fade-in duration-300">
+                  <header className="relative bg-gray-900 text-white py-16 px-6 text-center overflow-hidden">
+                    <div className="absolute inset-0 opacity-20 bg-[url('https://images.squarespace-cdn.com/content/v1/64b8ce7983e67906ccb6616f/ad1eb7df-a94c-4108-a72b-9868d33fb7cf/truck.jpg?format=2500w')] bg-cover bg-center" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-gray-900/50 to-gray-900" />
+                    
+                    <div className="relative z-10 max-w-4xl mx-auto">
+                      <h1 className="text-4xl md:text-6xl font-black uppercase tracking-wider mb-4 leading-tight">
+                        Express <span className="text-sky-500">Booking</span>
+                      </h1>
+                      <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto mb-8">
+                        Skip the phone tag. Select your service below to get instant pricing and priority dispatch in Metro Detroit.
+                      </p>
+                      <button onClick={scrollToMenu} className="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-lg hover:shadow-sky-500/20 transition-all transform hover:scale-105">
+                        Start My Order
+                      </button>
+                    </div>
+                  </header>
+
+                  <main className="container mx-auto px-4 py-12" ref={menuSectionRef}>
+                    <div className="text-center mb-10">
+                      <h2 className="text-3xl font-bold text-slate-800">Select Service Category</h2>
+                      <p className="text-slate-600 mt-2">Choose an option to see available services.</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                      {categories.map((cat) => (
+                        <div key={cat.id} onClick={() => { setActiveCategory(cat); setView('category'); }}
+                          className={`${cat.color} p-6 rounded-2xl border-2 border-transparent hover:${cat.accent} hover:shadow-xl transition-all cursor-pointer flex items-center gap-6 group`}
+                        >
+                          <div className="bg-white p-4 rounded-full shadow-sm group-hover:scale-110 transition-transform">
+                            {cat.icon}
+                          </div>
+                          <div>
+                            <h3 className="font-bold text-xl text-slate-900">{cat.title}</h3>
+                            <p className="text-sm text-slate-600 font-medium">{cat.subtitle}</p>
+                            <div className="mt-2 text-sm font-bold text-sky-600 flex items-center gap-1">View Options <ArrowRight size={16}/></div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </main>
+                  <Footer />
+                </div>
+              )}
+
+              {view === 'category' && activeCategory && (
+                <div className="animate-in slide-in-from-right duration-300 max-w-3xl mx-auto min-h-screen bg-white">
+                  <div className={`${activeCategory.color} sticky top-[72px] z-40 p-6 shadow-sm`}>
+                    <button onClick={() => setView('home')} className="flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-slate-900 mb-4 bg-white/50 w-fit px-3 py-1 rounded-full backdrop-blur-sm">
+                      <ChevronLeft size={16} /> Back to Categories
+                    </button>
+                    <div className="flex items-center gap-4">
+                      <div className="bg-white p-3 rounded-xl shadow-sm text-slate-800">{activeCategory.icon}</div>
+                      <div>
+                        <h1 className="text-2xl font-bold text-slate-900">{activeCategory.title}</h1>
+                        <p className="text-slate-600">{activeCategory.subtitle}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-6 pb-32">
+                    {activeCategory.items.map((item) => (
+                      <div key={item.id} className="bg-white border border-slate-100 rounded-xl p-5 shadow-sm mb-4 relative overflow-hidden hover:border-sky-200 transition-colors">
+                        {item.popular && <div className="absolute top-0 right-0 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-1 rounded-bl-lg">POPULAR</div>}
+                        <div className="flex justify-between items-start mb-2">
+                          <h3 className="font-bold text-slate-800 text-lg">{item.name}</h3>
+                          <div className="font-bold text-lg text-slate-900">${item.price}{item.isSubscription && <span className="text-xs font-normal text-slate-500">/mo</span>}</div>
+                        </div>
+                        <p className="text-slate-500 text-sm mb-4">{item.description}</p>
+                        <div className="flex gap-3">
+                          <button onClick={() => setShowItemDetails(item)} className="flex-1 py-2 px-3 rounded-lg border border-slate-200 text-slate-600 text-sm font-medium hover:bg-slate-50 flex items-center justify-center gap-2">
+                            <Info size={16} /> Details
+                          </button>
+                          <button onClick={(e) => { e.stopPropagation(); addToCart(item); }} className="flex-1 py-2 px-3 rounded-lg bg-sky-600 hover:bg-sky-700 text-white text-sm font-bold shadow-sm flex items-center justify-center gap-2">
+                            <Plus size={16} /> Add
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {view === 'checkout' && (
+                <div className="animate-in slide-in-from-right duration-300 min-h-screen bg-white">
+                  <div className="bg-gray-900 text-white p-4 sticky top-[72px] z-40 flex items-center gap-2 shadow-md">
+                     <button onClick={() => setView('home')} className="p-1 hover:bg-gray-700 rounded-full"><ChevronLeft size={20} /></button>
+                     <h2 className="font-bold text-lg">Your Request</h2>
+                  </div>
+
+                  <div className="max-w-xl mx-auto p-6 pb-32">
+                    {cart.length === 0 ? (
+                      <div className="text-center py-20 opacity-50">
+                        <ShoppingCart size={48} className="mx-auto mb-4" />
+                        <p>Tray is empty.</p>
+                        <button onClick={() => setView('home')} className="text-sky-600 font-bold mt-4 underline">Add Services</button>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="space-y-4 mb-8">
+                          {cart.map((item, index) => (
+                            <div key={index} className="flex justify-between items-center border-b border-slate-100 pb-4">
+                              <div>
+                                <h4 className="font-bold text-slate-800">{item.name}</h4>
+                                <p className="text-xs text-slate-500">{item.description}</p>
+                              </div>
+                              <div className="flex flex-col items-end gap-2 ml-4">
+                                <span className="font-bold">${item.price}</span>
+                                <button onClick={() => removeFromCart(index)} className="text-xs text-red-500 hover:text-red-700">Remove</button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="bg-slate-50 p-6 rounded-xl mb-8 border border-slate-200">
+                          <div className="flex justify-between items-center text-xl font-bold text-slate-900">
+                            <span>Est. Total</span>
+                            <span className="text-sky-600">${calculateTotal()}</span>
+                          </div>
+                          <p className="text-xs text-center text-slate-400 mt-2">Payment collected after service is complete.</p>
+                        </div>
+
+                        <form onSubmit={handlePlaceOrder} className="space-y-5">
+                          <div className="bg-sky-50 p-4 rounded-lg border border-sky-100 mb-6">
+                            <h3 className="font-bold text-sky-900 text-sm">Almost Done!</h3>
+                            <p className="text-sm text-sky-700">Enter your details to confirm this appointment.</p>
+                          </div>
+                          
+                          {cart.map((item, i) => <input key={i} type="hidden" name={`Item ${i+1}`} value={`${item.name} - $${item.price}`} />)}
+                          <input type="hidden" name="Total" value={`$${calculateTotal()}`} />
+
+                          <div><label className="block text-xs font-bold text-slate-500 uppercase mb-1">Full Name</label><input required type="text" name="name" className="w-full bg-white border border-slate-300 rounded-lg p-3 focus:border-sky-500 outline-none" placeholder="John Doe" /></div>
+                          <div><label className="block text-xs font-bold text-slate-500 uppercase mb-1">Phone</label><input required type="tel" name="phone" className="w-full bg-white border border-slate-300 rounded-lg p-3 focus:border-sky-500 outline-none" placeholder="(313) 555-0123" /></div>
+                          <div><label className="block text-xs font-bold text-slate-500 uppercase mb-1">Email</label><input required type="email" name="email" className="w-full bg-white border border-slate-300 rounded-lg p-3 focus:border-sky-500 outline-none" placeholder="john@example.com" /></div>
+                          <div><label className="block text-xs font-bold text-slate-500 uppercase mb-1">Address</label><input required type="text" name="address" className="w-full bg-white border border-slate-300 rounded-lg p-3 focus:border-sky-500 outline-none" placeholder="123 Main St, Southfield" /></div>
+                          
+                          <button type="submit" disabled={isSubmitting} className="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold text-lg py-4 rounded-xl shadow-lg transition-all flex justify-center items-center gap-2 disabled:opacity-50">
+                            {isSubmitting ? "Sending..." : <>Confirm Request <ArrowRight size={20} /></>}
+                          </button>
+                        </form>
+                      </>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {view !== 'checkout' && cart.length > 0 && (
+                 <div className="fixed bottom-6 left-6 right-6 z-50 max-w-md mx-auto animate-in slide-in-from-bottom duration-300">
+                  <button onClick={() => setView('checkout')} className="w-full bg-gray-900 text-white p-4 rounded-xl shadow-2xl flex justify-between items-center hover:bg-gray-800 transition-colors border border-gray-700">
+                    <div className="flex items-center gap-3">
+                      <div className="bg-sky-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">{cart.length}</div>
+                      <span className="font-bold">Complete Request</span>
+                    </div>
+                    <span className="font-bold text-lg">${calculateTotal()}</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<HVACBookingPage />);
+    </script>
+</body>
+</html>
