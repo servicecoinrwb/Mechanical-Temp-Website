@@ -93,7 +93,12 @@
     <loc>https://mechanicaltemp.com/thanksgiving-home-comfort-tips.html</loc>
     <lastmod>2025-11-23</lastmod>
     <priority>0.8</priority>
-  </url>
+</url>
+<url>
+    <loc>https://mechanicaltemp.com/whole-house-humidifier-benefits.html</loc>
+    <lastmod>2025-11-23</lastmod>
+    <priority>0.8</priority>
+</url>
 <url>
   <loc>https://www.mechanicaltemp.com/southfield.html</loc>
   <lastmod>2025-10-29T16:30:00+00:00</lastmod>
@@ -186,6 +191,11 @@
 </url>
 <url>
   <loc>https://vault.mechanicaltemp.com/</loc>
+  <lastmod>2025-10-29T16:30:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://booking.mechanicaltemp.com/</loc>
   <lastmod>2025-10-29T16:30:00+00:00</lastmod>
   <priority>0.90</priority>
 </url>
