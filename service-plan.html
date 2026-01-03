@@ -12,797 +12,350 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mechanical Temp Service Plan - Just $55/Month</title>
+    <title>Residential Service Plan | Mechanical Temp</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
     <style>
-        /* Scoped styles - only affect content within .landing-page-container */
-        .landing-page-container {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        .landing-page-container *,
-        .landing-page-container *::before,
-        .landing-page-container *::after {
-            box-sizing: border-box;
-        }
-
-        .landing-page-container {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            scroll-behavior: smooth;
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; scroll-behavior: smooth; }
+        
+        .plan-hero {
+            background: linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.85)), url('https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2069&auto=format&fit=crop') center center / cover no-repeat;
         }
         
-        .landing-page-container .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .landing-page-container .hidden {
-            display: none;
-        }
+        /* Chat Widget Styles (Consistent with other pages) */
+        #chat-bubble { position: fixed; bottom: 20px; right: 20px; z-index: 1000; cursor: pointer; background-color: #0ea5e9; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: transform 0.2s ease-in-out; }
+        #chat-bubble:hover { transform: scale(1.1); background-color: #0284c7; }
+        #chat-widget { position: fixed; bottom: 90px; right: 20px; z-index: 999; width: 350px; background-color: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); overflow: hidden; display: flex; flex-direction: column; transition: opacity 0.3s ease, transform 0.3s ease; transform-origin: bottom right; }
+        #chat-widget.hidden { opacity: 0; transform: scale(0.9); pointer-events: none; }
+        .chat-header { background-color: #0c4a6e; color: white; padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
         
-        /* Landing Page Header - renamed to avoid conflicts */
-        .landing-page-container .landing-header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white !important;
-            padding: 20px 0 60px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .landing-page-container .header-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px 20px;
-            position: relative;
-            z-index: 10;
-        }
-
-        .landing-page-container .logo {
-            height: 60px; 
-            width: auto;
-        }
-        
-        .landing-page-container .landing-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><defs><radialGradient id="a"><stop offset="20%" stop-color="%23ffffff" stop-opacity=".1"/><stop offset="100%" stop-color="%23ffffff" stop-opacity="0"/></radialGradient></defs><circle fill="url(%23a)" cx="50" cy="10" r="10"/></svg>') repeat;
-            opacity: 0.1;
-        }
-        
-        .landing-page-container .header-content {
-            position: relative;
-            z-index: 1;
-            padding-top: 20px;
-        }
-        
-        .landing-page-container .landing-header h1 {
-            font-size: 3.2rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            color: white !important;
-        }
-        
-        .landing-page-container .landing-header .subtitle {
-            font-size: 1.4rem;
-            margin-bottom: 25px;
-            opacity: 0.95;
-            color: white !important;
-        }
-        
-        .landing-page-container .landing-header p {
-            color: white !important;
-        }
-        
-        .landing-page-container .price-badge {
-            display: inline-block;
-            background: #ff6b35;
-            color: white;
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-size: 1.8rem;
-            font-weight: bold;
-            margin: 20px 0;
-            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
-            transform: scale(1);
-            transition: transform 0.3s ease;
-            text-decoration: none;
-        }
-        
-        .landing-page-container .price-badge:hover {
-            transform: scale(1.05);
-        }
-        
-        /* Benefits Section */
-        .landing-page-container .benefits {
-            padding: 80px 0;
-            background: #f8f9fa;
-        }
-        
-        .landing-page-container .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 60px;
-            color: #2c3e50;
-        }
-        
-        .landing-page-container .benefits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-        }
-        
-        .landing-page-container .benefit-card {
-            background: white;
-            padding: 40px 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .landing-page-container .benefit-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        }
-        
-        .landing-page-container .benefit-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: white;
-        }
-        
-        .landing-page-container .benefit-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: #2c3e50;
-        }
-        
-        .landing-page-container .benefit-card p {
-            color: #666;
-            font-size: 1.1rem;
-        }
-
-        /* Coverage Details Section */
-        .landing-page-container .coverage-details {
-            padding: 80px 0;
-            background: white;
-        }
-        .landing-page-container .coverage-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-            margin-top: 40px;
-        }
-        .landing-page-container .coverage-column {
-            background: #f8f9fa;
-            padding: 30px;
-            border-radius: 15px;
-        }
-        .landing-page-container .coverage-column h3 {
-            font-size: 1.6rem;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e1e5e9;
-        }
-        .landing-page-container .coverage-list {
-            list-style: none;
-            padding-left: 0;
-        }
-        .landing-page-container .coverage-list li {
-            margin-bottom: 12px;
-            font-size: 1.1rem;
-            position: relative;
-            padding-left: 30px;
-        }
-        .landing-page-container .coverage-list li::before {
-            position: absolute;
-            left: 0;
-            font-weight: bold;
-        }
-        .landing-page-container .included li::before {
-            content: '✓';
-            color: #28a745;
-        }
-        .landing-page-container .discounted li::before {
-            content: '+';
-            color: #ff6b35;
-        }
-        
-        /* FAQ Section */
-        .landing-page-container .faq-section {
-            padding: 80px 0;
-            background: #f8f9fa;
-        }
-
-        .landing-page-container .faq-item {
-            background: white;
-            margin-bottom: 15px;
-            border-radius: 10px;
-            border: 1px solid #e1e5e9;
-            overflow: hidden;
-        }
-
-        .landing-page-container .faq-question {
-            width: 100%;
-            background: none;
-            border: none;
-            text-align: left;
-            padding: 20px 30px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #2c3e50;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background-color 0.3s ease;
-        }
-
-        .landing-page-container .faq-question:hover {
-            background-color: #e9ecef;
-        }
-
-        .landing-page-container .faq-question::after {
-            content: '+';
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #3498db;
-            transition: transform 0.3s ease;
-        }
-
-        .landing-page-container .faq-question.active::after {
-            transform: rotate(45deg);
-        }
-
-        .landing-page-container .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease-out, padding 0.4s ease-out;
-            color: #555;
-            line-height: 1.7;
-        }
-
-        .landing-page-container .faq-answer p {
-            padding: 0 30px 20px;
-        }
-        
-        /* CTA Section */
-        .landing-page-container .cta-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 80px 0;
-            text-align: center;
-            color: white;
-        }
-        
-        .landing-page-container .signup-form {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            max-width: 500px;
-            margin: 40px auto 0;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-        }
-        
-        .landing-page-container .form-group {
-            margin-bottom: 25px;
-            text-align: left;
-        }
-        
-        .landing-page-container .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 600;
-        }
-        
-        .landing-page-container .form-group input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e1e5e9;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-        
-        .landing-page-container .form-group input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        
-        .landing-page-container .cta-button {
-            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
-            color: white;
-            padding: 18px 40px;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.3rem;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .landing-page-container .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.4);
-        }
-        
-        .landing-page-container .guarantee {
-            margin-top: 20px;
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-        
-        /* Testimonials */
-        .landing-page-container .testimonials {
-            padding: 80px 0;
-            background: #f8f9fa;
-        }
-        
-        .landing-page-container .testimonial-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 40px;
-            margin-top: 40px;
-        }
-        
-        .landing-page-container .testimonial {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        
-        .landing-page-container .testimonial-text {
-            font-style: italic;
-            margin-bottom: 20px;
-            font-size: 1.1rem;
-            color: #555;
-        }
-        
-        .landing-page-container .testimonial-author {
-            font-weight: bold;
-            color: #2c3e50;
-        }
-        
-        /* Trust Indicators */
-        .landing-page-container .trust-indicators {
-            padding: 60px 0;
-            background: white;
-            text-align: center;
-        }
-        
-        .landing-page-container .trust-badges {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 40px;
-            margin-top: 30px;
-        }
-        
-        .landing-page-container .trust-badge {
-            padding: 15px 25px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-        
-        /* Landing Footer */
-        .landing-page-container .landing-footer {
-            background: #2c3e50;
-            color: white;
-            padding: 40px 0;
-            text-align: center;
-        }
-        .landing-page-container .landing-footer a {
-            color: #bdc3c7;
-            text-decoration: none;
-        }
-        .landing-page-container .landing-footer a:hover {
-            color: white;
-        }
-        
-        /* Legal Page */
-        .landing-page-container .legal-page {
-            padding: 80px 0;
-            background: #f8f9fa;
-        }
-        .landing-page-container .legal-content {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        .landing-page-container .legal-content h1, 
-        .landing-page-container .legal-content h2, 
-        .landing-page-container .legal-content h3 {
-            color: #2c3e50;
-            margin-top: 20px;
-            margin-bottom: 15px;
-        }
-        .landing-page-container .legal-content h1 { font-size: 2.2rem; }
-        .landing-page-container .legal-content h2 { font-size: 1.8rem; border-bottom: 2px solid #e1e5e9; padding-bottom: 5px;}
-        .landing-page-container .legal-content h3 { font-size: 1.4rem; }
-        .landing-page-container .legal-content p, 
-        .landing-page-container .legal-content li {
-            margin-bottom: 10px;
-            line-height: 1.8;
-        }
-        .landing-page-container .legal-content ul {
-            list-style-position: inside;
-            padding-left: 20px;
-        }
-        .landing-page-container .back-button {
-            display: inline-block;
-            margin-top: 30px;
-            padding: 12px 25px;
-            background: #2c3e50;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-        .landing-page-container .back-button:hover {
-            background: #34495e;
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .landing-page-container .fade-in {
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .landing-page-container .landing-header h1 {
-                font-size: 2.2rem;
-            }
-            
-            .landing-page-container .landing-header .subtitle {
-                font-size: 1.1rem;
-            }
-            
-            .landing-page-container .price-badge {
-                font-size: 1.4rem;
-                padding: 10px 25px;
-            }
-            
-            .landing-page-container .section-title {
-                font-size: 2rem;
-            }
-            
-            .landing-page-container .signup-form {
-                margin: 20px;
-                padding: 30px 20px;
-            }
-        }
+        /* FAQ Accordion Transitions */
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .faq-icon { transition: transform 0.3s ease; }
+        .faq-btn[aria-expanded="true"] .faq-icon { transform: rotate(45deg); }
     </style>
 </head>
-<body>
-    <!-- All content wrapped in a scoped container -->
-    <div class="landing-page-container">
-        <div id="main-content">
-            <!-- Header -->
-            <section class="landing-header">
-                <div class="container">
-                    <nav class="header-nav">
-                        <a href="index.html">
-                            <img src="https://i.imgur.com/YJvJw7V.png" alt="Mechanical Temp Logo" class="logo">
-                        </a>
-                    </nav>
-                    <div class="header-content fade-in">
-                        <h1>Never Worry About HVAC Repairs Again</h1>
-                        <p class="subtitle">Premium HVAC maintenance & basic parts coverage for your home</p>
-                        <a href="#signup-section" class="price-badge">Only $55/Month</a>
-                        <p>Save hundreds on unexpected repairs • Priority service • Peace of mind</p>
-                    </div>
-                </div>
-            </section>
+<body class="text-gray-800">
 
-            <!-- Benefits -->
-            <section class="benefits">
-                <div class="container">
-                    <h2 class="section-title">What's Included in Your Membership</h2>
-                    <div class="benefits-grid">
-                        <div class="benefit-card">
-                            <div class="benefit-icon">🔧</div>
-                            <h3>Basic Parts Covered</h3>
-                            <p>Filters, belts, contactors, capacitors, and other essential components included at no extra cost</p>
-                        </div>
-                        <div class="benefit-card">
-                            <div class="benefit-icon">⚡</div>
-                            <h3>Priority Service</h3>
-                            <p>Jump to the front of the line with same-day or next-day service appointments</p>
-                        </div>
-                        <div class="benefit-card">
-                            <div class="benefit-icon">🛡️</div>
-                            <h3>2X Annual Maintenance</h3>
-                            <p>Spring and fall tune-ups to keep your system running efficiently all year long</p>
-                        </div>
-                    </div>
+    <!-- HEADER & NAVIGATION -->
+    <header class="bg-gray-900/95 sticky top-0 z-40 p-4 shadow-md backdrop-blur-sm">
+        <nav class="container mx-auto flex justify-between items-center text-white">
+            <a href="index.html" class="block">
+                <div class="flex items-center gap-2">
+                    <img src="https://i.imgur.com/YJvJw7V.png" alt="Mechanical Temp Logo" class="h-10 w-auto">
+                    <span class="font-bold text-xl tracking-tight hidden md:block">MECHANICAL TEMP</span>
                 </div>
-            </section>
-
-            <section class="coverage-details">
-                <div class="container">
-                    <h2 class="section-title">Coverage Details</h2>
-                    <div class="coverage-grid">
-                        <div class="coverage-column">
-                            <h3>Included Services & Parts</h3>
-                            <ul class="coverage-list included">
-                                <li>Two Annual Tune-Ups</li>
-                                <li>Standard Air Filters</li>
-                                <li>Fuses & Breakers</li>
-                                <li>Capacitors & Contactors</li>
-                                <li>Thermostat Calibration</li>
-                                <li>Condensate Line Cleaning</li>
-                            </ul>
-                        </div>
-                        <div class="coverage-column">
-                            <h3>Discounted Major Repairs</h3>
-                            <ul class="coverage-list discounted">
-                                <li>15% Off All Repair Labor</li>
-                                <li>10% Off Refrigerant</li>
-                                <li>10% Off Blower Motors</li>
-                                <li>10% Off Compressor Replacements</li>
-                                <li>10% Off Full System Replacements</li>
-                                <li>10% Off Ductwork Modifications</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="faq-section">
-                <div class="container">
-                    <h2 class="section-title">Frequently Asked Questions</h2>
-                    <div class="faq-container">
-                        <div class="faq-item">
-                            <button class="faq-question">
-                                What if I need a major repair not covered by the plan?
-                            </button>
-                            <div class="faq-answer">
-                                <p>Our membership covers all basic parts and maintenance to prevent major issues. If a major component like a compressor or motor fails, members receive a 10% discount on the total cost of the replacement, ensuring you still get significant savings.</p>
-                            </div>
-                        </div>
-                        <div class="faq-item">
-                            <button class="faq-question">
-                                Is there a long-term contract?
-                            </button>
-                            <div class="faq-answer">
-                                <p>No, there are no long-term contracts. Our membership is a simple month-to-month subscription. You can cancel at any time with no hidden fees or penalties. We also offer a 30-day money-back guarantee if you're not completely satisfied.</p>
-                            </div>
-                        </div>
-                        <div class="faq-item">
-                            <button class="faq-question">
-                                How quickly can I expect service?
-                            </button>
-                            <div class="faq-answer">
-                                <p>As a Mechanical Temp Service Plan member, you receive priority service. This means you jump to the front of the line. We guarantee a service appointment within 24 hours of your call, and often can provide same-day service for urgent issues.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- CTA Section -->
-            <section class="cta-section" id="signup-section">
-                <div class="container">
-                    <h2 style="font-size: 2.5rem; margin-bottom: 20px;">Start Saving Today</h2>
-                    <p style="font-size: 1.3rem; margin-bottom: 0;">Join thousands of homeowners who never worry about HVAC costs</p>
-                    
-                    <div class="signup-form">
-                        <h3 style="color: #333; margin-bottom: 25px; font-size: 1.5rem;">Get Started Now</h3>
-                        <form id="membershipForm">
-                            <div class="form-group">
-                                <label for="name">Full Name</label>
-                                <input type="text" id="name" name="name" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email Address</label>
-                                <input type="email" id="email" name="email" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="phone">Phone Number</label>
-                                <input type="tel" id="phone" name="phone" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="address">Home Address</label>
-                                <input type="text" id="address" name="address" required>
-                            </div>
-                            <button type="submit" class="cta-button">Start My Membership - $55/Month</button>
-                        </form>
-                        <p class="guarantee">30-day money-back guarantee • Cancel anytime • No hidden fees</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Testimonials -->
-            <section class="testimonials">
-                <div class="container">
-                    <h2 class="section-title">What Our Members Say</h2>
-                    <div class="testimonial-grid">
-                        <div class="testimonial">
-                            <p class="testimonial-text">"My AC died in July and they had a tech out the same day. The basic parts were covered and I only paid for labor. Saved me over $400!"</p>
-                            <p class="testimonial-author">— Sarah Martinez, Homeowner</p>
-                        </div>
-                        <div class="testimonial">
-                            <p class="testimonial-text">"The bi-annual maintenance has kept our 12-year-old system running like new. Best $55 I spend every month."</p>
-                            <p class="testimonial-author">— Mike Thompson, Homeowner</p>
-                        </div>
-                        <div class="testimonial">
-                            <p class="testimonial-text">"Professional service, fair pricing, and I love having priority scheduling. Never wait more than 24 hours for service."</p>
-                            <p class="testimonial-author">— Jennifer Liu, Homeowner</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Trust Indicators -->
-            <section class="trust-indicators">
-                <div class="container">
-                    <h3>Trusted by Local Homeowners</h3>
-                    <div class="trust-badges">
-                        <div class="trust-badge">Licensed & Insured</div>
-                        <div class="trust-badge">BBB A+ Rated</div>
-                        <div class="trust-badge">24/7 Support</div>
-                        <div class="trust-badge">20+ Years Experience</div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Footer -->
-            <footer class="landing-footer">
-                <div class="container">
-                    <p>&copy; 2025 Mechanical Temp HVAC Services. All rights reserved.</p>
-                    <p style="margin-top: 10px; opacity: 0.8;">
-                        Call us: (313) 282-4758 | Email: office@mechanicaltemp.com | 23093 Telegraph Rd, Southfield, MI 48033
-                    </p>
-                    <p style="margin-top: 10px; opacity: 0.8;">
-                        <a href="index.html">Main Website</a> |
-                        <a href="#" id="show-tos-link" style="cursor: pointer;">Terms of Service</a>
-                    </p>
-                </div>
-            </footer>
+            </a>
+            <ul class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                <li><a href="index.html" class="hover:text-sky-400">Home</a></li>
+                <li><a href="commercial.html" class="hover:text-sky-400">Commercial</a></li>
+                <li><a href="service-plan.html" class="text-sky-400">Service Plans</a></li>
+                <li><a href="#signup" class="bg-sky-600 hover:bg-sky-500 text-white px-4 py-2 rounded transition-colors">Join Now</a></li>
+            </ul>
+            <!-- Mobile Hamburger -->
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-white focus:outline-none">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                </button>
+            </div>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-gray-800 absolute top-full left-0 w-full">
+            <ul class="flex flex-col items-center space-y-4 py-4 text-white">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="commercial.html">Commercial</a></li>
+                <li><a href="#signup">Join Now</a></li>
+            </ul>
         </div>
+    </header>
 
-        <div id="tos-page" class="hidden">
-            <section class="legal-page">
-                <div class="container">
-                    <div class="legal-content">
-                        <h1>Mechanical Temp HVAC Membership Terms of Service</h1>
-                        <p>Effective Date: August 27, 2025 | Last Modified: August 27, 2025 | Version: 1.1</p>
-                        <h2>1. Initial Equipment Assessment & Right to Refuse Service</h2>
-                        <h3>30-Day Evaluation Period</h3>
-                        <p>A mandatory equipment inspection will be scheduled within 30 days of membership enrollment. Mechanical Temp reserves the right to cancel membership with a full refund if the equipment is found to pose immediate safety hazards, is beyond economical repair (repair costs exceed 60% of replacement value), exceeds 20 years of age (subject to case-by-case evaluation), has been improperly maintained creating excessive liability risk, or contains code violations or unsafe modifications.</p>
-                        <h3>Equipment Disqualification Criteria</h3>
-                        <ul>
-                            <li>Cracked heat exchangers or other combustion safety issues.</li>
-                            <li>Major refrigerant leaks (defined as >1 lb/year).</li>
-                            <li>Electrical systems not meeting current local safety codes.</li>
-                            <li>Ductwork with leakage greater than 40%.</li>
-                            <li>Systems with unauthorized or "jury-rigged" modifications.</li>
+    <div id="main-content">
+        <!-- HERO SECTION -->
+        <section class="plan-hero text-white py-24 px-6 relative">
+            <div class="container mx-auto text-center relative z-10">
+                <div class="inline-block bg-orange-500/20 border border-orange-400/30 text-orange-300 text-xs font-bold px-3 py-1 rounded-full mb-6 tracking-widest uppercase">
+                    Residential Protection
+                </div>
+                <h1 class="text-4xl md:text-6xl font-black uppercase tracking-tight mb-6 leading-tight">
+                    Never Worry About<br><span class="text-sky-400">HVAC Repairs Again.</span>
+                </h1>
+                <p class="max-w-2xl mx-auto text-lg md:text-xl text-slate-300 mb-8 leading-relaxed">
+                    Total peace of mind for your home. Includes two annual tune-ups, priority scheduling, and coverage for common parts failures.
+                </p>
+                
+                <div class="inline-flex items-center bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-6 py-3 mb-10">
+                    <span class="text-3xl font-bold text-white mr-2">$29</span>
+                    <span class="text-sm text-slate-300 flex flex-col text-left leading-tight">
+                        <span>PER</span>
+                        <span>MONTH</span>
+                    </span>
+                </div>
+
+                <div>
+                    <a href="#signup" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-4 px-10 rounded-lg text-lg transition-transform hover:scale-105 shadow-lg shadow-sky-500/30">
+                        Start Your Membership
+                    </a>
+                </div>
+                <p class="mt-4 text-sm text-slate-400">No contract. Cancel anytime.</p>
+            </div>
+        </section>
+
+        <!-- BENEFITS GRID -->
+        <section class="py-20 px-6 bg-white">
+            <div class="container mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Why Join the Club?</h2>
+                    <p class="max-w-2xl mx-auto text-slate-600 mt-2">More than just a tune-up. It's comprehensive protection for your home's most expensive appliance.</p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    <!-- Benefit 1 -->
+                    <div class="bg-slate-50 p-8 rounded-xl border border-slate-100 hover:shadow-lg transition-all hover:-translate-y-1 text-center">
+                        <div class="w-16 h-16 bg-sky-100 rounded-full flex items-center justify-center text-sky-600 text-2xl mb-6 mx-auto">
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-slate-900">Priority Service</h3>
+                        <p class="text-slate-600 text-sm">When the heat wave hits, you jump to the front of the line. Guaranteed service within 24 hours.</p>
+                    </div>
+
+                    <!-- Benefit 2 -->
+                    <div class="bg-slate-50 p-8 rounded-xl border border-slate-100 hover:shadow-lg transition-all hover:-translate-y-1 text-center">
+                        <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 text-2xl mb-6 mx-auto">
+                            <i class="fa-solid fa-screwdriver-wrench"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-slate-900">Free Basic Parts</h3>
+                        <p class="text-slate-600 text-sm">We cover the small stuff. Capacitors, contactors, and fuses are replaced <strong>free</strong> if they fail.</p>
+                    </div>
+
+                    <!-- Benefit 3 -->
+                    <div class="bg-slate-50 p-8 rounded-xl border border-slate-100 hover:shadow-lg transition-all hover:-translate-y-1 text-center">
+                        <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 text-2xl mb-6 mx-auto">
+                            <i class="fa-solid fa-snowflake"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-slate-900">2x Annual Tune-Ups</h3>
+                        <p class="text-slate-600 text-sm">We come out in the Spring (AC) and Fall (Furnace) to clean, calibrate, and optimize your system.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- WHAT'S COVERED -->
+        <section class="py-20 px-6 bg-slate-50">
+            <div class="container mx-auto max-w-5xl">
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
+                    <div class="grid md:grid-cols-2">
+                        <div class="p-10 border-b md:border-b-0 md:border-r border-slate-100">
+                            <h3 class="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                                <i class="fa-solid fa-check-circle text-emerald-500"></i> Included 100% Free
+                            </h3>
+                            <ul class="space-y-4">
+                                <li class="flex items-start gap-3">
+                                    <span class="text-emerald-500 font-bold">✓</span>
+                                    <span class="text-slate-700">Spring & Fall Maintenance Visits</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="text-emerald-500 font-bold">✓</span>
+                                    <span class="text-slate-700">Standard 1" Air Filters</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="text-emerald-500 font-bold">✓</span>
+                                    <span class="text-slate-700">Run Capacitors & Contactors</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="text-emerald-500 font-bold">✓</span>
+                                    <span class="text-slate-700">Fuses & Breakers</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="text-emerald-500 font-bold">✓</span>
+                                    <span class="text-slate-700">Condensate Drain Cleaning</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="p-10 bg-slate-50/50">
+                            <h3 class="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                                <i class="fa-solid fa-tags text-sky-500"></i> Member Discounts
+                            </h3>
+                            <ul class="space-y-4">
+                                <li class="flex items-start gap-3">
+                                    <span class="text-sky-500 font-bold text-sm bg-sky-100 px-2 rounded">15%</span>
+                                    <span class="text-slate-700">Off All Repair Labor</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="text-sky-500 font-bold text-sm bg-sky-100 px-2 rounded">10%</span>
+                                    <span class="text-slate-700">Off Blower Motors & Inducers</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="text-sky-500 font-bold text-sm bg-sky-100 px-2 rounded">10%</span>
+                                    <span class="text-slate-700">Off Refrigerant (Freon)</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="text-sky-500 font-bold text-sm bg-sky-100 px-2 rounded">10%</span>
+                                    <span class="text-slate-700">Off New System Installation</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ SECTION -->
+        <section class="py-20 px-6 bg-white">
+            <div class="container mx-auto max-w-3xl">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-slate-900">Frequently Asked Questions</h2>
+                <div class="space-y-4">
+                    <!-- FAQ 1 -->
+                    <div class="border border-slate-200 rounded-lg overflow-hidden">
+                        <button class="faq-btn w-full px-6 py-4 text-left bg-white hover:bg-slate-50 flex justify-between items-center transition-colors">
+                            <span class="font-bold text-slate-800">Is there a long-term contract?</span>
+                            <span class="faq-icon text-sky-500 text-xl font-bold">+</span>
+                        </button>
+                        <div class="faq-answer bg-slate-50 border-t border-slate-100">
+                            <p class="px-6 py-4 text-slate-600 text-sm">No. Our membership is a simple month-to-month subscription. You can cancel at any time with no fees.</p>
+                        </div>
+                    </div>
+                    <!-- FAQ 2 -->
+                    <div class="border border-slate-200 rounded-lg overflow-hidden">
+                        <button class="faq-btn w-full px-6 py-4 text-left bg-white hover:bg-slate-50 flex justify-between items-center transition-colors">
+                            <span class="font-bold text-slate-800">What if my compressor fails?</span>
+                            <span class="faq-icon text-sky-500 text-xl font-bold">+</span>
+                        </button>
+                        <div class="faq-answer bg-slate-50 border-t border-slate-100">
+                            <p class="px-6 py-4 text-slate-600 text-sm">Major components like compressors aren't free, but as a member, you get 10% off the total replacement cost and priority scheduling to get it fixed fast.</p>
+                        </div>
+                    </div>
+                    <!-- FAQ 3 -->
+                    <div class="border border-slate-200 rounded-lg overflow-hidden">
+                        <button class="faq-btn w-full px-6 py-4 text-left bg-white hover:bg-slate-50 flex justify-between items-center transition-colors">
+                            <span class="font-bold text-slate-800">Do you service my area?</span>
+                            <span class="faq-icon text-sky-500 text-xl font-bold">+</span>
+                        </button>
+                        <div class="faq-answer bg-slate-50 border-t border-slate-100">
+                            <p class="px-6 py-4 text-slate-600 text-sm">We service Southfield, Livonia, Novi, Canton, Dearborn, and most of Metro Detroit.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SIGN UP SECTION -->
+        <section id="signup" class="bg-gray-900 py-20 px-6">
+            <div class="container mx-auto">
+                <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row">
+                    <div class="md:w-1/2 bg-sky-600 p-10 text-white flex flex-col justify-center">
+                        <h3 class="text-3xl font-bold mb-4">Join the Club</h3>
+                        <p class="mb-6 opacity-90">Start saving on your HVAC costs today. It takes less than 2 minutes to sign up.</p>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check"></i> 30-Day Money Back Guarantee</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check"></i> Secure Stripe Payment</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check"></i> Instant Membership Activation</li>
                         </ul>
-                        <button class="back-button">← Go Back</button>
+                    </div>
+                    <div class="md:w-1/2 p-10">
+                        <form id="membershipForm" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1">Full Name</label>
+                                <input type="text" name="name" required class="w-full px-4 py-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-sky-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1">Email Address</label>
+                                <input type="email" name="email" required class="w-full px-4 py-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-sky-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1">Phone Number</label>
+                                <input type="tel" name="phone" required class="w-full px-4 py-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-sky-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1">Service Address</label>
+                                <input type="text" name="address" required class="w-full px-4 py-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-sky-500">
+                            </div>
+                            <button type="submit" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 rounded transition-colors mt-2">
+                                Go to Secure Checkout ($29/mo)
+                            </button>
+                            <p class="text-xs text-center text-slate-400 mt-4">By clicking above, you will be redirected to Stripe to complete your subscription.</p>
+                        </form>
                     </div>
                 </div>
-            </section>
-        </div>
+            </div>
+        </section>
 
-        <script>
-            // Scope all JavaScript to the landing page container
-            const landingPageContainer = document.querySelector('.landing-page-container');
-            const mainContent = landingPageContainer.querySelector('#main-content');
-            const tosPage = landingPageContainer.querySelector('#tos-page');
-            const showTosLink = landingPageContainer.querySelector('#show-tos-link');
-            const backButton = tosPage.querySelector('.back-button');
-
-            showTosLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                mainContent.classList.add('hidden');
-                tosPage.classList.remove('hidden');
-                window.scrollTo(0, 0);
-            });
-
-            backButton.addEventListener('click', () => {
-                tosPage.classList.add('hidden');
-                mainContent.classList.remove('hidden');
-                window.scrollTo(0, 0);
-            });
-
-            // Form submission handler
-            landingPageContainer.querySelector('#membershipForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const formData = new FormData(this);
-                const email = encodeURIComponent(formData.get('email'));
-                
-                // Redirect to Stripe with pre-filled information
-                window.location.href = `https://buy.stripe.com/fZueVccuMciT7d2a580Fi01?prefilled_email=${email}&client_reference_id=${email}`;
-            });
-
-            // Add scroll animations
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-
-            const observer = new IntersectionObserver(function(entries) {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                    }
-                });
-            }, observerOptions);
-
-            // Observe benefit cards and other elements - only within landing page container
-            landingPageContainer.querySelectorAll('.benefit-card, .testimonial').forEach(el => {
-                el.style.opacity = '0';
-                el.style.transform = 'translateY(20px)';
-                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                observer.observe(el);
-            });
-
-            // FAQ Accordion Handler - scoped to landing page
-            const faqQuestions = landingPageContainer.querySelectorAll('.faq-question');
-            faqQuestions.forEach(question => {
-                question.addEventListener('click', () => {
-                    const answer = question.nextElementSibling;
-                    const isActive = question.classList.contains('active');
-                    if (isActive) {
-                        question.classList.remove('active');
-                        answer.style.maxHeight = null;
-                    } else {
-                        // Close other open answers
-                        faqQuestions.forEach(q => {
-                            q.classList.remove('active');
-                            q.nextElementSibling.style.maxHeight = null;
-                        });
-                        question.classList.add('active');
-                        answer.style.maxHeight = answer.scrollHeight + "px";
-                    }
-                });
-            });
-        </script>
+        <!-- FOOTER -->
+        <footer class="bg-gray-900 border-t border-gray-800 pt-12 pb-8 px-6 text-slate-400 text-sm">
+            <div class="container mx-auto text-center">
+                <p class="mb-4">
+                    <strong>Mechanical Temp</strong> | (313) 282-4758 | Livonia, MI
+                </p>
+                <p class="mb-4">
+                    <a href="index.html" class="hover:text-white">Main Website</a> |
+                    <a href="#" id="show-tos-link" class="hover:text-white cursor-pointer">Terms of Service</a>
+                </p>
+                <p>&copy; 2025 Mechanical Temp HVAC Services. All rights reserved.</p>
+            </div>
+        </footer>
     </div>
+
+    <!-- TOS Page (Hidden) -->
+    <div id="tos-page" class="hidden bg-slate-50 min-h-screen py-20 px-6">
+        <div class="container mx-auto max-w-4xl bg-white p-10 rounded-xl shadow-lg">
+            <h1 class="text-3xl font-bold text-slate-900 mb-2">Terms of Service</h1>
+            <p class="text-sm text-slate-500 mb-8">Effective Date: August 27, 2025</p>
+            <h2 class="text-xl font-bold text-slate-800 mt-6 mb-4">1. Evaluation Period</h2>
+            <p class="text-slate-600 mb-4">A mandatory equipment inspection will be scheduled within 30 days. We reserve the right to refund/cancel if equipment is deemed unsafe or beyond repair.</p>
+            <button class="back-button px-6 py-3 bg-slate-800 text-white rounded-lg font-bold hover:bg-slate-700 transition-colors mt-8">← Go Back</button>
+        </div>
+    </div>
+
+    <!-- CHAT & SCRIPTS -->
+    <div id="chat-bubble">
+        <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-3.04 8.25-6.75 8.25-1.425 0-2.756-.382-3.937-1.043a.75.75 0 01-.263-.761l.574-2.286a.75.75 0 00-.534-.686 8.25 8.25 0 01-3.243-5.468C3.04 12.25 6 4.5 10.5 4.5c4.634 0 8.25 3.04 8.25 6.75z" /></svg>        
+    </div>
+    <div id="chat-widget" class="hidden">
+        <div class="chat-header"><h3>Chat with Us</h3><button id="close-chat-btn">&times;</button></div>
+        <form id="chat-form">
+            <div class="p-4 bg-slate-50"><input type="text" placeholder="Your Name" class="w-full border p-2 rounded mb-2"><input type="tel" placeholder="Phone" class="w-full border p-2 rounded"><textarea placeholder="Message..." class="w-full border p-2 rounded mt-2"></textarea><button class="w-full bg-sky-500 text-white font-bold p-2 rounded mt-2">Send</button></div>
+        </form>
+    </div>
+
+    <script>
+        // Mobile Menu
+        document.getElementById('mobile-menu-button')?.addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // FAQ Logic
+        document.querySelectorAll('.faq-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const answer = btn.nextElementSibling;
+                const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+                btn.setAttribute('aria-expanded', !isExpanded);
+                answer.style.maxHeight = isExpanded ? null : answer.scrollHeight + "px";
+                btn.querySelector('.faq-icon').style.transform = isExpanded ? 'rotate(0deg)' : 'rotate(45deg)';
+            });
+        });
+
+        // Form Submit
+        document.getElementById('membershipForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = new FormData(this).get('email');
+            window.location.href = `https://buy.stripe.com/fZueVccuMciT7d2a580Fi01?prefilled_email=${email}`;
+        });
+
+        // TOS Toggle
+        const main = document.getElementById('main-content');
+        const tos = document.getElementById('tos-page');
+        document.getElementById('show-tos-link').addEventListener('click', (e) => { e.preventDefault(); main.classList.add('hidden'); tos.classList.remove('hidden'); window.scrollTo(0,0); });
+        document.querySelector('.back-button').addEventListener('click', () => { tos.classList.add('hidden'); main.classList.remove('hidden'); window.scrollTo(0,0); });
+
+        // Chat Widget
+        const chatWidget = document.getElementById('chat-widget');
+        const toggleChat = () => chatWidget.classList.toggle('hidden');
+        document.getElementById('chat-bubble').addEventListener('click', toggleChat);
+        document.getElementById('close-chat-btn').addEventListener('click', toggleChat);
+    </script>
 </body>
 </html>
-
