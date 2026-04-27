@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tax & Payroll Schedule</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Oswald:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0e0f;
+    --bg-2: #131516;
+    --panel: #181a1b;
+    --panel-2: #1f2123;
+    --border: #2a2d2f;
+    --border-2: #3a3e41;
+    --text: #e8e8e8;
+    --text-2: #9aa0a4;
+    --text-3: #6b7075;
+    --accent: #ff7a1a;
+    --accent-2: #c45810;
+    --danger: #ef4444;
+    --warn: #f59e0b;
+    --ok: #22c55e;
+    --info: #38bdf8;
+    --grid: rgba(255, 255, 255, 0.025);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-position: 0 0;
+  }
+
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .display { font-family: 'Oswald', sans-serif; letter-spacing: 0.02em; }
+
+  /* Layout */
+  .shell { max-width: 1200px; margin: 0 auto; padding: 28px 24px 80px; }
+
+  /* Header */
+  header.bar {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 28px;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .brand .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .brand h1 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 32px;
+    letter-spacing: 0.01em;
+    line-height: 1;
+  }
+  .brand .sub {
+    color: var(--text-2);
+    font-size: 13px;
+    margin-top: 6px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .today {
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-2);
+    line-height: 1.7;
+  }
+  .today b { color: var(--text); font-weight: 500; }
+
+  /* Stat cards */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 28px;
+  }
+  .stat {
+    background: var(--panel);
+    padding: 18px 20px;
+    position: relative;
+  }
+  .stat .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-3);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .stat .value {
+    font-family: 'Oswald', sans-serif;
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .stat .footnote {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-2);
+    margin-top: 8px;
+  }
+  .stat.over .value { color: var(--danger); }
+  .stat.week .value { color: var(--warn); }
+  .stat.month .value { color: var(--accent); }
+  .stat.done .value { color: var(--ok); }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0;
+  }
+  .tab {
+    padding: 12px 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .tab:hover { color: var(--text-2); }
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .tab .count {
+    display: inline-block;
+    background: var(--panel-2);
+    color: var(--text-2);
+    padding: 1px 7px;
+    border-radius: 2px;
+    margin-left: 6px;
+    font-size: 10px;
+  }
+  .tab.active .count { background: var(--accent); color: #000; }
+
+  /* Toolbar */
+  .toolbar {
+    display: flex;
+    gap: 8px;
+    padding: 14px 0;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    border-bottom: 1px solid var(--border);
+  }
+  .btn {
+    background: var(--panel);
+    border: 1px solid var(--border-2);
+    color: var(--text);
+    padding: 8px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn:hover { background: var(--panel-2); border-color: var(--text-3); }
+  .btn.primary {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+  .btn.primary:hover { background: var(--accent-2); border-color: var(--accent-2); color: #fff; }
+  .btn.ghost { background: transparent; }
+  .btn.danger { color: var(--danger); border-color: var(--danger); }
+  .btn.danger:hover { background: var(--danger); color: #fff; }
+  .btn.sm { padding: 5px 10px; font-size: 10px; }
+
+  /* List */
+  .list {
+    margin-top: 0;
+  }
+  .list-empty {
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--text-3);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    border: 1px dashed var(--border-2);
+    margin-top: 20px;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 110px 1fr 120px 130px auto;
+    gap: 18px;
+    align-items: center;
+    padding: 16px 18px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-top: none;
+    transition: background 0.12s ease;
+  }
+  .row:first-child { border-top: 1px solid var(--border); }
+  .row:hover { background: var(--panel-2); }
+  .row.overdue { border-left: 3px solid var(--danger); }
+  .row.due-soon { border-left: 3px solid var(--warn); }
+  .row.upcoming { border-left: 3px solid var(--border-2); }
+  .row.completed { opacity: 0.65; border-left: 3px solid var(--ok); }
+
+  .row .date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+  }
+  .row .date .month {
+    color: var(--text-3);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .row .date .day {
+    font-size: 22px;
+    font-family: 'Oswald', sans-serif;
+    line-height: 1;
+  }
+  .row .date .year {
+    font-size: 10px;
+    color: var(--text-3);
+    margin-top: 3px;
+  }
+  .row .info .name {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .row .info .desc {
+    font-size: 12px;
+    color: var(--text-2);
+  }
+  .badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border: 1px solid var(--border-2);
+    border-radius: 2px;
+    color: var(--text-2);
+    margin-right: 6px;
+  }
+  .badge.state { color: var(--info); border-color: rgba(56,189,248,0.3); }
+  .badge.federal { color: var(--accent); border-color: rgba(255,122,26,0.4); }
+  .badge.annual { color: var(--warn); border-color: rgba(245,158,11,0.4); }
+  .badge.custom { color: var(--text-2); }
+  .badge.payroll { color: #c084fc; border-color: rgba(192,132,252,0.4); }
+  .badge.insurance { color: #4ade80; border-color: rgba(74,222,128,0.4); }
+
+  .row .amount {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--text-2);
+    text-align: right;
+  }
+  .row .amount.has { color: var(--text); }
+  .row .status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+  .status.overdue { color: var(--danger); }
+  .status.due-soon { color: var(--warn); }
+  .status.completed { color: var(--ok); }
+  .row .actions { display: flex; gap: 6px; justify-content: flex-end; }
+
+  /* Manage view */
+  .manage-section {
+    margin-top: 24px;
+  }
+  .section-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-2);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .template-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 12px;
+  }
+  .template-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: border-color 0.15s ease;
+  }
+  .template-card.active { border-color: var(--accent); }
+  .template-card.active::before {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent);
+    position: absolute;
+  }
+  .template-card .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .template-card .name { font-size: 14px; font-weight: 500; }
+  .template-card .desc { font-size: 12px; color: var(--text-2); line-height: 1.5; }
+  .template-card .freq {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-3);
+  }
+  .template-card .actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Toggle */
+  .toggle {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    background: var(--panel-2);
+    border: 1px solid var(--border-2);
+    border-radius: 0;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.15s ease;
+  }
+  .toggle::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 14px;
+    height: 14px;
+    background: var(--text-3);
+    transition: all 0.15s ease;
+  }
+  .toggle.on { background: var(--accent); border-color: var(--accent); }
+  .toggle.on::after { left: 18px; background: #000; }
+
+  /* Modal */
+  .modal-bg {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+  }
+  .modal-bg.open { display: flex; }
+  .modal {
+    background: var(--panel);
+    border: 1px solid var(--border-2);
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal h2 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--border);
+  }
+  .modal .body { padding: 20px 22px; }
+  .modal .foot {
+    padding: 14px 22px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
+  /* Forms */
+  .field { margin-bottom: 14px; }
+  .field label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 6px;
+  }
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+    background: var(--bg-2);
+    border: 1px solid var(--border-2);
+    color: var(--text);
+    padding: 9px 12px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+  }
+  .field input.mono { font-family: 'JetBrains Mono', monospace; }
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  /* Notice */
+  .notice {
+    padding: 12px 16px;
+    background: rgba(255,122,26,0.07);
+    border: 1px solid rgba(255,122,26,0.25);
+    border-left: 3px solid var(--accent);
+    font-size: 12px;
+    color: var(--text-2);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+  .notice b { color: var(--text); }
+
+  /* Mobile */
+  @media (max-width: 720px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .row { grid-template-columns: 1fr; gap: 10px; padding: 14px; }
+    .row .date { display: flex; align-items: baseline; gap: 8px; }
+    .row .date .day { font-size: 16px; }
+    .row .actions { justify-content: flex-start; }
+    .brand h1 { font-size: 24px; }
+    .stat .value { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <header class="bar">
+    <div class="brand">
+      <div class="eyebrow">// Schedule.OBLIGATIONS</div>
+      <h1>Tax &amp; Payroll Schedule</h1>
+      <div class="sub" id="sub">Mechanical Temp HVAC — MI</div>
+    </div>
+    <div class="today">
+      <div><b id="todayDate">—</b></div>
+      <div id="todayDay">—</div>
+    </div>
+  </header>
+
+  <div class="notice">
+    <b>Heads up.</b> Most payroll companies (Gusto, ADP, Paychex, etc.) handle MI withholding remittance, 941, 940, UIA, and W-2s automatically. Toggle those on only if you're filing them yourself or want a personal verification reminder. The annual filings (5081, 1099s, workers comp audit), estimated taxes, and renewal dates are typically <b>your</b> responsibility regardless.
+  </div>
+
+  <div class="stats">
+    <div class="stat over">
+      <div class="label">Overdue</div>
+      <div class="value" id="statOver">0</div>
+      <div class="footnote">past due date</div>
+    </div>
+    <div class="stat week">
+      <div class="label">Due This Week</div>
+      <div class="value" id="statWeek">0</div>
+      <div class="footnote">next 7 days</div>
+    </div>
+    <div class="stat month">
+      <div class="label">Due This Month</div>
+      <div class="value" id="statMonth">0</div>
+      <div class="footnote">rolling 30 days</div>
+    </div>
+    <div class="stat done">
+      <div class="label">Completed YTD</div>
+      <div class="value" id="statDone">0</div>
+      <div class="footnote" id="statDoneAmt">$0.00 paid</div>
+    </div>
+  </div>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="upcoming">Upcoming <span class="count" id="cUp">0</span></button>
+    <button class="tab" data-tab="overdue">Overdue <span class="count" id="cOv">0</span></button>
+    <button class="tab" data-tab="completed">Completed <span class="count" id="cDn">0</span></button>
+    <button class="tab" data-tab="manage">Manage</button>
+  </nav>
+
+  <div class="toolbar" id="toolbar">
+    <button class="btn" id="exportBtn">Export CSV</button>
+    <button class="btn primary" id="addCustomBtn">+ Custom Task</button>
+  </div>
+
+  <main id="content"></main>
+
+</div>
+
+<!-- Mark Done Modal -->
+<div class="modal-bg" id="doneModal">
+  <div class="modal">
+    <h2>Mark Complete</h2>
+    <div class="body">
+      <div class="field">
+        <label>Task</label>
+        <input id="doneName" type="text" disabled />
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Date Paid</label>
+          <input id="donePaidDate" type="date" />
+        </div>
+        <div class="field">
+          <label>Amount Paid</label>
+          <input id="donePaidAmt" type="number" step="0.01" class="mono" placeholder="0.00" />
+        </div>
+      </div>
+      <div class="field">
+        <label>Confirmation # / Reference</label>
+        <input id="doneConf" type="text" class="mono" placeholder="EFT confirmation, check #, etc." />
+      </div>
+      <div class="field">
+        <label>Notes</label>
+        <textarea id="doneNotes" rows="3" placeholder="Anything to remember next time"></textarea>
+      </div>
+    </div>
+    <div class="foot">
+      <button class="btn ghost" data-close>Cancel</button>
+      <button class="btn primary" id="doneSave">Mark Complete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Custom Task Modal -->
+<div class="modal-bg" id="customModal">
+  <div class="modal">
+    <h2 id="customTitle">New Custom Task</h2>
+    <div class="body">
+      <div class="field">
+        <label>Task Name</label>
+        <input id="cName" type="text" placeholder="e.g. General Liability Insurance Renewal" />
+      </div>
+      <div class="field">
+        <label>Description</label>
+        <input id="cDesc" type="text" placeholder="Optional details" />
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Category</label>
+          <select id="cCat">
+            <option value="state">State Tax</option>
+            <option value="federal">Federal Tax</option>
+            <option value="payroll">Payroll</option>
+            <option value="insurance">Insurance / Bonds</option>
+            <option value="annual">Annual Filing</option>
+            <option value="custom">Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Frequency</label>
+          <select id="cFreq">
+            <option value="monthly">Monthly</option>
+            <option value="quarterly">Quarterly</option>
+            <option value="semi">Semi-Annual</option>
+            <option value="annual">Annual</option>
+            <option value="once">One-Time</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>First Due Date</label>
+          <input id="cFirstDue" type="date" />
+        </div>
+        <div class="field">
+          <label>Estimated Amount</label>
+          <input id="cAmount" type="number" step="0.01" class="mono" placeholder="0.00 (optional)" />
+        </div>
+      </div>
+    </div>
+    <div class="foot">
+      <button class="btn ghost" data-close>Cancel</button>
+      <button class="btn primary" id="cSave">Save Task</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ──────────────────────────────────────────────────────────────────────────────
+// STORAGE — uses window.storage if available (artifact env), else localStorage
+// ──────────────────────────────────────────────────────────────────────────────
+const KEY = 'taxSchedule.v1';
+const Storage = {
+  async get() {
+    if (typeof window.storage !== 'undefined') {
+      try { const r = await window.storage.get(KEY); return r ? JSON.parse(r.value) : null; }
+      catch (e) { /* not found */ }
+    }
+    try { const v = localStorage.getItem(KEY); return v ? JSON.parse(v) : null; }
+    catch (e) { return null; }
+  },
+  async set(state) {
+    const str = JSON.stringify(state);
+    if (typeof window.storage !== 'undefined') {
+      try { await window.storage.set(KEY, str); return; } catch (e) {}
+    }
+    try { localStorage.setItem(KEY, str); } catch (e) {}
+  }
+};
+
+// ──────────────────────────────────────────────────────────────────────────────
+// PRESET TEMPLATES
+// schedule.type: monthly | quarterly | annual | estimated | semi
+//   monthly:    dayOfMonth (1-31), offsetMonth (0=this month, 1=next month, etc.)
+//   quarterly:  dayOfMonth, offsetMonth (months after quarter end)
+//   annual:     month (1-12), day
+//   estimated:  fixed quarterly tax dates: Apr 15, Jun 15, Sep 15, Jan 15
+//   semi:       months [1-12, 1-12], day
+// ──────────────────────────────────────────────────────────────────────────────
+const PRESETS = [
+  {
+    id: 'mi_wh_monthly',
+    name: 'MI Withholding Tax — Monthly',
+    desc: 'Form 5080. Required when annual MI WH liability ≥ $1,200. Due 20th of following month.',
+    cat: 'state',
+    schedule: { type: 'monthly', dayOfMonth: 20, offsetMonth: 1 },
+    note: 'Usually handled by payroll company.'
+  },
+  {
+    id: 'mi_wh_quarterly',
+    name: 'MI Withholding Tax — Quarterly',
+    desc: 'Form 5080. New employers + small filers. Due 20th of month after quarter end.',
+    cat: 'state',
+    schedule: { type: 'quarterly', dayOfMonth: 20, offsetMonth: 1 },
+    note: 'Usually handled by payroll company.'
+  },
+  {
+    id: 'mi_uia',
+    name: 'MI UIA Quarterly Wage/Tax Report',
+    desc: 'Form UIA 1028. Michigan unemployment insurance. Due 25th of month after quarter end.',
+    cat: 'state',
+    schedule: { type: 'quarterly', dayOfMonth: 25, offsetMonth: 1 },
+    note: 'Usually handled by payroll company.'
+  },
+  {
+    id: 'mi_5081',
+    name: 'MI Annual Return (Form 5081)',
+    desc: 'Sales/Use/Withholding annual reconciliation. Due February 28.',
+    cat: 'state',
+    schedule: { type: 'annual', month: 2, day: 28 }
+  },
+  {
+    id: 'mi_w2_recon',
+    name: 'MI W-2/1099 Reconciliation',
+    desc: 'Submit W-2s and 1099-NECs to Treasury via MTO. Due January 31.',
+    cat: 'state',
+    schedule: { type: 'annual', month: 1, day: 31 }
+  },
+  {
+    id: 'fed_941',
+    name: 'Federal 941 — Quarterly Payroll',
+    desc: 'Employer\'s quarterly federal payroll tax return. Due last day of month after quarter end.',
+    cat: 'federal',
+    schedule: { type: 'quarterly_lastday', offsetMonth: 1 },
+    note: 'Usually handled by payroll company.'
+  },
+  {
+    id: 'fed_940',
+    name: 'Federal 940 (FUTA) — Annual',
+    desc: 'Federal Unemployment Tax annual return. Due January 31.',
+    cat: 'federal',
+    schedule: { type: 'annual', month: 1, day: 31 },
+    note: 'Usually handled by payroll company.'
+  },
+  {
+    id: 'fed_w2',
+    name: 'W-2s & W-3 to SSA',
+    desc: 'Furnish W-2s to employees AND file W-3 with SSA. Due January 31.',
+    cat: 'annual',
+    schedule: { type: 'annual', month: 1, day: 31 },
+    note: 'Usually handled by payroll company.'
+  },
+  {
+    id: 'fed_1099',
+    name: '1099-NEC Filing',
+    desc: 'Issue 1099-NEC to subcontractors paid $600+ and file with IRS. Due January 31.',
+    cat: 'annual',
+    schedule: { type: 'annual', month: 1, day: 31 }
+  },
+  {
+    id: 'fed_estimated',
+    name: 'Federal Estimated Tax (1040-ES)',
+    desc: 'Quarterly estimated income tax for self-employed / S-corp owners.',
+    cat: 'federal',
+    schedule: { type: 'estimated' }
+  },
+  {
+    id: 'mi_estimated',
+    name: 'MI Estimated Tax (MI-1040ES)',
+    desc: 'Quarterly Michigan estimated income tax.',
+    cat: 'state',
+    schedule: { type: 'estimated' }
+  },
+  {
+    id: 'wc_audit',
+    name: 'Workers Comp Annual Audit',
+    desc: 'Insurance carrier audit of payroll for premium reconciliation. Date varies — set first occurrence.',
+    cat: 'insurance',
+    schedule: { type: 'annual_user', month: 6, day: 1 }
+  },
+  {
+    id: 'gl_renewal',
+    name: 'General Liability Renewal',
+    desc: 'Annual GL insurance renewal. Set to your policy date.',
+    cat: 'insurance',
+    schedule: { type: 'annual_user', month: 1, day: 1 }
+  },
+  {
+    id: 'mech_license',
+    name: 'MI Mechanical Contractor License Renewal',
+    desc: 'LARA mechanical contractor license. 3-year cycle — track expiration.',
+    cat: 'annual',
+    schedule: { type: 'annual_user', month: 12, day: 31 }
+  },
+  {
+    id: 'biz_renewal',
+    name: 'Business Entity Annual Statement',
+    desc: 'MI LARA annual statement for LLCs/Corps. Due Feb 15 (LLC) or May 15 (Corp).',
+    cat: 'annual',
+    schedule: { type: 'annual', month: 2, day: 15 }
+  }
+];
+
+// ──────────────────────────────────────────────────────────────────────────────
+// STATE
+// ──────────────────────────────────────────────────────────────────────────────
+let state = {
+  enabled: [],         // array of preset IDs that are active
+  customTemplates: [], // user-added templates
+  completions: {},     // { occurrenceId: { paidDate, amount, conf, notes } }
+  overrides: {}        // { presetId: { firstDue: 'YYYY-MM-DD' } } for annual_user
+};
+let currentTab = 'upcoming';
+let pendingDoneId = null;
+let editingCustomId = null;
+
+// ──────────────────────────────────────────────────────────────────────────────
+// DATE HELPERS
+// ──────────────────────────────────────────────────────────────────────────────
+const today = () => { const d = new Date(); d.setHours(0,0,0,0); return d; };
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate()+n); return x; };
+const daysBetween = (a, b) => Math.round((b - a) / 86400000);
+const fmtDate = (d) => d.toISOString().slice(0,10);
+const parseDate = (s) => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+const lastDayOfMonth = (year, month) => new Date(year, month, 0).getDate();
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MONTHS_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+// ──────────────────────────────────────────────────────────────────────────────
+// OCCURRENCE GENERATION
+// Produces a list of occurrences for the next 18 months (or past 6 if completed)
+// ──────────────────────────────────────────────────────────────────────────────
+function generateOccurrences() {
+  const result = [];
+  const allTemplates = [
+    ...PRESETS.filter(p => state.enabled.includes(p.id)),
+    ...state.customTemplates
+  ];
+  const t = today();
+  const startWindow = addDays(t, -180);
+  const endWindow   = addDays(t, 540);
+
+  for (const tpl of allTemplates) {
+    const occurrences = generateForTemplate(tpl, startWindow, endWindow);
+    for (const occ of occurrences) {
+      result.push({
+        id: `${tpl.id}__${fmtDate(occ.due)}`,
+        templateId: tpl.id,
+        templateName: tpl.name,
+        templateDesc: tpl.desc || tpl.description || '',
+        category: tpl.cat || tpl.category || 'custom',
+        due: occ.due,
+        amount: tpl.amount || null,
+        note: tpl.note || ''
+      });
+    }
+  }
+  // Add manually-completed occurrences from custom or one-time tasks not in window
+  return result;
+}
+
+function generateForTemplate(tpl, start, end) {
+  const sch = tpl.schedule;
+  const out = [];
+  if (!sch) return out;
+
+  if (sch.type === 'monthly') {
+    let cursor = new Date(start.getFullYear(), start.getMonth(), 1);
+    while (cursor <= end) {
+      // For each calendar month, the obligation period is that month;
+      // due date is offsetMonth months later on dayOfMonth
+      const dueMonth = cursor.getMonth() + (sch.offsetMonth || 0);
+      const due = new Date(cursor.getFullYear(), dueMonth, Math.min(sch.dayOfMonth, lastDayOfMonth(cursor.getFullYear(), dueMonth + 1)));
+      if (due >= start && due <= end) out.push({ due });
+      cursor = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1);
+    }
+  }
+  else if (sch.type === 'quarterly') {
+    // Quarter ends: Mar 31, Jun 30, Sep 30, Dec 31
+    const quarterEndMonths = [2, 5, 8, 11]; // 0-indexed: Mar, Jun, Sep, Dec
+    let year = start.getFullYear() - 1;
+    while (year <= end.getFullYear() + 1) {
+      for (const qm of quarterEndMonths) {
+        const dueMonth = qm + (sch.offsetMonth || 1);
+        const dueYear = year + Math.floor(dueMonth / 12);
+        const dueMonthNorm = ((dueMonth % 12) + 12) % 12;
+        const due = new Date(dueYear, dueMonthNorm, Math.min(sch.dayOfMonth, lastDayOfMonth(dueYear, dueMonthNorm + 1)));
+        if (due >= start && due <= end) out.push({ due });
+      }
+      year++;
+    }
+  }
+  else if (sch.type === 'quarterly_lastday') {
+    const quarterEndMonths = [2, 5, 8, 11];
+    let year = start.getFullYear() - 1;
+    while (year <= end.getFullYear() + 1) {
+      for (const qm of quarterEndMonths) {
+        const dueMonth = qm + (sch.offsetMonth || 1);
+        const dueYear = year + Math.floor(dueMonth / 12);
+        const dueMonthNorm = ((dueMonth % 12) + 12) % 12;
+        const due = new Date(dueYear, dueMonthNorm, lastDayOfMonth(dueYear, dueMonthNorm + 1));
+        if (due >= start && due <= end) out.push({ due });
+      }
+      year++;
+    }
+  }
+  else if (sch.type === 'annual') {
+    let year = start.getFullYear();
+    while (year <= end.getFullYear() + 1) {
+      const due = new Date(year, sch.month - 1, sch.day);
+      if (due >= start && due <= end) out.push({ due });
+      year++;
+    }
+  }
+  else if (sch.type === 'annual_user') {
+    // Use override if set, else default
+    const ov = state.overrides[tpl.id];
+    let baseDate;
+    if (ov && ov.firstDue) {
+      baseDate = parseDate(ov.firstDue);
+    } else {
+      baseDate = new Date(today().getFullYear(), sch.month - 1, sch.day);
+    }
+    let year = baseDate.getFullYear() - 1;
+    while (year <= end.getFullYear() + 1) {
+      const due = new Date(year, baseDate.getMonth(), baseDate.getDate());
+      if (due >= start && due <= end) out.push({ due });
+      year++;
+    }
+  }
+  else if (sch.type === 'estimated') {
+    // Apr 15, Jun 15, Sep 15, Jan 15 of following year
+    const dates = [
+      [3, 15],  // Apr 15
+      [5, 15],  // Jun 15
+      [8, 15],  // Sep 15
+      [0, 15]   // Jan 15 (following year)
+    ];
+    let year = start.getFullYear() - 1;
+    while (year <= end.getFullYear() + 1) {
+      const due1 = new Date(year, 3, 15);
+      const due2 = new Date(year, 5, 15);
+      const due3 = new Date(year, 8, 15);
+      const due4 = new Date(year + 1, 0, 15);
+      [due1, due2, due3, due4].forEach(d => {
+        if (d >= start && d <= end) out.push({ due: d });
+      });
+      year++;
+    }
+  }
+  else if (sch.type === 'once') {
+    if (sch.due) {
+      const due = parseDate(sch.due);
+      if (due >= start && due <= end) out.push({ due });
+    }
+  }
+  else if (sch.type === 'custom') {
+    // Custom template recurrence: monthly/quarterly/semi/annual/once based on cFreq
+    // Handled via tpl.schedule directly above
+  }
+
+  // De-dupe (same date occurring twice)
+  const seen = new Set();
+  return out.filter(o => {
+    const k = fmtDate(o.due);
+    if (seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
+}
+
+// ──────────────────────────────────────────────────────────────────────────────
+// CATEGORIZATION & STATUS
+// ──────────────────────────────────────────────────────────────────────────────
+function statusOf(occ) {
+  if (state.completions[occ.id]) return 'completed';
+  const t = today();
+  const days = daysBetween(t, occ.due);
+  if (days < 0) return 'overdue';
+  if (days <= 7) return 'due-soon';
+  return 'upcoming';
+}
+
+function catLabel(cat) {
+  return ({
+    state: 'STATE', federal: 'FED', payroll: 'PAYROLL',
+    insurance: 'INS', annual: 'ANNUAL', custom: 'CUSTOM'
+  })[cat] || cat.toUpperCase();
+}
+
+// ──────────────────────────────────────────────────────────────────────────────
+// RENDER
+// ──────────────────────────────────────────────────────────────────────────────
+function render() {
+  // Today
+  const t = today();
+  document.getElementById('todayDate').textContent =
+    t.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).toUpperCase();
+  document.getElementById('todayDay').textContent =
+    t.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+
+  // Generate all occurrences
+  const all = generateOccurrences();
+  const withStatus = all.map(o => ({ ...o, status: statusOf(o) }));
+
+  // Compute stats
+  const overdue = withStatus.filter(o => o.status === 'overdue');
+  const week = withStatus.filter(o => o.status === 'due-soon');
+  const month = withStatus.filter(o => {
+    if (o.status === 'completed' || o.status === 'overdue') return false;
+    const days = daysBetween(t, o.due);
+    return days >= 0 && days <= 30;
+  });
+  const yearStart = new Date(t.getFullYear(), 0, 1);
+  const completedYTD = Object.entries(state.completions)
+    .filter(([id, rec]) => rec.paidDate && parseDate(rec.paidDate) >= yearStart);
+  const completedYTDAmt = completedYTD.reduce((s, [, r]) => s + (parseFloat(r.amount) || 0), 0);
+
+  document.getElementById('statOver').textContent = overdue.length;
+  document.getElementById('statWeek').textContent = week.length;
+  document.getElementById('statMonth').textContent = month.length;
+  document.getElementById('statDone').textContent = completedYTD.length;
+  document.getElementById('statDoneAmt').textContent = '$' + completedYTDAmt.toFixed(2) + ' paid';
+
+  // Tab counts
+  const upcomingList = withStatus.filter(o => o.status === 'upcoming' || o.status === 'due-soon')
+    .sort((a, b) => a.due - b.due);
+  const completedList = withStatus.filter(o => o.status === 'completed')
+    .sort((a, b) => b.due - a.due);
+
+  document.getElementById('cUp').textContent = upcomingList.length + week.length;
+  document.getElementById('cOv').textContent = overdue.length;
+  document.getElementById('cDn').textContent = completedList.length;
+
+  // Render content based on active tab
+  const content = document.getElementById('content');
+  const toolbar = document.getElementById('toolbar');
+
+  if (currentTab === 'manage') {
+    toolbar.style.display = 'flex';
+    content.innerHTML = renderManage();
+    bindManage();
+  } else if (currentTab === 'upcoming') {
+    toolbar.style.display = 'flex';
+    const list = [...week, ...upcomingList.filter(o => o.status === 'upcoming')];
+    content.innerHTML = renderList(list, 'upcoming');
+    bindRowActions();
+  } else if (currentTab === 'overdue') {
+    toolbar.style.display = 'flex';
+    content.innerHTML = renderList(overdue.sort((a,b) => a.due - b.due), 'overdue');
+    bindRowActions();
+  } else if (currentTab === 'completed') {
+    toolbar.style.display = 'flex';
+    content.innerHTML = renderList(completedList, 'completed');
+    bindRowActions();
+  }
+}
+
+function renderList(items, kind) {
+  if (!items.length) {
+    if (kind === 'upcoming' && state.enabled.length === 0 && state.customTemplates.length === 0) {
+      return `<div class="list-empty">
+        Nothing scheduled yet. Head to <b>Manage</b> to enable preset obligations<br>
+        (MI 5081, 1099s, estimated tax, license renewals, etc.) or add a custom task.
+      </div>`;
+    }
+    const messages = {
+      upcoming: 'Nothing upcoming. You\'re clear.',
+      overdue: 'Nothing overdue. Keep it that way.',
+      completed: 'No completed items yet.'
+    };
+    return `<div class="list-empty">${messages[kind]}</div>`;
+  }
+
+  const rows = items.map(o => {
+    const m = MONTHS[o.due.getMonth()];
+    const day = o.due.getDate();
+    const yr = o.due.getFullYear();
+    const completion = state.completions[o.id];
+    const t = today();
+    const days = daysBetween(t, o.due);
+    let statusText = '';
+    if (o.status === 'overdue') statusText = `${Math.abs(days)}d overdue`;
+    else if (o.status === 'due-soon') statusText = days === 0 ? 'Today' : `In ${days}d`;
+    else if (o.status === 'completed') statusText = `Paid ${completion.paidDate || ''}`;
+    else statusText = `In ${days}d`;
+
+    const amount = completion?.amount
+      ? `$${parseFloat(completion.amount).toFixed(2)}`
+      : (o.amount ? `~$${parseFloat(o.amount).toFixed(2)}` : '—');
+
+    let actions = '';
+    if (o.status !== 'completed') {
+      actions = `<button class="btn primary sm" data-act="done" data-id="${o.id}" data-name="${escapeAttr(o.templateName)}">Mark Done</button>`;
+    } else {
+      actions = `<button class="btn ghost sm" data-act="undo" data-id="${o.id}">Undo</button>`;
+    }
+
+    return `<div class="row ${o.status}">
+      <div class="date">
+        <div class="month">${m}</div>
+        <div class="day">${day}</div>
+        <div class="year">${yr}</div>
+      </div>
+      <div class="info">
+        <div class="name">${escapeHtml(o.templateName)}</div>
+        <div class="desc">
+          <span class="badge ${o.category}">${catLabel(o.category)}</span>
+          ${escapeHtml(o.templateDesc)}
+        </div>
+      </div>
+      <div class="amount ${completion?.amount ? 'has' : ''}">${amount}</div>
+      <div class="status ${o.status}">${statusText}</div>
+      <div class="actions">${actions}</div>
+    </div>`;
+  }).join('');
+
+  return `<div class="list">${rows}</div>`;
+}
+
+function renderManage() {
+  // Group presets by category
+  const byCat = { state: [], federal: [], annual: [], insurance: [] };
+  PRESETS.forEach(p => {
+    if (byCat[p.cat]) byCat[p.cat].push(p);
+    else { byCat[p.cat] = byCat[p.cat] || []; byCat[p.cat].push(p); }
+  });
+
+  const sectionLabels = {
+    state: 'Michigan State Obligations',
+    federal: 'Federal Tax Obligations',
+    annual: 'Annual Filings & Renewals',
+    insurance: 'Insurance & Bonds'
+  };
+
+  let html = '';
+  for (const cat of ['state', 'federal', 'annual', 'insurance']) {
+    if (!byCat[cat] || !byCat[cat].length) continue;
+    html += `<div class="manage-section">
+      <div class="section-title">${sectionLabels[cat]}</div>
+      <div class="template-grid">
+        ${byCat[cat].map(p => renderTemplateCard(p, false)).join('')}
+      </div>
+    </div>`;
+  }
+
+  // Custom templates
+  html += `<div class="manage-section">
+    <div class="section-title">Custom Tasks
+      <button class="btn primary sm" id="addCustomBtn2">+ Add Custom</button>
+    </div>`;
+  if (state.customTemplates.length === 0) {
+    html += `<div class="list-empty">No custom tasks yet. Use the button above for renewals, audits, or anything not in the presets.</div>`;
+  } else {
+    html += `<div class="template-grid">${state.customTemplates.map(p => renderTemplateCard(p, true)).join('')}</div>`;
+  }
+  html += `</div>`;
+
+  return html;
+}
+
+function renderTemplateCard(tpl, isCustom) {
+  const enabled = isCustom ? true : state.enabled.includes(tpl.id);
+  const freq = describeFreq(tpl.schedule);
+
+  return `<div class="template-card ${enabled ? 'active' : ''}">
+    <div class="head">
+      <div style="flex:1;">
+        <div class="name">${escapeHtml(tpl.name)}</div>
+        <div class="freq">${freq}</div>
+      </div>
+      ${isCustom ? '' : `<div class="toggle ${enabled ? 'on' : ''}" data-toggle="${tpl.id}"></div>`}
+    </div>
+    <div class="desc">${escapeHtml(tpl.desc || tpl.description || '')}</div>
+    ${tpl.note ? `<div class="freq" style="color:var(--accent)">↳ ${escapeHtml(tpl.note)}</div>` : ''}
+    ${tpl.schedule.type === 'annual_user' ? `
+      <div class="actions">
+        <button class="btn ghost sm" data-set-date="${tpl.id}">Set Date</button>
+      </div>` : ''}
+    ${isCustom ? `
+      <div class="actions">
+        <button class="btn ghost sm" data-edit-custom="${tpl.id}">Edit</button>
+        <button class="btn danger sm" data-del-custom="${tpl.id}">Delete</button>
+      </div>` : ''}
+  </div>`;
+}
+
+function describeFreq(sch) {
+  if (!sch) return '';
+  if (sch.type === 'monthly') return `Monthly · Day ${sch.dayOfMonth}`;
+  if (sch.type === 'quarterly') return `Quarterly · Day ${sch.dayOfMonth} of month +${sch.offsetMonth}`;
+  if (sch.type === 'quarterly_lastday') return `Quarterly · Last day of month +${sch.offsetMonth}`;
+  if (sch.type === 'annual') return `Annual · ${MONTHS_FULL[sch.month-1]} ${sch.day}`;
+  if (sch.type === 'annual_user') return `Annual · Set your date`;
+  if (sch.type === 'estimated') return `Estimated Tax · 4× per year`;
+  if (sch.type === 'once') return `One-Time · ${sch.due || 'Set date'}`;
+  if (sch.type === 'custom') return sch.label || 'Custom';
+  return '';
+}
+
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function escapeAttr(s) { return escapeHtml(s).replace(/"/g, '&quot;'); }
+
+// ──────────────────────────────────────────────────────────────────────────────
+// EVENT BINDINGS
+// ──────────────────────────────────────────────────────────────────────────────
+function bindRowActions() {
+  document.querySelectorAll('[data-act]').forEach(b => {
+    b.addEventListener('click', () => {
+      const act = b.getAttribute('data-act');
+      const id = b.getAttribute('data-id');
+      if (act === 'done') {
+        openDoneModal(id, b.getAttribute('data-name'));
+      } else if (act === 'undo') {
+        if (confirm('Mark this as not paid and remove the completion record?')) {
+          delete state.completions[id];
+          save(); render();
+        }
+      }
+    });
+  });
+}
+
+function bindManage() {
+  document.querySelectorAll('[data-toggle]').forEach(t => {
+    t.addEventListener('click', () => {
+      const id = t.getAttribute('data-toggle');
+      if (state.enabled.includes(id)) {
+        state.enabled = state.enabled.filter(x => x !== id);
+      } else {
+        state.enabled.push(id);
+      }
+      save(); render();
+    });
+  });
+  document.querySelectorAll('[data-set-date]').forEach(b => {
+    b.addEventListener('click', () => {
+      const id = b.getAttribute('data-set-date');
+      const cur = state.overrides[id]?.firstDue || '';
+      const v = prompt('Enter first due date (YYYY-MM-DD):', cur);
+      if (v && /^\d{4}-\d{2}-\d{2}$/.test(v)) {
+        state.overrides[id] = { firstDue: v };
+        // Auto-enable
+        if (!state.enabled.includes(id)) state.enabled.push(id);
+        save(); render();
+      }
+    });
+  });
+  document.querySelectorAll('[data-edit-custom]').forEach(b => {
+    b.addEventListener('click', () => openCustomModal(b.getAttribute('data-edit-custom')));
+  });
+  document.querySelectorAll('[data-del-custom]').forEach(b => {
+    b.addEventListener('click', () => {
+      const id = b.getAttribute('data-del-custom');
+      if (confirm('Delete this custom task and all its history?')) {
+        state.customTemplates = state.customTemplates.filter(t => t.id !== id);
+        // Remove related completions
+        Object.keys(state.completions).forEach(occId => {
+          if (occId.startsWith(id + '__')) delete state.completions[occId];
+        });
+        save(); render();
+      }
+    });
+  });
+  const add2 = document.getElementById('addCustomBtn2');
+  if (add2) add2.addEventListener('click', () => openCustomModal());
+}
+
+// Tabs
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    currentTab = t.getAttribute('data-tab');
+    render();
+  });
+});
+
+// Toolbar buttons
+document.getElementById('addCustomBtn').addEventListener('click', () => openCustomModal());
+document.getElementById('exportBtn').addEventListener('click', exportCSV);
+
+// Modal close
+document.querySelectorAll('[data-close]').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.modal-bg').forEach(m => m.classList.remove('open'));
+  });
+});
+document.querySelectorAll('.modal-bg').forEach(bg => {
+  bg.addEventListener('click', (e) => {
+    if (e.target === bg) bg.classList.remove('open');
+  });
+});
+
+// ──────────────────────────────────────────────────────────────────────────────
+// MODALS
+// ──────────────────────────────────────────────────────────────────────────────
+function openDoneModal(occId, name) {
+  pendingDoneId = occId;
+  document.getElementById('doneName').value = name;
+  document.getElementById('donePaidDate').value = fmtDate(today());
+  document.getElementById('donePaidAmt').value = '';
+  document.getElementById('doneConf').value = '';
+  document.getElementById('doneNotes').value = '';
+  document.getElementById('doneModal').classList.add('open');
+}
+
+document.getElementById('doneSave').addEventListener('click', () => {
+  if (!pendingDoneId) return;
+  state.completions[pendingDoneId] = {
+    paidDate: document.getElementById('donePaidDate').value,
+    amount: document.getElementById('donePaidAmt').value,
+    conf: document.getElementById('doneConf').value,
+    notes: document.getElementById('doneNotes').value
+  };
+  document.getElementById('doneModal').classList.remove('open');
+  pendingDoneId = null;
+  save(); render();
+});
+
+function openCustomModal(editId) {
+  editingCustomId = editId || null;
+  document.getElementById('customTitle').textContent = editId ? 'Edit Custom Task' : 'New Custom Task';
+  if (editId) {
+    const t = state.customTemplates.find(x => x.id === editId);
+    if (!t) return;
+    document.getElementById('cName').value = t.name || '';
+    document.getElementById('cDesc').value = t.desc || '';
+    document.getElementById('cCat').value = t.cat || 'custom';
+    document.getElementById('cFreq').value = t._freq || 'annual';
+    document.getElementById('cFirstDue').value = t._firstDue || '';
+    document.getElementById('cAmount').value = t.amount || '';
+  } else {
+    document.getElementById('cName').value = '';
+    document.getElementById('cDesc').value = '';
+    document.getElementById('cCat').value = 'custom';
+    document.getElementById('cFreq').value = 'annual';
+    document.getElementById('cFirstDue').value = fmtDate(today());
+    document.getElementById('cAmount').value = '';
+  }
+  document.getElementById('customModal').classList.add('open');
+}
+
+document.getElementById('cSave').addEventListener('click', () => {
+  const name = document.getElementById('cName').value.trim();
+  if (!name) { alert('Task name required'); return; }
+  const desc = document.getElementById('cDesc').value.trim();
+  const cat = document.getElementById('cCat').value;
+  const freq = document.getElementById('cFreq').value;
+  const firstDue = document.getElementById('cFirstDue').value;
+  const amount = document.getElementById('cAmount').value;
+  if (!firstDue) { alert('First due date required'); return; }
+
+  const tpl = {
+    id: editingCustomId || ('custom_' + Date.now()),
+    name, desc, cat,
+    amount: amount || null,
+    _freq: freq,
+    _firstDue: firstDue,
+    schedule: buildScheduleFromCustom(freq, firstDue)
+  };
+
+  if (editingCustomId) {
+    state.customTemplates = state.customTemplates.map(t => t.id === editingCustomId ? tpl : t);
+  } else {
+    state.customTemplates.push(tpl);
+  }
+  document.getElementById('customModal').classList.remove('open');
+  editingCustomId = null;
+  save(); render();
+});
+
+function buildScheduleFromCustom(freq, firstDue) {
+  const d = parseDate(firstDue);
+  if (freq === 'monthly') return { type: 'monthly', dayOfMonth: d.getDate(), offsetMonth: 0 };
+  if (freq === 'quarterly') {
+    return { type: 'custom_quarterly', firstDue, dayOfMonth: d.getDate() };
+  }
+  if (freq === 'semi') return { type: 'custom_semi', firstDue };
+  if (freq === 'annual') return { type: 'annual_user', month: d.getMonth() + 1, day: d.getDate() };
+  if (freq === 'once') return { type: 'once', due: firstDue };
+  return { type: 'once', due: firstDue };
+}
+
+// Custom quarterly/semi need their own generator branch — extend generateForTemplate
+const _origGen = generateForTemplate;
+generateForTemplate = function(tpl, start, end) {
+  const sch = tpl.schedule;
+  if (sch && sch.type === 'custom_quarterly' && sch.firstDue) {
+    const out = [];
+    let d = parseDate(sch.firstDue);
+    // step backward 3mo until before start
+    while (d > start) d = new Date(d.getFullYear(), d.getMonth() - 3, d.getDate());
+    while (d <= end) {
+      if (d >= start) out.push({ due: new Date(d) });
+      d = new Date(d.getFullYear(), d.getMonth() + 3, d.getDate());
+    }
+    return out;
+  }
+  if (sch && sch.type === 'custom_semi' && sch.firstDue) {
+    const out = [];
+    let d = parseDate(sch.firstDue);
+    while (d > start) d = new Date(d.getFullYear(), d.getMonth() - 6, d.getDate());
+    while (d <= end) {
+      if (d >= start) out.push({ due: new Date(d) });
+      d = new Date(d.getFullYear(), d.getMonth() + 6, d.getDate());
+    }
+    return out;
+  }
+  return _origGen(tpl, start, end);
+};
+
+// ──────────────────────────────────────────────────────────────────────────────
+// EXPORT
+// ──────────────────────────────────────────────────────────────────────────────
+function exportCSV() {
+  const all = generateOccurrences().map(o => ({ ...o, status: statusOf(o) }));
+  const rows = all.sort((a, b) => a.due - b.due).map(o => {
+    const c = state.completions[o.id] || {};
+    return [
+      fmtDate(o.due),
+      o.templateName,
+      catLabel(o.category),
+      o.status,
+      c.paidDate || '',
+      c.amount || '',
+      c.conf || '',
+      (c.notes || '').replace(/[\n\r,]/g, ' ')
+    ].map(v => `"${String(v).replace(/"/g,'""')}"`).join(',');
+  });
+  const csv = ['"Due Date","Task","Category","Status","Date Paid","Amount Paid","Confirmation","Notes"', ...rows].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `tax-schedule-${fmtDate(today())}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ──────────────────────────────────────────────────────────────────────────────
+// INIT
+// ──────────────────────────────────────────────────────────────────────────────
+async function save() { await Storage.set(state); }
+async function load() {
+  const stored = await Storage.get();
+  if (stored) state = { enabled: [], customTemplates: [], completions: {}, overrides: {}, ...stored };
+  render();
+}
+load();
+</script>
+</body>
+</html>
