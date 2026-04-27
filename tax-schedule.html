@@ -6,122 +6,121 @@
 <title>Tax & Payroll Schedule</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Oswald:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0d0e0f;
-    --bg-2: #131516;
-    --panel: #181a1b;
-    --panel-2: #1f2123;
-    --border: #2a2d2f;
-    --border-2: #3a3e41;
-    --text: #e8e8e8;
-    --text-2: #9aa0a4;
-    --text-3: #6b7075;
-    --accent: #ff7a1a;
-    --accent-2: #c45810;
-    --danger: #ef4444;
-    --warn: #f59e0b;
-    --ok: #22c55e;
-    --info: #38bdf8;
-    --grid: rgba(255, 255, 255, 0.025);
+    --bg: #f6f7f9;
+    --bg-2: #ffffff;
+    --panel: #ffffff;
+    --panel-2: #f9fafb;
+    --border: #e5e7eb;
+    --border-2: #d1d5db;
+    --text: #111827;
+    --text-2: #4b5563;
+    --text-3: #9ca3af;
+    --accent: #1e40af;
+    --accent-2: #1e3a8a;
+    --accent-soft: #eff6ff;
+    --danger: #b91c1c;
+    --danger-soft: #fef2f2;
+    --warn: #b45309;
+    --warn-soft: #fffbeb;
+    --ok: #047857;
+    --ok-soft: #ecfdf5;
+    --info: #0e7490;
+    --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.04);
+    --shadow: 0 1px 3px rgba(16, 24, 40, 0.06), 0 1px 2px rgba(16, 24, 40, 0.04);
+    --shadow-md: 0 4px 8px rgba(16, 24, 40, 0.06), 0 2px 4px rgba(16, 24, 40, 0.04);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
-  }
-  body {
-    background-image:
-      linear-gradient(var(--grid) 1px, transparent 1px),
-      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-    background-size: 32px 32px;
-    background-position: 0 0;
+    font-feature-settings: 'cv11', 'ss01';
   }
 
-  .mono { font-family: 'JetBrains Mono', monospace; }
-  .display { font-family: 'Oswald', sans-serif; letter-spacing: 0.02em; }
+  .serif { font-family: 'Source Serif 4', Georgia, serif; }
 
   /* Layout */
-  .shell { max-width: 1200px; margin: 0 auto; padding: 28px 24px 80px; }
+  .shell { max-width: 1200px; margin: 0 auto; padding: 32px 24px 80px; }
 
   /* Header */
   header.bar {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    padding-bottom: 18px;
+    padding-bottom: 24px;
     border-bottom: 1px solid var(--border);
     margin-bottom: 28px;
     gap: 24px;
     flex-wrap: wrap;
   }
   .brand .eyebrow {
-    font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
     color: var(--accent);
-    letter-spacing: 0.18em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    margin-bottom: 4px;
+    font-weight: 600;
+    margin-bottom: 8px;
   }
   .brand h1 {
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Source Serif 4', Georgia, serif;
     font-weight: 600;
     font-size: 32px;
-    letter-spacing: 0.01em;
-    line-height: 1;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    color: var(--text);
   }
   .brand .sub {
     color: var(--text-2);
-    font-size: 13px;
-    margin-top: 6px;
-    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    margin-top: 8px;
   }
   .today {
     text-align: right;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
+    font-size: 13px;
     color: var(--text-2);
-    line-height: 1.7;
+    line-height: 1.6;
   }
-  .today b { color: var(--text); font-weight: 500; }
+  .today b { color: var(--text); font-weight: 600; }
 
   /* Stat cards */
   .stats {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
+    gap: 16px;
     margin-bottom: 28px;
   }
   .stat {
     background: var(--panel);
-    padding: 18px 20px;
+    padding: 20px 22px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
     position: relative;
   }
   .stat .label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: var(--text-3);
-    letter-spacing: 0.16em;
+    font-size: 11px;
+    color: var(--text-2);
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    margin-bottom: 10px;
+    font-weight: 600;
+    margin-bottom: 12px;
   }
   .stat .value {
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Source Serif 4', Georgia, serif;
     font-size: 36px;
     font-weight: 600;
     line-height: 1;
+    letter-spacing: -0.02em;
   }
   .stat .footnote {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--text-2);
-    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text-3);
+    margin-top: 10px;
   }
   .stat.over .value { color: var(--danger); }
   .stat.week .value { color: var(--warn); }
@@ -137,161 +136,172 @@
   }
   .tab {
     padding: 12px 18px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-3);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-2);
     background: transparent;
     border: none;
     border-bottom: 2px solid transparent;
     margin-bottom: -1px;
     cursor: pointer;
     transition: color 0.15s ease, border-color 0.15s ease;
+    font-family: inherit;
   }
-  .tab:hover { color: var(--text-2); }
+  .tab:hover { color: var(--text); }
   .tab.active {
     color: var(--accent);
     border-bottom-color: var(--accent);
+    font-weight: 600;
   }
   .tab .count {
     display: inline-block;
     background: var(--panel-2);
     color: var(--text-2);
-    padding: 1px 7px;
-    border-radius: 2px;
+    padding: 2px 8px;
+    border-radius: 10px;
     margin-left: 6px;
-    font-size: 10px;
+    font-size: 11px;
+    font-weight: 500;
+    border: 1px solid var(--border);
   }
-  .tab.active .count { background: var(--accent); color: #000; }
+  .tab.active .count {
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-color: transparent;
+  }
 
   /* Toolbar */
   .toolbar {
     display: flex;
     gap: 8px;
-    padding: 14px 0;
+    padding: 16px 0;
     align-items: center;
     flex-wrap: wrap;
     justify-content: flex-end;
-    border-bottom: 1px solid var(--border);
   }
   .btn {
     background: var(--panel);
     border: 1px solid var(--border-2);
     color: var(--text);
     padding: 8px 14px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    font-size: 13px;
+    font-weight: 500;
     cursor: pointer;
+    border-radius: 6px;
     transition: all 0.15s ease;
+    font-family: inherit;
+    box-shadow: var(--shadow-sm);
   }
   .btn:hover { background: var(--panel-2); border-color: var(--text-3); }
   .btn.primary {
     background: var(--accent);
-    color: #000;
+    color: #fff;
     border-color: var(--accent);
     font-weight: 600;
   }
-  .btn.primary:hover { background: var(--accent-2); border-color: var(--accent-2); color: #fff; }
-  .btn.ghost { background: transparent; }
-  .btn.danger { color: var(--danger); border-color: var(--danger); }
-  .btn.danger:hover { background: var(--danger); color: #fff; }
-  .btn.sm { padding: 5px 10px; font-size: 10px; }
+  .btn.primary:hover { background: var(--accent-2); border-color: var(--accent-2); }
+  .btn.ghost { background: transparent; box-shadow: none; }
+  .btn.ghost:hover { background: var(--panel-2); }
+  .btn.danger { color: var(--danger); border-color: #fecaca; }
+  .btn.danger:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
+  .btn.sm { padding: 6px 11px; font-size: 12px; }
 
   /* List */
-  .list {
-    margin-top: 0;
-  }
+  .list { margin-top: 16px; }
   .list-empty {
     padding: 60px 20px;
     text-align: center;
-    color: var(--text-3);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
+    color: var(--text-2);
+    font-size: 14px;
+    background: var(--panel);
     border: 1px dashed var(--border-2);
+    border-radius: 8px;
     margin-top: 20px;
   }
+  .list-empty b { color: var(--text); font-weight: 600; }
   .row {
     display: grid;
-    grid-template-columns: 110px 1fr 120px 130px auto;
+    grid-template-columns: 100px 1fr 120px 130px auto;
     gap: 18px;
     align-items: center;
-    padding: 16px 18px;
+    padding: 16px 20px;
     background: var(--panel);
     border: 1px solid var(--border);
     border-top: none;
     transition: background 0.12s ease;
   }
-  .row:first-child { border-top: 1px solid var(--border); }
+  .row:first-child { border-top: 1px solid var(--border); border-radius: 8px 8px 0 0; }
+  .row:last-child { border-radius: 0 0 8px 8px; }
+  .row:only-child { border-radius: 8px; }
   .row:hover { background: var(--panel-2); }
   .row.overdue { border-left: 3px solid var(--danger); }
   .row.due-soon { border-left: 3px solid var(--warn); }
   .row.upcoming { border-left: 3px solid var(--border-2); }
-  .row.completed { opacity: 0.65; border-left: 3px solid var(--ok); }
+  .row.completed { opacity: 0.7; border-left: 3px solid var(--ok); }
 
-  .row .date {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-  }
+  .row .date { font-size: 13px; }
   .row .date .month {
     color: var(--text-3);
-    font-size: 10px;
-    letter-spacing: 0.14em;
+    font-size: 11px;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
+    font-weight: 600;
     margin-bottom: 2px;
   }
   .row .date .day {
-    font-size: 22px;
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 24px;
+    font-weight: 600;
     line-height: 1;
+    color: var(--text);
   }
   .row .date .year {
-    font-size: 10px;
+    font-size: 11px;
     color: var(--text-3);
     margin-top: 3px;
   }
   .row .info .name {
     font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 4px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--text);
   }
   .row .info .desc {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--text-2);
+    line-height: 1.5;
   }
   .badge {
     display: inline-block;
-    font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     padding: 3px 8px;
-    border: 1px solid var(--border-2);
-    border-radius: 2px;
+    border-radius: 4px;
+    font-weight: 600;
+    margin-right: 8px;
+    background: var(--panel-2);
     color: var(--text-2);
-    margin-right: 6px;
+    border: 1px solid var(--border);
   }
-  .badge.state { color: var(--info); border-color: rgba(56,189,248,0.3); }
-  .badge.federal { color: var(--accent); border-color: rgba(255,122,26,0.4); }
-  .badge.annual { color: var(--warn); border-color: rgba(245,158,11,0.4); }
+  .badge.state { color: var(--info); background: #ecfeff; border-color: #cffafe; }
+  .badge.federal { color: var(--accent); background: var(--accent-soft); border-color: #dbeafe; }
+  .badge.annual { color: var(--warn); background: var(--warn-soft); border-color: #fde68a; }
+  .badge.payroll { color: #6d28d9; background: #f5f3ff; border-color: #ddd6fe; }
+  .badge.insurance { color: var(--ok); background: var(--ok-soft); border-color: #a7f3d0; }
   .badge.custom { color: var(--text-2); }
-  .badge.payroll { color: #c084fc; border-color: rgba(192,132,252,0.4); }
-  .badge.insurance { color: #4ade80; border-color: rgba(74,222,128,0.4); }
 
   .row .amount {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    font-size: 14px;
+    font-weight: 500;
     color: var(--text-2);
     text-align: right;
   }
   .row .amount.has { color: var(--text); }
   .row .status {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 600;
     color: var(--text-3);
   }
   .status.overdue { color: var(--danger); }
@@ -300,17 +310,14 @@
   .row .actions { display: flex; gap: 6px; justify-content: flex-end; }
 
   /* Manage view */
-  .manage-section {
-    margin-top: 24px;
-  }
+  .manage-section { margin-top: 28px; }
   .section-title {
-    font-family: 'Oswald', sans-serif;
-    font-size: 16px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text-2);
-    margin-bottom: 12px;
-    padding-bottom: 8px;
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
     border-bottom: 1px solid var(--border);
     display: flex;
     justify-content: space-between;
@@ -319,27 +326,23 @@
   .template-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 12px;
+    gap: 14px;
   }
   .template-card {
     background: var(--panel);
     border: 1px solid var(--border);
-    padding: 16px;
+    padding: 18px;
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    transition: border-color 0.15s ease;
+    gap: 10px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
-  .template-card.active { border-color: var(--accent); }
-  .template-card.active::before {
-    content: '';
-    display: block;
-    width: 6px;
-    height: 6px;
-    background: var(--accent);
-    border-radius: 50%;
-    box-shadow: 0 0 8px var(--accent);
-    position: absolute;
+  .template-card:hover { box-shadow: var(--shadow); }
+  .template-card.active {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent), var(--shadow-sm);
   }
   .template-card .head {
     display: flex;
@@ -347,18 +350,18 @@
     align-items: flex-start;
     gap: 12px;
   }
-  .template-card .name { font-size: 14px; font-weight: 500; }
-  .template-card .desc { font-size: 12px; color: var(--text-2); line-height: 1.5; }
+  .template-card .name { font-size: 14px; font-weight: 600; color: var(--text); }
+  .template-card .desc { font-size: 13px; color: var(--text-2); line-height: 1.5; }
   .template-card .freq {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
+    font-size: 12px;
     color: var(--text-3);
+    font-weight: 500;
   }
   .template-card .actions {
     display: flex;
     gap: 6px;
     margin-top: 8px;
-    padding-top: 10px;
+    padding-top: 12px;
     border-top: 1px solid var(--border);
   }
 
@@ -367,9 +370,8 @@
     position: relative;
     width: 36px;
     height: 20px;
-    background: var(--panel-2);
-    border: 1px solid var(--border-2);
-    border-radius: 0;
+    background: var(--border);
+    border-radius: 999px;
     cursor: pointer;
     flex-shrink: 0;
     transition: background 0.15s ease;
@@ -379,18 +381,21 @@
     position: absolute;
     top: 2px;
     left: 2px;
-    width: 14px;
-    height: 14px;
-    background: var(--text-3);
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    border-radius: 50%;
     transition: all 0.15s ease;
+    box-shadow: var(--shadow-sm);
   }
-  .toggle.on { background: var(--accent); border-color: var(--accent); }
-  .toggle.on::after { left: 18px; background: #000; }
+  .toggle.on { background: var(--accent); }
+  .toggle.on::after { left: 18px; }
 
   /* Modal */
   .modal-bg {
     position: fixed; inset: 0;
-    background: rgba(0,0,0,0.7);
+    background: rgba(17, 24, 39, 0.5);
+    backdrop-filter: blur(2px);
     display: none;
     align-items: center;
     justify-content: center;
@@ -400,58 +405,61 @@
   .modal-bg.open { display: flex; }
   .modal {
     background: var(--panel);
-    border: 1px solid var(--border-2);
+    border-radius: 12px;
     width: 100%;
     max-width: 520px;
     max-height: 90vh;
     overflow-y: auto;
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.05);
   }
   .modal h2 {
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Source Serif 4', Georgia, serif;
     font-size: 20px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    padding: 18px 22px;
+    font-weight: 600;
+    padding: 20px 24px;
     border-bottom: 1px solid var(--border);
   }
-  .modal .body { padding: 20px 22px; }
+  .modal .body { padding: 22px 24px; }
   .modal .foot {
-    padding: 14px 22px;
+    padding: 16px 24px;
     border-top: 1px solid var(--border);
     display: flex;
     gap: 8px;
     justify-content: flex-end;
+    background: var(--panel-2);
+    border-radius: 0 0 12px 12px;
   }
 
   /* Forms */
-  .field { margin-bottom: 14px; }
+  .field { margin-bottom: 16px; }
   .field label {
     display: block;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--text-3);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-2);
     margin-bottom: 6px;
   }
   .field input,
   .field select,
   .field textarea {
     width: 100%;
-    background: var(--bg-2);
+    background: #fff;
     border: 1px solid var(--border-2);
     color: var(--text);
     padding: 9px 12px;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 13px;
+    font-family: inherit;
+    font-size: 14px;
+    border-radius: 6px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
-  .field input.mono { font-family: 'JetBrains Mono', monospace; }
   .field input:focus,
   .field select:focus,
   .field textarea:focus {
     outline: none;
     border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
   }
+  .field input:disabled { background: var(--panel-2); color: var(--text-2); }
   .field-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -460,26 +468,27 @@
 
   /* Notice */
   .notice {
-    padding: 12px 16px;
-    background: rgba(255,122,26,0.07);
-    border: 1px solid rgba(255,122,26,0.25);
+    padding: 14px 18px;
+    background: var(--accent-soft);
+    border: 1px solid #dbeafe;
     border-left: 3px solid var(--accent);
-    font-size: 12px;
+    border-radius: 6px;
+    font-size: 13px;
     color: var(--text-2);
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     line-height: 1.6;
   }
-  .notice b { color: var(--text); }
+  .notice b { color: var(--text); font-weight: 600; }
 
   /* Mobile */
   @media (max-width: 720px) {
     .stats { grid-template-columns: repeat(2, 1fr); }
     .row { grid-template-columns: 1fr; gap: 10px; padding: 14px; }
     .row .date { display: flex; align-items: baseline; gap: 8px; }
-    .row .date .day { font-size: 16px; }
+    .row .date .day { font-size: 18px; }
     .row .actions { justify-content: flex-start; }
-    .brand h1 { font-size: 24px; }
-    .stat .value { font-size: 28px; }
+    .brand h1 { font-size: 26px; }
+    .stat .value { font-size: 30px; }
   }
 </style>
 </head>
@@ -488,9 +497,9 @@
 
   <header class="bar">
     <div class="brand">
-      <div class="eyebrow">// Schedule.OBLIGATIONS</div>
+      <div class="eyebrow">Compliance Calendar</div>
       <h1>Tax &amp; Payroll Schedule</h1>
-      <div class="sub" id="sub">Mechanical Temp HVAC — MI</div>
+      <div class="sub" id="sub">Mechanical Temp HVAC — Michigan</div>
     </div>
     <div class="today">
       <div><b id="todayDate">—</b></div>
@@ -557,12 +566,12 @@
         </div>
         <div class="field">
           <label>Amount Paid</label>
-          <input id="donePaidAmt" type="number" step="0.01" class="mono" placeholder="0.00" />
+          <input id="donePaidAmt" type="number" step="0.01" placeholder="0.00" />
         </div>
       </div>
       <div class="field">
         <label>Confirmation # / Reference</label>
-        <input id="doneConf" type="text" class="mono" placeholder="EFT confirmation, check #, etc." />
+        <input id="doneConf" type="text" placeholder="EFT confirmation, check #, etc." />
       </div>
       <div class="field">
         <label>Notes</label>
@@ -619,7 +628,7 @@
         </div>
         <div class="field">
           <label>Estimated Amount</label>
-          <input id="cAmount" type="number" step="0.01" class="mono" placeholder="0.00 (optional)" />
+          <input id="cAmount" type="number" step="0.01" placeholder="0.00 (optional)" />
         </div>
       </div>
     </div>
@@ -655,12 +664,6 @@ const Storage = {
 
 // ──────────────────────────────────────────────────────────────────────────────
 // PRESET TEMPLATES
-// schedule.type: monthly | quarterly | annual | estimated | semi
-//   monthly:    dayOfMonth (1-31), offsetMonth (0=this month, 1=next month, etc.)
-//   quarterly:  dayOfMonth, offsetMonth (months after quarter end)
-//   annual:     month (1-12), day
-//   estimated:  fixed quarterly tax dates: Apr 15, Jun 15, Sep 15, Jan 15
-//   semi:       months [1-12, 1-12], day
 // ──────────────────────────────────────────────────────────────────────────────
 const PRESETS = [
   {
@@ -780,10 +783,10 @@ const PRESETS = [
 // STATE
 // ──────────────────────────────────────────────────────────────────────────────
 let state = {
-  enabled: [],         // array of preset IDs that are active
-  customTemplates: [], // user-added templates
-  completions: {},     // { occurrenceId: { paidDate, amount, conf, notes } }
-  overrides: {}        // { presetId: { firstDue: 'YYYY-MM-DD' } } for annual_user
+  enabled: [],
+  customTemplates: [],
+  completions: {},
+  overrides: {}
 };
 let currentTab = 'upcoming';
 let pendingDoneId = null;
@@ -803,7 +806,6 @@ const MONTHS_FULL = ['January','February','March','April','May','June','July','A
 
 // ──────────────────────────────────────────────────────────────────────────────
 // OCCURRENCE GENERATION
-// Produces a list of occurrences for the next 18 months (or past 6 if completed)
 // ──────────────────────────────────────────────────────────────────────────────
 function generateOccurrences() {
   const result = [];
@@ -830,7 +832,6 @@ function generateOccurrences() {
       });
     }
   }
-  // Add manually-completed occurrences from custom or one-time tasks not in window
   return result;
 }
 
@@ -842,8 +843,6 @@ function generateForTemplate(tpl, start, end) {
   if (sch.type === 'monthly') {
     let cursor = new Date(start.getFullYear(), start.getMonth(), 1);
     while (cursor <= end) {
-      // For each calendar month, the obligation period is that month;
-      // due date is offsetMonth months later on dayOfMonth
       const dueMonth = cursor.getMonth() + (sch.offsetMonth || 0);
       const due = new Date(cursor.getFullYear(), dueMonth, Math.min(sch.dayOfMonth, lastDayOfMonth(cursor.getFullYear(), dueMonth + 1)));
       if (due >= start && due <= end) out.push({ due });
@@ -851,8 +850,7 @@ function generateForTemplate(tpl, start, end) {
     }
   }
   else if (sch.type === 'quarterly') {
-    // Quarter ends: Mar 31, Jun 30, Sep 30, Dec 31
-    const quarterEndMonths = [2, 5, 8, 11]; // 0-indexed: Mar, Jun, Sep, Dec
+    const quarterEndMonths = [2, 5, 8, 11];
     let year = start.getFullYear() - 1;
     while (year <= end.getFullYear() + 1) {
       for (const qm of quarterEndMonths) {
@@ -888,7 +886,6 @@ function generateForTemplate(tpl, start, end) {
     }
   }
   else if (sch.type === 'annual_user') {
-    // Use override if set, else default
     const ov = state.overrides[tpl.id];
     let baseDate;
     if (ov && ov.firstDue) {
@@ -904,13 +901,6 @@ function generateForTemplate(tpl, start, end) {
     }
   }
   else if (sch.type === 'estimated') {
-    // Apr 15, Jun 15, Sep 15, Jan 15 of following year
-    const dates = [
-      [3, 15],  // Apr 15
-      [5, 15],  // Jun 15
-      [8, 15],  // Sep 15
-      [0, 15]   // Jan 15 (following year)
-    ];
     let year = start.getFullYear() - 1;
     while (year <= end.getFullYear() + 1) {
       const due1 = new Date(year, 3, 15);
@@ -929,12 +919,7 @@ function generateForTemplate(tpl, start, end) {
       if (due >= start && due <= end) out.push({ due });
     }
   }
-  else if (sch.type === 'custom') {
-    // Custom template recurrence: monthly/quarterly/semi/annual/once based on cFreq
-    // Handled via tpl.schedule directly above
-  }
 
-  // De-dupe (same date occurring twice)
   const seen = new Set();
   return out.filter(o => {
     const k = fmtDate(o.due);
@@ -958,27 +943,24 @@ function statusOf(occ) {
 
 function catLabel(cat) {
   return ({
-    state: 'STATE', federal: 'FED', payroll: 'PAYROLL',
-    insurance: 'INS', annual: 'ANNUAL', custom: 'CUSTOM'
-  })[cat] || cat.toUpperCase();
+    state: 'State', federal: 'Federal', payroll: 'Payroll',
+    insurance: 'Insurance', annual: 'Annual', custom: 'Custom'
+  })[cat] || cat;
 }
 
 // ──────────────────────────────────────────────────────────────────────────────
 // RENDER
 // ──────────────────────────────────────────────────────────────────────────────
 function render() {
-  // Today
   const t = today();
   document.getElementById('todayDate').textContent =
-    t.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).toUpperCase();
+    t.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   document.getElementById('todayDay').textContent =
-    t.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+    t.toLocaleDateString('en-US', { weekday: 'long' });
 
-  // Generate all occurrences
   const all = generateOccurrences();
   const withStatus = all.map(o => ({ ...o, status: statusOf(o) }));
 
-  // Compute stats
   const overdue = withStatus.filter(o => o.status === 'overdue');
   const week = withStatus.filter(o => o.status === 'due-soon');
   const month = withStatus.filter(o => {
@@ -995,19 +977,17 @@ function render() {
   document.getElementById('statWeek').textContent = week.length;
   document.getElementById('statMonth').textContent = month.length;
   document.getElementById('statDone').textContent = completedYTD.length;
-  document.getElementById('statDoneAmt').textContent = '$' + completedYTDAmt.toFixed(2) + ' paid';
+  document.getElementById('statDoneAmt').textContent = '$' + completedYTDAmt.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' paid';
 
-  // Tab counts
   const upcomingList = withStatus.filter(o => o.status === 'upcoming' || o.status === 'due-soon')
     .sort((a, b) => a.due - b.due);
   const completedList = withStatus.filter(o => o.status === 'completed')
     .sort((a, b) => b.due - a.due);
 
-  document.getElementById('cUp').textContent = upcomingList.length + week.length;
+  document.getElementById('cUp').textContent = upcomingList.length;
   document.getElementById('cOv').textContent = overdue.length;
   document.getElementById('cDn').textContent = completedList.length;
 
-  // Render content based on active tab
   const content = document.getElementById('content');
   const toolbar = document.getElementById('toolbar');
 
@@ -1017,8 +997,7 @@ function render() {
     bindManage();
   } else if (currentTab === 'upcoming') {
     toolbar.style.display = 'flex';
-    const list = [...week, ...upcomingList.filter(o => o.status === 'upcoming')];
-    content.innerHTML = renderList(list, 'upcoming');
+    content.innerHTML = renderList(upcomingList, 'upcoming');
     bindRowActions();
   } else if (currentTab === 'overdue') {
     toolbar.style.display = 'flex';
@@ -1061,8 +1040,8 @@ function renderList(items, kind) {
     else statusText = `In ${days}d`;
 
     const amount = completion?.amount
-      ? `$${parseFloat(completion.amount).toFixed(2)}`
-      : (o.amount ? `~$${parseFloat(o.amount).toFixed(2)}` : '—');
+      ? `$${parseFloat(completion.amount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`
+      : (o.amount ? `~$${parseFloat(o.amount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : '—');
 
     let actions = '';
     if (o.status !== 'completed') {
@@ -1094,7 +1073,6 @@ function renderList(items, kind) {
 }
 
 function renderManage() {
-  // Group presets by category
   const byCat = { state: [], federal: [], annual: [], insurance: [] };
   PRESETS.forEach(p => {
     if (byCat[p.cat]) byCat[p.cat].push(p);
@@ -1119,7 +1097,6 @@ function renderManage() {
     </div>`;
   }
 
-  // Custom templates
   html += `<div class="manage-section">
     <div class="section-title">Custom Tasks
       <button class="btn primary sm" id="addCustomBtn2">+ Add Custom</button>
@@ -1218,7 +1195,6 @@ function bindManage() {
       const v = prompt('Enter first due date (YYYY-MM-DD):', cur);
       if (v && /^\d{4}-\d{2}-\d{2}$/.test(v)) {
         state.overrides[id] = { firstDue: v };
-        // Auto-enable
         if (!state.enabled.includes(id)) state.enabled.push(id);
         save(); render();
       }
@@ -1232,7 +1208,6 @@ function bindManage() {
       const id = b.getAttribute('data-del-custom');
       if (confirm('Delete this custom task and all its history?')) {
         state.customTemplates = state.customTemplates.filter(t => t.id !== id);
-        // Remove related completions
         Object.keys(state.completions).forEach(occId => {
           if (occId.startsWith(id + '__')) delete state.completions[occId];
         });
@@ -1244,7 +1219,6 @@ function bindManage() {
   if (add2) add2.addEventListener('click', () => openCustomModal());
 }
 
-// Tabs
 document.querySelectorAll('.tab').forEach(t => {
   t.addEventListener('click', () => {
     document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
@@ -1254,11 +1228,9 @@ document.querySelectorAll('.tab').forEach(t => {
   });
 });
 
-// Toolbar buttons
 document.getElementById('addCustomBtn').addEventListener('click', () => openCustomModal());
 document.getElementById('exportBtn').addEventListener('click', exportCSV);
 
-// Modal close
 document.querySelectorAll('[data-close]').forEach(b => {
   b.addEventListener('click', () => {
     document.querySelectorAll('.modal-bg').forEach(m => m.classList.remove('open'));
@@ -1360,14 +1332,12 @@ function buildScheduleFromCustom(freq, firstDue) {
   return { type: 'once', due: firstDue };
 }
 
-// Custom quarterly/semi need their own generator branch — extend generateForTemplate
 const _origGen = generateForTemplate;
 generateForTemplate = function(tpl, start, end) {
   const sch = tpl.schedule;
   if (sch && sch.type === 'custom_quarterly' && sch.firstDue) {
     const out = [];
     let d = parseDate(sch.firstDue);
-    // step backward 3mo until before start
     while (d > start) d = new Date(d.getFullYear(), d.getMonth() - 3, d.getDate());
     while (d <= end) {
       if (d >= start) out.push({ due: new Date(d) });
