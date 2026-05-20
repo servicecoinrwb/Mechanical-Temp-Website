@@ -503,12 +503,13 @@ body { padding-bottom: 90px; min-height: 100vh; }
 
     <div class="card">
       <p class="card-title">Voice rehearsal</p>
-      <p class="muted" style="margin:0 0 8px;">Tap the mic, deliver your pitch out loud, tap again to stop. Claude will grade it.</p>
+      <p class="muted" style="margin:0 0 8px;">Tap the mic, deliver your full pitch out loud, tap again to stop. Then tap "Grade my pitch" — Claude listens and gives you feedback.</p>
       <button class="mic-btn" id="micBtn" onclick="toggleMic()" aria-label="Toggle microphone">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
       </button>
       <p style="text-align:center; font-size:13px; color: var(--mt-text-muted); margin: 8px 0;" id="micStatus">Ready when you are</p>
-      <div class="transcript-box" id="voiceTranscript">Your transcript will show here...</div>
+      <!-- Transcript captured silently in the background; user doesn't need to see the raw text -->
+      <div class="transcript-box" id="voiceTranscript" style="display:none;"></div>
       <button class="btn btn-primary" id="gradeVoiceBtn" onclick="gradePitch('voice')" disabled style="margin-top:10px;">Grade my pitch</button>
     </div>
   </div>
@@ -1107,6 +1108,11 @@ function startRecording() {
     const display = (combinedFinal + ' ' + interim.trim()).trim();
     transcriptEl.textContent = display;
     transcriptEl.dataset.final = combinedFinal;
+
+    // Update mic status with a live "still listening" signal so user knows it's working
+    const wordCount = combinedFinal.split(/\s+/).filter(Boolean).length;
+    const elapsed = ((Date.now() - recordStart) / 1000).toFixed(0);
+    document.getElementById('micStatus').textContent = `🔴 Recording ${elapsed}s — keep going, tap mic to stop`;
   };
 
   recognition.onerror = (e) => {
