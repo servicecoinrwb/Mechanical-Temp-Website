@@ -287,9 +287,43 @@ body { padding-bottom: 90px; min-height: 100vh; }
 /* Setup banner */
 .setup-banner { background: #FEF3C7; border: 1px solid #FCD34D; color: #78350F; padding: 12px; border-radius: 10px; margin-bottom: 12px; font-size: 13px; }
 .setup-banner button { background: #92400E; color: white; border: none; padding: 6px 12px; border-radius: 6px; margin-top: 6px; font-size: 12px; cursor: pointer; font-family: inherit; font-weight: 500; }
+
+/* Login screen */
+.login-screen { position: fixed; inset: 0; background: var(--mt-navy); display: flex; align-items: center; justify-content: center; padding: 24px; z-index: 1000; }
+.login-card { background: var(--mt-surface); border-radius: 16px; padding: 32px 24px; max-width: 380px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+.login-logo { width: 56px; height: 56px; background: var(--mt-sky); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 22px; color: white; margin: 0 auto 16px; }
+.login-title { text-align: center; font-size: 20px; font-weight: 600; margin: 0 0 4px; color: var(--mt-navy); }
+.login-sub { text-align: center; font-size: 13px; color: var(--mt-text-muted); margin: 0 0 24px; }
+.login-error { background: #FEE2E2; color: #991B1B; padding: 10px; border-radius: 8px; font-size: 13px; margin-bottom: 12px; min-height: 18px; }
+.login-error:empty { display: none; }
+
+/* User pill in settings */
+.user-pill { background: var(--mt-bg); padding: 12px 14px; border-radius: 10px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
+.user-pill-info { font-size: 13px; }
+.user-pill-email { font-weight: 600; color: var(--mt-navy); }
+.user-pill-role { font-size: 11px; color: var(--mt-text-muted); text-transform: uppercase; letter-spacing: 0.4px; margin-top: 2px; }
 </style>
 </head>
 <body>
+
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="loginScreen" style="display:none;">
+  <div class="login-card">
+    <div class="login-logo">MT</div>
+    <h2 class="login-title">Mechanical Temp Sales Coach</h2>
+    <p class="login-sub">Sign in to continue</p>
+    <div class="login-error" id="loginError"></div>
+    <label class="label">Email</label>
+    <input class="input" id="loginEmail" type="email" autocomplete="email" placeholder="you@mechanicaltemp.com" onkeydown="if(event.key==='Enter') document.getElementById('loginPassword').focus()" />
+    <label class="label">Password</label>
+    <input class="input" id="loginPassword" type="password" autocomplete="current-password" placeholder="••••••••" onkeydown="if(event.key==='Enter') signIn()" />
+    <button class="btn btn-primary" id="loginBtn" onclick="signIn()" style="margin-top: 12px;">Sign in</button>
+    <p style="text-align:center; font-size:12px; color: var(--mt-text-muted); margin: 16px 0 0;">Need access? Ask Brian to add your email.</p>
+  </div>
+</div>
+
+<!-- APP SHELL -->
+<div id="appShell" style="display:none;">
 
 <div class="header">
   <div class="header-inner">
@@ -311,11 +345,6 @@ body { padding-bottom: 90px; min-height: 100vh; }
 
 <!-- PREP SCREEN -->
 <div class="screen active" id="screen-prep">
-  <div id="setupBanner" class="setup-banner" style="display:none;">
-    <strong>Setup needed.</strong> Add your Supabase, Claude, and Google Maps keys to start saving stops and using all features.
-    <br><button onclick="openSettings()">Open settings</button>
-  </div>
-
   <div class="hero">
     <h2>Before you walk in</h2>
     <p>Two minutes. Don't skip these.</p>
@@ -591,19 +620,14 @@ body { padding-bottom: 90px; min-height: 100vh; }
 <div class="modal-bg" id="settingsModal" onclick="if(event.target===this) closeSettings()">
   <div class="modal">
     <h3>Settings</h3>
-    <p class="muted" style="font-size:13px; margin: 0 0 12px;">Keys are stored in browser localStorage. They never leave your device except to call the respective APIs.</p>
 
-    <label class="label">Supabase URL</label>
-    <input class="input" id="setSupaUrl" placeholder="https://xxx.supabase.co" />
-
-    <label class="label">Supabase anon key</label>
-    <input class="input" id="setSupaKey" type="password" placeholder="eyJhbGciOiJI..." />
-
-    <label class="label">Claude API key (Anthropic)</label>
-    <input class="input" id="setClaudeKey" type="password" placeholder="sk-ant-..." />
-
-    <label class="label">Google Maps API key</label>
-    <input class="input" id="setMapsKey" type="password" placeholder="AIza..." />
+    <div class="user-pill">
+      <div class="user-pill-info">
+        <div class="user-pill-email" id="userEmail">—</div>
+        <div class="user-pill-role">Signed in</div>
+      </div>
+      <button class="btn btn-outline" onclick="signOut()" style="width: auto; padding: 8px 14px; font-size: 13px;">Sign out</button>
+    </div>
 
     <label class="label">Your service call rate (for objection script)</label>
     <input class="input" id="setRate" placeholder="$150" />
@@ -649,9 +673,26 @@ body { padding-bottom: 90px; min-height: 100vh; }
 
 <div class="toast" id="toast"></div>
 
+</div><!-- /appShell -->
+
 <script>
 // =========================
-// State & settings
+// BAKED-IN PUBLIC CONFIG
+// These are not secrets:
+//   - Supabase URL is a public endpoint
+//   - Supabase anon key is designed to be embedded in client apps (protected by RLS + auth)
+//   - Worker URL is just a URL (protected by token verification)
+//   - Maps key is protected by referrer restriction at Google's side
+// =========================
+const CONFIG = {
+  SUPABASE_URL:  'https://nhkamxvahtxbqcterhgi.supabase.co',
+  SUPABASE_ANON: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5oa2FteHZhaHR4YnFjdGVyaGdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyOTIzMTksImV4cCI6MjA5NDg2ODMxOX0.0fYJKjBOPxKVjSPdn01oqv0sJG8dfZ0cE2biMI-yprk',
+  CLAUDE_PROXY:  'https://mt-claude-proxy.summer-unit-44dd.workers.dev',
+  MAPS_KEY:      'AIzaSyCB1DVFb3pWDt0WaqwPNvkUqbUrqVaAaJI'
+};
+
+// =========================
+// State & user-facing settings (per-device, non-secret)
 // =========================
 const CHECKLIST = [
   { id: 'c1', label: 'Polo / Mechanical Temp shirt on', sub: 'Uniform = permission to be there' },
@@ -662,12 +703,14 @@ const CHECKLIST = [
 ];
 
 const settings = {
-  supaUrl: localStorage.getItem('mt_supa_url') || '',
-  supaKey: localStorage.getItem('mt_supa_key') || '',
-  claudeKey: localStorage.getItem('mt_claude_key') || '',
-  mapsKey: localStorage.getItem('mt_maps_key') || '',
   rate: localStorage.getItem('mt_rate') || '$150',
   sig: localStorage.getItem('mt_sig') || 'Brian\nMechanical Temp LLC\n(248) 263-6160\nbrian@mechanicaltemp.com'
+};
+
+// Auth state — populated on login
+const auth = {
+  session: null,    // { access_token, refresh_token, expires_at, user }
+  user: null
 };
 
 let stops = [];
@@ -685,20 +728,123 @@ let mapsReady = false;
 // =========================
 // Boot
 // =========================
-function init() {
+async function init() {
   renderChecklist();
-  updateStatusDot();
-  if (!settings.supaUrl || !settings.claudeKey) {
-    document.getElementById('setupBanner').style.display = 'block';
+  // Try to restore an existing session from localStorage
+  const restored = await restoreSession();
+  if (restored) {
+    showApp();
+  } else {
+    showLogin();
   }
+}
+
+function showLogin() {
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('appShell').style.display = 'none';
+}
+
+function showApp() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('appShell').style.display = 'block';
+  document.getElementById('userEmail').textContent = auth.user?.email || '';
+  updateStatusDot();
   loadStops();
-  if (settings.mapsKey) loadGoogleMaps();
+  if (CONFIG.MAPS_KEY && CONFIG.MAPS_KEY !== 'YOUR-MAPS-KEY') loadGoogleMaps();
 }
 
 function updateStatusDot() {
   const dot = document.getElementById('statusDot');
-  if (settings.supaUrl && settings.supaKey) dot.classList.add('online');
+  if (auth.session) dot.classList.add('online');
   else dot.classList.remove('online');
+}
+
+// =========================
+// Auth — Supabase email + password
+// =========================
+async function signIn() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('loginError');
+  const btn = document.getElementById('loginBtn');
+  errEl.textContent = '';
+  if (!email || !password) { errEl.textContent = 'Email and password required'; return; }
+  btn.disabled = true; btn.textContent = 'Signing in...';
+  try {
+    const res = await fetch(CONFIG.SUPABASE_URL + '/auth/v1/token?grant_type=password', {
+      method: 'POST',
+      headers: { apikey: CONFIG.SUPABASE_ANON, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      errEl.textContent = data.error_description || data.msg || 'Sign-in failed';
+      return;
+    }
+    auth.session = data;
+    auth.user = data.user;
+    localStorage.setItem('mt_session', JSON.stringify(data));
+    document.getElementById('loginPassword').value = '';
+    showApp();
+  } catch (e) {
+    errEl.textContent = 'Network error: ' + e.message;
+  } finally {
+    btn.disabled = false; btn.textContent = 'Sign in';
+  }
+}
+
+async function restoreSession() {
+  const raw = localStorage.getItem('mt_session');
+  if (!raw) return false;
+  let session;
+  try { session = JSON.parse(raw); } catch (e) { return false; }
+  if (!session?.access_token) return false;
+
+  // Check if token is still valid; refresh if not
+  const now = Math.floor(Date.now() / 1000);
+  if (session.expires_at && session.expires_at < now + 60) {
+    // Try refresh
+    if (!session.refresh_token) return false;
+    try {
+      const res = await fetch(CONFIG.SUPABASE_URL + '/auth/v1/token?grant_type=refresh_token', {
+        method: 'POST',
+        headers: { apikey: CONFIG.SUPABASE_ANON, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refresh_token: session.refresh_token })
+      });
+      if (!res.ok) { localStorage.removeItem('mt_session'); return false; }
+      session = await res.json();
+      localStorage.setItem('mt_session', JSON.stringify(session));
+    } catch (e) { return false; }
+  }
+
+  // Verify by fetching user (also confirms the token still works)
+  try {
+    const res = await fetch(CONFIG.SUPABASE_URL + '/auth/v1/user', {
+      headers: { apikey: CONFIG.SUPABASE_ANON, Authorization: 'Bearer ' + session.access_token }
+    });
+    if (!res.ok) { localStorage.removeItem('mt_session'); return false; }
+    auth.user = await res.json();
+    auth.session = session;
+    return true;
+  } catch (e) { return false; }
+}
+
+async function signOut() {
+  try {
+    if (auth.session?.access_token) {
+      await fetch(CONFIG.SUPABASE_URL + '/auth/v1/logout', {
+        method: 'POST',
+        headers: { apikey: CONFIG.SUPABASE_ANON, Authorization: 'Bearer ' + auth.session.access_token }
+      });
+    }
+  } catch (e) { /* ignore */ }
+  auth.session = null;
+  auth.user = null;
+  stops = [];
+  route = [];
+  localStorage.removeItem('mt_session');
+  closeSettings();
+  showLogin();
 }
 
 // =========================
@@ -834,6 +980,30 @@ function stopRecording() {
   document.getElementById('gradeVoiceBtn').disabled = false;
 }
 
+async function callClaude(messages, maxTokens) {
+  if (!auth.session?.access_token) throw new Error('Not signed in');
+  const res = await fetch(CONFIG.CLAUDE_PROXY, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + auth.session.access_token
+    },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: maxTokens,
+      messages
+    })
+  });
+  if (res.status === 401) {
+    // token expired — try one refresh, then bail to login if still bad
+    const ok = await restoreSession();
+    if (!ok) { showLogin(); throw new Error('Session expired — please sign in again'); }
+    return callClaude(messages, maxTokens);
+  }
+  if (!res.ok) throw new Error('Proxy: ' + res.status + ' ' + (await res.text()).slice(0, 200));
+  return await res.json();
+}
+
 async function gradePitch(mode) {
   let transcript = '';
   let duration = null;
@@ -844,7 +1014,7 @@ async function gradePitch(mode) {
     transcript = document.getElementById('textPitch').value.trim();
   }
   if (!transcript) { toast('Nothing to grade yet', 'error'); return; }
-  if (!settings.claudeKey) { toast('Add your Claude API key in settings', 'error'); openSettings(); return; }
+  if (!auth.session) { toast('Please sign in first', 'error'); showLogin(); return; }
 
   toast('Sending to Claude...');
 
@@ -879,25 +1049,7 @@ Return ONLY valid JSON with this exact shape, no markdown, no preamble:
 }`;
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': settings.claudeKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 600,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-    if (!res.ok) {
-      const err = await res.text();
-      throw new Error('Claude API: ' + res.status + ' ' + err.slice(0, 200));
-    }
-    const data = await res.json();
+    const data = await callClaude([{ role: 'user', content: prompt }], 600);
     const text = data.content[0].text.trim().replace(/^```json|```$/g, '').trim();
     const scores = JSON.parse(text);
     renderScores(scores, duration);
@@ -934,20 +1086,26 @@ async function savePractice(mode, transcript, duration, scores) {
 // =========================
 // Stops — Supabase CRUD
 // =========================
-function supaReady() { return settings.supaUrl && settings.supaKey; }
+function supaReady() { return !!auth.session?.access_token; }
 
 async function supa(table, method, body, query) {
-  const url = `${settings.supaUrl}/rest/v1/${table}${query || ''}`;
+  if (!auth.session?.access_token) throw new Error('Not signed in');
+  const url = `${CONFIG.SUPABASE_URL}/rest/v1/${table}${query || ''}`;
   const res = await fetch(url, {
     method,
     headers: {
-      apikey: settings.supaKey,
-      Authorization: 'Bearer ' + settings.supaKey,
+      apikey: CONFIG.SUPABASE_ANON,
+      Authorization: 'Bearer ' + auth.session.access_token,
       'Content-Type': 'application/json',
       Prefer: method === 'POST' ? 'return=representation' : 'return=minimal'
     },
     body: body ? JSON.stringify(body) : undefined
   });
+  if (res.status === 401) {
+    const ok = await restoreSession();
+    if (!ok) { showLogin(); throw new Error('Session expired'); }
+    return supa(table, method, body, query);
+  }
   if (!res.ok) throw new Error('Supabase: ' + res.status + ' ' + await res.text());
   if (method === 'GET' || method === 'POST') return res.json();
   return null;
@@ -1133,7 +1291,7 @@ async function deleteCurrentStop() {
 async function draftFollowupForCurrent() {
   const s = stops.find(x => x.id === currentStopId);
   if (!s) return;
-  if (!settings.claudeKey) { toast('Add Claude API key first', 'error'); openSettings(); return; }
+  if (!auth.session) { toast('Please sign in first', 'error'); showLogin(); return; }
   closeStopModal();
   toast('Drafting...');
 
@@ -1153,22 +1311,7 @@ Return ONLY valid JSON, no markdown:
 }`;
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': settings.claudeKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 400,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-    if (!res.ok) throw new Error('API ' + res.status);
-    const data = await res.json();
+    const data = await callClaude([{ role: 'user', content: prompt }], 400);
     const text = data.content[0].text.trim().replace(/^```json|```$/g, '').trim();
     const draft = JSON.parse(text);
     document.getElementById('emailTo').value = s.contact_email || '';
@@ -1212,9 +1355,9 @@ async function markFollowupSent() {
 // Google Maps + Places
 // =========================
 function loadGoogleMaps() {
-  if (mapsReady || !settings.mapsKey) return;
+  if (mapsReady || !CONFIG.MAPS_KEY || CONFIG.MAPS_KEY === 'YOUR-MAPS-KEY') return;
   const s = document.createElement('script');
-  s.src = `https://maps.googleapis.com/maps/api/js?key=${settings.mapsKey}&libraries=places&loading=async&callback=onMapsReady`;
+  s.src = `https://maps.googleapis.com/maps/api/js?key=${CONFIG.MAPS_KEY}&libraries=places&loading=async&callback=onMapsReady`;
   s.async = true;
   document.head.appendChild(s);
 }
@@ -1374,13 +1517,9 @@ async function saveRoute() {
 }
 
 // =========================
-// Settings
+// Settings (now only user-facing prefs — no keys)
 // =========================
 function openSettings() {
-  document.getElementById('setSupaUrl').value = settings.supaUrl;
-  document.getElementById('setSupaKey').value = settings.supaKey;
-  document.getElementById('setClaudeKey').value = settings.claudeKey;
-  document.getElementById('setMapsKey').value = settings.mapsKey;
   document.getElementById('setRate').value = settings.rate;
   document.getElementById('setSig').value = settings.sig;
   document.getElementById('settingsModal').classList.add('show');
@@ -1389,24 +1528,12 @@ function openSettings() {
 function closeSettings() { document.getElementById('settingsModal').classList.remove('show'); }
 
 function saveSettings() {
-  settings.supaUrl = document.getElementById('setSupaUrl').value.trim().replace(/\/$/, '');
-  settings.supaKey = document.getElementById('setSupaKey').value.trim();
-  settings.claudeKey = document.getElementById('setClaudeKey').value.trim();
-  settings.mapsKey = document.getElementById('setMapsKey').value.trim();
   settings.rate = document.getElementById('setRate').value.trim();
   settings.sig = document.getElementById('setSig').value.trim();
-  localStorage.setItem('mt_supa_url', settings.supaUrl);
-  localStorage.setItem('mt_supa_key', settings.supaKey);
-  localStorage.setItem('mt_claude_key', settings.claudeKey);
-  localStorage.setItem('mt_maps_key', settings.mapsKey);
   localStorage.setItem('mt_rate', settings.rate);
   localStorage.setItem('mt_sig', settings.sig);
   closeSettings();
-  updateStatusDot();
-  document.getElementById('setupBanner').style.display = (settings.supaUrl && settings.claudeKey) ? 'none' : 'block';
   toast('Settings saved', 'success');
-  loadStops();
-  if (settings.mapsKey && !mapsReady) loadGoogleMaps();
 }
 
 // =========================
