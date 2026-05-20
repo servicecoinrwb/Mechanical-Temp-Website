@@ -302,6 +302,25 @@ body { padding-bottom: 90px; min-height: 100vh; }
 .user-pill-info { font-size: 13px; }
 .user-pill-email { font-weight: 600; color: var(--mt-navy); }
 .user-pill-role { font-size: 11px; color: var(--mt-text-muted); text-transform: uppercase; letter-spacing: 0.4px; margin-top: 2px; }
+
+/* Script helper (peek + teleprompter) */
+.script-helper { background: var(--mt-sky-light); border: 1px solid #BFDBFE; border-radius: 12px; padding: 12px; margin-bottom: 12px; }
+.script-helper-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+.script-helper-title { font-size: 12px; font-weight: 600; color: var(--mt-navy); text-transform: uppercase; letter-spacing: 0.5px; margin: 0; }
+.script-helper-toggle { font-size: 13px; color: var(--mt-sky); font-weight: 500; }
+.script-helper-body { margin-top: 12px; display: none; }
+.script-helper.open .script-helper-body { display: block; }
+.script-helper-mode { display: flex; gap: 6px; margin-bottom: 10px; }
+.script-helper-mode button { flex: 1; padding: 6px 8px; border: 1px solid var(--mt-border); background: white; border-radius: 6px; font-family: inherit; font-size: 12px; font-weight: 500; color: var(--mt-text-muted); cursor: pointer; }
+.script-helper-mode button.active { background: var(--mt-navy); color: white; border-color: var(--mt-navy); }
+.script-line-item { padding: 8px 10px; border-radius: 6px; background: white; margin-bottom: 6px; font-size: 13px; line-height: 1.45; transition: all 0.3s; }
+.script-line-item .step-num { color: var(--mt-sky); font-weight: 700; margin-right: 6px; }
+.script-line-item.active { background: var(--mt-warn); color: white; transform: scale(1.02); box-shadow: 0 4px 12px rgba(245,158,11,0.3); }
+.script-line-item.active .step-num { color: white; }
+.script-line-item.done { background: #D1FAE5; color: #065F46; }
+.script-line-item.done .step-num { color: #065F46; }
+.teleprompter-controls { display: flex; gap: 8px; align-items: center; margin-top: 10px; font-size: 12px; color: var(--mt-text-muted); }
+.teleprompter-controls input[type="range"] { flex: 1; }
 </style>
 </head>
 <body>
@@ -461,6 +480,27 @@ body { padding-bottom: 90px; min-height: 100vh; }
 
   <!-- Voice mode -->
   <div id="modeVoice">
+
+    <!-- Script helper (peek + teleprompter) -->
+    <div class="script-helper" id="scriptHelper">
+      <div class="script-helper-header" onclick="toggleScriptHelper()">
+        <p class="script-helper-title">📖 Need the script?</p>
+        <span class="script-helper-toggle" id="scriptHelperToggle">Show</span>
+      </div>
+      <div class="script-helper-body">
+        <div class="script-helper-mode">
+          <button class="active" data-helper-mode="peek" onclick="setHelperMode('peek')">Peek mode</button>
+          <button data-helper-mode="prompter" onclick="setHelperMode('prompter')">Teleprompter</button>
+        </div>
+        <div id="scriptLines"></div>
+        <div class="teleprompter-controls" id="prompterControls" style="display:none;">
+          <span>Pace</span>
+          <input type="range" id="prompterPace" min="3" max="10" step="1" value="6" />
+          <span><span id="prompterPaceVal">6</span>s/line</span>
+        </div>
+      </div>
+    </div>
+
     <div class="card">
       <p class="card-title">Voice rehearsal</p>
       <p class="muted" style="margin:0 0 8px;">Tap the mic, deliver your pitch out loud, tap again to stop. Claude will grade it.</p>
@@ -730,6 +770,16 @@ let mapsReady = false;
 // =========================
 async function init() {
   renderChecklist();
+  renderScriptLines();
+  // Wire up the teleprompter pace display
+  const pace = document.getElementById('prompterPace');
+  if (pace) {
+    pace.addEventListener('input', () => {
+      document.getElementById('prompterPaceVal').textContent = pace.value;
+      // If currently running, restart with new pace
+      if (prompterTimer) startPrompter();
+    });
+  }
   // Try to restore an existing session from localStorage
   const restored = await restoreSession();
   if (restored) {
@@ -914,6 +964,90 @@ async function startBreath() {
 // =========================
 // Practice — voice + text
 // =========================
+// =========================
+// Pitch script (used by helper card)
+// =========================
+const PITCH_LINES = [
+  { step: 1, text: "Hi, I'm Brian with Mechanical Temp — the HVAC company up on Telegraph." },
+  { step: 2, text: "I'm not here to sell you anything today — just dropping off a card in case your heat or AC ever acts up." },
+  { step: 3, text: "Who handles the building stuff here — is that the office manager?" },
+  { step: 4, text: "Is there anything bugging them right now? Hot spots, noisy units, anything like that?" },
+  { step: 5, text: "Here's my card — we handle a lot of the national chains around here. Thanks for your time." }
+];
+
+let helperMode = 'peek';
+let prompterTimer = null;
+let prompterIndex = 0;
+
+function renderScriptLines() {
+  const el = document.getElementById('scriptLines');
+  el.innerHTML = PITCH_LINES.map((l, i) => `
+    <div class="script-line-item" data-idx="${i}">
+      <span class="step-num">${l.step}.</span>${escapeHtml(l.text)}
+    </div>
+  `).join('');
+}
+
+function toggleScriptHelper() {
+  const el = document.getElementById('scriptHelper');
+  const toggle = document.getElementById('scriptHelperToggle');
+  el.classList.toggle('open');
+  toggle.textContent = el.classList.contains('open') ? 'Hide' : 'Show';
+  if (el.classList.contains('open') && !document.getElementById('scriptLines').innerHTML) {
+    renderScriptLines();
+  }
+}
+
+function setHelperMode(mode) {
+  helperMode = mode;
+  document.querySelectorAll('[data-helper-mode]').forEach(b => {
+    b.classList.toggle('active', b.dataset.helperMode === mode);
+  });
+  document.getElementById('prompterControls').style.display = mode === 'prompter' ? 'flex' : 'none';
+  // Reset visual state
+  document.querySelectorAll('.script-line-item').forEach(el => el.classList.remove('active', 'done'));
+  stopPrompter();
+}
+
+function startPrompter() {
+  stopPrompter();
+  if (helperMode !== 'prompter') return;
+  // Make sure helper is open and lines are rendered
+  const helper = document.getElementById('scriptHelper');
+  if (!helper.classList.contains('open')) toggleScriptHelper();
+  prompterIndex = 0;
+  const pace = (parseInt(document.getElementById('prompterPace').value, 10) || 6) * 1000;
+  // Show first line immediately
+  showPrompterLine(prompterIndex);
+  prompterTimer = setInterval(() => {
+    prompterIndex++;
+    if (prompterIndex >= PITCH_LINES.length) {
+      // mark all done and stop
+      document.querySelectorAll('.script-line-item').forEach(el => { el.classList.remove('active'); el.classList.add('done'); });
+      stopPrompter();
+      return;
+    }
+    showPrompterLine(prompterIndex);
+  }, pace);
+}
+
+function showPrompterLine(idx) {
+  document.querySelectorAll('.script-line-item').forEach((el, i) => {
+    el.classList.remove('active');
+    if (i < idx) el.classList.add('done');
+    else el.classList.remove('done');
+  });
+  const target = document.querySelector(`.script-line-item[data-idx="${idx}"]`);
+  if (target) {
+    target.classList.add('active');
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+function stopPrompter() {
+  if (prompterTimer) { clearInterval(prompterTimer); prompterTimer = null; }
+}
+
 function setMode(mode) {
   document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
   document.getElementById('modeVoice').style.display = mode === 'voice' ? 'block' : 'none';
@@ -997,6 +1131,8 @@ function startRecording() {
   document.getElementById('voiceTranscript').textContent = '';
   document.getElementById('voiceTranscript').dataset.final = '';
   document.getElementById('gradeVoiceBtn').disabled = true;
+  // Kick off the teleprompter if user has it selected
+  if (helperMode === 'prompter') startPrompter();
 }
 
 function stopRecording() {
@@ -1008,6 +1144,7 @@ function stopRecording() {
   document.getElementById('micBtn').classList.remove('recording');
   document.getElementById('micStatus').textContent = `Recorded ${recordDuration.toFixed(1)}s. Ready to grade.`;
   document.getElementById('gradeVoiceBtn').disabled = false;
+  stopPrompter();
 }
 
 async function callClaude(messages, maxTokens) {
