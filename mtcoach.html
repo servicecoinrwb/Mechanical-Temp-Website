@@ -754,6 +754,7 @@ let route = [];
 let currentRating = 0;
 let currentStopId = null;
 let isRecording = false;
+let userStopped = false;
 let recognition = null;
 let recordStart = 0;
 let recordDuration = 0;
@@ -1104,59 +1105,76 @@ function startRecording() {
     const display = (combinedFinal + ' ' + interim.trim()).trim();
     transcriptEl.textContent = display;
     transcriptEl.dataset.final = combinedFinal;
-
-    // Update mic status with a live "still listening" signal so user knows it's working
-    const wordCount = combinedFinal.split(/\s+/).filter(Boolean).length;
-    const elapsed = ((Date.now() - recordStart) / 1000).toFixed(0);
-    document.getElementById('micStatus').textContent = `🔴 Recording ${elapsed}s — keep going, tap mic to stop`;
   };
 
   recognition.onerror = (e) => {
     if (e.error === 'no-speech' || e.error === 'aborted') return; // benign — engine just heard silence
     toast('Mic error: ' + e.error, 'error');
+    userStopped = true; // treat real errors as user-stop so we don't loop
     stopRecording();
   };
 
   recognition.onend = () => {
-    // Don't auto-restart — let the user control when recording ends. If they're still
-    // intending to record (isRecording=true) and the engine ended on its own (silence
-    // timeout on Android), end cleanly instead of silently cycling.
-    if (isRecording) {
+    // If the user tapped mic to stop, end cleanly.
+    // If the engine ended on its own (Android silence timeout, ~12-60s window),
+    // silently restart so the user keeps recording without interruption.
+    if (userStopped || !isRecording) {
+      // Recording is genuinely done — finalize state
       isRecording = false;
       recordDuration = (Date.now() - recordStart) / 1000;
       document.getElementById('micBtn').classList.remove('recording');
+      document.getElementById('micStatus').textContent = `Recorded ${recordDuration.toFixed(1)}s. Ready to grade.`;
       document.getElementById('gradeVoiceBtn').disabled = false;
       stopPrompter();
-      if (recordDuration < 3) {
-        document.getElementById('micStatus').textContent = `Recording stopped (${recordDuration.toFixed(1)}s). Tap mic again to retry.`;
-      } else {
-        document.getElementById('micStatus').textContent = `Recorded ${recordDuration.toFixed(1)}s. Ready to grade.`;
+    } else {
+      // Engine timed out but user still wants to record — restart in a new session bucket.
+      // Bumping _mtSessionId means the new session writes to a fresh bucket; the onresult
+      // handler combines all buckets into a single transcript.
+      window._mtSessionId++;
+      try {
+        recognition.start();
+      } catch (e) {
+        // start() can throw if engine isn't fully released yet — try once more after a tick
+        setTimeout(() => {
+          if (isRecording && !userStopped) {
+            try { recognition.start(); } catch (err) { /* give up silently */ }
+          }
+        }, 100);
       }
     }
   };
 
   recognition.start();
   isRecording = true;
+  userStopped = false;
   recordStart = Date.now();
   document.getElementById('micBtn').classList.add('recording');
-  document.getElementById('micStatus').textContent = 'Recording... tap mic to stop';
+  document.getElementById('micStatus').textContent = '🔴 Recording 0s — keep going, tap mic to stop';
   document.getElementById('voiceTranscript').textContent = '';
   document.getElementById('voiceTranscript').dataset.final = '';
   document.getElementById('gradeVoiceBtn').disabled = true;
+
+  // Continuous timer that runs independent of speech recognition results,
+  // so it keeps counting during silent engine-restart gaps
+  if (window._mtTimerInt) clearInterval(window._mtTimerInt);
+  window._mtTimerInt = setInterval(() => {
+    if (!isRecording) { clearInterval(window._mtTimerInt); window._mtTimerInt = null; return; }
+    const elapsed = ((Date.now() - recordStart) / 1000).toFixed(0);
+    document.getElementById('micStatus').textContent = `🔴 Recording ${elapsed}s — keep going, tap mic to stop`;
+  }, 500);
+
   // Kick off the teleprompter if user has it selected
   if (helperMode === 'prompter') startPrompter();
 }
 
 function stopRecording() {
+  userStopped = true;
   if (recognition) {
-    isRecording = false;
     recognition.stop();
+    // onend will set isRecording=false and update UI
+  } else {
+    isRecording = false;
   }
-  recordDuration = (Date.now() - recordStart) / 1000;
-  document.getElementById('micBtn').classList.remove('recording');
-  document.getElementById('micStatus').textContent = `Recorded ${recordDuration.toFixed(1)}s. Ready to grade.`;
-  document.getElementById('gradeVoiceBtn').disabled = false;
-  stopPrompter();
 }
 
 async function callClaude(messages, maxTokens) {
