@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0B2545">
+<title>Mechanical Temp — Sales Coach</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --mt-navy: #0B2545;
+  --mt-navy-dark: #061a35;
+  --mt-sky: #4A90E2;
+  --mt-sky-light: #E8F1FB;
+  --mt-bg: #F5F7FA;
+  --mt-surface: #FFFFFF;
+  --mt-border: #E2E8F0;
+  --mt-text: #1A2332;
+  --mt-text-muted: #64748B;
+  --mt-success: #10B981;
+  --mt-warn: #F59E0B;
+  --mt-danger: #EF4444;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; padding: 0; background: var(--mt-bg); color: var(--mt-text); font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 15px; line-height: 1.5; }
+body { padding-bottom: 90px; min-height: 100vh; }
+
+/* Header */
+.header {
+  background: var(--mt-navy);
+  color: white;
+  padding: 14px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.header-inner { display: flex; align-items: center; justify-content: space-between; }
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand-logo { width: 32px; height: 32px; background: var(--mt-sky); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; color: white; }
+.brand-name { font-weight: 600; font-size: 15px; letter-spacing: -0.2px; }
+.brand-sub { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: -2px; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: #94a3b8; }
+.status-dot.online { background: var(--mt-success); }
+
+/* Tabs */
+.tabbar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--mt-surface);
+  border-top: 1px solid var(--mt-border);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  z-index: 50;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.tab {
+  background: none; border: none;
+  padding: 10px 4px 8px;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--mt-text-muted);
+  cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.tab svg { width: 22px; height: 22px; }
+.tab.active { color: var(--mt-navy); }
+.tab.active svg { stroke: var(--mt-sky); }
+
+/* Screens */
+.screen { display: none; padding: 16px; max-width: 640px; margin: 0 auto; }
+.screen.active { display: block; }
+.screen-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; color: var(--mt-text-muted); margin: 4px 0 12px; }
+
+/* Cards */
+.card {
+  background: var(--mt-surface);
+  border: 1px solid var(--mt-border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.card-title { font-size: 11px; font-weight: 600; color: var(--mt-text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 10px; }
+.card h3 { margin: 0 0 8px; font-size: 16px; font-weight: 600; }
+.muted { color: var(--mt-text-muted); font-size: 13px; }
+
+/* Hero */
+.hero { text-align: center; padding: 4px 0 16px; }
+.hero h2 { margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -0.3px; }
+.hero p { margin: 4px 0 0; color: var(--mt-text-muted); font-size: 14px; }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: none;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.05s, opacity 0.15s;
+}
+.btn:active { transform: scale(0.98); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary { background: var(--mt-navy); color: white; }
+.btn-primary:hover { background: var(--mt-navy-dark); }
+.btn-sky { background: var(--mt-sky); color: white; }
+.btn-outline { background: transparent; color: var(--mt-navy); border: 1px solid var(--mt-border); }
+.btn-danger { background: var(--mt-danger); color: white; }
+.btn-row { display: flex; gap: 8px; }
+.btn-row .btn { flex: 1; }
+
+/* Forms */
+.input, .select, .textarea {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid var(--mt-border);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  background: var(--mt-surface);
+  color: var(--mt-text);
+  margin-bottom: 8px;
+}
+.input:focus, .select:focus, .textarea:focus { outline: none; border-color: var(--mt-sky); box-shadow: 0 0 0 3px rgba(74,144,226,0.15); }
+.textarea { resize: vertical; min-height: 80px; }
+.label { font-size: 12px; font-weight: 500; color: var(--mt-text-muted); margin: 4px 0; display: block; }
+
+/* Checklist */
+.check-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--mt-border); cursor: pointer; }
+.check-item:last-child { border-bottom: none; }
+.check-box { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #CBD5E1; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 1px; transition: all 0.2s; }
+.check-box svg { width: 14px; height: 14px; opacity: 0; stroke: white; }
+.check-item.done .check-box { background: var(--mt-success); border-color: var(--mt-success); }
+.check-item.done .check-box svg { opacity: 1; }
+.check-item.done .check-label { color: var(--mt-text-muted); text-decoration: line-through; }
+.check-label { font-size: 14px; font-weight: 500; }
+.check-sub { font-size: 12px; color: var(--mt-text-muted); margin-top: 2px; }
+
+/* Breath circle */
+.breath-wrap { display: flex; flex-direction: column; align-items: center; margin: 12px 0; }
+.breath-circle {
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  background: var(--mt-sky-light);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 4s ease-in-out, background-color 0.5s;
+}
+.breath-circle.expand { background: #d6e7f8; }
+.breath-text { font-size: 18px; font-weight: 600; color: var(--mt-navy); }
+
+/* Script */
+.script-step { margin-bottom: 12px; }
+.script-quote {
+  background: var(--mt-sky-light);
+  border-left: 3px solid var(--mt-sky);
+  padding: 12px 14px;
+  border-radius: 0 8px 8px 0;
+  font-size: 15px;
+  line-height: 1.55;
+  margin: 0 0 8px;
+}
+.script-quote strong { color: var(--mt-navy); }
+
+/* Objections */
+.obj { padding: 12px 0; border-bottom: 1px solid var(--mt-border); }
+.obj:last-child { border-bottom: none; }
+.obj-q { font-size: 13px; font-weight: 600; color: var(--mt-text-muted); margin: 0 0 6px; }
+.obj-a { font-size: 14px; margin: 0; line-height: 1.5; }
+
+/* Stops list */
+.stop-card { background: var(--mt-surface); border: 1px solid var(--mt-border); border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; }
+.stop-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.stop-biz { font-weight: 600; font-size: 14px; }
+.stop-meta { font-size: 12px; color: var(--mt-text-muted); margin-top: 2px; }
+.outcome-pill { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px; white-space: nowrap; }
+.outcome-card-dropped { background: #F1F5F9; color: #475569; }
+.outcome-got-manager { background: #FEF3C7; color: #92400E; }
+.outcome-lead-warm { background: #DBEAFE; color: #1E40AF; }
+.outcome-not-interested { background: #F1F5F9; color: #94A3B8; }
+.outcome-closed { background: #D1FAE5; color: #065F46; }
+.outcome-follow-up-sent { background: #E0E7FF; color: #3730A3; }
+
+.rating-stars { display: inline-flex; gap: 2px; margin-top: 6px; }
+.star { width: 18px; height: 18px; cursor: pointer; color: #CBD5E1; }
+.star.filled { color: var(--mt-warn); }
+
+/* Stats */
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+.stat { background: var(--mt-surface); border: 1px solid var(--mt-border); border-radius: 10px; padding: 12px; }
+.stat-num { font-size: 24px; font-weight: 700; color: var(--mt-navy); }
+.stat-label { font-size: 11px; color: var(--mt-text-muted); text-transform: uppercase; letter-spacing: 0.4px; margin-top: 2px; }
+.stat-trend { font-size: 12px; color: var(--mt-success); margin-top: 4px; font-weight: 500; }
+.stat-trend.down { color: var(--mt-danger); }
+
+/* Trend chart */
+.trend-chart { background: var(--mt-surface); border: 1px solid var(--mt-border); border-radius: 10px; padding: 14px; margin-bottom: 12px; }
+.trend-bars { display: flex; align-items: flex-end; gap: 4px; height: 80px; margin-top: 8px; }
+.trend-bar { flex: 1; background: var(--mt-sky); border-radius: 3px 3px 0 0; min-height: 4px; transition: height 0.3s; }
+.trend-bar.empty { background: var(--mt-border); }
+.trend-day { font-size: 9px; color: var(--mt-text-muted); text-align: center; flex: 1; }
+.trend-labels { display: flex; gap: 4px; margin-top: 4px; }
+
+/* Follow-ups */
+.followup-card { background: #FEF3C7; border: 1px solid #FCD34D; border-radius: 10px; padding: 12px; margin-bottom: 8px; }
+.followup-card .stop-biz { color: #78350F; }
+.followup-card .stop-meta { color: #92400E; }
+
+/* Map */
+#mapEl { width: 100%; height: 280px; border-radius: 10px; overflow: hidden; background: var(--mt-bg); }
+.route-stop { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--mt-border); }
+.route-num { width: 24px; height: 24px; background: var(--mt-navy); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+.route-info { flex: 1; min-width: 0; }
+.route-name { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.route-addr { font-size: 11px; color: var(--mt-text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.route-remove { background: none; border: none; color: var(--mt-danger); cursor: pointer; padding: 4px 8px; font-size: 18px; }
+
+/* Voice */
+.mic-btn {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: var(--mt-sky);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  margin: 16px auto;
+  box-shadow: 0 4px 14px rgba(74,144,226,0.3);
+  transition: all 0.2s;
+}
+.mic-btn:active { transform: scale(0.95); }
+.mic-btn.recording { background: var(--mt-danger); animation: pulse 1.5s infinite; }
+.mic-btn svg { width: 32px; height: 32px; }
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 4px 14px rgba(239,68,68,0.4); }
+  50% { box-shadow: 0 4px 24px rgba(239,68,68,0.7); }
+}
+.transcript-box {
+  background: #FAFBFD;
+  border: 1px solid var(--mt-border);
+  border-radius: 10px;
+  padding: 12px;
+  min-height: 80px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--mt-text);
+  font-family: 'Inter', sans-serif;
+  white-space: pre-wrap;
+}
+.score-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+.score-item { background: var(--mt-bg); border-radius: 8px; padding: 10px; }
+.score-label { font-size: 11px; color: var(--mt-text-muted); margin-bottom: 4px; }
+.score-bar-wrap { height: 6px; background: var(--mt-border); border-radius: 3px; overflow: hidden; margin-top: 4px; }
+.score-bar { height: 100%; background: var(--mt-sky); transition: width 0.5s; }
+.score-bar.good { background: var(--mt-success); }
+.score-bar.warn { background: var(--mt-warn); }
+.score-bar.bad { background: var(--mt-danger); }
+.score-num { font-size: 16px; font-weight: 600; color: var(--mt-navy); }
+
+.mode-toggle { display: flex; background: var(--mt-bg); border-radius: 8px; padding: 3px; margin-bottom: 12px; }
+.mode-btn { flex: 1; padding: 8px; border: none; background: none; border-radius: 6px; font-family: inherit; font-size: 13px; font-weight: 500; color: var(--mt-text-muted); cursor: pointer; }
+.mode-btn.active { background: var(--mt-surface); color: var(--mt-navy); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+
+/* Modal */
+.modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: none; align-items: flex-end; justify-content: center; z-index: 100; }
+.modal-bg.show { display: flex; }
+.modal { background: var(--mt-surface); width: 100%; max-width: 640px; border-radius: 16px 16px 0 0; padding: 16px 16px 24px; max-height: 85vh; overflow-y: auto; }
+.modal h3 { margin: 0 0 12px; font-size: 18px; }
+
+/* Settings */
+.settings-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--mt-border); }
+.settings-row:last-child { border-bottom: none; }
+.settings-label { font-size: 14px; font-weight: 500; }
+.settings-sub { font-size: 12px; color: var(--mt-text-muted); }
+
+/* Toast */
+.toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: var(--mt-navy); color: white; padding: 10px 18px; border-radius: 24px; font-size: 13px; font-weight: 500; opacity: 0; transition: opacity 0.3s; z-index: 200; pointer-events: none; }
+.toast.show { opacity: 1; }
+.toast.error { background: var(--mt-danger); }
+.toast.success { background: var(--mt-success); }
+
+/* Setup banner */
+.setup-banner { background: #FEF3C7; border: 1px solid #FCD34D; color: #78350F; padding: 12px; border-radius: 10px; margin-bottom: 12px; font-size: 13px; }
+.setup-banner button { background: #92400E; color: white; border: none; padding: 6px 12px; border-radius: 6px; margin-top: 6px; font-size: 12px; cursor: pointer; font-family: inherit; font-weight: 500; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-logo">MT</div>
+      <div>
+        <div class="brand-name">Mechanical Temp</div>
+        <div class="brand-sub">Sales coach</div>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <div class="status-dot" id="statusDot" title="Supabase connection"></div>
+      <button onclick="openSettings()" style="background:none; border:none; color:white; cursor:pointer; padding:4px;" aria-label="Settings">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- PREP SCREEN -->
+<div class="screen active" id="screen-prep">
+  <div id="setupBanner" class="setup-banner" style="display:none;">
+    <strong>Setup needed.</strong> Add your Supabase, Claude, and Google Maps keys to start saving stops and using all features.
+    <br><button onclick="openSettings()">Open settings</button>
+  </div>
+
+  <div class="hero">
+    <h2>Before you walk in</h2>
+    <p>Two minutes. Don't skip these.</p>
+  </div>
+
+  <div class="card">
+    <p class="card-title">In the truck</p>
+    <div id="checklist"></div>
+    <button class="btn btn-outline" onclick="resetChecklist()" style="margin-top:10px;">Reset checklist</button>
+  </div>
+
+  <div class="card">
+    <p class="card-title">4-7-8 breath — drops the cortisol</p>
+    <div class="breath-wrap">
+      <div class="breath-circle" id="breath"><span class="breath-text" id="breathText">Tap to start</span></div>
+    </div>
+    <button class="btn btn-sky" id="breathBtn" onclick="startBreath()">Start breathing exercise</button>
+    <p class="muted" style="margin:10px 0 0; text-align:center; font-size:12px;">In 4 → hold 7 → out 8. Three cycles.</p>
+  </div>
+
+  <div class="card">
+    <p class="card-title">The one thing</p>
+    <p style="margin:0; font-size:14px;">Your job is <strong>not</strong> to close a sale. Your job is to leave a card with the right person's name on the back. That's it. Set the bar low and you'll clear it.</p>
+  </div>
+</div>
+
+<!-- SCRIPT SCREEN -->
+<div class="screen" id="screen-script">
+  <div class="hero">
+    <h2>The 30-second pitch</h2>
+    <p>Memorize the bold parts. Riff the rest.</p>
+  </div>
+
+  <div class="card">
+    <div class="script-step">
+      <p class="card-title">1 — Open</p>
+      <p class="script-quote">"Hi, I'm Brian with <strong>Mechanical Temp</strong> — we're the HVAC company right up on Telegraph."</p>
+      <p class="muted" style="font-size:12px; margin:0;">Local + landmark. Disarms "who are you" instantly.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="script-step">
+      <p class="card-title">2 — Disarm (most important)</p>
+      <p class="script-quote">"I'm <strong>not here to sell you anything today</strong> — just wanted to drop off a card in case your heat or AC ever acts up."</p>
+      <p class="muted" style="font-size:12px; margin:0;">This sentence is the whole game. Say it slow.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="script-step">
+      <p class="card-title">3 — Get the name</p>
+      <p class="script-quote">"Who handles the building stuff here — is that the office manager?"</p>
+      <p class="muted" style="font-size:12px; margin:0;">Write the name on the back of a spare card.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="script-step">
+      <p class="card-title">4 — The probe</p>
+      <p class="script-quote">"Is there anything bugging them right now? Hot spots, a unit making noise, anything like that?"</p>
+      <p class="muted" style="font-size:12px; margin:0;">Yes → ask for the manager. No → leave card.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="script-step">
+      <p class="card-title">5 — Close & exit</p>
+      <p class="script-quote">"Here's my card — we do everything from filter changes to full replacements, and we handle a lot of the national chains. Keep us in mind. Thanks for your time."</p>
+      <p class="muted" style="font-size:12px; margin:0;">Smile, walk out. Don't linger.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="card-title">Objection handlers</p>
+    <div class="obj">
+      <p class="obj-q">"We already have a guy."</p>
+      <p class="obj-a">"Great — every business should. We're just the backup when your guy's tied up. Mind if I leave a card?"</p>
+    </div>
+    <div class="obj">
+      <p class="obj-q">"The manager isn't here."</p>
+      <p class="obj-a">"No problem. What's their name? I'll write it on the card so they know who it's for."</p>
+    </div>
+    <div class="obj">
+      <p class="obj-q">"We're not interested."</p>
+      <p class="obj-a">"Totally fair — no pitch. Just leaving a card in case something breaks on a Sunday."</p>
+    </div>
+    <div class="obj">
+      <p class="obj-q">"Send us an email."</p>
+      <p class="obj-a">"Happy to — what's the best address? Whose attention should I put it to?"</p>
+    </div>
+    <div class="obj">
+      <p class="obj-q">"How much do you charge?"</p>
+      <p class="obj-a">"Depends on the job — service call is [rate] and we quote replacements free. Want me to send someone to look?"</p>
+    </div>
+    <div class="obj">
+      <p class="obj-q">"What makes you different?"</p>
+      <p class="obj-a">"We answer the phone. Most don't. And we handle the big national chains so we know commercial systems."</p>
+    </div>
+  </div>
+</div>
+
+<!-- PRACTICE SCREEN -->
+<div class="screen" id="screen-practice">
+  <div class="hero">
+    <h2>Rehearse the pitch</h2>
+    <p>Practice until it feels boring. Then it'll feel natural in person.</p>
+  </div>
+
+  <div class="mode-toggle">
+    <button class="mode-btn active" data-mode="voice" onclick="setMode('voice')">🎤 Voice</button>
+    <button class="mode-btn" data-mode="text" onclick="setMode('text')">⌨ Type</button>
+  </div>
+
+  <!-- Voice mode -->
+  <div id="modeVoice">
+    <div class="card">
+      <p class="card-title">Voice rehearsal</p>
+      <p class="muted" style="margin:0 0 8px;">Tap the mic, deliver your pitch out loud, tap again to stop. Claude will grade it.</p>
+      <button class="mic-btn" id="micBtn" onclick="toggleMic()" aria-label="Toggle microphone">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </button>
+      <p style="text-align:center; font-size:13px; color: var(--mt-text-muted); margin: 8px 0;" id="micStatus">Ready when you are</p>
+      <div class="transcript-box" id="voiceTranscript">Your transcript will show here...</div>
+      <button class="btn btn-primary" id="gradeVoiceBtn" onclick="gradePitch('voice')" disabled style="margin-top:10px;">Grade my pitch</button>
+    </div>
+  </div>
+
+  <!-- Text mode -->
+  <div id="modeText" style="display:none;">
+    <div class="card">
+      <p class="card-title">Type rehearsal</p>
+      <p class="muted" style="margin:0 0 8px;">Type out your pitch as you'd say it. Claude will grade and suggest fixes.</p>
+      <textarea class="textarea" id="textPitch" placeholder="Hi, I'm Brian with Mechanical Temp..."></textarea>
+      <button class="btn btn-primary" onclick="gradePitch('text')">Grade my pitch</button>
+    </div>
+  </div>
+
+  <!-- Scores -->
+  <div class="card" id="scoresCard" style="display:none;">
+    <p class="card-title">Your score</p>
+    <div style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+      <div style="font-size:48px; font-weight:700; color: var(--mt-navy); line-height:1;" id="overallScore">—</div>
+      <div>
+        <div style="font-size:12px; color:var(--mt-text-muted); text-transform:uppercase; letter-spacing:0.5px;">Overall</div>
+        <div style="font-size:13px; color:var(--mt-text-muted);" id="overallDuration">—</div>
+      </div>
+    </div>
+    <div class="score-grid">
+      <div class="score-item"><div class="score-label">Opener</div><div class="score-num" id="sc-opener">—</div><div class="score-bar-wrap"><div class="score-bar" id="bar-opener" style="width:0%"></div></div></div>
+      <div class="score-item"><div class="score-label">Disarm</div><div class="score-num" id="sc-disarm">—</div><div class="score-bar-wrap"><div class="score-bar" id="bar-disarm" style="width:0%"></div></div></div>
+      <div class="score-item"><div class="score-label">Name ask</div><div class="score-num" id="sc-name">—</div><div class="score-bar-wrap"><div class="score-bar" id="bar-name" style="width:0%"></div></div></div>
+      <div class="score-item"><div class="score-label">Probe</div><div class="score-num" id="sc-probe">—</div><div class="score-bar-wrap"><div class="score-bar" id="bar-probe" style="width:0%"></div></div></div>
+      <div class="score-item"><div class="score-label">Close</div><div class="score-num" id="sc-close">—</div><div class="score-bar-wrap"><div class="score-bar" id="bar-close" style="width:0%"></div></div></div>
+      <div class="score-item"><div class="score-label">Pace</div><div class="score-num" id="sc-pace">—</div><div class="score-bar-wrap"><div class="score-bar" id="bar-pace" style="width:0%"></div></div></div>
+    </div>
+    <div style="margin-top:14px; padding-top:14px; border-top: 1px solid var(--mt-border);">
+      <div class="card-title">Feedback</div>
+      <p style="margin:0; font-size:14px; line-height:1.6;" id="feedbackText"></p>
+    </div>
+  </div>
+</div>
+
+<!-- LOG SCREEN -->
+<div class="screen" id="screen-log">
+  <div class="hero">
+    <h2>Today's route</h2>
+    <p>Log every stop. Follow-up is where the money is.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-num" id="statToday">0</div><div class="stat-label">Stops today</div></div>
+    <div class="stat"><div class="stat-num" id="statTotal">0</div><div class="stat-label">Total stops</div></div>
+    <div class="stat"><div class="stat-num" id="statConfidence">—</div><div class="stat-label">Avg confidence (7d)</div><div class="stat-trend" id="confTrend"></div></div>
+    <div class="stat"><div class="stat-num" id="statFollowups">0</div><div class="stat-label">Follow-ups due</div></div>
+  </div>
+
+  <div class="trend-chart" id="trendChart">
+    <div class="card-title">Confidence trend — last 14 days</div>
+    <div class="trend-bars" id="trendBars"></div>
+    <div class="trend-labels" id="trendLabels"></div>
+  </div>
+
+  <div class="card">
+    <p class="card-title">Add stop</p>
+    <input class="input" id="logBiz" placeholder="Business name (e.g. Lakeside Dental)" />
+    <input class="input" id="logAddress" placeholder="Address (optional)" />
+    <input class="input" id="logContact" placeholder="Contact name (back of card)" />
+    <input class="input" id="logEmail" placeholder="Contact email (for follow-up)" type="email" />
+    <select class="select" id="logOutcome">
+      <option value="card-dropped">Card dropped</option>
+      <option value="got-manager">Spoke to decision-maker</option>
+      <option value="lead-warm">Warm lead — follow up</option>
+      <option value="not-interested">Not interested</option>
+      <option value="closed">Closed today</option>
+    </select>
+    <div>
+      <span class="label">How did it feel? (1=rough, 5=smooth)</span>
+      <div class="rating-stars" id="ratingStars">
+        <svg class="star" data-rating="1" onclick="setRating(1)" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg class="star" data-rating="2" onclick="setRating(2)" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg class="star" data-rating="3" onclick="setRating(3)" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg class="star" data-rating="4" onclick="setRating(4)" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg class="star" data-rating="5" onclick="setRating(5)" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+    </div>
+    <textarea class="textarea" id="logNotes" placeholder="Notes (optional)"></textarea>
+    <button class="btn btn-primary" onclick="addStop()">Save stop</button>
+  </div>
+
+  <div class="card" id="followupsCard">
+    <p class="card-title">Follow-ups due today</p>
+    <div id="followupsList"><p class="muted" style="margin:0; font-size:13px;">None yet — drop more cards.</p></div>
+  </div>
+
+  <div class="card">
+    <p class="card-title">Recent stops</p>
+    <div id="stopsList"><p class="muted" style="margin:0; font-size:13px;">Loading...</p></div>
+  </div>
+</div>
+
+<!-- ROUTE SCREEN -->
+<div class="screen" id="screen-route">
+  <div class="hero">
+    <h2>Plan today's route</h2>
+    <p>Pick stops, get an optimized order.</p>
+  </div>
+
+  <div class="card">
+    <p class="card-title">Search for businesses</p>
+    <input class="input" id="placesSearch" placeholder="e.g. dental office Southfield" autocomplete="off" />
+    <div id="placesResults" style="margin-top:6px;"></div>
+    <p class="muted" style="font-size:12px; margin:8px 0 0;">Type to search, tap a result to add to your route.</p>
+  </div>
+
+  <div class="card">
+    <p class="card-title">Your route (<span id="routeCount">0</span>)</p>
+    <div id="routeList"><p class="muted" style="margin:0; font-size:13px;">No stops yet. Search above to add.</p></div>
+    <div id="mapEl" style="margin-top: 12px; display:none;"></div>
+    <div class="btn-row" style="margin-top: 10px;">
+      <button class="btn btn-outline" onclick="optimizeRoute()" id="optimizeBtn" disabled>Optimize order</button>
+      <button class="btn btn-primary" onclick="openInMaps()" id="openMapsBtn" disabled>Open in Google Maps</button>
+    </div>
+    <button class="btn btn-outline" onclick="saveRoute()" id="saveRouteBtn" disabled style="margin-top: 8px;">Save route</button>
+  </div>
+</div>
+
+<!-- TABBAR -->
+<div class="tabbar">
+  <button class="tab active" onclick="showTab('prep')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+    Prep
+  </button>
+  <button class="tab" onclick="showTab('script')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    Script
+  </button>
+  <button class="tab" onclick="showTab('practice')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+    Practice
+  </button>
+  <button class="tab" onclick="showTab('log')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+    Log
+  </button>
+  <button class="tab" onclick="showTab('route')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+    Route
+  </button>
+</div>
+
+<!-- Settings Modal -->
+<div class="modal-bg" id="settingsModal" onclick="if(event.target===this) closeSettings()">
+  <div class="modal">
+    <h3>Settings</h3>
+    <p class="muted" style="font-size:13px; margin: 0 0 12px;">Keys are stored in browser localStorage. They never leave your device except to call the respective APIs.</p>
+
+    <label class="label">Supabase URL</label>
+    <input class="input" id="setSupaUrl" placeholder="https://xxx.supabase.co" />
+
+    <label class="label">Supabase anon key</label>
+    <input class="input" id="setSupaKey" type="password" placeholder="eyJhbGciOiJI..." />
+
+    <label class="label">Claude API key (Anthropic)</label>
+    <input class="input" id="setClaudeKey" type="password" placeholder="sk-ant-..." />
+
+    <label class="label">Google Maps API key</label>
+    <input class="input" id="setMapsKey" type="password" placeholder="AIza..." />
+
+    <label class="label">Your service call rate (for objection script)</label>
+    <input class="input" id="setRate" placeholder="$150" />
+
+    <label class="label">Follow-up email signature</label>
+    <textarea class="textarea" id="setSig" placeholder="Brian Smith&#10;Mechanical Temp LLC&#10;(248) 555-0123&#10;brian@mechanicaltemp.com"></textarea>
+
+    <div class="btn-row" style="margin-top: 14px;">
+      <button class="btn btn-outline" onclick="closeSettings()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveSettings()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Stop Detail Modal -->
+<div class="modal-bg" id="stopModal" onclick="if(event.target===this) closeStopModal()">
+  <div class="modal">
+    <h3 id="stopModalTitle">Stop</h3>
+    <div id="stopModalBody"></div>
+    <div class="btn-row" style="margin-top: 14px;">
+      <button class="btn btn-outline" onclick="closeStopModal()">Close</button>
+      <button class="btn btn-sky" id="draftEmailBtn" onclick="draftFollowupForCurrent()">Draft follow-up</button>
+    </div>
+    <button class="btn btn-danger" onclick="deleteCurrentStop()" style="margin-top:8px;">Delete this stop</button>
+  </div>
+</div>
+
+<!-- Email Draft Modal -->
+<div class="modal-bg" id="emailModal" onclick="if(event.target===this) closeEmailModal()">
+  <div class="modal">
+    <h3>Follow-up email draft</h3>
+    <input class="input" id="emailTo" placeholder="To:" />
+    <input class="input" id="emailSubj" placeholder="Subject:" />
+    <textarea class="textarea" id="emailBody" style="min-height: 200px;"></textarea>
+    <div class="btn-row" style="margin-top: 10px;">
+      <button class="btn btn-outline" onclick="closeEmailModal()">Cancel</button>
+      <button class="btn btn-outline" onclick="copyEmail()">Copy</button>
+      <button class="btn btn-primary" onclick="openMailto()">Open in mail</button>
+    </div>
+    <button class="btn btn-sky" onclick="markFollowupSent()" style="margin-top:8px;">Mark as sent</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// =========================
+// State & settings
+// =========================
+const CHECKLIST = [
+  { id: 'c1', label: 'Polo / Mechanical Temp shirt on', sub: 'Uniform = permission to be there' },
+  { id: 'c2', label: 'Cards + one-pagers in hand', sub: '5 of each, stapled together' },
+  { id: 'c3', label: 'Phone on silent', sub: 'Nothing kills a pitch like a ringtone' },
+  { id: 'c4', label: 'Breath check — do the 4-7-8', sub: 'Tap "Start breathing" above' },
+  { id: 'c5', label: 'Read the script once out loud', sub: 'Out loud — not in your head' }
+];
+
+const settings = {
+  supaUrl: localStorage.getItem('mt_supa_url') || '',
+  supaKey: localStorage.getItem('mt_supa_key') || '',
+  claudeKey: localStorage.getItem('mt_claude_key') || '',
+  mapsKey: localStorage.getItem('mt_maps_key') || '',
+  rate: localStorage.getItem('mt_rate') || '$150',
+  sig: localStorage.getItem('mt_sig') || 'Brian\nMechanical Temp LLC\n(248) 263-6160\nbrian@mechanicaltemp.com'
+};
+
+let stops = [];
+let route = [];
+let currentRating = 0;
+let currentStopId = null;
+let isRecording = false;
+let recognition = null;
+let recordStart = 0;
+let recordDuration = 0;
+let placesService = null;
+let placesAutocomplete = null;
+let mapsReady = false;
+
+// =========================
+// Boot
+// =========================
+function init() {
+  renderChecklist();
+  updateStatusDot();
+  if (!settings.supaUrl || !settings.claudeKey) {
+    document.getElementById('setupBanner').style.display = 'block';
+  }
+  loadStops();
+  if (settings.mapsKey) loadGoogleMaps();
+}
+
+function updateStatusDot() {
+  const dot = document.getElementById('statusDot');
+  if (settings.supaUrl && settings.supaKey) dot.classList.add('online');
+  else dot.classList.remove('online');
+}
+
+// =========================
+// Tabs
+// =========================
+function showTab(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t => {
+    if (t.getAttribute('onclick').includes("'" + name + "'")) t.classList.add('active');
+  });
+  if (name === 'log') { renderStops(); renderFollowups(); renderTrend(); }
+}
+
+// =========================
+// Checklist
+// =========================
+function renderChecklist() {
+  const el = document.getElementById('checklist');
+  el.innerHTML = CHECKLIST.map(c => `
+    <div class="check-item" data-id="${c.id}" onclick="toggleCheck('${c.id}')">
+      <div class="check-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div><div class="check-label">${c.label}</div><div class="check-sub">${c.sub}</div></div>
+    </div>
+  `).join('');
+}
+function toggleCheck(id) {
+  document.querySelector('.check-item[data-id="' + id + '"]').classList.toggle('done');
+}
+function resetChecklist() {
+  document.querySelectorAll('.check-item').forEach(el => el.classList.remove('done'));
+  toast('Checklist reset');
+}
+
+// =========================
+// Breath
+// =========================
+let breathing = false;
+async function startBreath() {
+  if (breathing) return;
+  breathing = true;
+  const circle = document.getElementById('breath');
+  const text = document.getElementById('breathText');
+  const btn = document.getElementById('breathBtn');
+  btn.textContent = 'Breathing...';
+  btn.disabled = true;
+  for (let i = 0; i < 3; i++) {
+    text.textContent = 'Breathe in';
+    circle.classList.add('expand');
+    circle.style.transform = 'scale(1.15)';
+    await new Promise(r => setTimeout(r, 4000));
+    text.textContent = 'Hold';
+    await new Promise(r => setTimeout(r, 7000));
+    text.textContent = 'Breathe out';
+    circle.classList.remove('expand');
+    circle.style.transform = 'scale(0.85)';
+    await new Promise(r => setTimeout(r, 8000));
+  }
+  circle.style.transform = 'scale(1)';
+  text.textContent = 'You\u2019re ready';
+  btn.textContent = 'Run again';
+  btn.disabled = false;
+  breathing = false;
+}
+
+// =========================
+// Practice — voice + text
+// =========================
+function setMode(mode) {
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+  document.getElementById('modeVoice').style.display = mode === 'voice' ? 'block' : 'none';
+  document.getElementById('modeText').style.display = mode === 'text' ? 'block' : 'none';
+}
+
+function toggleMic() {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    toast('Voice not supported in this browser. Use Chrome or Safari.', 'error');
+    return;
+  }
+  if (isRecording) stopRecording();
+  else startRecording();
+}
+
+function startRecording() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SR();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = 'en-US';
+
+  const transcriptEl = document.getElementById('voiceTranscript');
+  let finalTranscript = '';
+
+  recognition.onresult = (event) => {
+    let interim = '';
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const r = event.results[i];
+      if (r.isFinal) finalTranscript += r[0].transcript + ' ';
+      else interim += r[0].transcript;
+    }
+    transcriptEl.textContent = finalTranscript + interim;
+    transcriptEl.dataset.final = finalTranscript;
+  };
+
+  recognition.onerror = (e) => {
+    toast('Mic error: ' + e.error, 'error');
+    stopRecording();
+  };
+
+  recognition.onend = () => {
+    if (isRecording) recognition.start(); // auto-restart if user hasn't stopped
+  };
+
+  recognition.start();
+  isRecording = true;
+  recordStart = Date.now();
+  document.getElementById('micBtn').classList.add('recording');
+  document.getElementById('micStatus').textContent = 'Recording... tap mic to stop';
+  document.getElementById('voiceTranscript').textContent = '';
+  document.getElementById('voiceTranscript').dataset.final = '';
+  document.getElementById('gradeVoiceBtn').disabled = true;
+}
+
+function stopRecording() {
+  if (recognition) {
+    isRecording = false;
+    recognition.stop();
+  }
+  recordDuration = (Date.now() - recordStart) / 1000;
+  document.getElementById('micBtn').classList.remove('recording');
+  document.getElementById('micStatus').textContent = `Recorded ${recordDuration.toFixed(1)}s. Ready to grade.`;
+  document.getElementById('gradeVoiceBtn').disabled = false;
+}
+
+async function gradePitch(mode) {
+  let transcript = '';
+  let duration = null;
+  if (mode === 'voice') {
+    transcript = document.getElementById('voiceTranscript').dataset.final || document.getElementById('voiceTranscript').textContent;
+    duration = recordDuration;
+  } else {
+    transcript = document.getElementById('textPitch').value.trim();
+  }
+  if (!transcript) { toast('Nothing to grade yet', 'error'); return; }
+  if (!settings.claudeKey) { toast('Add your Claude API key in settings', 'error'); openSettings(); return; }
+
+  toast('Sending to Claude...');
+
+  const prompt = `You are coaching Brian, an HVAC contractor in Southfield Michigan who runs Mechanical Temp LLC. He is practicing a 30-second walk-in pitch to office managers at small commercial businesses (dentists, doctors, small offices). He is introverted and out of his comfort zone.
+
+The pitch he is practicing has 5 parts:
+1. OPENER: Introduce self + company + local reference ("Hi, I'm Brian with Mechanical Temp, the HVAC company up on Telegraph")
+2. DISARM: Reduce sales pressure ("I'm not here to sell you anything today, just dropping off a card")
+3. NAME ASK: Find out who handles facilities ("Who handles the building stuff here?")
+4. PROBE: Ask if anything is bothering them ("Hot spots, noisy units, anything bugging them?")
+5. CLOSE: Hand card and exit cleanly ("Here's my card, keep us in mind, thanks for your time")
+
+Brian's transcript:
+"""
+${transcript}
+"""
+
+${duration ? `Spoken duration: ${duration.toFixed(1)} seconds.` : ''}
+
+Grade each of the 5 parts from 0-100 based on whether he hit them (allow paraphrasing, what matters is the function). Also grade PACE (0-100): for voice, the ideal pitch is 25-45 seconds with ~150 words; too fast or too slow loses points. For text mode, score pace as 75 if it would clearly fit in 30 seconds, lower if too wordy.
+
+Return ONLY valid JSON with this exact shape, no markdown, no preamble:
+{
+  "opener": <int 0-100>,
+  "disarm": <int 0-100>,
+  "name_ask": <int 0-100>,
+  "probe": <int 0-100>,
+  "close": <int 0-100>,
+  "pace": <int 0-100>,
+  "overall": <int 0-100>,
+  "feedback": "<2-3 sentence specific feedback. Be warm but direct. Point out what he nailed and the ONE thing to fix next time. No corporate-speak. If a section was missing entirely, say so plainly.>"
+}`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': settings.claudeKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 600,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error('Claude API: ' + res.status + ' ' + err.slice(0, 200));
+    }
+    const data = await res.json();
+    const text = data.content[0].text.trim().replace(/^```json|```$/g, '').trim();
+    const scores = JSON.parse(text);
+    renderScores(scores, duration);
+    savePractice(mode, transcript, duration, scores);
+  } catch (e) {
+    toast('Grading failed: ' + e.message, 'error');
+    console.error(e);
+  }
+}
+
+function renderScores(scores, duration) {
+  document.getElementById('scoresCard').style.display = 'block';
+  document.getElementById('overallScore').textContent = scores.overall;
+  document.getElementById('overallDuration').textContent = duration ? `${duration.toFixed(1)}s pitch` : 'Typed pitch';
+  ['opener','disarm','name_ask','probe','close','pace'].forEach(k => {
+    const key = k === 'name_ask' ? 'name' : k;
+    document.getElementById('sc-' + key).textContent = scores[k];
+    const bar = document.getElementById('bar-' + key);
+    bar.style.width = scores[k] + '%';
+    bar.className = 'score-bar ' + (scores[k] >= 75 ? 'good' : scores[k] >= 50 ? 'warn' : 'bad');
+  });
+  document.getElementById('feedbackText').textContent = scores.feedback;
+}
+
+async function savePractice(mode, transcript, duration, scores) {
+  if (!supaReady()) return;
+  try {
+    await supa('mt_sales_practice', 'POST', {
+      mode, transcript, duration_s: duration, scores, feedback: scores.feedback
+    });
+  } catch (e) { console.error('save practice', e); }
+}
+
+// =========================
+// Stops — Supabase CRUD
+// =========================
+function supaReady() { return settings.supaUrl && settings.supaKey; }
+
+async function supa(table, method, body, query) {
+  const url = `${settings.supaUrl}/rest/v1/${table}${query || ''}`;
+  const res = await fetch(url, {
+    method,
+    headers: {
+      apikey: settings.supaKey,
+      Authorization: 'Bearer ' + settings.supaKey,
+      'Content-Type': 'application/json',
+      Prefer: method === 'POST' ? 'return=representation' : 'return=minimal'
+    },
+    body: body ? JSON.stringify(body) : undefined
+  });
+  if (!res.ok) throw new Error('Supabase: ' + res.status + ' ' + await res.text());
+  if (method === 'GET' || method === 'POST') return res.json();
+  return null;
+}
+
+async function loadStops() {
+  if (!supaReady()) {
+    document.getElementById('stopsList').innerHTML = '<p class="muted" style="margin:0; font-size:13px;">Add Supabase keys in settings to save stops.</p>';
+    return;
+  }
+  try {
+    stops = await supa('mt_sales_stops', 'GET', null, '?order=created_at.desc&limit=100');
+    renderStops(); renderFollowups(); renderTrend();
+  } catch (e) {
+    document.getElementById('stopsList').innerHTML = '<p class="muted" style="margin:0; font-size:13px;">Load error: ' + e.message + '</p>';
+  }
+}
+
+function setRating(n) {
+  currentRating = n;
+  document.querySelectorAll('.star').forEach(s => {
+    s.classList.toggle('filled', parseInt(s.dataset.rating) <= n);
+  });
+}
+
+async function addStop() {
+  const biz = document.getElementById('logBiz').value.trim();
+  if (!biz) { toast('Business name required', 'error'); return; }
+  if (!supaReady()) { toast('Set up Supabase keys first', 'error'); openSettings(); return; }
+
+  const payload = {
+    business_name: biz,
+    address: document.getElementById('logAddress').value.trim() || null,
+    contact_name: document.getElementById('logContact').value.trim() || null,
+    contact_email: document.getElementById('logEmail').value.trim() || null,
+    outcome: document.getElementById('logOutcome').value,
+    rating: currentRating || null,
+    notes: document.getElementById('logNotes').value.trim() || null
+  };
+
+  try {
+    const created = await supa('mt_sales_stops', 'POST', payload);
+    stops.unshift(...created);
+    ['logBiz','logAddress','logContact','logEmail','logNotes'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('logOutcome').value = 'card-dropped';
+    currentRating = 0;
+    document.querySelectorAll('.star').forEach(s => s.classList.remove('filled'));
+    renderStops(); renderFollowups(); renderTrend();
+    toast('Stop saved', 'success');
+  } catch (e) {
+    toast('Save failed: ' + e.message, 'error');
+  }
+}
+
+function outcomeLabel(o) {
+  return { 'card-dropped':'Card dropped','got-manager':'Spoke to manager','lead-warm':'Warm lead','not-interested':'Not interested','closed':'Closed','follow-up-sent':'Followed up' }[o] || o;
+}
+
+function renderStops() {
+  const list = document.getElementById('stopsList');
+  const todayStr = new Date().toDateString();
+  document.getElementById('statToday').textContent = stops.filter(s => new Date(s.created_at).toDateString() === todayStr).length;
+  document.getElementById('statTotal').textContent = stops.length;
+
+  if (stops.length === 0) {
+    list.innerHTML = '<p class="muted" style="margin:0; font-size:13px;">No stops yet — your first one is the hardest. After that they get easier.</p>';
+    return;
+  }
+  list.innerHTML = stops.slice(0, 30).map(s => {
+    const d = new Date(s.created_at);
+    const time = d.toLocaleString([], { month:'short', day:'numeric', hour:'numeric', minute:'2-digit' });
+    const rating = s.rating ? '★'.repeat(s.rating) + '☆'.repeat(5-s.rating) : '';
+    return `<div class="stop-card" onclick="openStop('${s.id}')">
+      <div class="stop-head">
+        <div style="flex:1; min-width:0;">
+          <div class="stop-biz">${escapeHtml(s.business_name)}</div>
+          <div class="stop-meta">${s.contact_name ? escapeHtml(s.contact_name) + ' • ' : ''}${time}${rating ? ' • <span style="color:var(--mt-warn)">' + rating + '</span>' : ''}</div>
+        </div>
+        <span class="outcome-pill outcome-${s.outcome}">${outcomeLabel(s.outcome)}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderFollowups() {
+  const now = Date.now();
+  const due = stops.filter(s =>
+    !s.follow_up_sent_at &&
+    s.follow_up_at && new Date(s.follow_up_at).getTime() <= now &&
+    ['card-dropped','got-manager','lead-warm'].includes(s.outcome)
+  );
+  document.getElementById('statFollowups').textContent = due.length;
+  const el = document.getElementById('followupsList');
+  if (due.length === 0) {
+    el.innerHTML = '<p class="muted" style="margin:0; font-size:13px;">No follow-ups due. Drop more cards.</p>';
+    return;
+  }
+  el.innerHTML = due.slice(0, 8).map(s => `
+    <div class="followup-card" onclick="openStop('${s.id}')">
+      <div class="stop-head">
+        <div style="flex:1; min-width:0;">
+          <div class="stop-biz">${escapeHtml(s.business_name)}</div>
+          <div class="stop-meta">${s.contact_name ? escapeHtml(s.contact_name) : 'No contact'}${s.contact_email ? ' • ' + escapeHtml(s.contact_email) : ''}</div>
+        </div>
+        <span style="font-size:11px; font-weight:600; color:#92400E;">DUE</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderTrend() {
+  const bars = document.getElementById('trendBars');
+  const labels = document.getElementById('trendLabels');
+  const days = [];
+  for (let i = 13; i >= 0; i--) {
+    const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate() - i);
+    const dayStops = stops.filter(s => {
+      const sd = new Date(s.created_at); sd.setHours(0,0,0,0);
+      return sd.getTime() === d.getTime() && s.rating;
+    });
+    const avg = dayStops.length ? dayStops.reduce((a,s) => a + s.rating, 0) / dayStops.length : 0;
+    days.push({ date: d, avg, count: dayStops.length });
+  }
+  bars.innerHTML = days.map(d => {
+    const h = d.avg > 0 ? (d.avg / 5) * 100 : 0;
+    return `<div class="trend-bar ${d.count === 0 ? 'empty' : ''}" style="height:${h}%" title="${d.date.toLocaleDateString()}: ${d.avg.toFixed(1)} (${d.count})"></div>`;
+  }).join('');
+  labels.innerHTML = days.map((d,i) => i % 2 === 0 ? `<div class="trend-day">${d.date.toLocaleDateString([], {month:'numeric',day:'numeric'})}</div>` : '<div class="trend-day"></div>').join('');
+
+  // 7-day avg + trend
+  const last7 = days.slice(-7).filter(d => d.count > 0);
+  const prev7 = days.slice(-14, -7).filter(d => d.count > 0);
+  const avg7 = last7.length ? last7.reduce((a,d) => a + d.avg, 0) / last7.length : 0;
+  const avgPrev = prev7.length ? prev7.reduce((a,d) => a + d.avg, 0) / prev7.length : 0;
+  document.getElementById('statConfidence').textContent = avg7 > 0 ? avg7.toFixed(1) : '—';
+  const trendEl = document.getElementById('confTrend');
+  if (avg7 > 0 && avgPrev > 0) {
+    const diff = avg7 - avgPrev;
+    if (Math.abs(diff) < 0.05) { trendEl.textContent = '— flat'; trendEl.classList.remove('down'); }
+    else if (diff > 0) { trendEl.textContent = '↑ ' + diff.toFixed(1); trendEl.classList.remove('down'); }
+    else { trendEl.textContent = '↓ ' + Math.abs(diff).toFixed(1); trendEl.classList.add('down'); }
+  } else trendEl.textContent = '';
+}
+
+function openStop(id) {
+  const s = stops.find(x => x.id === id);
+  if (!s) return;
+  currentStopId = id;
+  document.getElementById('stopModalTitle').textContent = s.business_name;
+  const due = s.follow_up_at && new Date(s.follow_up_at).getTime() <= Date.now() && !s.follow_up_sent_at;
+  document.getElementById('stopModalBody').innerHTML = `
+    <p class="muted" style="margin:0 0 8px;">${outcomeLabel(s.outcome)} • ${new Date(s.created_at).toLocaleString()}</p>
+    ${s.contact_name ? `<p style="margin:4px 0;"><strong>Contact:</strong> ${escapeHtml(s.contact_name)}</p>` : ''}
+    ${s.contact_email ? `<p style="margin:4px 0;"><strong>Email:</strong> ${escapeHtml(s.contact_email)}</p>` : ''}
+    ${s.address ? `<p style="margin:4px 0;"><strong>Address:</strong> ${escapeHtml(s.address)}</p>` : ''}
+    ${s.rating ? `<p style="margin:4px 0;"><strong>Confidence:</strong> ${'★'.repeat(s.rating)}${'☆'.repeat(5-s.rating)}</p>` : ''}
+    ${s.notes ? `<p style="margin:8px 0; padding:8px; background: var(--mt-bg); border-radius: 6px;"><strong>Notes:</strong><br>${escapeHtml(s.notes)}</p>` : ''}
+    <p style="margin:8px 0 0; font-size:13px; color: var(--mt-text-muted);">
+      Follow-up ${s.follow_up_sent_at ? 'sent ' + new Date(s.follow_up_sent_at).toLocaleDateString() : (due ? '<strong style="color:#92400E;">DUE NOW</strong>' : 'on ' + new Date(s.follow_up_at).toLocaleDateString())}
+    </p>
+  `;
+  document.getElementById('draftEmailBtn').disabled = !!s.follow_up_sent_at;
+  document.getElementById('stopModal').classList.add('show');
+}
+
+function closeStopModal() { document.getElementById('stopModal').classList.remove('show'); }
+
+async function deleteCurrentStop() {
+  if (!currentStopId) return;
+  if (!confirm('Delete this stop? Cannot undo.')) return;
+  try {
+    await supa('mt_sales_stops', 'DELETE', null, '?id=eq.' + currentStopId);
+    stops = stops.filter(s => s.id !== currentStopId);
+    closeStopModal();
+    renderStops(); renderFollowups(); renderTrend();
+    toast('Stop deleted', 'success');
+  } catch (e) { toast('Delete failed', 'error'); }
+}
+
+// =========================
+// Follow-up email draft
+// =========================
+async function draftFollowupForCurrent() {
+  const s = stops.find(x => x.id === currentStopId);
+  if (!s) return;
+  if (!settings.claudeKey) { toast('Add Claude API key first', 'error'); openSettings(); return; }
+  closeStopModal();
+  toast('Drafting...');
+
+  const isSeasonBlast = false;
+  const prompt = `Write a short, friendly, professional follow-up email from Brian at Mechanical Temp LLC (HVAC contractor in Southfield MI) to a business he dropped a card off at two weeks ago. The tone should be: direct, no fluff, no corporate-speak, no "I hope this email finds you well." 3 sentences max in the body. Just checking in, offering to take a quick look if anything has come up. Not pushy.
+
+Context:
+- Business: ${s.business_name}
+- Contact name (if any): ${s.contact_name || 'unknown'}
+- Their outcome from the visit: ${outcomeLabel(s.outcome)}
+${s.notes ? '- Notes from visit: ' + s.notes : ''}
+
+Return ONLY valid JSON, no markdown:
+{
+  "subject": "<subject line, 5-8 words, no exclamation marks>",
+  "body": "<email body, 3 sentences max, plain text, no signature (signature added separately), use \\n for paragraph breaks>"
+}`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': settings.claudeKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 400,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    if (!res.ok) throw new Error('API ' + res.status);
+    const data = await res.json();
+    const text = data.content[0].text.trim().replace(/^```json|```$/g, '').trim();
+    const draft = JSON.parse(text);
+    document.getElementById('emailTo').value = s.contact_email || '';
+    document.getElementById('emailSubj').value = draft.subject;
+    document.getElementById('emailBody').value = draft.body + '\n\n--\n' + settings.sig;
+    document.getElementById('emailModal').classList.add('show');
+  } catch (e) {
+    toast('Draft failed: ' + e.message, 'error');
+  }
+}
+
+function closeEmailModal() { document.getElementById('emailModal').classList.remove('show'); }
+
+function copyEmail() {
+  const subj = document.getElementById('emailSubj').value;
+  const body = document.getElementById('emailBody').value;
+  navigator.clipboard.writeText('Subject: ' + subj + '\n\n' + body);
+  toast('Copied to clipboard', 'success');
+}
+
+function openMailto() {
+  const to = encodeURIComponent(document.getElementById('emailTo').value);
+  const subj = encodeURIComponent(document.getElementById('emailSubj').value);
+  const body = encodeURIComponent(document.getElementById('emailBody').value);
+  window.location.href = `mailto:${to}?subject=${subj}&body=${body}`;
+}
+
+async function markFollowupSent() {
+  if (!currentStopId) return;
+  try {
+    await supa('mt_sales_stops', 'PATCH', { follow_up_sent_at: new Date().toISOString(), outcome: 'follow-up-sent' }, '?id=eq.' + currentStopId);
+    const s = stops.find(x => x.id === currentStopId);
+    if (s) { s.follow_up_sent_at = new Date().toISOString(); s.outcome = 'follow-up-sent'; }
+    closeEmailModal();
+    renderStops(); renderFollowups();
+    toast('Marked as sent', 'success');
+  } catch (e) { toast('Update failed', 'error'); }
+}
+
+// =========================
+// Google Maps + Places
+// =========================
+function loadGoogleMaps() {
+  if (mapsReady || !settings.mapsKey) return;
+  const s = document.createElement('script');
+  s.src = `https://maps.googleapis.com/maps/api/js?key=${settings.mapsKey}&libraries=places&loading=async&callback=onMapsReady`;
+  s.async = true;
+  document.head.appendChild(s);
+}
+
+window.onMapsReady = function() {
+  mapsReady = true;
+  initPlacesSearch();
+};
+
+function initPlacesSearch() {
+  const input = document.getElementById('placesSearch');
+  const resultsEl = document.getElementById('placesResults');
+  let timer = null;
+
+  input.addEventListener('input', () => {
+    clearTimeout(timer);
+    const q = input.value.trim();
+    if (q.length < 3) { resultsEl.innerHTML = ''; return; }
+    timer = setTimeout(() => {
+      const svc = new google.maps.places.AutocompleteService();
+      svc.getPlacePredictions({ input: q, componentRestrictions: { country: 'us' }, location: new google.maps.LatLng(42.4737, -83.2244), radius: 30000 }, (preds) => {
+        if (!preds) { resultsEl.innerHTML = ''; return; }
+        resultsEl.innerHTML = preds.slice(0, 5).map(p => `
+          <div onclick="addToRoute('${p.place_id}', this.dataset.txt)" data-txt="${escapeHtml(p.structured_formatting.main_text)}|${escapeHtml(p.structured_formatting.secondary_text || '')}" style="padding:10px; border:1px solid var(--mt-border); border-radius:8px; margin-bottom:4px; cursor:pointer; background:var(--mt-surface);">
+            <div style="font-size:14px; font-weight:500;">${escapeHtml(p.structured_formatting.main_text)}</div>
+            <div style="font-size:12px; color: var(--mt-text-muted);">${escapeHtml(p.structured_formatting.secondary_text || '')}</div>
+          </div>
+        `).join('');
+      });
+    }, 250);
+  });
+}
+
+function addToRoute(placeId, txt) {
+  const [name, addr] = txt.split('|');
+  const svc = new google.maps.places.PlacesService(document.createElement('div'));
+  svc.getDetails({ placeId, fields: ['name','formatted_address','geometry','place_id'] }, (place, status) => {
+    if (status !== 'OK') { toast('Place fetch failed', 'error'); return; }
+    route.push({
+      place_id: place.place_id,
+      name: place.name,
+      address: place.formatted_address,
+      lat: place.geometry.location.lat(),
+      lng: place.geometry.location.lng()
+    });
+    document.getElementById('placesSearch').value = '';
+    document.getElementById('placesResults').innerHTML = '';
+    renderRoute();
+  });
+}
+
+function removeFromRoute(idx) {
+  route.splice(idx, 1);
+  renderRoute();
+}
+
+function renderRoute() {
+  const el = document.getElementById('routeList');
+  document.getElementById('routeCount').textContent = route.length;
+  document.getElementById('optimizeBtn').disabled = route.length < 3;
+  document.getElementById('openMapsBtn').disabled = route.length === 0;
+  document.getElementById('saveRouteBtn').disabled = route.length === 0;
+  if (route.length === 0) {
+    el.innerHTML = '<p class="muted" style="margin:0; font-size:13px;">No stops yet. Search above to add.</p>';
+    document.getElementById('mapEl').style.display = 'none';
+    return;
+  }
+  el.innerHTML = route.map((r, i) => `
+    <div class="route-stop">
+      <div class="route-num">${i+1}</div>
+      <div class="route-info">
+        <div class="route-name">${escapeHtml(r.name)}</div>
+        <div class="route-addr">${escapeHtml(r.address)}</div>
+      </div>
+      <button class="route-remove" onclick="removeFromRoute(${i})" aria-label="Remove">×</button>
+    </div>
+  `).join('');
+  drawMap();
+}
+
+function drawMap() {
+  if (!mapsReady || route.length === 0) return;
+  const mapEl = document.getElementById('mapEl');
+  mapEl.style.display = 'block';
+  const map = new google.maps.Map(mapEl, {
+    zoom: 11,
+    center: { lat: route[0].lat, lng: route[0].lng },
+    mapTypeControl: false,
+    streetViewControl: false,
+    fullscreenControl: false,
+    styles: [{ featureType: 'poi', stylers: [{ visibility: 'off' }] }]
+  });
+  const bounds = new google.maps.LatLngBounds();
+  route.forEach((r, i) => {
+    const m = new google.maps.Marker({
+      position: { lat: r.lat, lng: r.lng },
+      map,
+      label: { text: String(i+1), color: 'white', fontWeight: 'bold' },
+      title: r.name
+    });
+    bounds.extend(m.getPosition());
+  });
+  if (route.length > 1) map.fitBounds(bounds, 40);
+}
+
+// Nearest-neighbor route ordering
+function optimizeRoute() {
+  if (route.length < 3) return;
+  const unvisited = route.slice(1);
+  const ordered = [route[0]];
+  while (unvisited.length > 0) {
+    const last = ordered[ordered.length - 1];
+    let bestIdx = 0, bestDist = Infinity;
+    unvisited.forEach((s, i) => {
+      const d = haversine(last.lat, last.lng, s.lat, s.lng);
+      if (d < bestDist) { bestDist = d; bestIdx = i; }
+    });
+    ordered.push(unvisited.splice(bestIdx, 1)[0]);
+  }
+  route = ordered;
+  renderRoute();
+  toast('Route optimized', 'success');
+}
+
+function haversine(lat1, lon1, lat2, lon2) {
+  const R = 6371, dLat = (lat2-lat1) * Math.PI/180, dLon = (lon2-lon1) * Math.PI/180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLon/2)**2;
+  return 2 * R * Math.asin(Math.sqrt(a));
+}
+
+function openInMaps() {
+  if (route.length === 0) return;
+  if (route.length === 1) {
+    window.open(`https://www.google.com/maps/search/?api=1&query=${route[0].lat},${route[0].lng}&query_place_id=${route[0].place_id}`);
+    return;
+  }
+  const origin = `${route[0].lat},${route[0].lng}`;
+  const destination = `${route[route.length-1].lat},${route[route.length-1].lng}`;
+  const waypoints = route.slice(1, -1).map(r => `${r.lat},${r.lng}`).join('|');
+  const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&waypoints=${waypoints}&travelmode=driving`;
+  window.open(url);
+}
+
+async function saveRoute() {
+  if (route.length === 0) return;
+  if (!supaReady()) { toast('Set up Supabase first', 'error'); return; }
+  const name = prompt('Name this route?', 'Route ' + new Date().toLocaleDateString());
+  if (!name) return;
+  try {
+    await supa('mt_sales_routes', 'POST', {
+      name,
+      planned_for: new Date().toISOString().slice(0,10),
+      stops_json: route
+    });
+    toast('Route saved', 'success');
+  } catch (e) { toast('Save failed: ' + e.message, 'error'); }
+}
+
+// =========================
+// Settings
+// =========================
+function openSettings() {
+  document.getElementById('setSupaUrl').value = settings.supaUrl;
+  document.getElementById('setSupaKey').value = settings.supaKey;
+  document.getElementById('setClaudeKey').value = settings.claudeKey;
+  document.getElementById('setMapsKey').value = settings.mapsKey;
+  document.getElementById('setRate').value = settings.rate;
+  document.getElementById('setSig').value = settings.sig;
+  document.getElementById('settingsModal').classList.add('show');
+}
+
+function closeSettings() { document.getElementById('settingsModal').classList.remove('show'); }
+
+function saveSettings() {
+  settings.supaUrl = document.getElementById('setSupaUrl').value.trim().replace(/\/$/, '');
+  settings.supaKey = document.getElementById('setSupaKey').value.trim();
+  settings.claudeKey = document.getElementById('setClaudeKey').value.trim();
+  settings.mapsKey = document.getElementById('setMapsKey').value.trim();
+  settings.rate = document.getElementById('setRate').value.trim();
+  settings.sig = document.getElementById('setSig').value.trim();
+  localStorage.setItem('mt_supa_url', settings.supaUrl);
+  localStorage.setItem('mt_supa_key', settings.supaKey);
+  localStorage.setItem('mt_claude_key', settings.claudeKey);
+  localStorage.setItem('mt_maps_key', settings.mapsKey);
+  localStorage.setItem('mt_rate', settings.rate);
+  localStorage.setItem('mt_sig', settings.sig);
+  closeSettings();
+  updateStatusDot();
+  document.getElementById('setupBanner').style.display = (settings.supaUrl && settings.claudeKey) ? 'none' : 'block';
+  toast('Settings saved', 'success');
+  loadStops();
+  if (settings.mapsKey && !mapsReady) loadGoogleMaps();
+}
+
+// =========================
+// Utils
+// =========================
+function escapeHtml(s) { return String(s||'').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }
+let toastTimer = null;
+function toast(msg, type) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show' + (type ? ' ' + type : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+// Go
+init();
+</script>
+</body>
+</html>
