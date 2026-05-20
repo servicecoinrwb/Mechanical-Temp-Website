@@ -935,28 +935,58 @@ function startRecording() {
   recognition.continuous = true;
   recognition.interimResults = true;
   recognition.lang = 'en-US';
+  // Maximum alternatives = 1 is plenty and reduces engine noise on Android
+  recognition.maxAlternatives = 1;
 
   const transcriptEl = document.getElementById('voiceTranscript');
-  let finalTranscript = '';
+  // Track committed final segments across recognition restarts
+  if (!window._mtFinalSegments) window._mtFinalSegments = [];
+  // Reset for a fresh session
+  window._mtFinalSegments = [];
+  window._mtSessionId = (window._mtSessionId || 0) + 1;
+  const sessionId = window._mtSessionId;
 
   recognition.onresult = (event) => {
+    if (sessionId !== window._mtSessionId) return; // stale handler from a previous session
     let interim = '';
-    for (let i = event.resultIndex; i < event.results.length; i++) {
+    // Walk the FULL results array (not just from resultIndex) and split into final vs interim
+    const finalThisBatch = [];
+    for (let i = 0; i < event.results.length; i++) {
       const r = event.results[i];
-      if (r.isFinal) finalTranscript += r[0].transcript + ' ';
-      else interim += r[0].transcript;
+      const text = (r[0]?.transcript || '').trim();
+      if (!text) continue;
+      if (r.isFinal) finalThisBatch.push(text);
+      else interim += ' ' + text;
     }
-    transcriptEl.textContent = finalTranscript + interim;
-    transcriptEl.dataset.final = finalTranscript;
+    // The browser's `event.results` is the canonical list for this recognition session.
+    // We replace the per-session final segments with what the browser says is final, period.
+    // This prevents the "Hi I'm Brian Hi I'm Brian Hi I'm Brian" duplication.
+    window._mtFinalSegments[sessionId] = finalThisBatch;
+
+    // Combine final segments across all sessions (in case onend auto-restarted)
+    const combinedFinal = window._mtFinalSegments
+      .filter(Boolean)
+      .map(arr => arr.join(' '))
+      .join(' ')
+      .trim();
+
+    const display = (combinedFinal + ' ' + interim.trim()).trim();
+    transcriptEl.textContent = display;
+    transcriptEl.dataset.final = combinedFinal;
   };
 
   recognition.onerror = (e) => {
+    if (e.error === 'no-speech' || e.error === 'aborted') return; // benign
     toast('Mic error: ' + e.error, 'error');
     stopRecording();
   };
 
   recognition.onend = () => {
-    if (isRecording) recognition.start(); // auto-restart if user hasn't stopped
+    if (isRecording) {
+      // Auto-restart, but bump session id so the new instance accumulates into a new bucket
+      window._mtSessionId++;
+      try { recognition.start(); } catch (e) { /* already started */ }
+    }
   };
 
   recognition.start();
@@ -1015,6 +1045,9 @@ async function gradePitch(mode) {
   }
   if (!transcript) { toast('Nothing to grade yet', 'error'); return; }
   if (!auth.session) { toast('Please sign in first', 'error'); showLogin(); return; }
+
+  // Belt-and-suspenders: collapse any repeated phrases the speech recognizer may have duplicated
+  transcript = dedupeRepeatedPhrases(transcript);
 
   toast('Sending to Claude...');
 
@@ -1540,6 +1573,48 @@ function saveSettings() {
 // Utils
 // =========================
 function escapeHtml(s) { return String(s||'').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }
+
+// Collapse phrases the speech recognizer may have repeated (Android Chrome quirk).
+// Handles two patterns:
+//   1) Prefix-growth: "hi / hi I'm / hi I'm Brian / hi I'm Brian from..." — the
+//      last sentence contains the full intended message
+//   2) Simple repetition: "X X X" → "X"
+function dedupeRepeatedPhrases(text) {
+  if (!text) return text;
+  let s = text.replace(/\s+/g, ' ').trim();
+  const words = s.split(/\s+/);
+
+  // Pattern 1: prefix-growth detection (run FIRST, before regex collapse).
+  // If the text looks like "Hi / Hi I'm / Hi I'm Brian / Hi I'm Brian from X",
+  // then it almost certainly starts with the word "Hi" repeated. Detect that.
+  if (words.length > 20) {
+    const firstWord = words[0].toLowerCase();
+    // Count how often the first word recurs — if it appears 4+ times, we have prefix growth
+    const firstWordCount = words.filter(w => w.toLowerCase() === firstWord).length;
+    if (firstWordCount >= 4) {
+      // Find positions where the first word starts a new "growth iteration"
+      const positions = [];
+      words.forEach((w, i) => { if (w.toLowerCase() === firstWord) positions.push(i); });
+      // The LAST iteration is the complete message — take everything from the last position
+      const lastStart = positions[positions.length - 1];
+      const candidate = words.slice(lastStart).join(' ');
+      // Sanity check — the candidate should be at least 1/4 the length of the original
+      if (candidate.length > s.length / 4 || candidate.split(' ').length >= 5) {
+        s = candidate;
+      }
+    }
+  }
+
+  // Pattern 2: regex collapse for any remaining "X X" duplications
+  for (let n = 8; n >= 2; n--) {
+    const re = new RegExp('\\b((?:\\S+\\s+){' + (n-1) + '}\\S+)(?:\\s+\\1\\b)+', 'gi');
+    let prev;
+    do { prev = s; s = s.replace(re, '$1'); } while (s !== prev);
+  }
+  s = s.replace(/\b(\S+)(?:\s+\1\b)+/gi, '$1');
+
+  return s.trim();
+}
 let toastTimer = null;
 function toast(msg, type) {
   const el = document.getElementById('toast');
