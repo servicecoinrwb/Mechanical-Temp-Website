@@ -152,6 +152,7 @@
                 <li><a href="#financing-cta" class="hover:text-sky-400">Financing</a></li>
                 <li><a href="#about" class="hover:text-sky-400">About Us</a></li>
                 <li><a href="blog.html" class="hover:text-sky-400">Blog</a></li>
+                <li><a href="https://customer.mechanicaltemp.com/" target="_blank" rel="noopener" class="bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded-lg font-bold transition-colors inline-flex items-center gap-2" onclick="if(typeof gtag!=='undefined')gtag('event','click_customer_portal',{'event_category':'engagement','event_label':'desktop_nav'})"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>Customer Portal</a></li>
             </ul>
             <button id="mobile-menu-btn" class="md:hidden" aria-label="Open menu">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
@@ -165,6 +166,7 @@
                 <li class="w-full text-center py-2"><a href="#financing-cta" class="hover:text-sky-400 mobile-link">Financing</a></li>
                 <li class="w-full text-center py-2"><a href="#about" class="hover:text-sky-400 mobile-link">About Us</a></li>
                 <li class="w-full text-center py-2"><a href="blog.html" class="hover:text-sky-400 mobile-link">Blog</a></li>
+                <li class="w-full text-center py-2"><a href="https://customer.mechanicaltemp.com/" target="_blank" rel="noopener" class="bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded-lg font-bold inline-block mobile-link" onclick="if(typeof gtag!=='undefined')gtag('event','click_customer_portal',{'event_category':'engagement','event_label':'mobile_nav'})">💳 Customer Portal</a></li>
             </ul>
         </div>
     </header>
@@ -699,6 +701,7 @@ ABOUT MECHANICAL TEMP:
 - Owner: Brian
 - National accounts: CBRE, Cushman & Wakefield, Sodexo, SMS Assist, Nest Facilitate, Boss Facility Services, CLS, Roth
 - Office email: office@mechanicaltemp.com
+- CUSTOMER PORTAL: https://customer.mechanicaltemp.com/ — Customers can sign up (Google login, no password needed) to view & pay invoices online (credit card via Stripe, USDC crypto, or smart contract), schedule service, and message us. If anyone asks about paying online, checking an invoice, signing up for online access, or wants to "go paperless", point them to the portal. For ANY portal sign-up issues, login problems, or general payment trouble, also tell them to call (313) 282-4758 — Brian or the office can help directly.
 
 ==== CRITICAL: CONVERSATION ROUTING ====
 
@@ -822,6 +825,18 @@ Tempi: "Yes, we do! IAQ systems like humidifiers, UV, and better filtration are 
 Customer: "Do you do water heaters?"
 Tempi: "Yep, water heaters are right in our wheelhouse — tank, tankless, electric, gas, whatever you've got. What's going on with yours, and where are you located?
 [BTN: ✓ Send a tech | Need replacement quote | Tankless install]"
+
+Customer: "Can I pay my bill online?"
+Tempi: "Absolutely! You can pay online anytime at our customer portal: https://customer.mechanicaltemp.com/ — sign in with your email or Google account, no password to set up. We accept credit card, crypto, or smart contract payments. If you run into any sign-up trouble, just give us a call at (313) 282-4758.
+[BTN: 🔗 Open the portal | Other payment options | Question about invoice]"
+
+Customer: "How do I sign up for the customer portal?"
+Tempi: "Super easy — just head to https://customer.mechanicaltemp.com/ and click 'Log In to Portal'. You can sign in with your Google email or any email address (no password needed, just a secure link). If you hit any issues, call us at (313) 282-4758 and we'll get you set up.
+[BTN: 🔗 Go to portal | What can I do there? | Talk to someone]"
+
+Customer: "I lost my invoice, can you resend it?"
+Tempi: "No problem! The easiest way is to log into our customer portal at https://customer.mechanicaltemp.com/ — all your invoices are right there. If you'd rather we email it again, give us your name and the service address so we can pull it up.
+[BTN: 🔗 Open the portal | Type my info | Call us instead]"
 
 REMEMBER: Identify conversation type → collect ONLY the fields for that type → fire [LEAD_READY:TYPE] → done. Every response has [BTN: ...] line at the end.`;
         
