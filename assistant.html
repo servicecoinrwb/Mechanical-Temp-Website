@@ -341,6 +341,29 @@
     const EMAILJS_TEMPLATE = 'template_j68qyhk';
     const EMAILJS_USER = 'IJHcoSxlSQ9OPOJGS';
 
+    // Google Ads conversion label — set this AFTER creating the conversion
+    // action in Google Ads (see DEPLOY.md). Until then, leave empty.
+    const GOOGLE_ADS_CONVERSION_LABEL = ''; // e.g. 'AbCdEfGhIjKl'
+
+    // ============================================================
+    // UTM CAPTURE — pulls ad tracking params from URL
+    // ============================================================
+    const UTM_KEYS = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','gclid'];
+    const utmData = {};
+    (function captureUtm() {
+        const params = new URLSearchParams(window.location.search);
+        UTM_KEYS.forEach(key => {
+            const val = params.get(key);
+            if (val) {
+                utmData[key] = val;
+                try { sessionStorage.setItem('mt_' + key, val); } catch(e) {}
+            } else {
+                try { const stored = sessionStorage.getItem('mt_' + key); if (stored) utmData[key] = stored; } catch(e) {}
+            }
+        });
+        if (document.referrer && !utmData.utm_source) utmData.referrer = document.referrer;
+    })();
+
     // ============================================================
     // CAPABILITIES
     // ============================================================
@@ -662,10 +685,17 @@ REMEMBER: Identify conversation type → collect ONLY the fields for that type �
         const cartSummary = cart.length > 0
             ? `\n\n--- ITEMS IN CART ---\n${cart.map(i => `- ${i.name} ($${i.price})`).join('\n')}\nCart total: $${cart.reduce((s,i)=>s+i.price,0)}`
             : '';
+
+        // Build UTM/campaign attribution block
+        const utmEntries = Object.entries(utmData).filter(([k,v]) => v);
+        const utmSummary = utmEntries.length > 0
+            ? `\n\n--- AD CAMPAIGN ATTRIBUTION ---\n${utmEntries.map(([k,v]) => `${k}: ${v}`).join('\n')}`
+            : '\n\n--- AD CAMPAIGN ATTRIBUTION ---\n(no UTM params — likely direct traffic or organic)';
+
         return {
             from_name: `Tempi (AI page) - ${label}`,
             phone: phoneMatch ? phoneMatch[0] : 'See transcript',
-            message: `${label}\n=========================================\n\nSource: AI Assistant Landing Page\nConversation Type: ${leadType}\nTime: ${new Date().toLocaleString('en-US', { timeZone: 'America/Detroit' })} ET${cartSummary}\n\n--- FULL TRANSCRIPT ---\n\n` +
+            message: `${label}\n=========================================\n\nSource: AI Assistant Landing Page\nConversation Type: ${leadType}\nTime: ${new Date().toLocaleString('en-US', { timeZone: 'America/Detroit' })} ET${utmSummary}${cartSummary}\n\n--- FULL TRANSCRIPT ---\n\n` +
                 conversation.map(m => `[${m.role === 'user' ? 'CUSTOMER' : 'TEMPI'}]: ${m.content.replace(/\[LEAD_READY:[^\]]+\]/g,'').replace(/\[LEAD_READY\]/g,'').replace(/\[BTN:[^\]]+\]/g,'').trim()}`).join('\n\n')
         };
     }
@@ -678,12 +708,26 @@ REMEMBER: Identify conversation type → collect ONLY the fields for that type �
             const leadData = extractLeadInfo(conversationHistory, leadType);
             await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, leadData);
             console.log(`Lead sent: ${leadType}`);
+
+            // GA4 event with campaign context
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'chat_lead', {
                     'event_category': 'conversion',
                     'event_label': leadType,
-                    'source': 'ai_landing_page'
+                    'source': 'ai_landing_page',
+                    'campaign': utmData.utm_campaign || 'direct',
+                    'keyword': utmData.utm_term || 'none',
+                    'utm_source': utmData.utm_source || 'direct'
                 });
+
+                // Google Ads conversion — only fires if you've set the conversion label
+                if (GOOGLE_ADS_CONVERSION_LABEL) {
+                    gtag('event', 'conversion', {
+                        'send_to': `AW-11260644372/${GOOGLE_ADS_CONVERSION_LABEL}`,
+                        'value': leadType === 'COMMERCIAL_DISPATCH' ? 500 : 100,
+                        'currency': 'USD'
+                    });
+                }
             }
         } catch (err) {
             console.error('Lead email failed:', err);
