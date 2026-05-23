@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mechanical Temp - Express Booking</title>
+    <title>Mechanical Temp - How can we help?</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -20,14 +20,33 @@
     <style>
         body { font-family: 'Inter', sans-serif; }
         html { scroll-behavior: smooth; }
+        @keyframes blink { 0%, 80%, 100% { opacity: 0.3; } 40% { opacity: 1; } }
+        .typing-dot { animation: blink 1.2s infinite; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        /* hide scrollbar but allow scroll inside chat thread */
+        .chat-scroll::-webkit-scrollbar { width: 6px; }
+        .chat-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900">
     <div id="root"></div>
 
-    <script type="text/babel">
-        const { useState, useRef } = React;
+    <script type="text/babel" data-presets="env,react">
+        const { useState, useRef, useEffect } = React;
 
+        /* ============================================================
+           CONFIG — edit these to retarget the page
+           ============================================================ */
+        const CLAUDE_API_KEY = ""; // optional: leave empty to use proxy below
+        const CLAUDE_PROXY_URL = "https://api.anthropic.com/v1/messages"; // see notes — you'll want your own proxy in production
+        const FORMSPREE_ENDPOINT = "https://formspree.io/f/xldwzbal";
+        const BUSINESS_PHONE = "(313) 282-4758";
+        const BUSINESS_PHONE_RAW = "3132824758";
+
+        /* ============================================================
+           ICONS (kept inline to match your existing file)
+           ============================================================ */
         const IconBase = ({ children, size = 24, className = "", ...props }) => (
             <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} {...props}>{children}</svg>
         );
@@ -45,23 +64,18 @@
         const ArrowRight = (p) => <IconBase {...p}><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></IconBase>;
         const Info = (p) => <IconBase {...p}><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></IconBase>;
         const ShieldCheck = (p) => <IconBase {...p}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></IconBase>;
+        const Send = (p) => <IconBase {...p}><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></IconBase>;
+        const MessageCircle = (p) => <IconBase {...p}><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></IconBase>;
+        const Sparkles = (p) => <IconBase {...p}><path d="M12 3l1.9 5.8a2 2 0 0 0 1.3 1.3L21 12l-5.8 1.9a2 2 0 0 0-1.3 1.3L12 21l-1.9-5.8a2 2 0 0 0-1.3-1.3L3 12l5.8-1.9a2 2 0 0 0 1.3-1.3L12 3z"/></IconBase>;
 
-        const HVACBookingPage = () => {
-          const [view, setView] = useState('home');
-          const [activeCategory, setActiveCategory] = useState(null);
-          const [cart, setCart] = useState([]);
-          const [isOrderPlaced, setIsOrderPlaced] = useState(false);
-          const [isSubmitting, setIsSubmitting] = useState(false);
-          const [showItemDetails, setShowItemDetails] = useState(null);
-          const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-          const menuSectionRef = useRef(null);
-
-          const scrollToMenu = () => menuSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-
-          const categories = [
+        /* ============================================================
+           SERVICE MENU — shared between Cass and the menu UI
+           ============================================================ */
+        const categories = [
             {
               id: 'heating', title: 'Heating', subtitle: 'Furnaces, Boilers & Heat Pumps',
               icon: <Flame size={40} className="text-orange-500" />,
+              iconSm: <Flame size={22} className="text-orange-500" />,
               color: 'bg-orange-50', accent: 'border-orange-500', textAccent: 'text-orange-600',
               items: [
                 { id: 'h1', name: 'The "No Heat" Diagnostic', description: 'System down? We find the problem. Includes trip & 1hr labor.', price: 89, popular: true, details: 'Expert troubleshooting to identify the root cause. Upfront pricing for any further repairs.', duration: '60-90 mins' },
@@ -72,6 +86,7 @@
             {
               id: 'cooling', title: 'Cooling', subtitle: 'A/C Units & Mini Splits',
               icon: <Snowflake size={40} className="text-sky-500" />,
+              iconSm: <Snowflake size={22} className="text-sky-500" />,
               color: 'bg-sky-50', accent: 'border-sky-500', textAccent: 'text-sky-600',
               items: [
                 { id: 'c1', name: 'The "No Cool" Diagnostic', description: 'Blowing warm air? We will diagnose the issue fast.', price: 89, popular: true, details: 'Comprehensive testing of refrigerant, capacitor, and compressor.', duration: '60-90 mins' },
@@ -81,6 +96,7 @@
             {
               id: 'iaq', title: 'Air Quality', subtitle: 'Humidifiers & Filters',
               icon: <Wind size={40} className="text-green-500" />,
+              iconSm: <Wind size={22} className="text-green-500" />,
               color: 'bg-green-50', accent: 'border-green-500', textAccent: 'text-green-600',
               items: [
                 { id: 'a1', name: 'Whole Home Humidifier', description: 'Installation of bypass humidifier.', price: 550, details: 'Stop dry winter air. Includes unit and installation.', duration: '3 hours' },
@@ -90,54 +106,217 @@
             {
               id: 'plans', title: 'Service Plans', subtitle: 'Maintenance Memberships',
               icon: <ShieldCheck size={40} className="text-purple-500" />,
+              iconSm: <ShieldCheck size={22} className="text-purple-500" />,
               color: 'bg-purple-50', accent: 'border-purple-500', textAccent: 'text-purple-600',
               items: [
                 { id: 'p1', name: 'Mechanical Temp Service Plan', description: '2 Visits/Yr + Priority Status + Discounts.', price: 55, isSubscription: true, popular: true, details: 'Total peace of mind. Includes Fall and Spring tune-ups and 15% off repairs.', duration: 'Monthly' }
               ]
             }
-          ];
+        ];
 
-          const addToCart = (item) => setCart([...cart, item]);
+        const ALL_ITEMS = categories.flatMap(cat =>
+            cat.items.map(it => ({ ...it, categoryId: cat.id, categoryTitle: cat.title }))
+        );
+
+        /* ============================================================
+           CASS — the AI concierge
+           ============================================================ */
+        const CASS_SYSTEM_PROMPT = `You are Cass, the AI concierge for Mechanical Temp LLC — a commercial & residential HVAC contractor in Southfield, MI (23093 Telegraph Rd). You greet visitors on the website and help them get to the right service quickly.
+
+You are the FIRST point of contact, like a warm, knowledgeable receptionist who happens to know HVAC.
+
+YOUR BOOKABLE SERVICE MENU (these are the ONLY services someone can book directly here — use the exact IDs):
+${JSON.stringify(ALL_ITEMS.map(i => ({ id: i.id, name: i.name, price: i.price, description: i.description, category: i.categoryTitle })), null, 2)}
+
+How you work:
+1. Listen to what's happening with their system. Ask 1-2 short clarifying questions if needed — don't interrogate, this is a website not a phone call.
+2. When you have enough info, recommend specific menu item(s) by ID in the "suggest" array. The customer will see them as clickable cards under the chat.
+3. If their issue is BEYOND the menu (multi-building commercial quote, national account dispatch, complex install requiring estimate), set intent to "quote_request" or "national_account", tell them you'll have Brian (the owner) call them, and ask for their name + phone number.
+4. For general questions (hours, service area, what kind of work you do) — answer briefly and offer to help with a booking.
+5. Service area: metro Detroit / Southeast Michigan. Open 7am-7pm. Phone is ${BUSINESS_PHONE} if they want to call directly.
+
+Tone: Warm, plain-spoken, like a real receptionist. Short responses — usually 2-3 sentences. No bullet lists in the reply. Don't say "I understand" or "I'm sorry to hear that" robotically. Don't use emoji.
+
+Respond ONLY with a JSON object in this exact shape (no markdown fences, no preamble, no trailing text):
+{
+  "reply": "your short message to the visitor",
+  "suggest": ["item_id_1", "item_id_2"],
+  "intent": "service_booking" | "quote_request" | "national_account" | "general_question" | "unclear",
+  "contact_captured": { "name": "...", "phone": "..." } | null
+}
+
+"suggest" = item IDs from the menu above that you want to recommend right now. Empty array [] if you're still gathering info or it's not a menu service.
+"contact_captured" = only fill this in once the visitor has given you BOTH their name and phone number (for quote/national-account requests). Otherwise null.`;
+
+        async function callCass(history) {
+            const body = {
+                model: "claude-sonnet-4-5",
+                max_tokens: 800,
+                system: CASS_SYSTEM_PROMPT,
+                messages: history
+            };
+            const headers = { "Content-Type": "application/json" };
+            if (CLAUDE_API_KEY) {
+                headers["x-api-key"] = CLAUDE_API_KEY;
+                headers["anthropic-version"] = "2023-06-01";
+                headers["anthropic-dangerous-direct-browser-access"] = "true";
+            }
+            try {
+                const response = await fetch(CLAUDE_PROXY_URL, {
+                    method: "POST",
+                    headers,
+                    body: JSON.stringify(body)
+                });
+                if (!response.ok) throw new Error("API " + response.status);
+                const data = await response.json();
+                const textBlock = data.content.find(b => b.type === 'text');
+                let raw = (textBlock ? textBlock.text : '').replace(/```json|```/g, '').trim();
+                try { return JSON.parse(raw); }
+                catch {
+                    return { reply: raw || "Sorry — I glitched. Could you say that again?", suggest: [], intent: "unclear", contact_captured: null };
+                }
+            } catch (err) {
+                console.error("Cass error:", err);
+                return {
+                    reply: `I'm having trouble connecting right now. You can also call us directly at ${BUSINESS_PHONE} — we'll pick up.`,
+                    suggest: [],
+                    intent: "unclear",
+                    contact_captured: null
+                };
+            }
+        }
+
+        /* ============================================================
+           MAIN APP
+           ============================================================ */
+        const HVACBookingPage = () => {
+          const [view, setView] = useState('hero'); // 'hero' | 'chat' | 'category' | 'checkout' | 'confirmed'
+          const [activeCategory, setActiveCategory] = useState(null);
+          const [cart, setCart] = useState([]);
+          const [isSubmitting, setIsSubmitting] = useState(false);
+          const [showItemDetails, setShowItemDetails] = useState(null);
+          const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+          // chat state
+          const [history, setHistory] = useState([]);
+          const [messages, setMessages] = useState([]); // { who: 'ai'|'user', text }
+          const [suggested, setSuggested] = useState([]); // array of item IDs
+          const [intent, setIntent] = useState(null);
+          const [capturedContact, setCapturedContact] = useState(null);
+          const [chatLoading, setChatLoading] = useState(false);
+          const [chatInput, setChatInput] = useState('');
+          const [heroInput, setHeroInput] = useState('');
+          const threadRef = useRef(null);
+
+          useEffect(() => {
+              if (threadRef.current) threadRef.current.scrollTop = threadRef.current.scrollHeight;
+          }, [messages, suggested, chatLoading]);
+
+          const addToCart = (item) => {
+              setCart(c => [...c, item]);
+              if (window.gtag) window.gtag('event', 'add_to_cart', { item_id: item.id, item_name: item.name, value: item.price });
+          };
           const removeFromCart = (index) => setCart(cart.filter((_, i) => i !== index));
-          const calculateTotal = () => cart.reduce((total, item) => total + item.price, 0);
+          const calculateTotal = () => cart.reduce((t, i) => t + i.price, 0);
+
+          const startChat = async (initialMsg) => {
+              setMessages([]);
+              setSuggested([]);
+              setIntent(null);
+              setCapturedContact(null);
+              setHistory([]);
+              setView('chat');
+              if (initialMsg) {
+                  await sendChatMessage(initialMsg, []);
+              } else {
+                  setMessages([{ who: 'ai', text: "Hi there — thanks for stopping by Mechanical Temp. What's going on with your system today?" }]);
+              }
+          };
+
+          const sendChatMessage = async (text, currentHistory) => {
+              if (!text.trim() || chatLoading) return;
+              const newHistory = [...(currentHistory ?? history), { role: 'user', content: text }];
+              setHistory(newHistory);
+              setMessages(m => [...m, { who: 'user', text }]);
+              setChatInput('');
+              setChatLoading(true);
+
+              const result = await callCass(newHistory);
+
+              setHistory(h => [...h, { role: 'assistant', content: JSON.stringify(result) }]);
+              setMessages(m => [...m, { who: 'ai', text: result.reply }]);
+
+              // validate suggested IDs against real menu
+              const validIds = (result.suggest || []).filter(id => ALL_ITEMS.some(it => it.id === id));
+              setSuggested(validIds);
+              setIntent(result.intent || 'unclear');
+              if (result.contact_captured && result.contact_captured.name && result.contact_captured.phone) {
+                  setCapturedContact(result.contact_captured);
+                  // fire to Formspree as a lead even before checkout
+                  submitLead(result.contact_captured, result.intent, newHistory);
+              }
+              setChatLoading(false);
+
+              if (window.gtag) window.gtag('event', 'cass_message', { intent: result.intent });
+          };
+
+          const submitLead = async (contact, intent, transcriptHistory) => {
+              const fd = new FormData();
+              fd.append('source', 'cass-chat-lead');
+              fd.append('intent', intent || 'unclear');
+              fd.append('name', contact.name);
+              fd.append('phone', contact.phone);
+              fd.append('transcript', transcriptHistory.map(m => `${m.role}: ${typeof m.content === 'string' ? m.content : JSON.stringify(m.content)}`).join('\n\n'));
+              try {
+                  await fetch(FORMSPREE_ENDPOINT, { method: 'POST', body: fd, headers: { 'Accept': 'application/json' } });
+              } catch (e) { console.error('Lead submit failed', e); }
+          };
 
           const handlePlaceOrder = async (e) => {
             e.preventDefault();
             setIsSubmitting(true);
             const formData = new FormData(e.target);
+            // attach chat transcript if present
+            if (history.length > 0) {
+                formData.append('chat_transcript', history.map(m => `${m.role}: ${typeof m.content === 'string' ? m.content : JSON.stringify(m.content)}`).join('\n\n'));
+            }
             try {
-              const response = await fetch("https://formspree.io/f/xldwzbal", {
+              const response = await fetch(FORMSPREE_ENDPOINT, {
                 method: "POST", body: formData, headers: { 'Accept': 'application/json' }
               });
               if (response.ok) {
-                setIsOrderPlaced(true);
+                if (window.gtag) window.gtag('event', 'booking_submitted', { value: calculateTotal() });
+                setView('confirmed');
                 setIsSubmitting(false);
                 setCart([]);
-                setTimeout(() => { setIsOrderPlaced(false); setView('home'); }, 5000);
+                setTimeout(() => setView('hero'), 5000);
               } else {
-                alert("Issue submitting. Please call (313) 282-4758.");
+                alert(`Issue submitting. Please call ${BUSINESS_PHONE}.`);
                 setIsSubmitting(false);
               }
             } catch {
-              alert("Network error. Please call (313) 282-4758.");
+              alert(`Network error. Please call ${BUSINESS_PHONE}.`);
               setIsSubmitting(false);
             }
           };
 
+          /* ============================================================
+             NAVBAR + FOOTER
+             ============================================================ */
           const Navbar = () => (
             <nav className="bg-gray-900/95 sticky top-0 z-50 p-4 shadow-md backdrop-blur-sm">
               <div className="container mx-auto flex justify-between items-center text-white">
-                <div className="flex items-center gap-3 cursor-pointer" onClick={() => setView('home')}>
-                  <img src="https://i.imgur.com/YJvJw7V.png" alt="Mechanical Temp" className="h-10 w-auto" />
-                  <span className="font-bold text-white text-base hidden sm:inline"></span>
+                <div className="flex items-center gap-3 cursor-pointer" onClick={() => setView('hero')}>
+                  <img src="https://i.imgur.com/YJvJw7V.png" alt="Mechanical Temp" className="h-10 w-auto" onError={(e)=>{e.target.style.display='none'}} />
+                  <span className="font-bold text-white text-base">Mechanical Temp</span>
                 </div>
                 <ul className="hidden md:flex items-center space-x-6 text-sm font-semibold">
                   <li><a href="https://www.mechanicaltemp.com/#services" className="hover:text-sky-400 transition-colors">Services</a></li>
                   <li><a href="https://www.mechanicaltemp.com/service-plan.html" className="hover:text-sky-400 transition-colors">Service Plan</a></li>
                   <li><a href="https://www.mechanicaltemp.com/#offers" className="hover:text-sky-400 transition-colors">Offers</a></li>
                   <li>
-                    <a href="tel:313-282-4758" className="bg-sky-600 hover:bg-sky-500 px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
-                      <Phone size={16} /> (313) 282-4758
+                    <a href={`tel:${BUSINESS_PHONE_RAW}`} className="bg-sky-600 hover:bg-sky-500 px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
+                      <Phone size={16} /> {BUSINESS_PHONE}
                     </a>
                   </li>
                 </ul>
@@ -148,7 +327,7 @@
               {mobileMenuOpen && (
                 <div className="md:hidden absolute top-full left-0 w-full bg-gray-900 border-t border-gray-800 p-4 flex flex-col gap-4 text-center">
                   <a href="https://www.mechanicaltemp.com" className="text-white font-bold">Return to Main Site</a>
-                  <a href="tel:313-282-4758" className="text-sky-400 font-bold">Call Now</a>
+                  <a href={`tel:${BUSINESS_PHONE_RAW}`} className="text-sky-400 font-bold">Call Now</a>
                 </div>
               )}
             </nav>
@@ -156,17 +335,20 @@
 
           const Footer = () => (
             <footer className="bg-gray-900 pt-16 pb-8 px-6 text-white text-center mt-12">
-              <img src="https://i.imgur.com/YJvJw7V.png" alt="Mechanical Temp" className="h-12 w-auto mx-auto mb-4" />
+              <img src="https://i.imgur.com/YJvJw7V.png" alt="Mechanical Temp" className="h-12 w-auto mx-auto mb-4" onError={(e)=>{e.target.style.display='none'}} />
               <h3 className="text-2xl font-bold text-white mb-2">Mechanical Temp</h3>
               <p className="text-slate-400 mb-6">23093 Telegraph Rd, Southfield, MI 48033</p>
               <div className="space-y-2 text-slate-300">
-                <p><a href="tel:3132824758" className="hover:text-sky-400">Call Us: (313) 282-4758</a></p>
+                <p><a href={`tel:${BUSINESS_PHONE_RAW}`} className="hover:text-sky-400">Call Us: {BUSINESS_PHONE}</a></p>
                 <p className="text-sm opacity-75">&copy; 2025 Mechanical Temp. All Rights Reserved.</p>
               </div>
             </footer>
           );
 
-          if (isOrderPlaced) {
+          /* ============================================================
+             CONFIRMED VIEW
+             ============================================================ */
+          if (view === 'confirmed') {
             return (
               <div className="min-h-screen bg-green-500 flex flex-col items-center justify-center text-white p-8 text-center">
                 <div className="bg-white text-green-500 p-6 rounded-full mb-6 shadow-lg animate-bounce">
@@ -178,15 +360,19 @@
                   <p className="text-sm font-medium">Estimated Call Back</p>
                   <p className="text-2xl font-bold">Within 10 Mins</p>
                 </div>
-                <button onClick={() => setView('home')} className="mt-8 text-sm underline opacity-75 hover:opacity-100">Book Another Service</button>
+                <button onClick={() => setView('hero')} className="mt-8 text-sm underline opacity-75 hover:opacity-100">Book Another Service</button>
               </div>
             );
           }
 
+          /* ============================================================
+             MAIN
+             ============================================================ */
           return (
             <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-20 md:pb-0">
               <Navbar />
 
+              {/* Item details modal */}
               {showItemDetails && (
                 <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
                   <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
@@ -207,40 +393,80 @@
                 </div>
               )}
 
-              {view === 'home' && (
+              {/* ========== HERO ========== */}
+              {view === 'hero' && (
                 <div>
-                  <header className="relative bg-gray-900 text-white py-16 px-6 text-center overflow-hidden">
-                    <div className="absolute inset-0 opacity-20 bg-cover bg-center" style={{backgroundImage: "url('https://images.squarespace-cdn.com/content/v1/64b8ce7983e67906ccb6616f/ad1eb7df-a94c-4108-a72b-9868d33fb7cf/truck.jpg?format=2500w')"}} />
-                    <div className="absolute inset-0 bg-gradient-to-b from-gray-900/50 to-gray-900" />
-                    <div className="relative z-10 max-w-4xl mx-auto">
-                      <h1 className="text-4xl md:text-6xl font-black uppercase tracking-wider mb-4 leading-tight">
-                        Express <span className="text-sky-500">Booking</span>
+                  <header className="relative bg-gradient-to-b from-gray-900 via-gray-900 to-slate-900 text-white py-16 px-6 overflow-hidden">
+                    <div className="absolute inset-0 opacity-10 bg-cover bg-center" style={{backgroundImage: "url('https://images.squarespace-cdn.com/content/v1/64b8ce7983e67906ccb6616f/ad1eb7df-a94c-4108-a72b-9868d33fb7cf/truck.jpg?format=2500w')"}} />
+                    <div className="relative z-10 max-w-2xl mx-auto text-center">
+                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/15 border border-sky-500/30 text-sky-300 text-xs font-semibold uppercase tracking-wider mb-5">
+                        <Sparkles size={14} /> Now with instant assistance
+                      </div>
+                      <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-4 leading-tight">
+                        How can we <span className="text-sky-400">help</span> you today?
                       </h1>
-                      <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto mb-8">
-                        Skip the phone tag. Select your service below to get instant pricing and priority dispatch in Metro Detroit.
+                      <p className="text-base md:text-lg text-slate-300 max-w-lg mx-auto mb-8">
+                        Tell our digital assistant what's going on — or browse the menu below for instant booking.
                       </p>
-                      <button onClick={scrollToMenu} className="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-lg transition-all transform hover:scale-105">
-                        Start My Order
-                      </button>
+
+                      {/* The big input */}
+                      <div className="relative max-w-xl mx-auto mb-4">
+                        <input
+                          type="text"
+                          value={heroInput}
+                          onChange={e => setHeroInput(e.target.value)}
+                          onKeyDown={e => { if (e.key === 'Enter' && heroInput.trim()) startChat(heroInput.trim()); }}
+                          placeholder="e.g. my furnace won't turn on..."
+                          className="w-full pl-5 pr-16 py-4 text-base bg-white/10 backdrop-blur border border-white/20 rounded-2xl text-white placeholder-slate-400 focus:bg-white/15 focus:border-sky-400 outline-none transition"
+                        />
+                        <button
+                          onClick={() => heroInput.trim() && startChat(heroInput.trim())}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 bg-sky-500 hover:bg-sky-400 disabled:opacity-40 text-white w-10 h-10 rounded-xl flex items-center justify-center transition"
+                          disabled={!heroInput.trim()}
+                        >
+                          <ArrowRight size={18} />
+                        </button>
+                      </div>
+
+                      {/* Quick chips */}
+                      <div className="flex flex-wrap gap-2 justify-center mb-8">
+                        {[
+                          { label: 'No heat', msg: "My furnace won't turn on, I have no heat." },
+                          { label: 'No cool', msg: 'My AC is running but not cooling.' },
+                          { label: 'Need a tune-up', msg: 'I want to schedule a seasonal tune-up.' },
+                          { label: 'Commercial quote', msg: "I'm a property manager and need a quote for HVAC service across multiple buildings." }
+                        ].map(chip => (
+                          <button
+                            key={chip.label}
+                            onClick={() => startChat(chip.msg)}
+                            className="px-3 py-1.5 text-xs font-medium bg-white/8 hover:bg-white/15 border border-white/15 rounded-full transition"
+                          >
+                            {chip.label}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </header>
 
-                  <main className="container mx-auto px-4 py-12" ref={menuSectionRef}>
-                    <div className="text-center mb-10">
-                      <h2 className="text-3xl font-bold text-slate-800">Select Service Category</h2>
-                      <p className="text-slate-600 mt-2">Choose an option to see available services.</p>
+                  {/* OR divider + menu */}
+                  <main className="container mx-auto px-4 py-12 max-w-4xl">
+                    <div className="flex items-center gap-4 mb-10 max-w-md mx-auto">
+                      <div className="flex-1 h-px bg-slate-300" />
+                      <span className="text-xs uppercase tracking-widest font-semibold text-slate-500">Or browse the menu</span>
+                      <div className="flex-1 h-px bg-slate-300" />
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {categories.map((cat) => (
                         <div key={cat.id} onClick={() => { setActiveCategory(cat); setView('category'); }}
-                          className={`${cat.color} p-6 rounded-2xl border-2 border-transparent hover:shadow-xl transition-all cursor-pointer flex items-center gap-6 group`}>
-                          <div className="bg-white p-4 rounded-full shadow-sm group-hover:scale-110 transition-transform">
+                          className={`${cat.color} p-5 rounded-2xl border-2 border-transparent hover:shadow-xl hover:-translate-y-0.5 transition-all cursor-pointer flex items-center gap-5 group`}>
+                          <div className="bg-white p-3 rounded-xl shadow-sm group-hover:scale-110 transition-transform">
                             {cat.icon}
                           </div>
-                          <div>
-                            <h3 className="font-bold text-xl text-slate-900">{cat.title}</h3>
-                            <p className="text-sm text-slate-600 font-medium">{cat.subtitle}</p>
-                            <div className="mt-2 text-sm font-bold text-sky-600 flex items-center gap-1">View Options <ArrowRight size={16}/></div>
+                          <div className="flex-1">
+                            <h3 className="font-bold text-lg text-slate-900">{cat.title}</h3>
+                            <p className="text-sm text-slate-600">{cat.subtitle}</p>
+                            <div className="mt-1.5 text-sm font-bold text-sky-600 flex items-center gap-1">View Options <ArrowRight size={14}/></div>
                           </div>
                         </div>
                       ))}
@@ -250,10 +476,115 @@
                 </div>
               )}
 
+              {/* ========== CHAT VIEW ========== */}
+              {view === 'chat' && (
+                <div className="max-w-2xl mx-auto min-h-screen bg-white">
+                  <div className="bg-slate-100 sticky top-[72px] z-40 p-4 border-b border-slate-200">
+                    <button onClick={() => setView('hero')} className="flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-slate-900 mb-3 bg-white w-fit px-3 py-1 rounded-full border border-slate-200">
+                      <ChevronLeft size={16} /> Back
+                    </button>
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-sky-100 flex items-center justify-center text-sky-700 font-bold text-sm">CS</div>
+                      <div>
+                        <p className="font-bold text-slate-900 leading-tight">Cass</p>
+                        <p className="text-xs text-slate-500 flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span> Digital concierge · responds instantly
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div ref={threadRef} className="p-4 pb-6 flex flex-col gap-3 chat-scroll" style={{ minHeight: '50vh' }}>
+                    {messages.map((m, i) => (
+                      <div key={i} className={`flex gap-2 ${m.who === 'user' ? 'justify-end' : ''}`}>
+                        {m.who === 'ai' && (
+                          <div className="w-7 h-7 rounded-full bg-sky-100 flex items-center justify-center text-sky-700 font-bold text-[10px] flex-shrink-0 mt-1">CS</div>
+                        )}
+                        <div className={`max-w-[80%] px-4 py-2.5 text-sm leading-relaxed ${
+                          m.who === 'user'
+                            ? 'bg-sky-600 text-white rounded-2xl rounded-br-md'
+                            : 'bg-slate-100 text-slate-900 rounded-2xl rounded-bl-md'
+                        }`}>{m.text}</div>
+                      </div>
+                    ))}
+                    {chatLoading && (
+                      <div className="flex gap-2">
+                        <div className="w-7 h-7 rounded-full bg-sky-100 flex items-center justify-center text-sky-700 font-bold text-[10px] flex-shrink-0 mt-1">CS</div>
+                        <div className="bg-slate-100 rounded-2xl rounded-bl-md px-4 py-3 flex gap-1.5">
+                          <span className="typing-dot w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                          <span className="typing-dot w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                          <span className="typing-dot w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Suggested service cards */}
+                  {suggested.length > 0 && (
+                    <div className="px-4 mb-4">
+                      <div className="bg-sky-50 border border-sky-200 rounded-xl p-3">
+                        <p className="text-[11px] uppercase tracking-widest font-bold text-sky-700 mb-2 flex items-center gap-1.5">
+                          <Sparkles size={12}/> Cass suggests
+                        </p>
+                        <div className="space-y-2">
+                          {suggested.map(id => {
+                            const it = ALL_ITEMS.find(i => i.id === id);
+                            if (!it) return null;
+                            return (
+                              <div key={id} className="bg-white rounded-lg p-3 flex justify-between items-center gap-3 border border-sky-100">
+                                <div className="flex-1 min-w-0">
+                                  <p className="font-bold text-sm text-slate-900">{it.name}</p>
+                                  <p className="text-xs text-slate-500 mt-0.5 leading-snug">{it.description}</p>
+                                </div>
+                                <div className="flex flex-col items-end gap-1.5 flex-shrink-0">
+                                  <span className="font-bold text-sm">${it.price}{it.isSubscription && <span className="text-[10px] text-slate-400 font-normal">/mo</span>}</span>
+                                  <button onClick={() => addToCart(it)} className="bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold px-3 py-1 rounded-md">Add</button>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Contact captured banner */}
+                  {capturedContact && (
+                    <div className="px-4 mb-4">
+                      <div className="bg-green-50 border border-green-200 rounded-xl p-3 flex items-center gap-2">
+                        <Check className="text-green-600 flex-shrink-0" size={18}/>
+                        <p className="text-sm text-green-900">Got it — we'll have Brian call <strong>{capturedContact.name}</strong> at {capturedContact.phone} shortly.</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Chat input */}
+                  <div className="sticky bottom-0 bg-white border-t border-slate-200 p-3 flex gap-2">
+                    <input
+                      type="text"
+                      value={chatInput}
+                      onChange={e => setChatInput(e.target.value)}
+                      onKeyDown={e => { if (e.key === 'Enter') sendChatMessage(chatInput); }}
+                      disabled={chatLoading}
+                      placeholder="Type a message..."
+                      className="flex-1 px-4 py-3 bg-slate-100 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-sky-400 outline-none disabled:opacity-50"
+                    />
+                    <button
+                      onClick={() => sendChatMessage(chatInput)}
+                      disabled={!chatInput.trim() || chatLoading}
+                      className="bg-sky-600 hover:bg-sky-700 disabled:opacity-40 text-white w-12 h-12 rounded-xl flex items-center justify-center"
+                    >
+                      <Send size={18}/>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* ========== CATEGORY VIEW ========== */}
               {view === 'category' && activeCategory && (
                 <div className="max-w-3xl mx-auto min-h-screen bg-white">
                   <div className={`${activeCategory.color} sticky top-[72px] z-40 p-6 shadow-sm`}>
-                    <button onClick={() => setView('home')} className="flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-slate-900 mb-4 bg-white/50 w-fit px-3 py-1 rounded-full">
+                    <button onClick={() => setView('hero')} className="flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-slate-900 mb-4 bg-white/50 w-fit px-3 py-1 rounded-full">
                       <ChevronLeft size={16} /> Back to Categories
                     </button>
                     <div className="flex items-center gap-4">
@@ -283,14 +614,28 @@
                         </div>
                       </div>
                     ))}
+
+                    {/* Ask Cass escape hatch */}
+                    <div className="mt-6 bg-sky-50 border border-sky-200 rounded-xl p-4 flex items-center gap-3">
+                      <MessageCircle className="text-sky-700 flex-shrink-0" size={22}/>
+                      <div className="flex-1">
+                        <p className="text-sm font-semibold text-slate-900">Not sure which is right?</p>
+                        <p className="text-xs text-slate-600">Cass can help you pick the right service in 30 seconds.</p>
+                      </div>
+                      <button
+                        onClick={() => startChat(`I was looking at your ${activeCategory.title.toLowerCase()} options but I'm not sure which one fits my situation.`)}
+                        className="bg-sky-600 hover:bg-sky-700 text-white text-sm font-bold px-4 py-2 rounded-lg whitespace-nowrap"
+                      >Ask Cass</button>
+                    </div>
                   </div>
                 </div>
               )}
 
+              {/* ========== CHECKOUT ========== */}
               {view === 'checkout' && (
                 <div className="min-h-screen bg-white">
                   <div className="bg-gray-900 text-white p-4 sticky top-[72px] z-40 flex items-center gap-2 shadow-md">
-                    <button onClick={() => setView('home')} className="p-1 hover:bg-gray-700 rounded-full"><ChevronLeft size={20} /></button>
+                    <button onClick={() => setView('hero')} className="p-1 hover:bg-gray-700 rounded-full"><ChevronLeft size={20} /></button>
                     <h2 className="font-bold text-lg">Your Request</h2>
                   </div>
                   <div className="max-w-xl mx-auto p-6 pb-32">
@@ -298,7 +643,7 @@
                       <div className="text-center py-20 opacity-50">
                         <ShoppingCart size={48} className="mx-auto mb-4" />
                         <p>Tray is empty.</p>
-                        <button onClick={() => setView('home')} className="text-sky-600 font-bold mt-4 underline">Add Services</button>
+                        <button onClick={() => setView('hero')} className="text-sky-600 font-bold mt-4 underline">Add Services</button>
                       </div>
                     ) : (
                       <>
@@ -330,10 +675,23 @@
                           </div>
                           {cart.map((item, i) => <input key={i} type="hidden" name={`Item ${i+1}`} value={`${item.name} - $${item.price}`} />)}
                           <input type="hidden" name="Total" value={`$${calculateTotal()}`} />
-                          <div><label className="block text-xs font-bold text-slate-500 uppercase mb-1">Full Name</label><input required type="text" name="name" className="w-full bg-white border border-slate-300 rounded-lg p-3 focus:border-sky-500 outline-none" placeholder="John Doe" /></div>
-                          <div><label className="block text-xs font-bold text-slate-500 uppercase mb-1">Phone</label><input required type="tel" name="phone" className="w-full bg-white border border-slate-300 rounded-lg p-3 focus:border-sky-500 outline-none" placeholder="(313) 555-0123" /></div>
-                          <div><label className="block text-xs font-bold text-slate-500 uppercase mb-1">Email</label><input required type="email" name="email" className="w-full bg-white border border-slate-300 rounded-lg p-3 focus:border-sky-500 outline-none" placeholder="john@example.com" /></div>
-                          <div><label className="block text-xs font-bold text-slate-500 uppercase mb-1">Address</label><input required type="text" name="address" className="w-full bg-white border border-slate-300 rounded-lg p-3 focus:border-sky-500 outline-none" placeholder="123 Main St, Southfield" /></div>
+                          <input type="hidden" name="source" value="express-booking" />
+                          <div>
+                            <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Full Name</label>
+                            <input required type="text" name="name" defaultValue={capturedContact?.name || ''} className="w-full bg-white border border-slate-300 rounded-lg p-3 focus:border-sky-500 outline-none" placeholder="John Doe" />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Phone</label>
+                            <input required type="tel" name="phone" defaultValue={capturedContact?.phone || ''} className="w-full bg-white border border-slate-300 rounded-lg p-3 focus:border-sky-500 outline-none" placeholder="(313) 555-0123" />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Email</label>
+                            <input required type="email" name="email" className="w-full bg-white border border-slate-300 rounded-lg p-3 focus:border-sky-500 outline-none" placeholder="john@example.com" />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Address</label>
+                            <input required type="text" name="address" className="w-full bg-white border border-slate-300 rounded-lg p-3 focus:border-sky-500 outline-none" placeholder="123 Main St, Southfield" />
+                          </div>
                           <button type="submit" disabled={isSubmitting} className="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold text-lg py-4 rounded-xl shadow-lg transition-all flex justify-center items-center gap-2 disabled:opacity-50">
                             {isSubmitting ? "Sending..." : <><span>Confirm Request</span><ArrowRight size={20} /></>}
                           </button>
@@ -344,6 +702,7 @@
                 </div>
               )}
 
+              {/* Sticky cart bar */}
               {view !== 'checkout' && cart.length > 0 && (
                 <div className="fixed bottom-6 left-6 right-6 z-50 max-w-md mx-auto">
                   <button onClick={() => setView('checkout')} className="w-full bg-gray-900 text-white p-4 rounded-xl shadow-2xl flex justify-between items-center hover:bg-gray-800 transition-colors border border-gray-700">
