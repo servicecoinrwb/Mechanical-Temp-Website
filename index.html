@@ -16,36 +16,13 @@
     <title>Expert HVAC Services in Southfield & Metro Detroit | Mechanical Temp</title>
     <meta name="description" content="Mechanical Temp offers expert residential and commercial HVAC services in Southfield, MI and Metro Detroit. 24/7 emergency repair, installation, and maintenance for furnaces & AC.">
     
-    <!-- =================================================================== -->
-    <!-- CANONICAL TAG TO PREVENT DUPLICATE CONTENT                          -->
-    <!-- =================================================================== -->
     <link rel="canonical" href="https://www.mechanicaltemp.com/" />
-
-    <!-- =================================================================== -->
-    <!-- PERFORMANCE: Preload hero image (LCP element)                       -->
-    <!-- =================================================================== -->
     <link rel="preload" as="image" href="https://imageview.mechanicaltemp.com/objects/uploads/563e6147-a505-4919-97da-dd365ecce41a" fetchpriority="high">
-
-    <!-- =================================================================== -->
-    <!-- PERFORMANCE: DNS prefetch + preconnect for third-party origins      -->
-    <!-- =================================================================== -->
     <link rel="preconnect" href="https://imageview.mechanicaltemp.com">
     <link rel="preconnect" href="https://i.imgur.com">
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     <link rel="dns-prefetch" href="https://www.googletagmanager.com">
-
-    <!-- =================================================================== -->
-    <!-- PERFORMANCE: Use precompiled Tailwind CSS instead of CDN compiler   -->
-    <!--                                                                     -->
-    <!-- IMPORTANT: For best results, build your own tailwind.css locally:   -->
-    <!--   1) npm install -D tailwindcss                                     -->
-    <!--   2) npx tailwindcss -i ./input.css -o ./tailwind.css --minify      -->
-    <!--   3) Replace the link below with: <link rel="stylesheet" href="tailwind.css"> -->
-    <!--                                                                     -->
-    <!-- The line below is a fallback that still avoids the 3MB JIT runtime  -->
-    <!-- but uses a generic precompiled build (Tailwind 2.2). If any styles  -->
-    <!-- look off, switch to the local-build approach above.                 -->
-    <!-- =================================================================== -->
+    <link rel="dns-prefetch" href="https://tempi.summer-unit-44dd.workers.dev">
     <link rel="stylesheet" href="tailwind.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -100,8 +77,8 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* Lighter background for the body */
-            scroll-behavior: smooth; /* Added for smooth scrolling from nav links */
+            background-color: #f8fafc;
+            scroll-behavior: smooth;
         }
         .hero-section-container {
             background-image: url('https://imageview.mechanicaltemp.com/objects/uploads/563e6147-a505-4919-97da-dd365ecce41a');
@@ -111,128 +88,306 @@
         .hero-overlay {
             background-color: rgba(12, 26, 62, 0.85);
         }
-        /* Style for the offer card price */
         .offer-price {
             background-color: #eff6ff;
             color: #1d4ed8;
         }
-        /* Custom scrollbar for modal content */
-        .modal-body::-webkit-scrollbar {
-            width: 8px;
-        }
-        .modal-body::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        .modal-body::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 4px;
-        }
-        .modal-body::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-        /* Chat Widget Styles */
+        .modal-body::-webkit-scrollbar { width: 8px; }
+        .modal-body::-webkit-scrollbar-track { background: #f1f1f1; }
+        .modal-body::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
+        .modal-body::-webkit-scrollbar-thumb:hover { background: #555; }
+
+        /* ============== TEMPI CHAT WIDGET STYLES ============== */
         #chat-bubble {
             position: fixed;
             bottom: 20px;
             right: 20px;
             z-index: 1000;
             cursor: pointer;
-            background-color: #0ea5e9; /* sky-500 */
-            width: 60px;
-            height: 60px;
+            background-color: #0ea5e9;
+            width: 64px;
+            height: 64px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
             transition: transform 0.2s ease-in-out;
+            border: 3px solid white;
         }
         #chat-bubble:hover {
-            transform: scale(1.1);
-            background-color: #0284c7; /* sky-600 */
+            transform: scale(1.08);
+            background-color: #0284c7;
+        }
+        #chat-bubble svg {
+            width: 36px;
+            height: 36px;
+        }
+        #chat-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+            animation: tempi-bounce 1.2s infinite;
+        }
+        #chat-badge.hidden { display: none; }
+        @keyframes tempi-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
         }
         #chat-widget {
             position: fixed;
-            bottom: 90px;
+            bottom: 95px;
             right: 20px;
             z-index: 999;
-            width: 350px;
+            width: 370px;
+            max-width: calc(100vw - 40px);
+            height: 560px;
+            max-height: calc(100vh - 130px);
             background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
             overflow: hidden;
             display: flex;
             flex-direction: column;
             transition: opacity 0.3s ease, transform 0.3s ease;
             transform-origin: bottom right;
         }
-         #chat-widget.hidden {
+        #chat-widget.hidden {
             opacity: 0;
             transform: scale(0.9);
             pointer-events: none;
         }
         .chat-header {
-            background-color: #0c4a6e; /* sky-900 */
+            background: linear-gradient(135deg, #0c4a6e 0%, #0369a1 100%);
             color: white;
-            padding: 1rem;
+            padding: 12px 16px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 12px;
         }
-        .chat-header h3 {
-            font-weight: bold;
-            font-size: 1.125rem;
+        .tempi-header-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: white;
+            flex-shrink: 0;
+            overflow: hidden;
+            border: 2px solid white;
+        }
+        .chat-header-info { flex: 1; }
+        .chat-header-info .name { font-weight: bold; font-size: 16px; line-height: 1.2; }
+        .chat-header-info .status {
+            font-size: 11px;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 2px;
+        }
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            background: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 0 2px rgba(16,185,129,0.3);
         }
         #close-chat-btn {
             background: none;
             border: none;
             color: white;
-            font-size: 1.5rem;
+            font-size: 24px;
             cursor: pointer;
+            opacity: 0.8;
+            padding: 0;
+            line-height: 1;
         }
-        .chat-body {
-            padding: 1rem;
-            background-color: #f1f5f9; /* slate-100 */
-            color: #475569; /* slate-600 */
-            font-size: 0.9rem;
+        #close-chat-btn:hover { opacity: 1; }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 12px;
+            background-color: #f1f5f9;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
-        .chat-footer {
-            padding: 1rem;
-            border-top: 1px solid #e2e8f0; /* slate-200 */
+        .chat-messages::-webkit-scrollbar { width: 6px; }
+        .chat-messages::-webkit-scrollbar-track { background: transparent; }
+        .chat-messages::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .msg-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 6px;
+            animation: tempi-fadeIn 0.3s ease-out;
+        }
+        @keyframes tempi-fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .msg-row.user { justify-content: flex-end; }
+        .msg-avatar-small {
+            width: 28px;
+            height: 28px;
+            flex-shrink: 0;
+            margin-bottom: 2px;
+        }
+        .msg-bubble {
+            position: relative;
+            padding: 10px 14px;
+            border-radius: 18px;
+            font-size: 13.5px;
+            line-height: 1.45;
+            max-width: 75%;
+            word-wrap: break-word;
+            border: 2.5px solid #1e293b;
+        }
+        .msg-bubble.bot {
+            background: white;
+            color: #1e293b;
+            border-bottom-left-radius: 4px;
+        }
+        .msg-bubble.bot::before {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: -10px;
+            width: 0;
+            height: 0;
+            border-top: 10px solid #1e293b;
+            border-right: 10px solid transparent;
+        }
+        .msg-bubble.bot::after {
+            content: '';
+            position: absolute;
+            bottom: 1px;
+            left: -5px;
+            width: 0;
+            height: 0;
+            border-top: 7px solid white;
+            border-right: 7px solid transparent;
+        }
+        .msg-bubble.user {
+            background: #0ea5e9;
+            color: white;
+            border-bottom-right-radius: 4px;
+            border-color: #0c4a6e;
+        }
+        .msg-bubble.user::before {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: -10px;
+            width: 0;
+            height: 0;
+            border-top: 10px solid #0c4a6e;
+            border-left: 10px solid transparent;
+        }
+        .msg-bubble.user::after {
+            content: '';
+            position: absolute;
+            bottom: 1px;
+            right: -5px;
+            width: 0;
+            height: 0;
+            border-top: 7px solid #0ea5e9;
+            border-left: 7px solid transparent;
+        }
+        .msg-bubble.typing {
+            display: flex;
+            gap: 4px;
+            padding: 14px 16px;
+        }
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: #64748b;
+            border-radius: 50%;
+            animation: tempi-typingBounce 1.2s infinite;
+        }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes tempi-typingBounce {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+            30% { transform: translateY(-5px); opacity: 1; }
+        }
+        .quick-replies {
+            padding: 8px 12px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .quick-replies.hidden { display: none; }
+        .quick-reply {
+            background: #e0f2fe;
+            color: #0c4a6e;
+            border: 1.5px solid #7dd3fc;
+            border-radius: 16px;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.15s;
+            font-family: inherit;
+        }
+        .quick-reply:hover {
+            background: #0ea5e9;
+            color: white;
+            border-color: #0ea5e9;
+            transform: translateY(-1px);
+        }
+        .chat-input-row {
+            padding: 10px 12px;
+            border-top: 1px solid #e2e8f0;
+            background-color: white;
+            display: flex;
+            gap: 6px;
+            align-items: flex-end;
         }
         #chat-input {
-            width: 100%;
-            border: 1px solid #cbd5e1; /* slate-300 */
-            border-radius: 8px;
-            padding: 0.75rem;
+            flex: 1;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 8px 12px;
             resize: none;
+            font-family: inherit;
+            font-size: 13.5px;
+            max-height: 80px;
+            outline: none;
+            transition: border-color 0.15s;
         }
+        #chat-input:focus { border-color: #0ea5e9; }
         #send-chat-btn {
-            width: 100%;
-            margin-top: 0.5rem;
-            background-color: #0ea5e9; /* sky-500 */
+            background-color: #0ea5e9;
             color: white;
-            font-weight: bold;
-            padding: 0.75rem;
-            border-radius: 8px;
             border: none;
+            border-radius: 10px;
+            padding: 8px 14px;
             cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        #send-chat-btn:hover {
-            background-color: #0284c7; /* sky-600 */
-        }
-        #send-chat-btn:disabled {
-            background-color: #94a3b8; /* slate-400 */
-            cursor: not-allowed;
-        }
-        #chat-confirmation {
-            text-align: center;
             font-weight: bold;
-            color: #16a34a; /* green-600 */
-            padding: 0.5rem;
-            background-color: #dcfce7; /* green-100 */
-            border-radius: 6px;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+        #send-chat-btn:hover { background-color: #0284c7; }
+        #send-chat-btn:disabled { background-color: #94a3b8; cursor: not-allowed; }
+        .chat-disclaimer {
+            font-size: 10px;
+            color: #94a3b8;
+            text-align: center;
+            padding: 4px 8px 6px;
+            background: white;
         }
     </style>
 </head>
@@ -244,31 +399,24 @@
             <a href="index.html" class="block">
                 <img src="https://i.imgur.com/YJvJw7V.png" alt="Mechanical Temp Logo" width="160" height="48" class="h-12 w-auto">
             </a>
-            <!-- Desktop Menu -->
             <ul class="hidden md:flex items-center space-x-6">
                 <li><a href="#services" class="hover:text-sky-400">Services</a></li>
                 <li><a href="service-plan.html" class="hover:text-sky-400">Service Plan</a></li>
                 <li><a href="#offers" class="hover:text-sky-400">Offers</a></li>
-                <!-- FINANCING LINK ADDED -->
                 <li><a href="#financing-cta" class="hover:text-sky-400">Financing</a></li>
-                <!-- END OF ADDED LINK -->
                 <li><a href="#about" class="hover:text-sky-400">About Us</a></li>
                 <li><a href="blog.html" class="hover:text-sky-400">Blog</a></li>
             </ul>
-            <!-- Mobile Menu Button -->
             <button id="mobile-menu-btn" class="md:hidden" aria-label="Open menu">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
             </button>
         </nav>
-        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-gray-900">
             <ul class="flex flex-col items-center text-white p-4">
                 <li class="w-full text-center py-2"><a href="#services" class="hover:text-sky-400 mobile-link">Services</a></li>
                 <li class="w-full text-center py-2"><a href="service-plan.html" class="hover:text-sky-400 mobile-link">Service Plan</a></li>
                 <li class="w-full text-center py-2"><a href="#offers" class="hover:text-sky-400 mobile-link">Offers</a></li>
-                <!-- FINANCING LINK ADDED -->
                 <li class="w-full text-center py-2"><a href="#financing-cta" class="hover:text-sky-400 mobile-link">Financing</a></li>
-                <!-- END OF ADDED LINK -->
                 <li class="w-full text-center py-2"><a href="#about" class="hover:text-sky-400 mobile-link">About Us</a></li>
                 <li class="w-full text-center py-2"><a href="blog.html" class="hover:text-sky-400 mobile-link">Blog</a></li>
             </ul>
@@ -276,7 +424,7 @@
     </header>
 
     <!-- HERO SECTION -->
-    <section class="min-h-screen hero-section-container -mt-[88px] pt-[88px]"> <!-- Offset for sticky header -->
+    <section class="min-h-screen hero-section-container -mt-[88px] pt-[88px]">
         <div class="min-h-screen hero-overlay flex items-center justify-center text-center p-6 text-white">
             <div>
                 <h1 class="text-4xl md:text-6xl font-black uppercase tracking-wider mb-4">
@@ -298,19 +446,16 @@
             <h2 class="text-3xl md:text-4xl font-bold mb-2">Our Core HVAC Services</h2>
             <p class="max-w-2xl mx-auto text-slate-600 mb-12">From emergency repairs to new system installations, we have you covered.</p>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Service 1: Heating -->
                 <div class="bg-slate-50 p-8 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
                     <h3 class="text-2xl font-bold mb-3">Heating & Furnace Services</h3>
                     <p class="text-slate-600 mb-4">Expert furnace repair, maintenance, and installation to keep your Michigan home warm all winter.</p>
                     <a href="furnace-services.html" class="text-sky-600 font-bold hover:underline">Learn More →</a>
                 </div>
-                <!-- Service 2: Cooling -->
                 <div class="bg-slate-50 p-8 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
                     <h3 class="text-2xl font-bold mb-3">Air Conditioning Services</h3>
                     <p class="text-slate-600 mb-4">Fast AC repair, tune-ups, and new air conditioner installation for total summer comfort.</p>
                     <a href="ac-services.html" class="text-sky-600 font-bold hover:underline">Learn More →</a>
                 </div>
-                <!-- Service 3: Commercial -->
                 <div class="bg-slate-50 p-8 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
                     <h3 class="text-2xl font-bold mb-3">Commercial HVAC</h3>
                     <p class="text-slate-600 mb-4">Reliable and efficient HVAC solutions for businesses, offices, and commercial properties in Metro Detroit.</p>
@@ -358,13 +503,10 @@
              <h2 class="text-3xl md:text-4xl font-bold">Brands We Trust</h2>
              <p class="max-w-2xl mx-auto text-slate-600 mt-2 mb-6">We are proud to be an authorized dealer for industry-leading brands known for their reliability and performance.</p>
              <div class="mt-6 flex flex-wrap justify-center gap-6">
-                 <!-- AirQuest -->
                  <a href="https://www.airquestcomfort.com/en/us/" target="_blank" rel="noopener noreferrer" class="block p-4 bg-white border border-gray-200 rounded-lg shadow-sm text-center transition-all duration-300 hover:shadow-lg hover:scale-105">
                      <img src="https://www.airquestcomfort.com/en/us/media_1b3a4194f19a94470a5646ca094daaaee0fa85e00.png?width=2000&format=webply&optimize=medium" alt="AirQuest Authorized Dealer Logo" width="200" height="64" loading="lazy" decoding="async" class="h-16 mx-auto object-contain">
                      <p class="text-xs font-bold text-sky-700 uppercase tracking-wider mt-2">Authorized Dealer</p>
                  </a>
-                 
-                 <!-- Cypher -->
                  <a href="https://cypher.mechanicaltemp.com/" target="_blank" rel="noopener noreferrer" class="block p-4 bg-white border border-gray-200 rounded-lg shadow-sm text-center transition-all duration-300 hover:shadow-lg hover:scale-105">
                     <img src="https://imageview.mechanicaltemp.com/objects/uploads/a58483f3-52d2-4771-8fb3-912a04297814" alt="Cypher Authorized Dealer Logo" width="200" height="64" loading="lazy" decoding="async" class="h-16 mx-auto object-contain">
                     <p class="text-xs font-bold text-sky-700 uppercase tracking-wider mt-2">Authorized Dealer</p>
@@ -373,23 +515,19 @@
         </div>
     </section>
 
-    <!-- "TESTIMONIALS" SECTION -->
+    <!-- TESTIMONIALS SECTION -->
     <section id="testimonials" class="bg-slate-50 py-20 px-6">
         <div class="container mx-auto text-center">
             <h2 class="text-3xl md:text-4xl font-bold mb-2">What Our Customers Are Saying</h2>
             <p class="max-w-2xl mx-auto text-slate-600 mb-12">We're proud to have earned the trust of homeowners and businesses across Metro Detroit.</p>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                <!-- Testimonial 1 -->
                 <div class="bg-white p-8 rounded-lg shadow-md flex flex-col text-left">
                     <div class="flex mb-4">
-                        <!-- 5 Star Rating -->
                         <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
                     </div>
                     <p class="text-slate-600 italic flex-grow">"Great professional work and advice.. great competitive price and very happy with response... one word Phenomenal"</p>
                     <p class="font-bold text-gray-800 mt-4">- Chirag R M., Southfield, MI</p>
                 </div>
-
-                <!-- Testimonial 2 -->
                 <div class="bg-white p-8 rounded-lg shadow-md flex flex-col text-left">
                     <div class="flex mb-4">
                         <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
@@ -397,8 +535,6 @@
                     <p class="text-slate-600 italic flex-grow">"It was a pleasure doing business with Mechanical Temp. They were professional, courteous and even showed up a half hour early. If you are looking for a new HVAC company I would give them a call."</p>
                     <p class="font-bold text-gray-800 mt-4">- Jason B., Novi, MI</p>
                 </div>
-
-                <!-- Testimonial 3 -->
                 <div class="bg-white p-8 rounded-lg shadow-md flex flex-col text-left">
                     <div class="flex mb-4">
                         <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
@@ -415,7 +551,7 @@
         </div>
     </section>
 
-    <!-- FROM OUR BLOG SECTION -->
+    <!-- BLOG PREVIEW -->
     <section id="blog-preview" class="bg-slate-50 py-20 px-6">
         <div class="container mx-auto text-center max-w-4xl">
             <h2 class="text-3xl md:text-4xl font-bold">From Our Blog</h2>
@@ -430,7 +566,7 @@
                          <a href="5-signs-furnace-repair-fall.html" class="hover:text-sky-600 transition-colors">5 Signs Your Furnace Needs Repair This Fall</a>
                      </h3>
                      <p class="text-slate-600 mb-6 flex-grow">
-                         As the leaves start to change color, it’s crucial to make sure your furnace is in top working condition. Ignoring small warning signs now can lead to a complete breakdown...
+                         As the leaves start to change color, it's crucial to make sure your furnace is in top working condition. Ignoring small warning signs now can lead to a complete breakdown...
                      </p>
                      <a href="5-signs-furnace-repair-fall.html" class="text-sky-600 font-bold hover:underline self-start">Read Full Article →</a>
                 </div>
@@ -438,8 +574,7 @@
         </div>
     </section>
 
-
-    <!-- "SERVICE PLAN" CTA SECTION -->
+    <!-- SERVICE PLAN CTA -->
     <section id="service-plan" class="bg-gray-800 py-20 px-6 text-white">
         <div class="container mx-auto text-center max-w-4xl">
             <h2 class="text-3xl md:text-4xl font-bold mb-4">Total Peace of Mind is Here</h2>
@@ -467,13 +602,12 @@
         </div>
     </section>
 
-    <!-- "CURRENT OFFERS" SECTION -->
+    <!-- CURRENT OFFERS -->
     <section id="offers" class="bg-white py-20 px-6">
         <div class="container mx-auto text-center">
             <h2 class="text-3xl md:text-4xl font-bold mb-2">Current HVAC Offers</h2>
             <p class="max-w-2xl mx-auto text-slate-600 mb-12">Save on your next service. Mention the offer when you call to book!</p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                <!-- Offer 1: AC Tune-Up -->
                 <div class="bg-white rounded-lg shadow-lg border-2 border-sky-500 text-center p-8 flex flex-col">
                     <div class="w-16 h-16 mx-auto bg-sky-100 rounded-full flex items-center justify-center mb-4"><svg class="w-8 h-8 text-sky-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg></div>
                     <h3 class="text-2xl font-bold text-gray-800">Furnace Tune-Up Special</h3>
@@ -483,20 +617,15 @@
                         Schedule My Tune-Up
                     </button>
                 </div>
-                <!-- Offer 2: New System Discount -->
                 <div class="bg-white rounded-lg shadow-lg border-2 border-orange-500 text-center p-8 flex flex-col">
                     <div class="w-16 h-16 mx-auto bg-orange-100 rounded-full flex items-center justify-center mb-4"><svg class="w-8 h-8 text-orange-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.362-1.44m3.362-2.946V7.5a2.25 2.25 0 00-2.25-2.25H12A2.25 2.25 0 009.75 7.5v1.138M15.362 5.214a2.252 2.252 0 01-1.232 2.146l-2.25.75a2.25 2.25 0 01-2.332 0l-2.25-.75a2.252 2.252 0 01-1.232-2.146V6.75A2.25 2.25 0 016.75 4.5h.75a2.25 2.25 0 012.25 2.25v.375m3.362 2.946a2.25 2.25 0 012.25-2.25h.75a2.25 2.25 0 012.25 2.25v.375m-3.362 2.946a2.25 2.25 0 01-2.25.75h-1.5a2.25 2.25 0 01-2.25-.75" /></svg></div>
                     <h3 class="text-2xl font-bold text-gray-800">New System Discount</h3>
                     <p class="text-5xl font-black text-orange-600 my-3">$500 OFF</p>
                     <p class="text-slate-600 flex-grow">Save big on a new high-efficiency furnace or air conditioner installation. Free estimate included.</p>
-                    
-                    <!-- FINANCING MENTION ADDED -->
                     <p class="text-sm text-slate-500 mt-3">
                         Financing available! 
                         <a href="#financing-cta" class="text-sky-600 hover:underline">Learn More</a>
                     </p>
-                    <!-- END OF ADDED MENTION -->
-
                      <button onclick="openScheduler()" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg text-lg inline-block mt-6 transition-transform hover:scale-105">
                          Get My Free Estimate
                     </button>
@@ -505,12 +634,9 @@
         </div>
     </section>
 
-    <!-- =================================================================== -->
-    <!-- FINANCING CTA SECTION (ADDED)                                      -->
-    <!-- =================================================================== -->
+    <!-- FINANCING CTA -->
     <section id="financing-cta" class="bg-slate-50 py-20 px-6">
         <div class="container mx-auto text-center max-w-3xl">
-            <!-- Added a generic financing icon for visual appeal -->
             <svg class="w-16 h-16 mx-auto mb-6 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6A.75.75 0 012.25 5.25v-.75m0 0A.75.75 0 013 4.5A.75.75 0 013.75 4.5m0 0v.75A.75.75 0 013 6A.75.75 0 012.25 5.25v-.75m3.75 0v.75A.75.75 0 016 6A.75.75 0 015.25 5.25v-.75m0 0A.75.75 0 016 4.5A.75.75 0 016.75 4.5m0 0v.75A.75.75 0 016 6A.75.75 0 015.25 5.25v-.75m3.75 0v.75A.75.75 0 019 6A.75.75 0 018.25 5.25v-.75m0 0A.75.75 0 019 4.5A.75.75 0 019.75 4.5m0 0v.75A.75.75 0 019 6A.75.75 0 018.25 5.25v-.75m3.75 0v.75A.75.75 0 0112 6A.75.75 0 0111.25 5.25v-.75m0 0A.75.75 0 0112 4.5A.75.75 0 0112.75 4.5m0 0v.75A.75.75 0 0112 6A.75.75 0 0111.25 5.25v-.75m3.75 0v.75A.75.75 0 0115 6A.75.75 0 0114.25 5.25v-.75m0 0A.75.75 0 0115 4.5A.75.75 0 0115.75 4.5m0 0v.75A.75.75 0 0115 6A.75.75 0 0114.25 5.25v-.75m3.75 0v.75A.75.75 0 0118 6A.75.75 0 0117.25 5.25v-.75m0 0A.75.75 0 0118 4.5A.75.75 0 0118.75 4.5m0 0v.75A.75.75 0 0118 6A.75.75 0 0117.25 5.25v-.75m3 15V15m-3 0v-2.25a2.25 2.25 0 012.25-2.25c1.026 0 1.945.694 2.152 1.662M18.75 18.75c.621 0 1.125-.504 1.125-1.125V15m0 0v-2.25A2.25 2.25 0 0018 10.5a2.25 2.25 0 00-2.25 2.25v.632m0 0V15m0 0a2.25 2.25 0 01-2.25-2.25V10.5A2.25 2.25 0 0115.75 12.75v.632m0 0V15m0 0A2.25 2.25 0 0113.5 12.75V10.5A2.25 2.25 0 0115.75 12.75v.632m0 0V15m0 0a2.25 2.25 0 01-2.25-2.25V10.5A2.25 2.25 0 0113.5 12.75v.632M10.5 18.75v-2.25a2.25 2.25 0 012.25-2.25c1.026 0 1.945.694 2.152 1.662M10.5 18.75c.621 0 1.125-.504 1.125-1.125V15m0 0v-2.25A2.25 2.25 0 0010.5 10.5a2.25 2.25 0 00-2.25 2.25v.632m0 0V15m0 0a2.25 2.25 0 01-2.25-2.25V10.5A2.25 2.25 0 018.25 12.75v.632m0 0V15m0 0A2.25 2.25 0 016 12.75V10.5A2.25 2.25 0 018.25 12.75v.632m0 0V15m0 0a2.25 2.25 0 01-2.25-2.25V10.5A2.25 2.25 0 016 12.75v.632" />
             </svg>
@@ -526,11 +652,8 @@
             </a>
         </div>
     </section>
-    <!-- =================================================================== -->
-    <!-- END OF ADDED SECTION                                            -->
-    <!-- =================================================================== -->
 
-    <!-- SERVICE AREA SECTION -->
+    <!-- SERVICE AREA -->
     <section id="locations" class="bg-white py-20 px-6">
         <div class="container mx-auto text-center">
             <h2 class="text-3xl md:text-4xl font-bold mb-4">Proudly Serving Metro Detroit</h2>
@@ -581,45 +704,86 @@
         </div>
     </footer>
 
-    <!-- CHAT BUBBLE & WIDGET -->
-    <div id="chat-bubble">
-        <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-3.04 8.25-6.75 8.25-1.425 0-2.756-.382-3.937-1.043a.75.75 0 01-.263-.761l.574-2.286a.75.75 0 00-.534-.686 8.25 8.25 0 01-3.243-5.468C3.04 12.25 6 4.5 10.5 4.5c4.634 0 8.25 3.04 8.25 6.75z" />
-        </svg>        
+    <!-- ============== TEMPI CHAT BUBBLE ============== -->
+    <div id="chat-bubble" aria-label="Open chat with Tempi">
+        <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="25" cy="26" r="14" fill="#fcd9b6"/>
+            <path d="M 11 24 Q 12 10 25 9 Q 38 10 39 24 Q 38 18 34 16 Q 30 14 25 14 Q 20 14 16 16 Q 12 18 11 24 Z" fill="#8b4513"/>
+            <path d="M 14 22 Q 17 17 22 17 Q 20 20 18 22 Z" fill="#8b4513"/>
+            <path d="M 36 22 Q 33 17 28 17 Q 30 20 32 22 Z" fill="#8b4513"/>
+            <circle cx="20" cy="26" r="1.5" fill="#1f2937"/>
+            <circle cx="30" cy="26" r="1.5" fill="#1f2937"/>
+            <circle cx="20.5" cy="25.5" r="0.5" fill="white"/>
+            <circle cx="30.5" cy="25.5" r="0.5" fill="white"/>
+            <path d="M 20 31 Q 25 34 30 31" stroke="#c2410c" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <ellipse cx="17" cy="30" rx="1.8" ry="1" fill="#fda4af" opacity="0.6"/>
+            <ellipse cx="33" cy="30" rx="1.8" ry="1" fill="#fda4af" opacity="0.6"/>
+            <path d="M 13 22 Q 25 12 37 22" stroke="#1e293b" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <circle cx="12" cy="24" r="2.5" fill="#1e293b"/>
+            <circle cx="38" cy="24" r="2.5" fill="#1e293b"/>
+            <path d="M 38 26 Q 40 28 38 32" stroke="#1e293b" stroke-width="1.5" fill="none"/>
+            <circle cx="37" cy="32" r="1.2" fill="#1e293b"/>
+        </svg>
+        <span id="chat-badge" class="hidden">1</span>
     </div>
 
+    <!-- ============== TEMPI CHAT WIDGET ============== -->
     <div id="chat-widget" class="hidden">
         <div class="chat-header">
-            <h3>Chat with Us</h3>
-            <button id="close-chat-btn" aria-label="Close chat">&times;</button>
-        </div>
-        <form id="chat-form">
-            <div class="chat-body">
-                <p>Questions? Enter your details and we'll text you back shortly!</p>
-                <div class="mt-4 space-y-3">
-                    <input type="text" id="chat-name" placeholder="Your Name" required class="w-full border border-slate-300 rounded-md px-3 py-2 text-sm">
-                    <input type="tel" id="chat-phone" placeholder="Your Phone Number" required class="w-full border border-slate-300 rounded-md px-3 py-2 text-sm">
+            <div class="tempi-header-avatar">
+                <svg viewBox="0 0 44 44" width="44" height="44" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="22" cy="22" r="22" fill="#fde68a"/>
+                    <circle cx="22" cy="23" r="11" fill="#fcd9b6"/>
+                    <path d="M 10 22 Q 11 8 22 7 Q 33 8 34 22 Q 33 16 30 14 Q 26 12 22 12 Q 18 12 14 14 Q 11 16 10 22 Z" fill="#8b4513"/>
+                    <path d="M 13 20 Q 16 15 20 16 Q 18 18 16 20 Z" fill="#8b4513"/>
+                    <path d="M 31 20 Q 28 15 24 16 Q 26 18 28 20 Z" fill="#8b4513"/>
+                    <circle cx="18" cy="23" r="1.3" fill="#1f2937"/>
+                    <circle cx="26" cy="23" r="1.3" fill="#1f2937"/>
+                    <circle cx="18.4" cy="22.6" r="0.4" fill="white"/>
+                    <circle cx="26.4" cy="22.6" r="0.4" fill="white"/>
+                    <path d="M 18 27 Q 22 29.5 26 27" stroke="#c2410c" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+                    <ellipse cx="15.5" cy="26" rx="1.4" ry="0.8" fill="#fda4af" opacity="0.6"/>
+                    <ellipse cx="28.5" cy="26" rx="1.4" ry="0.8" fill="#fda4af" opacity="0.6"/>
+                    <path d="M 11 19 Q 22 10 33 19" stroke="#1e293b" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                    <circle cx="10.5" cy="21" r="2.2" fill="#1e293b"/>
+                    <circle cx="33.5" cy="21" r="2.2" fill="#1e293b"/>
+                    <path d="M 33.5 23 Q 35 25 33 28" stroke="#1e293b" stroke-width="1.3" fill="none"/>
+                    <circle cx="32.5" cy="28" r="1" fill="#1e293b"/>
+                </svg>
+            </div>
+            <div class="chat-header-info">
+                <div class="name">Tempi</div>
+                <div class="status">
+                    <span class="status-dot"></span>
+                    Mechanical Temp · online
                 </div>
-                <div id="chat-confirmation" class="hidden mt-2">Message Sent! ✔️</div>
             </div>
-            <div class="chat-footer">
-                <textarea id="chat-input" placeholder="Type your message..." rows="2" required></textarea>
-                <button id="send-chat-btn" type="submit">Send Message</button>
-            </div>
-        </form>
+            <button id="close-chat-btn" aria-label="Minimize chat">&times;</button>
+        </div>
+        
+        <div id="chat-messages" class="chat-messages"></div>
+        
+        <div id="quick-replies" class="quick-replies hidden">
+            <button class="quick-reply" data-msg="I'd like to schedule a service appointment">Schedule service</button>
+            <button class="quick-reply" data-msg="Can I get a quote for a new system?">Get a quote</button>
+            <button class="quick-reply" data-msg="Tell me about the $29/month service plan">Service plan</button>
+            <button class="quick-reply" data-msg="What are your current offers?">Current offers</button>
+        </div>
+        
+        <div class="chat-input-row">
+            <textarea id="chat-input" placeholder="Type your message..." rows="1"></textarea>
+            <button id="send-chat-btn" type="button">Send</button>
+        </div>
+        
+        <div class="chat-disclaimer">Powered by AI. For emergencies call (313) 282-4758.</div>
     </div>
     
-    <!-- =================================================================== -->
-    <!-- SCHEDULER MODAL                                                   -->
-    <!-- =================================================================== -->
+    <!-- SCHEDULER MODAL -->
     <div id="scheduler-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4 hidden">
         <div id="hvac-scheduler-widget" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
-            <!-- Close Button -->
             <button onclick="closeScheduler()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 z-20" aria-label="Close scheduler">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
-
-            <!-- Header -->
             <div class="bg-gradient-to-r from-sky-600 to-cyan-500 text-white p-6 sm:p-8 text-center shrink-0">
                 <h2 class="text-2xl sm:text-3xl font-bold">Schedule HVAC Service</h2>
                 <p class="text-sm sm:text-base opacity-90 mt-1">Weekdays 8am-4pm • Weekends 10am-2pm</p>
@@ -627,10 +791,7 @@
                     🔒 Secure Form • Spam Protected • Your Privacy Matters
                 </div>
             </div>
-
-            <!-- Modal Body (with scrolling) -->
             <div class="p-6 sm:p-8 overflow-y-auto modal-body">
-                <!-- Progress Bar -->
                 <div class="flex justify-center items-center mb-6">
                     <div id="progress-1" class="w-10 h-10 rounded-full flex items-center justify-center font-bold bg-sky-600 text-white">1</div>
                     <div class="flex-auto h-1 bg-gray-200"><div id="progress-line-1" class="h-1 bg-sky-600 w-0 transition-all duration-300"></div></div>
@@ -640,8 +801,6 @@
                     <div class="flex-auto h-1 bg-gray-200"><div id="progress-line-3" class="h-1 bg-sky-600 w-0 transition-all duration-300"></div></div>
                     <div id="progress-4" class="w-10 h-10 rounded-full flex items-center justify-center font-bold bg-gray-200 text-gray-500">4</div>
                 </div>
-
-                <!-- Step 1: Date Selection -->
                 <div id="step-1">
                     <h3 class="text-2xl font-bold text-center mb-4">Select a Date</h3>
                     <div id="calendar" class="grid grid-cols-7 gap-2"></div>
@@ -649,8 +808,6 @@
                         <button id="next-btn-1" onclick="nextStep()" class="bg-sky-500 text-white font-bold py-3 px-10 rounded-lg disabled:bg-gray-300" disabled>Next Step</button>
                     </div>
                 </div>
-
-                <!-- Step 2: Time Selection -->
                 <div id="step-2" class="hidden">
                     <h3 class="text-2xl font-bold text-center mb-4">Select a Time</h3>
                     <div class="bg-slate-100 p-4 rounded-lg text-center mb-4">
@@ -662,8 +819,6 @@
                         <button id="next-btn-2" onclick="nextStep()" class="bg-sky-500 text-white font-bold py-3 px-10 rounded-lg disabled:bg-gray-300" disabled>Next Step</button>
                     </div>
                 </div>
-                
-                <!-- Step 3: Information Form -->
                 <div id="step-3" class="hidden">
                     <h3 class="text-2xl font-bold text-center mb-4">Your Information</h3>
                     <div class="bg-slate-100 p-4 rounded-lg mb-4">
@@ -685,8 +840,6 @@
                         <button id="submit-btn" onclick="submitAppointment()" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-10 rounded-lg">Book Appointment</button>
                     </div>
                 </div>
-
-                <!-- Step 4: Confirmation Screen -->
                 <div id="step-4" class="hidden">
                     <div class="text-center p-6">
                         <div class="text-6xl text-green-500 mb-4">✓</div>
@@ -713,9 +866,7 @@
     
 <script>
     // =================================================================== //
-    // PERFORMANCE: EmailJS is loaded lazily on first interaction with     //
-    // chat or scheduler. This avoids loading ~30KB of JS on page load    //
-    // for users who never use those features.                            //
+    // EMAILJS LAZY LOADER (shared by scheduler + Tempi chat)              //
     // =================================================================== //
     let emailjsReady = null;
     function loadEmailJS() {
@@ -733,27 +884,24 @@
         return emailjsReady;
     }
 
-    // SCHEDULER MODAL LOGIC
+    // =================================================================== //
+    // SCHEDULER MODAL (unchanged)                                         //
+    // =================================================================== //
     const schedulerModal = document.getElementById("scheduler-modal");
 
     function openScheduler() {
         schedulerModal.classList.remove("hidden");
         document.body.style.overflow = "hidden";
-        // Lazy-load EmailJS as soon as the user shows intent
         loadEmailJS().catch(err => console.error('EmailJS failed to load:', err));
     }
 
     function closeScheduler(reset = false) {
         schedulerModal.classList.add("hidden");
         document.body.style.overflow = "auto";
-        if (reset) {
-            resetForm();
-        }
+        if (reset) resetForm();
     }
     schedulerModal.addEventListener("click", function(e) {
-        if (e.target === schedulerModal) {
-            closeScheduler();
-        }
+        if (e.target === schedulerModal) closeScheduler();
     });
 
     let currentStep = 1;
@@ -804,12 +952,7 @@
         t.classList.remove("border-gray-200");
         selectedDate = e;
         document.getElementById("next-btn-1").disabled = false;
-        document.getElementById("selected-date").textContent = e.toLocaleDateString("en", {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric"
-        });
+        document.getElementById("selected-date").textContent = e.toLocaleDateString("en", {weekday: "long", year: "numeric", month: "long", day: "numeric"});
     }
 
     function generateTimeSlots() {
@@ -835,12 +978,7 @@
         t.classList.remove("border-gray-300");
         selectedTime = e;
         document.getElementById("next-btn-2").disabled = false;
-        document.getElementById("confirm-date").textContent = selectedDate.toLocaleDateString("en", {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric"
-        });
+        document.getElementById("confirm-date").textContent = selectedDate.toLocaleDateString("en", {weekday: "long", year: "numeric", month: "long", day: "numeric"});
         document.getElementById("confirm-time").textContent = e;
     }
 
@@ -898,7 +1036,6 @@
     function validateCaptcha() {
         const e = parseInt(document.getElementById("captcha").value);
         if (e !== mathAnswer) {
-            console.error("Captcha failed");
             generateMathCaptcha();
             document.getElementById("captcha").value = "";
             document.getElementById("captcha").classList.add('border-red-500');
@@ -916,12 +1053,7 @@
         }
         const t = new FormData(e);
         appointmentData = {
-            date: selectedDate.toLocaleDateString("en", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric"
-            }),
+            date: selectedDate.toLocaleDateString("en", {weekday: "long", year: "numeric", month: "long", day: "numeric"}),
             time: selectedTime,
             serviceType: t.get("service-type"),
             name: t.get("name"),
@@ -938,15 +1070,10 @@
 
     function sendAppointmentEmail(e) {
         const t = "template_q5fbhd8";
-        // Make sure EmailJS is loaded before sending
-        loadEmailJS().then(() => {
-            return emailjs.send("service_ziwf1pg", t, e);
-        }).then(function(e) {
-            console.log("Email sent successfully:", e);
+        loadEmailJS().then(() => emailjs.send("service_ziwf1pg", t, e))
+        .then(function(e) {
             showConfirmation();
         }).catch(function(e) {
-            console.log("Email failed:", e);
-            console.error("There was an error submitting your request. Please try again.");
             const t = document.getElementById("submit-btn");
             t.disabled = false;
             t.textContent = "Book Appointment";
@@ -961,9 +1088,7 @@
         document.getElementById("final-name").textContent = appointmentData.name;
         document.getElementById("final-email").textContent = appointmentData.email;
         document.getElementById("final-phone").textContent = appointmentData.phone;
-        
         gtag('event', 'schedule_appointment', { 'event_category': 'conversion' });
-
         nextStep();
     }
 
@@ -983,94 +1108,275 @@
         generateMathCaptcha();
     }
 
-    // --- RESPONSIVE HEADER & CHAT WIDGET SCRIPT ---
-    const chatBubble = document.getElementById('chat-bubble');
-    const chatWidget = document.getElementById('chat-widget');
-    const closeChatBtn = document.getElementById('close-chat-btn');
-    const chatForm = document.getElementById('chat-form');
-    const chatConfirmation = document.getElementById('chat-confirmation');
+    // =================================================================== //
+    // MOBILE MENU                                                         //
+    // =================================================================== //
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
-
-    mobileMenuBtn.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
-    });
-
+    mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
     document.querySelectorAll('.mobile-link').forEach(link => {
-        link.addEventListener('click', () => {
-            mobileMenu.classList.add('hidden');
-        });
+        link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
     });
 
-    function toggleChatWidget() {
-        chatWidget.classList.toggle('hidden');
-        if (!chatWidget.classList.contains('hidden')) {
-            chatConfirmation.classList.add('hidden');
-            chatForm.reset();
-            // Lazy-load EmailJS the first time chat is opened
-            loadEmailJS().catch(err => console.error('EmailJS failed to load:', err));
-        }
-    }
-
-    chatBubble.addEventListener('click', toggleChatWidget);
-    closeChatBtn.addEventListener('click', toggleChatWidget);
-    
-    chatForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const sendChatBtn = document.getElementById('send-chat-btn');
-        sendChatBtn.disabled = true;
-        sendChatBtn.textContent = 'Sending...';
-
-        const chatData = {
-            from_name: document.getElementById('chat-name').value,
-            phone: document.getElementById('chat-phone').value,
-            message: document.getElementById('chat-input').value,
-        };
+    // =================================================================== //
+    // TEMPI CHAT WIDGET                                                   //
+    // =================================================================== //
+    (function() {
+        const CLAUDE_PROXY_URL = 'https://tempi.summer-unit-44dd.workers.dev/';
+        const EMAILJS_SERVICE = 'service_ziwf1pg';
+        const EMAILJS_TEMPLATE = 'template_j68qyhk';
         
-        const chatTemplateID = 'template_j68qyhk';
+        const conversationHistory = [];
+        let leadCaptured = false;
+        let hasGreeted = false;
+        let widgetEverOpened = false;
+        
+        const SYSTEM_PROMPT = `You are Tempi, the friendly virtual customer service rep for Mechanical Temp, a commercial and residential HVAC company in Southfield, MI serving Metro Detroit. You're warm, helpful, and a little playful — like a knowledgeable friend at the front desk.
 
-        loadEmailJS().then(() => {
-            return emailjs.send('service_ziwf1pg', chatTemplateID, chatData);
-        }).then(function(response) {
-            console.log('Chat message sent successfully:', response);
-            chatConfirmation.classList.remove('hidden');
-            gtag('event', 'chat_lead', { 'event_category': 'conversion' });
-        }).catch(function(error) {
-            console.log('Chat message failed:', error);
-            console.error('Sorry, the message could not be sent. Please try again.');
-        }).finally(function() {
-            sendChatBtn.disabled = false;
-            sendChatBtn.textContent = 'Send Message';
+ABOUT MECHANICAL TEMP:
+- Address: 23093 Telegraph Rd, Southfield, MI 48033
+- Phone: (313) 282-4758
+- Hours: Weekdays 8am-4pm, Weekends 10am-2pm, 24/7 emergency service available
+- Services: Furnace repair/install/maintenance, AC repair/install/maintenance, Commercial HVAC, Duct work, Ductless mini-splits
+- Service area: Southfield, Dearborn, Livonia, Novi, Canton, Plymouth, Northville, West Bloomfield, Royal Oak, Ferndale, Westland, Farmington Hills, Redford and surrounding Metro Detroit
+- Authorized AirQuest dealer
+- We also service national accounts (CBRE, Cushman & Wakefield, Sodexo, SMS Assist, etc.) — when a facilities/property management rep contacts us, shift to a more professional dispatch tone and treat as urgent commercial work.
+
+CURRENT OFFERS:
+- Furnace Tune-Up Special: $69 (21-point inspection)
+- New System Discount: $500 off new high-efficiency furnace or AC install (free estimate included)
+- Service Plan: $29/month - includes 2 annual tune-ups, priority service, covers many common parts
+- Financing available through Acorn Finance (no credit impact to pre-qualify)
+
+YOUR JOB:
+1. Greet warmly. Answer questions about services, pricing, offers, and service area in a friendly, conversational tone.
+2. Keep responses SHORT — 2-3 sentences max. This is a chat, not an essay.
+3. Use light, natural language. Occasional emoji is okay (1 max per message, only when it fits naturally).
+4. For any service request (repair, install, quote, emergency, commercial dispatch), collect FOUR things across the conversation: (a) name, (b) phone number, (c) service address, (d) brief description of the issue. The customer may provide these one at a time, in chunks, or all at once — track what you have.
+5. CLOSING THE LEAD: As soon as you have all 4 pieces of info — even if some were given earlier in the conversation — STOP asking more questions. Write a SHORT confirmation message that lists the 4 pieces back to the customer, says someone will follow up, and ends with the EXACT phrase: [LEAD_READY]
+Do NOT ask another confirming question after you have all 4 pieces. Closing the loop is more important than perfect detail. If the issue description is vague (like "furnace not working"), that's still enough — don't keep probing for diagnostic detail. A tech will figure that out on site.
+6. For after-hours emergencies, also tell them to call (313) 282-4758 directly while you collect their info.
+7. NEVER invent specific repair prices. For new system pricing, you can mention the general range ($3,000–$6,000+ installed for a furnace) but always say a tech will give the exact quote on-site.
+8. Don't be pushy. If they just want info, give it to them — don't force lead capture.
+9. If asked about services we don't offer (plumbing, electrical, roofing, appliance repair), politely say it's not our area and suggest they find a specialist. Don't recommend specific competing companies.
+10. For angry/frustrated customers: acknowledge their feelings first ("That's really frustrating — I'm sorry"), don't make excuses, don't promise refunds or specific actions you can't guarantee. Collect info and tell them you'll escalate to the owner. The owner is Brian.
+
+TONE EXAMPLES:
+- Good: "Oh no, a furnace acting up in Michigan is no fun! Let's get a tech out to take a look. Can I grab your name and number?"
+- Good: "Yep, we cover Livonia! Same-day service is usually doable. What's going on with your system?"
+- Good (commercial): "Got it — 5-ton Carrier RTU, compressor not engaging. I'll need your name, phone, and site address to dispatch."
+- Bad: "I would be delighted to assist you with your HVAC concerns at this time." (too stiff)`;
+        
+        const chatBubble = document.getElementById('chat-bubble');
+        const chatWidget = document.getElementById('chat-widget');
+        const closeBtn = document.getElementById('close-chat-btn');
+        const messagesEl = document.getElementById('chat-messages');
+        const inputEl = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-chat-btn');
+        const quickRepliesEl = document.getElementById('quick-replies');
+        const chatBadge = document.getElementById('chat-badge');
+        
+        const TEMPI_SMALL_SVG = `<svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" class="msg-avatar-small"><circle cx="14" cy="14" r="14" fill="#fde68a"/><circle cx="14" cy="15" r="7" fill="#fcd9b6"/><path d="M 7 14 Q 8 5 14 4 Q 20 5 21 14 Q 20 11 18 9.5 Q 16 8.5 14 8.5 Q 12 8.5 10 9.5 Q 8 11 7 14 Z" fill="#8b4513"/><circle cx="11.5" cy="15" r="0.9" fill="#1f2937"/><circle cx="16.5" cy="15" r="0.9" fill="#1f2937"/><circle cx="11.7" cy="14.8" r="0.3" fill="white"/><circle cx="16.7" cy="14.8" r="0.3" fill="white"/><path d="M 11.5 17.5 Q 14 19 16.5 17.5" stroke="#c2410c" stroke-width="0.9" fill="none" stroke-linecap="round"/><ellipse cx="9.8" cy="16.8" rx="0.9" ry="0.5" fill="#fda4af" opacity="0.6"/><ellipse cx="18.2" cy="16.8" rx="0.9" ry="0.5" fill="#fda4af" opacity="0.6"/><path d="M 7.5 12 Q 14 7 20.5 12" stroke="#1e293b" stroke-width="1.2" fill="none" stroke-linecap="round"/><circle cx="7.2" cy="13" r="1.4" fill="#1e293b"/><circle cx="20.8" cy="13" r="1.4" fill="#1e293b"/></svg>`;
+        
+        function escapeHtml(s) {
+            const div = document.createElement('div');
+            div.textContent = s;
+            return div.innerHTML;
+        }
+        
+        function addBotMessage(text) {
+            const row = document.createElement('div');
+            row.className = 'msg-row bot';
+            row.innerHTML = TEMPI_SMALL_SVG + `<div class="msg-bubble bot">${escapeHtml(text)}</div>`;
+            messagesEl.appendChild(row);
+            scrollToBottom();
+        }
+        
+        function addUserMessage(text) {
+            const row = document.createElement('div');
+            row.className = 'msg-row user';
+            row.innerHTML = `<div class="msg-bubble user">${escapeHtml(text)}</div>`;
+            messagesEl.appendChild(row);
+            scrollToBottom();
+        }
+        
+        function showTyping() {
+            const row = document.createElement('div');
+            row.className = 'msg-row bot';
+            row.id = 'typing-row';
+            row.innerHTML = TEMPI_SMALL_SVG + `<div class="msg-bubble bot typing"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>`;
+            messagesEl.appendChild(row);
+            scrollToBottom();
+        }
+        
+        function hideTyping() {
+            const t = document.getElementById('typing-row');
+            if (t) t.remove();
+        }
+        
+        function scrollToBottom() {
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+        }
+        
+        function showBadge(n) {
+            chatBadge.textContent = n;
+            chatBadge.classList.remove('hidden');
+        }
+        
+        function hideBadge() {
+            chatBadge.classList.add('hidden');
+        }
+        
+        function openWidget() {
+            chatWidget.classList.remove('hidden');
+            widgetEverOpened = true;
+            hideBadge();
+            
+            if (!hasGreeted) {
+                hasGreeted = true;
+                setTimeout(() => {
+                    addBotMessage("Hi there! 👋 I'm Tempi from Mechanical Temp. How can I help you today?");
+                    quickRepliesEl.classList.remove('hidden');
+                }, 300);
+            }
+            
+            loadEmailJS().catch(e => console.error('EmailJS load failed', e));
+            setTimeout(() => inputEl.focus(), 100);
+        }
+        
+        function closeWidget() {
+            chatWidget.classList.add('hidden');
+            if (conversationHistory.length > 0 && !leadCaptured) {
+                showBadge('!');
+            }
+        }
+        
+        function toggleWidget() {
+            if (chatWidget.classList.contains('hidden')) {
+                openWidget();
+            } else {
+                closeWidget();
+            }
+        }
+        
+        async function sendToClaude(userMessage) {
+            conversationHistory.push({ role: 'user', content: userMessage });
+            try {
+                const res = await fetch(CLAUDE_PROXY_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: 'claude-haiku-4-5-20251001',
+                        max_tokens: 400,
+                        system: SYSTEM_PROMPT,
+                        messages: conversationHistory
+                    })
+                });
+                if (!res.ok) throw new Error('Proxy error: ' + res.status);
+                const data = await res.json();
+                const reply = data.content?.filter(b => b.type === 'text')?.map(b => b.text)?.join('\n') || "Hmm, I didn't catch that. Could you try again?";
+                conversationHistory.push({ role: 'assistant', content: reply });
+                return reply;
+            } catch (err) {
+                console.error('Claude call failed:', err);
+                return "I'm having trouble connecting right now 😕 Please call us at (313) 282-4758 and we'll help you right away!";
+            }
+        }
+        
+        function extractLeadInfo(conversation) {
+            const fullText = conversation.map(m => m.content).join('\n');
+            const phoneMatch = fullText.match(/(\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/);
+            return {
+                from_name: 'Tempi - Website Chat Lead',
+                phone: phoneMatch ? phoneMatch[0] : 'See transcript',
+                message: '🤖 NEW CHAT LEAD FROM TEMPI 🤖\n\nFull conversation transcript:\n\n' + 
+                    conversation.map(m => `[${m.role === 'user' ? 'CUSTOMER' : 'TEMPI'}]: ${m.content.replace(/\[LEAD_READY\]/g, '')}`).join('\n\n')
+            };
+        }
+        
+        async function fireLeadEmail() {
+            if (leadCaptured) return;
+            leadCaptured = true;
+            try {
+                await loadEmailJS();
+                const leadData = extractLeadInfo(conversationHistory);
+                await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, leadData);
+                console.log('Lead email sent to DSM via EmailJS');
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'chat_lead', { 'event_category': 'conversion' });
+                }
+            } catch (err) {
+                console.error('Lead email failed:', err);
+                leadCaptured = false;
+            }
+        }
+        
+        async function handleSend(text) {
+            text = (text || inputEl.value).trim();
+            if (!text) return;
+            quickRepliesEl.classList.add('hidden');
+            addUserMessage(text);
+            inputEl.value = '';
+            sendBtn.disabled = true;
+            inputEl.disabled = true;
+            showTyping();
+            const reply = await sendToClaude(text);
+            hideTyping();
+            const cleanReply = reply.replace(/\[LEAD_READY\]/g, '').trim();
+            addBotMessage(cleanReply);
+            if (reply.includes('[LEAD_READY]')) {
+                fireLeadEmail();
+            }
+            sendBtn.disabled = false;
+            inputEl.disabled = false;
+            inputEl.focus();
+        }
+        
+        chatBubble.addEventListener('click', toggleWidget);
+        closeBtn.addEventListener('click', closeWidget);
+        sendBtn.addEventListener('click', () => handleSend());
+        inputEl.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSend();
+            }
         });
-    });
+        inputEl.addEventListener('input', () => {
+            inputEl.style.height = 'auto';
+            inputEl.style.height = Math.min(inputEl.scrollHeight, 80) + 'px';
+        });
+        document.querySelectorAll('.quick-reply').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const msg = btn.getAttribute('data-msg');
+                handleSend(msg);
+            });
+        });
+        setTimeout(() => {
+            if (!widgetEverOpened) showBadge('1');
+        }, 10000);
+    })();
 
-    // --- ALL INITIALIZATION AND EVENT LISTENERS ---
+    // =================================================================== //
+    // INITIALIZATION + ANALYTICS                                          //
+    // =================================================================== //
     document.addEventListener('DOMContentLoaded', function() {
-        // Initialize scheduler calendar and captcha
         generateCalendar();
         generateMathCaptcha();
 
-        // Track phone link clicks
         const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
         phoneLinks.forEach(link => {
             link.addEventListener('click', function() {
-                gtag('event', 'phone_call_click', {
-                    'event_category': 'conversion'
-                });
+                gtag('event', 'phone_call_click', {'event_category': 'conversion'});
             });
         });
 
-        // Track system selector link click
         const systemSelectorLink = document.querySelector('#system-selector-cta a');
         if (systemSelectorLink) {
             systemSelectorLink.addEventListener('click', function() {
-                gtag('event', 'system_selector_click', {
-                    'event_category': 'engagement'
-                });
+                gtag('event', 'system_selector_click', {'event_category': 'engagement'});
             });
         }
 
-        // Track specific offer and service plan clicks
         const offerButtons = document.querySelectorAll('#offers button[onclick="openScheduler()"]');
         offerButtons.forEach(button => {
             button.addEventListener('click', function() {
@@ -1083,15 +1389,13 @@
             });
         });
 
-        // Track service plan link click
         const servicePlanLink = document.querySelector('#service-plan a[href="service-plan.html"]');
         if (servicePlanLink) {
             servicePlanLink.addEventListener('click', function() {
-                gtag('event', 'click_service_plan_cta', {
-                    'event_category': 'engagement'
-                });
+                gtag('event', 'click_service_plan_cta', {'event_category': 'engagement'});
             });
         }
     });
 </script>
+</body>
 </html>
