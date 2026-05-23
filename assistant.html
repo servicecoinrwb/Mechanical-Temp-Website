@@ -78,7 +78,6 @@
         <nav class="container mx-auto flex justify-between items-center">
             <a href="https://www.mechanicaltemp.com" class="flex items-center gap-3">
                 <img src="https://i.imgur.com/YJvJw7V.png" alt="Mechanical Temp" class="h-10 w-auto" onerror="this.style.display='none'">
-                <span class="font-bold hidden sm:inline"></span>
             </a>
             <div class="flex items-center gap-4">
                 <a href="https://www.mechanicaltemp.com" class="text-sm text-slate-300 hover:text-white hidden sm:inline">← Main site</a>
@@ -91,14 +90,14 @@
     </header>
 
     <!-- HERO: Tempi-as-the-page -->
-    <section class="min-h-[85vh] flex flex-col items-center justify-center px-4 pt-20 pb-8 relative hero-glow"
+    <section class="min-h-[85vh] flex flex-col items-center justify-center px-4 pt-20 pb-8 relative hero-glow">
         <div class="max-w-2xl w-full text-center">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/30 text-sky-300 text-xs font-semibold uppercase tracking-wider mb-6">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l1.9 5.8 5.8 1.9-5.8 1.9L12 18.4l-1.9-5.8L4.3 10.7l5.8-1.9L12 3z"/></svg>
                 New · AI-powered assistant
             </div>
 
-            <!-- Tempi avatar (same SVG as the chat widget on main site) -->
+            <!-- Tempi avatar -->
             <div class="w-20 h-20 mx-auto mb-5 rounded-full bg-amber-100 flex items-center justify-center shadow-2xl">
                 <svg viewBox="0 0 44 44" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="22" cy="23" r="11" fill="#fcd9b6"/>
@@ -132,7 +131,8 @@
                     id="hero-input"
                     type="text"
                     placeholder="e.g. my furnace won't turn on..."
-class="w-full pl-5 pr-16 py-4 text-base bg-white/8 backdrop-blur border border-white/20 rounded-2xl text-slate-900 placeholder-slate-400 focus:bg-white/12 focus:border-sky-400 outline-none transition"                />
+                    class="w-full pl-5 pr-16 py-4 text-base bg-white/8 backdrop-blur border border-white/20 rounded-2xl text-slate-900 placeholder-slate-400 focus:bg-white/12 focus:border-sky-400 outline-none transition"
+                />
                 <button
                     id="hero-send"
                     class="absolute right-2 top-1/2 -translate-y-1/2 bg-sky-500 hover:bg-sky-400 disabled:opacity-40 text-white w-10 h-10 rounded-xl flex items-center justify-center transition"
@@ -151,7 +151,8 @@ class="w-full pl-5 pr-16 py-4 text-base bg-white/8 backdrop-blur border border-w
             </div>
 
             <!-- Trust line -->
-            <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-slate-400"><span class="flex items-center gap-1"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="text-yellow-400"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 5-star Google</span>
+            <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-slate-400">
+                <span class="flex items-center gap-1"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="text-yellow-400"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 5-star Google</span>
                 <span>·</span>
                 <span>Southfield, MI</span>
                 <span>·</span>
@@ -168,7 +169,7 @@ class="w-full pl-5 pr-16 py-4 text-base bg-white/8 backdrop-blur border border-w
         </div>
     </section>
 
-    <!-- MENU SECTION (Express Booking style, but adapted to dark theme) -->
+    <!-- MENU SECTION -->
     <section id="menu" class="bg-slate-50 text-slate-900 py-16 px-4">
         <div class="max-w-4xl mx-auto">
             <div class="text-center mb-10">
@@ -254,10 +255,9 @@ class="w-full pl-5 pr-16 py-4 text-base bg-white/8 backdrop-blur border border-w
         <p class="text-xs text-slate-500 mt-6">&copy; 2025 Mechanical Temp. All Rights Reserved.</p>
     </footer>
 
-    <!-- ========== TEMPI CHAT OVERLAY (fullscreen on this page) ========== -->
+    <!-- ========== TEMPI CHAT OVERLAY ========== -->
     <div id="tempi-overlay" class="hidden fixed inset-0 z-50 bg-slate-900/95 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="w-full max-w-2xl h-[85vh] max-h-[700px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden">
-            <!-- Header -->
             <div class="bg-gradient-to-r from-sky-700 to-sky-500 text-white p-4 flex items-center gap-3">
                 <div class="w-11 h-11 rounded-full bg-amber-100 border-2 border-white overflow-hidden flex-shrink-0">
                     <svg viewBox="0 0 44 44" width="44" height="44" xmlns="http://www.w3.org/2000/svg">
@@ -277,23 +277,20 @@ class="w-full pl-5 pr-16 py-4 text-base bg-white/8 backdrop-blur border border-w
                 <button id="close-tempi" class="text-white/80 hover:text-white text-2xl leading-none w-8 h-8 flex items-center justify-center">&times;</button>
             </div>
 
-            <!-- Portal bar (same as main site) -->
             <a href="https://customer.mechanicaltemp.com/" target="_blank" rel="noopener noreferrer" class="bg-sky-50 hover:bg-sky-100 border-b border-sky-200 px-4 py-2 flex items-center gap-2 text-sky-900 text-xs font-bold transition">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20" fill="currentColor" class="text-sky-600"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm3 0a1 1 0 011-1h1a1 1 0 110 2H8a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
                 <span>Customer Portal · Pay Online</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="ml-auto"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
             </a>
 
-            <!-- Thread -->
             <div id="tempi-thread" class="flex-1 overflow-y-auto p-4 chat-scroll bg-slate-50 flex flex-col gap-3"></div>
 
-            <!-- Input -->
             <div class="border-t border-slate-200 bg-white p-3 flex gap-2">
                 <input
                     id="tempi-input"
                     type="text"
                     placeholder="Type your message..."
-                    class="flex-1 px-4 py-3 bg-slate-100 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-sky-400 outline-none"
+                    class="flex-1 px-4 py-3 bg-slate-100 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:border-sky-400 outline-none"
                 />
                 <button id="tempi-send" class="bg-sky-600 hover:bg-sky-700 disabled:opacity-50 text-white px-5 rounded-xl font-bold text-sm">Send</button>
             </div>
@@ -301,7 +298,7 @@ class="w-full pl-5 pr-16 py-4 text-base bg-white/8 backdrop-blur border border-w
         </div>
     </div>
 
-    <!-- ========== MENU OVERLAY (category items & cart) ========== -->
+    <!-- ========== MENU OVERLAY ========== -->
     <div id="menu-overlay" class="hidden fixed inset-0 z-50 bg-slate-900/95 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="w-full max-w-2xl h-[85vh] max-h-[700px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden text-slate-900">
             <div id="menu-overlay-header" class="p-5 flex items-center justify-between border-b border-slate-200">
@@ -323,7 +320,7 @@ class="w-full pl-5 pr-16 py-4 text-base bg-white/8 backdrop-blur border border-w
         </div>
     </div>
 
-    <!-- Cart bar (sticky bottom when items added) -->
+    <!-- Cart bar -->
     <div id="cart-bar" class="hidden fixed bottom-4 left-4 right-4 z-40 max-w-md mx-auto">
         <button id="open-checkout-btn" class="w-full bg-slate-900 hover:bg-black text-white p-4 rounded-2xl shadow-2xl flex justify-between items-center border border-slate-700">
             <div class="flex items-center gap-3">
@@ -336,7 +333,7 @@ class="w-full pl-5 pr-16 py-4 text-base bg-white/8 backdrop-blur border border-w
 
 <script>
     // ============================================================
-    // CONFIG — wired to YOUR existing infrastructure
+    // CONFIG
     // ============================================================
     const TEMPI_PROXY_URL = 'https://tempi.summer-unit-44dd.workers.dev/';
     const TEMPI_MODEL = 'claude-haiku-4-5-20251001';
@@ -345,7 +342,7 @@ class="w-full pl-5 pr-16 py-4 text-base bg-white/8 backdrop-blur border border-w
     const EMAILJS_USER = 'IJHcoSxlSQ9OPOJGS';
 
     // ============================================================
-    // CAPABILITIES — same shape as main site
+    // CAPABILITIES
     // ============================================================
     const CAPABILITIES = {
         advertised: [
@@ -385,8 +382,7 @@ ${CAPABILITIES.decline.map(s => "- " + s).join("\n")}
 `;
 
     // ============================================================
-    // TEMPI SYSTEM PROMPT — same as main site, with one addition:
-    // Tempi knows about the visible service menu on this page
+    // TEMPI SYSTEM PROMPT
     // ============================================================
     const MENU_ITEMS_FOR_PROMPT = [
         { id: 'h1', name: 'No-Heat Diagnostic', price: 89, category: 'Heating' },
@@ -411,6 +407,12 @@ ABOUT MECHANICAL TEMP:
 - National accounts: CBRE, Cushman & Wakefield, Sodexo, SMS Assist, Nest Facilitate, Boss Facility Services, CLS, Roth
 - Office email: office@mechanicaltemp.com
 - CUSTOMER PORTAL: https://customer.mechanicaltemp.com/ — for paying invoices, scheduling, messaging us. Google login or magic link, no password.
+
+==== FORMATTING — VERY IMPORTANT ====
+
+DO NOT use markdown formatting. NO asterisks for bold (**word** is forbidden), NO underscores for italics, NO markdown headers (#), NO markdown links ([text](url)). The chat bubble renders plain text only, so markdown will show as literal characters and look broken.
+
+Write in plain text. If you want to emphasize a word, just say it normally. Bullet points are okay using simple dashes (- item).
 
 ==== THIS IS THE AI ASSISTANT LANDING PAGE ====
 
@@ -445,7 +447,7 @@ EVERY response MUST end with quick-reply buttons in this EXACT format:
 - Tiny emoji sparingly (📍 location, 💰 pricing, ✓ confirm, 📋 paperwork, 🏢 commercial)
 - Always include a forward option AND an escape option
 
-When you have all required fields, write confirmation in this format:
+When you have all required fields, write confirmation in this format (plain text, no markdown):
 
 Got it, [name]! To confirm:
 - [field 1]: [value]
@@ -463,7 +465,7 @@ Someone will follow up shortly. [LEAD_READY:TYPE]
 6. After-hours emergencies: tell them to call (313) 282-4758 while still collecting info.
 7. Once you fire [LEAD_READY:TYPE], do not keep probing.
 
-==== EXAMPLES ====
+==== EXAMPLES (note: plain text, no asterisks anywhere) ====
 
 Customer: "My furnace won't turn on"
 Tempi: "Oh no, that's no fun in Michigan! Our No-Heat Diagnostic at $89 covers the trip plus first hour of troubleshooting — usually catches it. Want me to grab your info to dispatch a tech, or got questions first?
@@ -477,7 +479,7 @@ Customer: "Do you do walk-in coolers?"
 Tempi: "Yep, commercial refrigeration is right in our wheelhouse — walk-ins, reach-ins, ice machines. Not our main marketing focus but we've got 20+ years of refrigeration experience. What's going on?
 [BTN: ✓ Send a tech | Get a quote | Other equipment too]"
 
-REMEMBER: Identify conversation type → collect ONLY the fields for that type → fire [LEAD_READY:TYPE] → done. Every response has [BTN: ...] line at the end.`;
+REMEMBER: Identify conversation type → collect ONLY the fields for that type → fire [LEAD_READY:TYPE] → done. Every response has [BTN: ...] line at the end. NO MARKDOWN — plain text only.`;
 
     // ============================================================
     // SERVICE MENU
@@ -554,15 +556,25 @@ REMEMBER: Identify conversation type → collect ONLY the fields for that type �
         const d = document.createElement('div'); d.textContent = s; return d.innerHTML;
     }
 
+    // Strip markdown that Tempi might still produce despite the prompt
+    function stripMarkdown(s) {
+        return s
+            .replace(/\*\*([^*]+)\*\*/g, '$1')   // **bold** → bold
+            .replace(/\*([^*]+)\*/g, '$1')       // *italic* → italic
+            .replace(/__([^_]+)__/g, '$1')       // __bold__ → bold
+            .replace(/_([^_]+)_/g, '$1')         // _italic_ → italic
+            .replace(/`([^`]+)`/g, '$1');        // `code` → code
+    }
+
     function parseButtons(text) {
         const m = text.match(/\[BTN:\s*([^\]]+)\]/);
-        if (!m) return { cleanText: text, buttons: [] };
+        if (!m) return { cleanText: stripMarkdown(text), buttons: [] };
         const buttons = m[1].split('|').map(s => s.trim()).filter(Boolean);
-        const cleanText = text
+        const cleanText = stripMarkdown(text
             .replace(/\[BTN:[^\]]+\]/g, '')
             .replace(/\[LEAD_READY:[^\]]+\]/g, '')
             .replace(/\[LEAD_READY\]/g, '')
-            .trim();
+            .trim());
         return { cleanText, buttons };
     }
 
@@ -821,14 +833,13 @@ REMEMBER: Identify conversation type → collect ONLY the fields for that type �
         document.getElementById('cart-total').textContent = '$' + total;
     }
     document.getElementById('open-checkout-btn').addEventListener('click', () => {
-        // Hand off cart contents to Tempi as a structured starter message
         closeMenu();
         const summary = cart.map(i => `- ${i.name} ($${i.price})`).join('\n');
         const total = cart.reduce((s, i) => s + i.price, 0);
         openTempi(`I want to book the following services (total $${total}):\n${summary}\n\nPlease collect my contact info and schedule it.`);
     });
 
-    // Apply category-card styles (Tailwind doesn't catch the class because it's defined dynamically)
+    // Apply category-card styles
     document.querySelectorAll('.category-card').forEach(c => {
         c.style.cssText += 'display:flex;align-items:center;gap:1rem;padding:1.25rem;border-radius:1rem;border:2px solid transparent;transition:all 0.2s;cursor:pointer;';
         c.addEventListener('mouseenter', () => c.style.transform = 'translateY(-2px)');
