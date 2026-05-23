@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) — same as main site -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0G63KLB2B0"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-0G63KLB2B0');
+      gtag('config', 'AW-11260644372');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talk to Tempi — Mechanical Temp AI Assistant</title>
+    <meta name="description" content="Describe your HVAC issue and get instant help from Tempi, our AI assistant. Or browse services to book directly. Serving Metro Detroit.">
+    <link rel="canonical" href="https://www.mechanicaltemp.com/assistant.html" />
+    <link rel="preconnect" href="https://tempi.summer-unit-44dd.workers.dev">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #0f172a; }
+        html { scroll-behavior: smooth; }
+        @keyframes blink { 0%, 80%, 100% { opacity: 0.3; } 40% { opacity: 1; } }
+        .typing-dot { animation: blink 1.2s infinite; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-up { animation: fadeUp 0.3s ease-out; }
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .hero-glow {
+            background: radial-gradient(circle at 30% 20%, rgba(14, 165, 233, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(2, 132, 199, 0.12) 0%, transparent 50%);
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #38bdf8, #0ea5e9, #0284c7);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-shift 6s ease infinite;
+        }
+        .chat-scroll::-webkit-scrollbar { width: 6px; }
+        .chat-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .inline-btn {
+            background: #e0f2fe;
+            color: #0c4a6e;
+            border: 1.5px solid #7dd3fc;
+            border-radius: 14px;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.15s;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .inline-btn:hover {
+            background: #0ea5e9;
+            color: white;
+            border-color: #0ea5e9;
+        }
+        .inline-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body class="text-white">
+
+    <!-- Minimal top nav -->
+    <header class="absolute top-0 left-0 right-0 z-30 p-4">
+        <nav class="container mx-auto flex justify-between items-center">
+            <a href="https://www.mechanicaltemp.com" class="flex items-center gap-3">
+                <img src="https://i.imgur.com/YJvJw7V.png" alt="Mechanical Temp" class="h-10 w-auto" onerror="this.style.display='none'">
+                <span class="font-bold hidden sm:inline">Mechanical Temp</span>
+            </a>
+            <div class="flex items-center gap-4">
+                <a href="https://www.mechanicaltemp.com" class="text-sm text-slate-300 hover:text-white hidden sm:inline">← Main site</a>
+                <a href="tel:+13132824758" class="bg-sky-600 hover:bg-sky-500 text-white text-sm font-bold px-4 py-2 rounded-lg flex items-center gap-2">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <span class="hidden sm:inline">(313) 282-4758</span>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- HERO: Tempi-as-the-page -->
+    <section class="min-h-screen flex flex-col items-center justify-center px-4 pt-24 pb-12 relative hero-glow">
+        <div class="max-w-2xl w-full text-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/30 text-sky-300 text-xs font-semibold uppercase tracking-wider mb-6">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l1.9 5.8 5.8 1.9-5.8 1.9L12 18.4l-1.9-5.8L4.3 10.7l5.8-1.9L12 3z"/></svg>
+                New · AI-powered assistant
+            </div>
+
+            <!-- Tempi avatar (same SVG as the chat widget on main site) -->
+            <div class="w-20 h-20 mx-auto mb-5 rounded-full bg-amber-100 flex items-center justify-center shadow-2xl">
+                <svg viewBox="0 0 44 44" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="22" cy="23" r="11" fill="#fcd9b6"/>
+                    <path d="M 10 22 Q 11 8 22 7 Q 33 8 34 22 Q 33 16 30 14 Q 26 12 22 12 Q 18 12 14 14 Q 11 16 10 22 Z" fill="#8b4513"/>
+                    <path d="M 13 20 Q 16 15 20 16 Q 18 18 16 20 Z" fill="#8b4513"/>
+                    <path d="M 31 20 Q 28 15 24 16 Q 26 18 28 20 Z" fill="#8b4513"/>
+                    <circle cx="18" cy="23" r="1.3" fill="#1f2937"/>
+                    <circle cx="26" cy="23" r="1.3" fill="#1f2937"/>
+                    <circle cx="18.4" cy="22.6" r="0.4" fill="white"/>
+                    <circle cx="26.4" cy="22.6" r="0.4" fill="white"/>
+                    <path d="M 18 27 Q 22 29.5 26 27" stroke="#c2410c" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+                    <ellipse cx="15.5" cy="26" rx="1.4" ry="0.8" fill="#fda4af" opacity="0.6"/>
+                    <ellipse cx="28.5" cy="26" rx="1.4" ry="0.8" fill="#fda4af" opacity="0.6"/>
+                    <path d="M 11 19 Q 22 10 33 19" stroke="#1e293b" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                    <circle cx="10.5" cy="21" r="2.2" fill="#1e293b"/>
+                    <circle cx="33.5" cy="21" r="2.2" fill="#1e293b"/>
+                    <path d="M 33.5 23 Q 35 25 33 28" stroke="#1e293b" stroke-width="1.3" fill="none"/>
+                    <circle cx="32.5" cy="28" r="1" fill="#1e293b"/>
+                </svg>
+            </div>
+
+            <h1 class="text-3xl md:text-5xl font-black tracking-tight mb-3 leading-tight">
+                Hi, I'm <span class="gradient-text">Tempi</span>.
+            </h1>
+            <p class="text-xl md:text-2xl text-slate-300 mb-2 font-light">How can I help with your HVAC today?</p>
+            <p class="text-sm text-slate-400 mb-8">Tell me what's going on — or browse services below.</p>
+
+            <!-- Big input -->
+            <div class="relative max-w-xl mx-auto mb-4">
+                <input
+                    id="hero-input"
+                    type="text"
+                    placeholder="e.g. my furnace won't turn on..."
+                    class="w-full pl-5 pr-16 py-4 text-base bg-white/8 backdrop-blur border border-white/20 rounded-2xl text-white placeholder-slate-400 focus:bg-white/12 focus:border-sky-400 outline-none transition"
+                />
+                <button
+                    id="hero-send"
+                    class="absolute right-2 top-1/2 -translate-y-1/2 bg-sky-500 hover:bg-sky-400 disabled:opacity-40 text-white w-10 h-10 rounded-xl flex items-center justify-center transition"
+                >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </button>
+            </div>
+
+            <!-- Quick-start chips -->
+            <div class="flex flex-wrap gap-2 justify-center mb-10">
+                <button class="hero-chip" data-msg="My furnace won't turn on, I have no heat.">No heat</button>
+                <button class="hero-chip" data-msg="My AC is running but not cooling.">No cool</button>
+                <button class="hero-chip" data-msg="I want to schedule a seasonal tune-up.">Tune-up</button>
+                <button class="hero-chip" data-msg="I'm with a property management company and need commercial HVAC service.">Commercial</button>
+                <button class="hero-chip" data-msg="I need a W-9 or COI from you for vendor onboarding.">Paperwork</button>
+            </div>
+
+            <!-- Trust line -->
+            <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-slate-400">
+                <span class="flex items-center gap-1"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="text-yellow-400"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 5-star Google</span>
+                <span>·</span>
+                <span>Southfield, MI</span>
+                <span>·</span>
+                <span>24/7 emergency service</span>
+                <span>·</span>
+                <span>20+ years experience</span>
+            </div>
+        </div>
+
+        <!-- Scroll hint -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-slate-500 text-xs animate-bounce">
+            <span>Browse services</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+    </section>
+
+    <!-- MENU SECTION (Express Booking style, but adapted to dark theme) -->
+    <section id="menu" class="bg-slate-50 text-slate-900 py-16 px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-10">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-100 text-sky-700 text-xs font-semibold uppercase tracking-wider mb-4">
+                    Or pick a service
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-2">Express Booking</h2>
+                <p class="text-slate-600 max-w-xl mx-auto">Know what you need? Skip the chat — pick a service and book directly.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div class="category-card bg-orange-50 hover:shadow-xl" data-cat="heating">
+                    <div class="bg-white p-3 rounded-xl shadow-sm">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-2.246-3.664-4.97-6.08a9.856 9.856 0 0 1 5.071 2.449c.5.5.5 1.5 1.5 2 2 1 2.5 3.5 2.5 5a4.5 4.5 0 0 1-4.5 4.5c-2.485 0-4.5-2.015-4.5-4.5a3.5 3.5 0 0 1 3.5-3.5c.958 0 1.5.5 1.5 1.5"/></svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-lg">Heating</h3>
+                        <p class="text-sm text-slate-600">Furnace · Boiler · Heat Pump</p>
+                        <div class="mt-1 text-sm font-bold text-orange-600">View services →</div>
+                    </div>
+                </div>
+
+                <div class="category-card bg-sky-50 hover:shadow-xl" data-cat="cooling">
+                    <div class="bg-white p-3 rounded-xl shadow-sm">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2"><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/><path d="M20 16l-4-4 4-4"/><path d="M4 8l4 4-4 4"/><path d="M16 4l-4 4-4-4"/><path d="M8 20l4-4 4 4"/></svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-lg">Cooling</h3>
+                        <p class="text-sm text-slate-600">AC · Mini-split</p>
+                        <div class="mt-1 text-sm font-bold text-sky-600">View services →</div>
+                    </div>
+                </div>
+
+                <div class="category-card bg-green-50 hover:shadow-xl" data-cat="iaq">
+                    <div class="bg-white p-3 rounded-xl shadow-sm">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/></svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-lg">Air Quality</h3>
+                        <p class="text-sm text-slate-600">Humidifier · IAQ · Filters</p>
+                        <div class="mt-1 text-sm font-bold text-green-600">View services →</div>
+                    </div>
+                </div>
+
+                <div class="category-card bg-purple-50 hover:shadow-xl" data-cat="plans">
+                    <div class="bg-white p-3 rounded-xl shadow-sm">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-lg">Service Plans</h3>
+                        <p class="text-sm text-slate-600">Monthly memberships</p>
+                        <div class="mt-1 text-sm font-bold text-purple-600">View services →</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bridge: nudge back to Tempi if menu doesn't fit -->
+            <div class="bg-white border border-sky-200 rounded-2xl p-5 flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+                <div class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                    <svg viewBox="0 0 44 44" width="36" height="36" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="22" cy="23" r="11" fill="#fcd9b6"/>
+                        <path d="M 10 22 Q 11 8 22 7 Q 33 8 34 22 Q 33 16 30 14 Q 26 12 22 12 Q 18 12 14 14 Q 11 16 10 22 Z" fill="#8b4513"/>
+                        <circle cx="18" cy="23" r="1.3" fill="#1f2937"/>
+                        <circle cx="26" cy="23" r="1.3" fill="#1f2937"/>
+                        <path d="M 18 27 Q 22 29.5 26 27" stroke="#c2410c" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <p class="font-bold text-slate-900">Don't see what you need?</p>
+                    <p class="text-sm text-slate-600">Tempi can help with commercial dispatch, paperwork, billing questions, and more.</p>
+                </div>
+                <button id="back-to-tempi-btn" class="bg-sky-600 hover:bg-sky-700 text-white font-bold px-5 py-2.5 rounded-lg whitespace-nowrap">Ask Tempi</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 px-4 text-center">
+        <img src="https://i.imgur.com/YJvJw7V.png" alt="Mechanical Temp" class="h-10 w-auto mx-auto mb-3" onerror="this.style.display='none'">
+        <p class="font-bold mb-1">Mechanical Temp</p>
+        <p class="text-slate-400 text-sm mb-4">23093 Telegraph Rd, Southfield, MI 48033</p>
+        <p class="text-sm"><a href="tel:+13132824758" class="text-sky-400 hover:text-sky-300">Call us: (313) 282-4758</a></p>
+        <p class="text-xs text-slate-500 mt-6">&copy; 2025 Mechanical Temp. All Rights Reserved.</p>
+    </footer>
+
+    <!-- ========== TEMPI CHAT OVERLAY (fullscreen on this page) ========== -->
+    <div id="tempi-overlay" class="hidden fixed inset-0 z-50 bg-slate-900/95 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="w-full max-w-2xl h-[85vh] max-h-[700px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-sky-700 to-sky-500 text-white p-4 flex items-center gap-3">
+                <div class="w-11 h-11 rounded-full bg-amber-100 border-2 border-white overflow-hidden flex-shrink-0">
+                    <svg viewBox="0 0 44 44" width="44" height="44" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="22" cy="23" r="11" fill="#fcd9b6"/>
+                        <path d="M 10 22 Q 11 8 22 7 Q 33 8 34 22 Q 33 16 30 14 Q 26 12 22 12 Q 18 12 14 14 Q 11 16 10 22 Z" fill="#8b4513"/>
+                        <circle cx="18" cy="23" r="1.3" fill="#1f2937"/>
+                        <circle cx="26" cy="23" r="1.3" fill="#1f2937"/>
+                        <path d="M 18 27 Q 22 29.5 26 27" stroke="#c2410c" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <p class="font-bold">Tempi</p>
+                    <p class="text-xs opacity-90 flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 bg-green-400 rounded-full"></span> Mechanical Temp · online
+                    </p>
+                </div>
+                <button id="close-tempi" class="text-white/80 hover:text-white text-2xl leading-none w-8 h-8 flex items-center justify-center">&times;</button>
+            </div>
+
+            <!-- Portal bar (same as main site) -->
+            <a href="https://customer.mechanicaltemp.com/" target="_blank" rel="noopener noreferrer" class="bg-sky-50 hover:bg-sky-100 border-b border-sky-200 px-4 py-2 flex items-center gap-2 text-sky-900 text-xs font-bold transition">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20" fill="currentColor" class="text-sky-600"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm3 0a1 1 0 011-1h1a1 1 0 110 2H8a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
+                <span>Customer Portal · Pay Online</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="ml-auto"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+            </a>
+
+            <!-- Thread -->
+            <div id="tempi-thread" class="flex-1 overflow-y-auto p-4 chat-scroll bg-slate-50 flex flex-col gap-3"></div>
+
+            <!-- Input -->
+            <div class="border-t border-slate-200 bg-white p-3 flex gap-2">
+                <input
+                    id="tempi-input"
+                    type="text"
+                    placeholder="Type your message..."
+                    class="flex-1 px-4 py-3 bg-slate-100 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-sky-400 outline-none"
+                />
+                <button id="tempi-send" class="bg-sky-600 hover:bg-sky-700 disabled:opacity-50 text-white px-5 rounded-xl font-bold text-sm">Send</button>
+            </div>
+            <p class="text-center text-[10px] text-slate-400 py-2 bg-white border-t border-slate-100">Powered by AI. For emergencies call (313) 282-4758.</p>
+        </div>
+    </div>
+
+    <!-- ========== MENU OVERLAY (category items & cart) ========== -->
+    <div id="menu-overlay" class="hidden fixed inset-0 z-50 bg-slate-900/95 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="w-full max-w-2xl h-[85vh] max-h-[700px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden text-slate-900">
+            <div id="menu-overlay-header" class="p-5 flex items-center justify-between border-b border-slate-200">
+                <div class="flex items-center gap-3">
+                    <div id="menu-overlay-icon" class="bg-slate-100 p-2 rounded-xl"></div>
+                    <div>
+                        <h2 id="menu-overlay-title" class="font-bold text-lg leading-tight"></h2>
+                        <p id="menu-overlay-subtitle" class="text-xs text-slate-500"></p>
+                    </div>
+                </div>
+                <button id="close-menu-overlay" class="text-slate-400 hover:text-slate-700 text-2xl leading-none w-8 h-8 flex items-center justify-center">&times;</button>
+            </div>
+            <div id="menu-overlay-items" class="flex-1 overflow-y-auto p-4 chat-scroll bg-slate-50 space-y-3"></div>
+            <div class="bg-sky-50 border-t border-sky-200 p-3 flex items-center gap-3">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0c4a6e" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                <p class="text-xs flex-1 text-sky-900"><strong>Not sure which one?</strong> Tempi can help you pick.</p>
+                <button id="overlay-ask-tempi" class="bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg whitespace-nowrap">Ask Tempi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart bar (sticky bottom when items added) -->
+    <div id="cart-bar" class="hidden fixed bottom-4 left-4 right-4 z-40 max-w-md mx-auto">
+        <button id="open-checkout-btn" class="w-full bg-slate-900 hover:bg-black text-white p-4 rounded-2xl shadow-2xl flex justify-between items-center border border-slate-700">
+            <div class="flex items-center gap-3">
+                <div id="cart-count" class="bg-sky-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">0</div>
+                <span class="font-bold">Continue to booking</span>
+            </div>
+            <span class="font-bold text-lg" id="cart-total">$0</span>
+        </button>
+    </div>
+
+<script>
+    // ============================================================
+    // CONFIG — wired to YOUR existing infrastructure
+    // ============================================================
+    const TEMPI_PROXY_URL = 'https://tempi.summer-unit-44dd.workers.dev/';
+    const TEMPI_MODEL = 'claude-haiku-4-5-20251001';
+    const EMAILJS_SERVICE = 'service_ziwf1pg';
+    const EMAILJS_TEMPLATE = 'template_j68qyhk';
+    const EMAILJS_USER = 'IJHcoSxlSQ9OPOJGS';
+
+    // ============================================================
+    // CAPABILITIES — same shape as main site
+    // ============================================================
+    const CAPABILITIES = {
+        advertised: [
+            "Furnace repair, install, and maintenance",
+            "AC repair, install, and maintenance",
+            "Commercial HVAC",
+            "Ductwork",
+            "Ductless mini-splits",
+            "RTUs (rooftop units)"
+        ],
+        quiet: [
+            "Commercial refrigeration (walk-in coolers, reach-in coolers, ice machines, restaurant equipment cooling)",
+            "Boilers and hydronic heating",
+            "Water heaters (all types - tank, tankless, electric, gas)",
+            "Indoor air quality (UV systems, filtration, humidifiers, dehumidifiers)",
+            "Smart thermostats and controls",
+            "Building automation systems (BAS)"
+        ],
+        decline: [
+            "Plumbing leaks and repairs",
+            "Electrical panel work",
+            "Roofing",
+            "Kitchen appliance repair (stoves, dishwashers, fridges in homes)",
+            "New gas line runs from the meter"
+        ]
+    };
+
+    const capabilitiesBlock = `
+ADVERTISED CORE SERVICES (confident yes, route as lead):
+${CAPABILITIES.advertised.map(s => "- " + s).join("\n")}
+
+QUIET CAPABILITIES (we do these but don't advertise — warm yes with mention of 20+ years experience, route as lead):
+${CAPABILITIES.quiet.map(s => "- " + s).join("\n")}
+
+HARD NO SERVICES (politely decline, don't recommend competitors by name):
+${CAPABILITIES.decline.map(s => "- " + s).join("\n")}
+`;
+
+    // ============================================================
+    // TEMPI SYSTEM PROMPT — same as main site, with one addition:
+    // Tempi knows about the visible service menu on this page
+    // ============================================================
+    const MENU_ITEMS_FOR_PROMPT = [
+        { id: 'h1', name: 'No-Heat Diagnostic', price: 89, category: 'Heating' },
+        { id: 'h2', name: 'Seasonal Furnace Tune-Up', price: 69, category: 'Heating' },
+        { id: 'h3', name: 'Smart Thermostat Install', price: 149, category: 'Heating' },
+        { id: 'c1', name: 'No-Cool Diagnostic', price: 89, category: 'Cooling' },
+        { id: 'c2', name: 'AC Chemical Wash', price: 199, category: 'Cooling' },
+        { id: 'a1', name: 'Whole Home Humidifier Install', price: 550, category: 'Air Quality' },
+        { id: 'a2', name: 'Humidifier Pad Refresh', price: 65, category: 'Air Quality' },
+        { id: 'p1', name: 'Mechanical Temp Service Plan', price: 55, category: 'Service Plans', note: 'per month' }
+    ];
+
+    const SYSTEM_PROMPT = `You are Tempi, the friendly virtual customer service rep for Mechanical Temp, a commercial and residential HVAC company in Southfield, MI serving Metro Detroit. You're warm, helpful, and a little playful — like a knowledgeable friend at the front desk who's also great at gently moving the conversation forward.
+
+ABOUT MECHANICAL TEMP:
+- Address: 23093 Telegraph Rd, Southfield, MI 48033
+- Phone: (313) 282-4758
+- Hours: Weekdays 8am-4pm, Weekends 10am-2pm, 24/7 emergency service available
+- Service area: Southfield, Dearborn, Livonia, Novi, Canton, Plymouth, Northville, West Bloomfield, Royal Oak, Ferndale, Westland, Farmington Hills, Redford and surrounding Metro Detroit
+- Authorized AirQuest dealer (main brand for new installs), but our techs service ALL brands
+- Owner: Brian
+- National accounts: CBRE, Cushman & Wakefield, Sodexo, SMS Assist, Nest Facilitate, Boss Facility Services, CLS, Roth
+- Office email: office@mechanicaltemp.com
+- CUSTOMER PORTAL: https://customer.mechanicaltemp.com/ — for paying invoices, scheduling, messaging us. Google login or magic link, no password.
+
+==== THIS IS THE AI ASSISTANT LANDING PAGE ====
+
+The customer is on a special page where YOU are the main feature, not a chat bubble in the corner. There is also a visible service menu on this page with these bookable items:
+
+${JSON.stringify(MENU_ITEMS_FOR_PROMPT, null, 2)}
+
+When a customer's issue matches one of these items, you can MENTION the menu item by name and suggest they book it directly. Example: "Sounds like a no-heat call — our No-Heat Diagnostic at $89 covers the trip and first hour of troubleshooting. Want me to set that up for you, or want me to walk through it first?"
+
+==== CRITICAL: CONVERSATION ROUTING ====
+
+Your FIRST job is to figure out WHY they're chatting. Don't assume every conversation is a service lead. The 7 conversation types:
+
+1. SERVICE_LEAD — Residential customer needs HVAC work. Collect: name, phone, address, brief issue. End with [LEAD_READY:SERVICE_LEAD].
+2. COMMERCIAL_DISPATCH — Facilities/property management rep (CBRE, Cushman, Sodexo, SMS Assist, etc). URGENT. Collect: name, direct phone, site address. End with [LEAD_READY:COMMERCIAL_DISPATCH].
+3. PAPERWORK — They need W-9, COI, vendor packet, etc. Collect: company name, contact name, email, document needed. End with [LEAD_READY:PAPERWORK].
+4. BILLING — Question about an invoice or past job. Collect: name, phone, service address, what their question is. End with [LEAD_READY:BILLING].
+5. VENDOR_SALES — Someone selling TO Mechanical Temp. Soft-screen. Spam → redirect to office@mechanicaltemp.com, NO capture. Legit → collect company, contact, phone/email, what they're offering. End with [LEAD_READY:VENDOR_SALES].
+6. EXISTING_CUSTOMER — Following up on a job we already did. Collect: name, phone, service address, what they need. End with [LEAD_READY:EXISTING_CUSTOMER].
+7. GENERAL_INFO — Just asking questions. No capture unless buying intent appears.
+
+==== CAPABILITIES ====
+${capabilitiesBlock}
+
+==== CRITICAL FORMAT RULES ====
+
+EVERY response MUST end with quick-reply buttons in this EXACT format:
+[BTN: Option 1 | Option 2 | Option 3]
+
+- 2-4 buttons per message (3 is ideal)
+- Each label MAX 4 words
+- Tiny emoji sparingly (📍 location, 💰 pricing, ✓ confirm, 📋 paperwork, 🏢 commercial)
+- Always include a forward option AND an escape option
+
+When you have all required fields, write confirmation in this format:
+
+Got it, [name]! To confirm:
+- [field 1]: [value]
+- [field 2]: [value]
+Someone will follow up shortly. [LEAD_READY:TYPE]
+[BTN: ✓ Got it, thanks | Add more info | Different question]
+
+==== ENGAGEMENT RULES ====
+
+1. KEEP IT SHORT. 1-2 sentences + buttons line.
+2. ANSWER THEN PIVOT. Short answer, forward buttons.
+3. NEVER invent specific repair prices. New system range OK ($3,000–$6,000+ furnace). Always "tech gives exact quote on-site."
+4. ADVERTISED services → confident yes. QUIET capabilities → warm yes with "we've got 20+ years experience". HARD NO → politely decline, no competitor names.
+5. Angry customers: acknowledge feelings, no excuses, no refund promises. Route as BILLING.
+6. After-hours emergencies: tell them to call (313) 282-4758 while still collecting info.
+7. Once you fire [LEAD_READY:TYPE], do not keep probing.
+
+==== EXAMPLES ====
+
+Customer: "My furnace won't turn on"
+Tempi: "Oh no, that's no fun in Michigan! Our No-Heat Diagnostic at $89 covers the trip plus first hour of troubleshooting — usually catches it. Want me to grab your info to dispatch a tech, or got questions first?
+[BTN: ✓ Send a tech | Same-day service? | Quote for new furnace]"
+
+Customer: "I'm with CBRE, RTU down in Livonia"
+Tempi: "Got it — let's dispatch ASAP. What's your name, direct phone, and the site address?
+[BTN: ✓ Type my info | Different site contact | Multiple sites]"
+
+Customer: "Do you do walk-in coolers?"
+Tempi: "Yep, commercial refrigeration is right in our wheelhouse — walk-ins, reach-ins, ice machines. Not our main marketing focus but we've got 20+ years of refrigeration experience. What's going on?
+[BTN: ✓ Send a tech | Get a quote | Other equipment too]"
+
+REMEMBER: Identify conversation type → collect ONLY the fields for that type → fire [LEAD_READY:TYPE] → done. Every response has [BTN: ...] line at the end.`;
+
+    // ============================================================
+    // SERVICE MENU
+    // ============================================================
+    const SERVICES = {
+        heating: {
+            title: 'Heating', subtitle: 'Furnaces, boilers & heat pumps',
+            iconBg: 'bg-orange-100', iconColor: '#f97316',
+            items: [
+                { id: 'h1', name: 'The "No Heat" Diagnostic', desc: 'System down? We find the problem. Includes trip & 1hr labor.', price: 89, popular: true },
+                { id: 'h2', name: 'Seasonal Furnace Tune-Up', desc: '21-point safety check, cleaning, and calibration.', price: 69 },
+                { id: 'h3', name: 'Smart Thermostat Install', desc: 'Install of your Nest or Ecobee + WiFi setup.', price: 149 }
+            ]
+        },
+        cooling: {
+            title: 'Cooling', subtitle: 'AC units & mini-splits',
+            iconBg: 'bg-sky-100', iconColor: '#0ea5e9',
+            items: [
+                { id: 'c1', name: 'The "No Cool" Diagnostic', desc: 'Blowing warm air? We diagnose fast.', price: 89, popular: true },
+                { id: 'c2', name: 'AC Chemical Wash', desc: 'Deep clean of outdoor condenser coil.', price: 199 }
+            ]
+        },
+        iaq: {
+            title: 'Air Quality', subtitle: 'Humidifiers & filters',
+            iconBg: 'bg-green-100', iconColor: '#22c55e',
+            items: [
+                { id: 'a1', name: 'Whole Home Humidifier', desc: 'Installation of bypass humidifier.', price: 550 },
+                { id: 'a2', name: 'Humidifier Pad Refresh', desc: 'Replace water panel and clean tray.', price: 65 }
+            ]
+        },
+        plans: {
+            title: 'Service Plans', subtitle: 'Monthly memberships',
+            iconBg: 'bg-purple-100', iconColor: '#a855f7',
+            items: [
+                { id: 'p1', name: 'Mechanical Temp Service Plan', desc: '2 visits/yr + priority + 15% off repairs.', price: 55, isSubscription: true, popular: true }
+            ]
+        }
+    };
+    const ALL_ITEMS = Object.entries(SERVICES).flatMap(([catId, c]) => c.items.map(i => ({ ...i, catId, catTitle: c.title })));
+
+    // ============================================================
+    // STATE
+    // ============================================================
+    let cart = [];
+    let conversationHistory = [];
+    let leadCaptured = false;
+    let hasGreeted = false;
+
+    // ============================================================
+    // EmailJS lazy load
+    // ============================================================
+    let emailjsReady = null;
+    function loadEmailJS() {
+        if (emailjsReady) return emailjsReady;
+        emailjsReady = new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+            script.onload = () => { emailjs.init(EMAILJS_USER); resolve(); };
+            script.onerror = reject;
+            document.head.appendChild(script);
+        });
+        return emailjsReady;
+    }
+
+    // ============================================================
+    // TEMPI OVERLAY
+    // ============================================================
+    const tempiOverlay = document.getElementById('tempi-overlay');
+    const tempiThread = document.getElementById('tempi-thread');
+    const tempiInput = document.getElementById('tempi-input');
+    const tempiSend = document.getElementById('tempi-send');
+
+    function escapeHtml(s) {
+        const d = document.createElement('div'); d.textContent = s; return d.innerHTML;
+    }
+
+    function parseButtons(text) {
+        const m = text.match(/\[BTN:\s*([^\]]+)\]/);
+        if (!m) return { cleanText: text, buttons: [] };
+        const buttons = m[1].split('|').map(s => s.trim()).filter(Boolean);
+        const cleanText = text
+            .replace(/\[BTN:[^\]]+\]/g, '')
+            .replace(/\[LEAD_READY:[^\]]+\]/g, '')
+            .replace(/\[LEAD_READY\]/g, '')
+            .trim();
+        return { cleanText, buttons };
+    }
+
+    const TEMPI_AVATAR_SVG = `<svg viewBox="0 0 28 28" width="24" height="24" xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0"><circle cx="14" cy="14" r="14" fill="#fde68a"/><circle cx="14" cy="15" r="7" fill="#fcd9b6"/><path d="M 7 14 Q 8 5 14 4 Q 20 5 21 14 Q 20 11 18 9.5 Q 16 8.5 14 8.5 Q 12 8.5 10 9.5 Q 8 11 7 14 Z" fill="#8b4513"/><circle cx="11.5" cy="15" r="0.9" fill="#1f2937"/><circle cx="16.5" cy="15" r="0.9" fill="#1f2937"/><path d="M 11.5 17.5 Q 14 19 16.5 17.5" stroke="#c2410c" stroke-width="0.9" fill="none" stroke-linecap="round"/></svg>`;
+
+    function addBotMessage(text, buttons) {
+        const row = document.createElement('div');
+        row.className = 'flex gap-2 items-end fade-up';
+        row.innerHTML = `${TEMPI_AVATAR_SVG}<div class="bg-white border-2 border-slate-800 rounded-2xl rounded-bl-md px-4 py-2.5 text-sm text-slate-900 max-w-[80%]">${escapeHtml(text)}</div>`;
+        tempiThread.appendChild(row);
+        if (buttons && buttons.length > 0) {
+            const br = document.createElement('div');
+            br.className = 'flex flex-wrap gap-1.5 ml-8 mt-1 fade-up';
+            buttons.forEach(label => {
+                const b = document.createElement('button');
+                b.className = 'inline-btn';
+                b.textContent = label;
+                b.addEventListener('click', () => {
+                    br.querySelectorAll('.inline-btn').forEach(x => x.disabled = true);
+                    handleTempiSend(label);
+                });
+                br.appendChild(b);
+            });
+            tempiThread.appendChild(br);
+        }
+        scrollTempiToBottom();
+    }
+
+    function addUserMessage(text) {
+        const row = document.createElement('div');
+        row.className = 'flex justify-end fade-up';
+        row.innerHTML = `<div class="bg-sky-500 border-2 border-sky-900 text-white rounded-2xl rounded-br-md px-4 py-2.5 text-sm max-w-[80%]">${escapeHtml(text)}</div>`;
+        tempiThread.appendChild(row);
+        scrollTempiToBottom();
+    }
+
+    function showTempiTyping() {
+        const row = document.createElement('div');
+        row.className = 'flex gap-2 items-end';
+        row.id = 'tempi-typing-row';
+        row.innerHTML = `${TEMPI_AVATAR_SVG}<div class="bg-white border-2 border-slate-800 rounded-2xl rounded-bl-md px-4 py-3 flex gap-1.5"><span class="typing-dot w-1.5 h-1.5 bg-slate-400 rounded-full"></span><span class="typing-dot w-1.5 h-1.5 bg-slate-400 rounded-full"></span><span class="typing-dot w-1.5 h-1.5 bg-slate-400 rounded-full"></span></div>`;
+        tempiThread.appendChild(row);
+        scrollTempiToBottom();
+    }
+    function hideTempiTyping() { const t = document.getElementById('tempi-typing-row'); if (t) t.remove(); }
+    function scrollTempiToBottom() { tempiThread.scrollTop = tempiThread.scrollHeight; }
+
+    async function callTempi(userMessage) {
+        conversationHistory.push({ role: 'user', content: userMessage });
+        try {
+            const res = await fetch(TEMPI_PROXY_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    model: TEMPI_MODEL,
+                    max_tokens: 400,
+                    system: SYSTEM_PROMPT,
+                    messages: conversationHistory
+                })
+            });
+            if (!res.ok) throw new Error('Proxy ' + res.status);
+            const data = await res.json();
+            const reply = data.content?.filter(b => b.type === 'text')?.map(b => b.text)?.join('\n') || "Hmm, I didn't catch that. Could you try again? [BTN: Try again | Talk to a person]";
+            conversationHistory.push({ role: 'assistant', content: reply });
+            return reply;
+        } catch (err) {
+            console.error('Tempi call failed:', err);
+            return "I'm having trouble connecting right now 😕 Please call us at (313) 282-4758 and we'll help you right away! [BTN: Try again | Call now]";
+        }
+    }
+
+    function extractLeadInfo(conversation, leadType) {
+        const fullText = conversation.map(m => m.content).join('\n');
+        const phoneMatch = fullText.match(/(\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/);
+        const typeLabels = {
+            'SERVICE_LEAD': '🚨 SERVICE LEAD',
+            'COMMERCIAL_DISPATCH': '🏢 COMMERCIAL DISPATCH - URGENT',
+            'PAPERWORK': '📋 PAPERWORK REQUEST',
+            'BILLING': '💰 BILLING INQUIRY',
+            'VENDOR_SALES': '🤝 VENDOR/SALES PITCH',
+            'EXISTING_CUSTOMER': '👤 EXISTING CUSTOMER FOLLOW-UP',
+            'GENERAL_INFO': 'ℹ️ GENERAL INFO REQUEST'
+        };
+        const label = typeLabels[leadType] || '📩 CHAT INQUIRY';
+        const cartSummary = cart.length > 0
+            ? `\n\n--- ITEMS IN CART ---\n${cart.map(i => `- ${i.name} ($${i.price})`).join('\n')}\nCart total: $${cart.reduce((s,i)=>s+i.price,0)}`
+            : '';
+        return {
+            from_name: `Tempi (AI page) - ${label}`,
+            phone: phoneMatch ? phoneMatch[0] : 'See transcript',
+            message: `${label}\n=========================================\n\nSource: AI Assistant Landing Page\nConversation Type: ${leadType}\nTime: ${new Date().toLocaleString('en-US', { timeZone: 'America/Detroit' })} ET${cartSummary}\n\n--- FULL TRANSCRIPT ---\n\n` +
+                conversation.map(m => `[${m.role === 'user' ? 'CUSTOMER' : 'TEMPI'}]: ${m.content.replace(/\[LEAD_READY:[^\]]+\]/g,'').replace(/\[LEAD_READY\]/g,'').replace(/\[BTN:[^\]]+\]/g,'').trim()}`).join('\n\n')
+        };
+    }
+
+    async function fireLeadEmail(leadType) {
+        if (leadCaptured) return;
+        leadCaptured = true;
+        try {
+            await loadEmailJS();
+            const leadData = extractLeadInfo(conversationHistory, leadType);
+            await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, leadData);
+            console.log(`Lead sent: ${leadType}`);
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'chat_lead', {
+                    'event_category': 'conversion',
+                    'event_label': leadType,
+                    'source': 'ai_landing_page'
+                });
+            }
+        } catch (err) {
+            console.error('Lead email failed:', err);
+            leadCaptured = false;
+        }
+    }
+
+    async function handleTempiSend(text) {
+        text = (text || tempiInput.value).trim();
+        if (!text) return;
+        addUserMessage(text);
+        tempiInput.value = '';
+        tempiSend.disabled = true;
+        tempiInput.disabled = true;
+        showTempiTyping();
+        const reply = await callTempi(text);
+        hideTempiTyping();
+        const { cleanText, buttons } = parseButtons(reply);
+        addBotMessage(cleanText, buttons);
+        const leadMatch = reply.match(/\[LEAD_READY:(\w+)\]/);
+        if (leadMatch) fireLeadEmail(leadMatch[1]);
+        else if (reply.includes('[LEAD_READY]')) fireLeadEmail('SERVICE_LEAD');
+        tempiSend.disabled = false;
+        tempiInput.disabled = false;
+        tempiInput.focus();
+    }
+
+    function openTempi(initialMessage) {
+        tempiOverlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        if (!hasGreeted) {
+            hasGreeted = true;
+            setTimeout(() => {
+                if (initialMessage) {
+                    handleTempiSend(initialMessage);
+                } else {
+                    addBotMessage("Hi there! 👋 I'm Tempi from Mechanical Temp. How can I help you today?", ["Schedule service", "Get a quote", "Just browsing", "Service plan info"]);
+                }
+            }, 200);
+        } else if (initialMessage) {
+            handleTempiSend(initialMessage);
+        }
+        loadEmailJS().catch(e => console.error('EmailJS load failed', e));
+        setTimeout(() => tempiInput.focus(), 250);
+    }
+
+    function closeTempi() {
+        tempiOverlay.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+
+    document.getElementById('close-tempi').addEventListener('click', closeTempi);
+    tempiSend.addEventListener('click', () => handleTempiSend());
+    tempiInput.addEventListener('keydown', e => { if (e.key === 'Enter') handleTempiSend(); });
+
+    // ============================================================
+    // HERO INPUT & CHIPS
+    // ============================================================
+    const heroInput = document.getElementById('hero-input');
+    const heroSend = document.getElementById('hero-send');
+    function heroSubmit() {
+        const v = heroInput.value.trim();
+        if (v) openTempi(v);
+    }
+    heroSend.addEventListener('click', heroSubmit);
+    heroInput.addEventListener('keydown', e => { if (e.key === 'Enter') heroSubmit(); });
+    document.querySelectorAll('.hero-chip').forEach(c => {
+        c.addEventListener('click', () => openTempi(c.dataset.msg));
+    });
+
+    document.getElementById('back-to-tempi-btn').addEventListener('click', () => openTempi());
+
+    // ============================================================
+    // MENU OVERLAY
+    // ============================================================
+    const menuOverlay = document.getElementById('menu-overlay');
+    const menuItemsContainer = document.getElementById('menu-overlay-items');
+
+    function openCategory(catId) {
+        const cat = SERVICES[catId];
+        if (!cat) return;
+        document.getElementById('menu-overlay-title').textContent = cat.title;
+        document.getElementById('menu-overlay-subtitle').textContent = cat.subtitle;
+
+        menuItemsContainer.innerHTML = cat.items.map(it => `
+            <div class="bg-white border border-slate-200 rounded-xl p-4 relative">
+                ${it.popular ? '<div class="absolute top-0 right-0 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-1 rounded-bl-lg">POPULAR</div>' : ''}
+                <div class="flex justify-between items-start mb-1 gap-3">
+                    <h3 class="font-bold text-slate-900 pr-4">${it.name}</h3>
+                    <div class="font-bold text-slate-900 whitespace-nowrap">$${it.price}${it.isSubscription ? '<span class="text-xs font-normal text-slate-500">/mo</span>' : ''}</div>
+                </div>
+                <p class="text-slate-600 text-sm mb-3">${it.desc}</p>
+                <button class="add-to-cart-btn w-full bg-sky-600 hover:bg-sky-700 text-white text-sm font-bold py-2 rounded-lg" data-id="${it.id}">Add to booking</button>
+            </div>
+        `).join('');
+
+        menuItemsContainer.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const item = ALL_ITEMS.find(i => i.id === btn.dataset.id);
+                if (item) {
+                    addToCart(item);
+                    btn.textContent = '✓ Added';
+                    btn.classList.add('bg-green-600');
+                    btn.classList.remove('bg-sky-600', 'hover:bg-sky-700');
+                    setTimeout(() => {
+                        btn.textContent = 'Add to booking';
+                        btn.classList.remove('bg-green-600');
+                        btn.classList.add('bg-sky-600', 'hover:bg-sky-700');
+                    }, 1500);
+                }
+            });
+        });
+
+        menuOverlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+        menuOverlay.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+
+    document.querySelectorAll('.category-card').forEach(c => {
+        c.addEventListener('click', () => openCategory(c.dataset.cat));
+    });
+    document.getElementById('close-menu-overlay').addEventListener('click', closeMenu);
+    document.getElementById('overlay-ask-tempi').addEventListener('click', () => {
+        const cat = document.getElementById('menu-overlay-title').textContent.toLowerCase();
+        closeMenu();
+        openTempi(`I was looking at your ${cat} options but I'm not sure which one is right for me.`);
+    });
+
+    // ============================================================
+    // CART
+    // ============================================================
+    function addToCart(item) {
+        cart.push(item);
+        updateCart();
+        if (typeof gtag !== 'undefined') gtag('event', 'add_to_cart', { item_id: item.id, item_name: item.name, value: item.price });
+    }
+    function updateCart() {
+        const bar = document.getElementById('cart-bar');
+        if (cart.length === 0) { bar.classList.add('hidden'); return; }
+        bar.classList.remove('hidden');
+        document.getElementById('cart-count').textContent = cart.length;
+        const total = cart.reduce((s, i) => s + i.price, 0);
+        document.getElementById('cart-total').textContent = '$' + total;
+    }
+    document.getElementById('open-checkout-btn').addEventListener('click', () => {
+        // Hand off cart contents to Tempi as a structured starter message
+        closeMenu();
+        const summary = cart.map(i => `- ${i.name} ($${i.price})`).join('\n');
+        const total = cart.reduce((s, i) => s + i.price, 0);
+        openTempi(`I want to book the following services (total $${total}):\n${summary}\n\nPlease collect my contact info and schedule it.`);
+    });
+
+    // Apply category-card styles (Tailwind doesn't catch the class because it's defined dynamically)
+    document.querySelectorAll('.category-card').forEach(c => {
+        c.style.cssText += 'display:flex;align-items:center;gap:1rem;padding:1.25rem;border-radius:1rem;border:2px solid transparent;transition:all 0.2s;cursor:pointer;';
+        c.addEventListener('mouseenter', () => c.style.transform = 'translateY(-2px)');
+        c.addEventListener('mouseleave', () => c.style.transform = 'translateY(0)');
+    });
+
+    // Apply chip styles
+    document.querySelectorAll('.hero-chip').forEach(c => {
+        c.style.cssText = 'padding:0.375rem 0.75rem;font-size:0.75rem;font-weight:500;background:rgba(255,255,255,0.08);color:white;border:1px solid rgba(255,255,255,0.15);border-radius:9999px;cursor:pointer;transition:background 0.15s;';
+        c.addEventListener('mouseenter', () => c.style.background = 'rgba(255,255,255,0.15)');
+        c.addEventListener('mouseleave', () => c.style.background = 'rgba(255,255,255,0.08)');
+    });
+
+    // Page-load analytics
+    if (typeof gtag !== 'undefined') gtag('event', 'page_view_ai_assistant', { 'event_category': 'engagement' });
+</script>
+</body>
+</html>
