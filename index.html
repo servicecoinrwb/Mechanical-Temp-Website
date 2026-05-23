@@ -633,11 +633,54 @@
     mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
     document.querySelectorAll('.mobile-link').forEach(link => { link.addEventListener('click', () => mobileMenu.classList.add('hidden')); });
 
-    // ============== TEMPI CHAT WIDGET v4 - Smart routing + inline buttons ==============
+    // ============== TEMPI CHAT WIDGET v4.2 - Smart routing + JSON capabilities ==============
     (function() {
         const CLAUDE_PROXY_URL = 'https://tempi.summer-unit-44dd.workers.dev/';
         const EMAILJS_SERVICE = 'service_ziwf1pg';
         const EMAILJS_TEMPLATE = 'template_j68qyhk';
+        
+        // =================================================================== //
+        // CAPABILITIES — Edit this object to add or remove services Tempi    //
+        // knows about. No need to touch the system prompt. Just add to the   //
+        // right tier and redeploy.                                            //
+        // =================================================================== //
+        const CAPABILITIES = {
+            advertised: [
+                "Furnace repair, install, and maintenance",
+                "AC repair, install, and maintenance",
+                "Commercial HVAC",
+                "Ductwork",
+                "Ductless mini-splits",
+                "RTUs (rooftop units)"
+            ],
+            quiet: [
+                "Commercial refrigeration (walk-in coolers, reach-in coolers, ice machines, restaurant equipment cooling)",
+                "Boilers and hydronic heating",
+                "Water heaters (all types - tank, tankless, electric, gas)",
+                "Indoor air quality (UV systems, filtration, humidifiers, dehumidifiers)",
+                "Smart thermostats and controls",
+                "Building automation systems (BAS)"
+            ],
+            decline: [
+                "Plumbing leaks and repairs",
+                "Electrical panel work",
+                "Roofing",
+                "Kitchen appliance repair (stoves, dishwashers, fridges in homes)",
+                "New gas line runs from the meter"
+            ]
+        };
+        
+        // Format for injection into prompt
+        const capabilitiesBlock = `
+ADVERTISED CORE SERVICES (confident yes, route as lead):
+${CAPABILITIES.advertised.map(s => "- " + s).join("\n")}
+
+QUIET CAPABILITIES (we do these but don't advertise — warm yes with mention of 20+ years experience, route as lead):
+${CAPABILITIES.quiet.map(s => "- " + s).join("\n")}
+
+HARD NO SERVICES (politely decline, don't recommend competitors by name):
+${CAPABILITIES.decline.map(s => "- " + s).join("\n")}
+`;
         
         const conversationHistory = [];
         let leadCaptured = false;
@@ -650,9 +693,7 @@ ABOUT MECHANICAL TEMP:
 - Address: 23093 Telegraph Rd, Southfield, MI 48033
 - Phone: (313) 282-4758
 - Hours: Weekdays 8am-4pm, Weekends 10am-2pm, 24/7 emergency service available
-- ADVERTISED CORE SERVICES: Furnace repair/install/maintenance, AC repair/install/maintenance, Commercial HVAC, Duct work, Ductless mini-splits, RTUs (rooftop units)
-- QUIET CAPABILITIES (we do these but don't advertise them — say YES warmly when asked, treat them like core services): Commercial refrigeration (walk-in coolers, reach-in coolers, ice machines, restaurant equipment cooling), Boilers and hydronic heating, Indoor air quality (UV systems, filtration, humidifiers), Smart thermostats and controls, Building automation/BAS work. Brian and the team have 20+ years across these — we just don't run ads for them.
-- HARD NO (services we genuinely don't do — politely decline these): Plumbing, electrical panel work, roofing, kitchen appliance repair (stoves/dishwashers/etc.), gas line installation
+- SERVICES: see the CAPABILITIES JSON block injected into your context below. Three tiers: "advertised" (core marketing focus), "quiet" (we do these but don't advertise — say warm yes with 20+ years experience mention), "decline" (genuinely outside our scope — politely decline, don't recommend competitors by name).
 - Service area: Southfield, Dearborn, Livonia, Novi, Canton, Plymouth, Northville, West Bloomfield, Royal Oak, Ferndale, Westland, Farmington Hills, Redford and surrounding Metro Detroit
 - Authorized AirQuest dealer (main brand for new installs), but our techs service ALL brands
 - Owner: Brian
@@ -778,6 +819,10 @@ Customer: "Do you install whole-house humidifiers?"
 Tempi: "Yes, we do! IAQ systems like humidifiers, UV, and better filtration are something we install regularly. What's the home address so we can size it right?
 [BTN: Type my info | What size do I need? | What does it cost?]"
 
+Customer: "Do you do water heaters?"
+Tempi: "Yep, water heaters are right in our wheelhouse — tank, tankless, electric, gas, whatever you've got. What's going on with yours, and where are you located?
+[BTN: ✓ Send a tech | Need replacement quote | Tankless install]"
+
 REMEMBER: Identify conversation type → collect ONLY the fields for that type → fire [LEAD_READY:TYPE] → done. Every response has [BTN: ...] line at the end.`;
         
         const chatBubble = document.getElementById('chat-bubble');
@@ -888,13 +933,15 @@ REMEMBER: Identify conversation type → collect ONLY the fields for that type �
         async function sendToClaude(userMessage) {
             conversationHistory.push({ role: 'user', content: userMessage });
             try {
+                // Inject capabilities JSON into prompt at request time
+                const fullSystemPrompt = SYSTEM_PROMPT + "\n\n==== CURRENT CAPABILITIES ====\n" + capabilitiesBlock;
                 const res = await fetch(CLAUDE_PROXY_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         model: 'claude-haiku-4-5-20251001',
                         max_tokens: 400,
-                        system: SYSTEM_PROMPT,
+                        system: fullSystemPrompt,
                         messages: conversationHistory
                     })
                 });
