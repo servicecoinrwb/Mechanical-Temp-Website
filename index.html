@@ -7,7 +7,6 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-0G63KLB2B0');
     </script>
     <meta charset="UTF-8">
@@ -39,356 +38,103 @@
       "url": "https://www.mechanicaltemp.com/",
       "telephone": "+1-313-282-4758",
       "priceRange": "$$",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "23093 Telegraph Rd",
-        "addressLocality": "Southfield",
-        "addressRegion": "MI",
-        "postalCode": "48033",
-        "addressCountry": "US"
-      },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": 42.4982,
-        "longitude": -83.2882
-      },
-      "openingHoursSpecification": {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-        "opens": "00:00",
-        "closes": "23:59"
-      },
-      "sameAs": [
-        "https://www.facebook.com/your-profile",
-        "https://www.yelp.com/biz/your-biz-name"
-      ],
-      "areaServed": {
-        "@type": "GeoCircle",
-        "geoMidpoint": {
-          "@type": "GeoCoordinates",
-          "latitude": "42.4982",
-          "longitude": "-83.2882"
-        },
-        "geoRadius": "40233"
-      } 
+      "address": {"@type": "PostalAddress","streetAddress": "23093 Telegraph Rd","addressLocality": "Southfield","addressRegion": "MI","postalCode": "48033","addressCountry": "US"},
+      "geo": {"@type": "GeoCoordinates","latitude": 42.4982,"longitude": -83.2882},
+      "openingHoursSpecification": {"@type": "OpeningHoursSpecification","dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens": "00:00","closes": "23:59"},
+      "sameAs": ["https://www.facebook.com/your-profile","https://www.yelp.com/biz/your-biz-name"],
+      "areaServed": {"@type": "GeoCircle","geoMidpoint": {"@type": "GeoCoordinates","latitude": "42.4982","longitude": "-83.2882"},"geoRadius": "40233"} 
     }
     </script>
     
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-            scroll-behavior: smooth;
-        }
-        .hero-section-container {
-            background-image: url('https://imageview.mechanicaltemp.com/objects/uploads/563e6147-a505-4919-97da-dd365ecce41a');
-            background-size: cover;
-            background-position: center;
-        }
-        .hero-overlay {
-            background-color: rgba(12, 26, 62, 0.85);
-        }
-        .offer-price {
-            background-color: #eff6ff;
-            color: #1d4ed8;
-        }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; scroll-behavior: smooth; }
+        .hero-section-container { background-image: url('https://imageview.mechanicaltemp.com/objects/uploads/563e6147-a505-4919-97da-dd365ecce41a'); background-size: cover; background-position: center; }
+        .hero-overlay { background-color: rgba(12, 26, 62, 0.85); }
+        .offer-price { background-color: #eff6ff; color: #1d4ed8; }
         .modal-body::-webkit-scrollbar { width: 8px; }
         .modal-body::-webkit-scrollbar-track { background: #f1f1f1; }
         .modal-body::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
         .modal-body::-webkit-scrollbar-thumb:hover { background: #555; }
 
-        /* ============== TEMPI CHAT WIDGET STYLES ============== */
-        #chat-bubble {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
-            cursor: pointer;
-            background-color: #0ea5e9;
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-            transition: transform 0.2s ease-in-out;
-            border: 3px solid white;
-        }
-        #chat-bubble:hover {
-            transform: scale(1.08);
-            background-color: #0284c7;
-        }
-        #chat-bubble svg {
-            width: 36px;
-            height: 36px;
-        }
-        #chat-badge {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            background: #ef4444;
-            color: white;
-            border-radius: 50%;
-            width: 22px;
-            height: 22px;
-            font-size: 12px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid white;
-            animation: tempi-bounce 1.2s infinite;
-        }
+        /* ============== TEMPI CHAT WIDGET ============== */
+        #chat-bubble { position: fixed; bottom: 20px; right: 20px; z-index: 1000; cursor: pointer; background-color: #0ea5e9; width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.25); transition: transform 0.2s ease-in-out; border: 3px solid white; }
+        #chat-bubble:hover { transform: scale(1.08); background-color: #0284c7; }
+        #chat-bubble svg { width: 36px; height: 36px; }
+        #chat-badge { position: absolute; top: -4px; right: -4px; background: #ef4444; color: white; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; font-weight: bold; display: flex; align-items: center; justify-content: center; border: 2px solid white; animation: tempi-bounce 1.2s infinite; }
         #chat-badge.hidden { display: none; }
-        @keyframes tempi-bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-3px); }
-        }
-        #chat-widget {
-            position: fixed;
-            bottom: 95px;
-            right: 20px;
-            z-index: 999;
-            width: 370px;
-            max-width: calc(100vw - 40px);
-            height: 560px;
-            max-height: calc(100vh - 130px);
-            background-color: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            transform-origin: bottom right;
-        }
-        #chat-widget.hidden {
-            opacity: 0;
-            transform: scale(0.9);
-            pointer-events: none;
-        }
-        .chat-header {
-            background: linear-gradient(135deg, #0c4a6e 0%, #0369a1 100%);
-            color: white;
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .tempi-header-avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: white;
-            flex-shrink: 0;
-            overflow: hidden;
-            border: 2px solid white;
-        }
+        @keyframes tempi-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+        #chat-widget { position: fixed; bottom: 95px; right: 20px; z-index: 999; width: 380px; max-width: calc(100vw - 40px); height: 600px; max-height: calc(100vh - 130px); background-color: white; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); overflow: hidden; display: flex; flex-direction: column; transition: opacity 0.3s ease, transform 0.3s ease; transform-origin: bottom right; }
+        #chat-widget.hidden { opacity: 0; transform: scale(0.9); pointer-events: none; }
+        .chat-header { background: linear-gradient(135deg, #0c4a6e 0%, #0369a1 100%); color: white; padding: 12px 16px; display: flex; align-items: center; gap: 12px; }
+        .tempi-header-avatar { width: 44px; height: 44px; border-radius: 50%; background: white; flex-shrink: 0; overflow: hidden; border: 2px solid white; }
         .chat-header-info { flex: 1; }
         .chat-header-info .name { font-weight: bold; font-size: 16px; line-height: 1.2; }
-        .chat-header-info .status {
-            font-size: 11px;
-            opacity: 0.9;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            margin-top: 2px;
-        }
-        .status-dot {
-            width: 7px;
-            height: 7px;
-            background: #10b981;
-            border-radius: 50%;
-            box-shadow: 0 0 0 2px rgba(16,185,129,0.3);
-        }
-        #close-chat-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            opacity: 0.8;
-            padding: 0;
-            line-height: 1;
-        }
+        .chat-header-info .status { font-size: 11px; opacity: 0.9; display: flex; align-items: center; gap: 5px; margin-top: 2px; }
+        .status-dot { width: 7px; height: 7px; background: #10b981; border-radius: 50%; box-shadow: 0 0 0 2px rgba(16,185,129,0.3); }
+        #close-chat-btn { background: none; border: none; color: white; font-size: 24px; cursor: pointer; opacity: 0.8; padding: 0; line-height: 1; }
         #close-chat-btn:hover { opacity: 1; }
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px 12px;
-            background-color: #f1f5f9;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 16px 12px; background-color: #f1f5f9; display: flex; flex-direction: column; gap: 10px; }
         .chat-messages::-webkit-scrollbar { width: 6px; }
         .chat-messages::-webkit-scrollbar-track { background: transparent; }
         .chat-messages::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-        .msg-row {
-            display: flex;
-            align-items: flex-end;
-            gap: 6px;
-            animation: tempi-fadeIn 0.3s ease-out;
-        }
-        @keyframes tempi-fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .msg-row { display: flex; align-items: flex-end; gap: 6px; animation: tempi-fadeIn 0.3s ease-out; }
+        @keyframes tempi-fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         .msg-row.user { justify-content: flex-end; }
-        .msg-avatar-small {
-            width: 28px;
-            height: 28px;
-            flex-shrink: 0;
-            margin-bottom: 2px;
-        }
-        .msg-bubble {
-            position: relative;
-            padding: 10px 14px;
-            border-radius: 18px;
-            font-size: 13.5px;
-            line-height: 1.45;
-            max-width: 75%;
-            word-wrap: break-word;
-            border: 2.5px solid #1e293b;
-        }
-        .msg-bubble.bot {
-            background: white;
-            color: #1e293b;
-            border-bottom-left-radius: 4px;
-        }
-        .msg-bubble.bot::before {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: -10px;
-            width: 0;
-            height: 0;
-            border-top: 10px solid #1e293b;
-            border-right: 10px solid transparent;
-        }
-        .msg-bubble.bot::after {
-            content: '';
-            position: absolute;
-            bottom: 1px;
-            left: -5px;
-            width: 0;
-            height: 0;
-            border-top: 7px solid white;
-            border-right: 7px solid transparent;
-        }
-        .msg-bubble.user {
-            background: #0ea5e9;
-            color: white;
-            border-bottom-right-radius: 4px;
-            border-color: #0c4a6e;
-        }
-        .msg-bubble.user::before {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            right: -10px;
-            width: 0;
-            height: 0;
-            border-top: 10px solid #0c4a6e;
-            border-left: 10px solid transparent;
-        }
-        .msg-bubble.user::after {
-            content: '';
-            position: absolute;
-            bottom: 1px;
-            right: -5px;
-            width: 0;
-            height: 0;
-            border-top: 7px solid #0ea5e9;
-            border-left: 7px solid transparent;
-        }
-        .msg-bubble.typing {
-            display: flex;
-            gap: 4px;
-            padding: 14px 16px;
-        }
-        .typing-dot {
-            width: 6px;
-            height: 6px;
-            background: #64748b;
-            border-radius: 50%;
-            animation: tempi-typingBounce 1.2s infinite;
-        }
+        .msg-avatar-small { width: 28px; height: 28px; flex-shrink: 0; margin-bottom: 2px; }
+        .msg-bubble { position: relative; padding: 10px 14px; border-radius: 18px; font-size: 13.5px; line-height: 1.45; max-width: 75%; word-wrap: break-word; border: 2.5px solid #1e293b; }
+        .msg-bubble.bot { background: white; color: #1e293b; border-bottom-left-radius: 4px; }
+        .msg-bubble.bot::before { content: ''; position: absolute; bottom: -2px; left: -10px; width: 0; height: 0; border-top: 10px solid #1e293b; border-right: 10px solid transparent; }
+        .msg-bubble.bot::after { content: ''; position: absolute; bottom: 1px; left: -5px; width: 0; height: 0; border-top: 7px solid white; border-right: 7px solid transparent; }
+        .msg-bubble.user { background: #0ea5e9; color: white; border-bottom-right-radius: 4px; border-color: #0c4a6e; }
+        .msg-bubble.user::before { content: ''; position: absolute; bottom: -2px; right: -10px; width: 0; height: 0; border-top: 10px solid #0c4a6e; border-left: 10px solid transparent; }
+        .msg-bubble.user::after { content: ''; position: absolute; bottom: 1px; right: -5px; width: 0; height: 0; border-top: 7px solid #0ea5e9; border-left: 7px solid transparent; }
+        .msg-bubble.typing { display: flex; gap: 4px; padding: 14px 16px; }
+        .typing-dot { width: 6px; height: 6px; background: #64748b; border-radius: 50%; animation: tempi-typingBounce 1.2s infinite; }
         .typing-dot:nth-child(2) { animation-delay: 0.2s; }
         .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes tempi-typingBounce {
-            0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
-            30% { transform: translateY(-5px); opacity: 1; }
-        }
-        .quick-replies {
-            padding: 8px 12px;
-            background: white;
-            border-top: 1px solid #e2e8f0;
+        @keyframes tempi-typingBounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-5px); opacity: 1; } }
+        
+        /* INLINE QUICK REPLIES — appear under each bot message */
+        .inline-buttons {
             display: flex;
             gap: 6px;
             flex-wrap: wrap;
+            margin-left: 34px;
+            margin-top: 2px;
+            animation: tempi-fadeIn 0.3s ease-out;
         }
-        .quick-replies.hidden { display: none; }
-        .quick-reply {
+        .inline-btn {
             background: #e0f2fe;
             color: #0c4a6e;
             border: 1.5px solid #7dd3fc;
-            border-radius: 16px;
-            padding: 6px 12px;
-            font-size: 12px;
+            border-radius: 14px;
+            padding: 5px 11px;
+            font-size: 11.5px;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.15s;
             font-family: inherit;
+            white-space: nowrap;
         }
-        .quick-reply:hover {
+        .inline-btn:hover {
             background: #0ea5e9;
             color: white;
             border-color: #0ea5e9;
             transform: translateY(-1px);
         }
-        .chat-input-row {
-            padding: 10px 12px;
-            border-top: 1px solid #e2e8f0;
-            background-color: white;
-            display: flex;
-            gap: 6px;
-            align-items: flex-end;
+        .inline-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
         }
-        #chat-input {
-            flex: 1;
-            border: 1.5px solid #cbd5e1;
-            border-radius: 10px;
-            padding: 8px 12px;
-            resize: none;
-            font-family: inherit;
-            font-size: 13.5px;
-            max-height: 80px;
-            outline: none;
-            transition: border-color 0.15s;
-        }
+        
+        .chat-input-row { padding: 10px 12px; border-top: 1px solid #e2e8f0; background-color: white; display: flex; gap: 6px; align-items: flex-end; }
+        #chat-input { flex: 1; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 8px 12px; resize: none; font-family: inherit; font-size: 13.5px; max-height: 80px; outline: none; transition: border-color 0.15s; }
         #chat-input:focus { border-color: #0ea5e9; }
-        #send-chat-btn {
-            background-color: #0ea5e9;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 8px 14px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 13px;
-            flex-shrink: 0;
-        }
+        #send-chat-btn { background-color: #0ea5e9; color: white; border: none; border-radius: 10px; padding: 8px 14px; cursor: pointer; font-weight: bold; font-size: 13px; flex-shrink: 0; }
         #send-chat-btn:hover { background-color: #0284c7; }
         #send-chat-btn:disabled { background-color: #94a3b8; cursor: not-allowed; }
-        .chat-disclaimer {
-            font-size: 10px;
-            color: #94a3b8;
-            text-align: center;
-            padding: 4px 8px 6px;
-            background: white;
-        }
+        .chat-disclaimer { font-size: 10px; color: #94a3b8; text-align: center; padding: 4px 8px 6px; background: white; }
     </style>
 </head>
 <body class="text-gray-800">
@@ -423,24 +169,18 @@
         </div>
     </header>
 
-    <!-- HERO SECTION -->
+    <!-- HERO -->
     <section class="min-h-screen hero-section-container -mt-[88px] pt-[88px]">
         <div class="min-h-screen hero-overlay flex items-center justify-center text-center p-6 text-white">
             <div>
-                <h1 class="text-4xl md:text-6xl font-black uppercase tracking-wider mb-4">
-                    Premier HVAC Services in Southfield & Metro Detroit
-                </h1>
-                <p class="max-w-3xl mx-auto text-lg md:text-xl text-slate-300 mb-8">
-                    Your trusted local experts for <strong>furnace and air conditioner repair, installation, and maintenance</strong>. We provide reliable residential and commercial solutions to keep you comfortable year-round.
-                </p>
-                <button onclick="openScheduler()" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-8 rounded-lg text-lg inline-block transition-transform hover:scale-105">
-                    Schedule Service Now
-                </button>
+                <h1 class="text-4xl md:text-6xl font-black uppercase tracking-wider mb-4">Premier HVAC Services in Southfield & Metro Detroit</h1>
+                <p class="max-w-3xl mx-auto text-lg md:text-xl text-slate-300 mb-8">Your trusted local experts for <strong>furnace and air conditioner repair, installation, and maintenance</strong>. We provide reliable residential and commercial solutions to keep you comfortable year-round.</p>
+                <button onclick="openScheduler()" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-8 rounded-lg text-lg inline-block transition-transform hover:scale-105">Schedule Service Now</button>
             </div>
         </div>
     </section>
 
-    <!-- SERVICES SECTION -->
+    <!-- SERVICES -->
     <section id="services" class="bg-white py-20 px-6">
         <div class="container mx-auto text-center">
             <h2 class="text-3xl md:text-4xl font-bold mb-2">Our Core HVAC Services</h2>
@@ -459,7 +199,7 @@
                 <div class="bg-slate-50 p-8 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
                     <h3 class="text-2xl font-bold mb-3">Commercial HVAC</h3>
                     <p class="text-slate-600 mb-4">Reliable and efficient HVAC solutions for businesses, offices, and commercial properties in Metro Detroit.</p>
-                        <a href="commercial-hvac.html" class="text-sky-600 font-bold hover:underline">Learn More →</a>
+                    <a href="commercial-hvac.html" class="text-sky-600 font-bold hover:underline">Learn More →</a>
                 </div>
             </div>
         </div>
@@ -470,34 +210,23 @@
         <div class="container mx-auto text-center max-w-3xl">
             <h2 class="text-3xl md:text-4xl font-bold">Time for a New System?</h2>
             <p class="max-w-2xl mx-auto text-slate-600 mt-4 mb-8 text-lg">Use our interactive System Selector tool to find the perfect furnace or air conditioner for your home's unique needs and get a free, personalized estimate.</p>
-            <a href="system-selector.html" class="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-10 rounded-lg text-xl inline-block transition-transform hover:scale-105">
-                Find My Perfect System
-            </a>
+            <a href="system-selector.html" class="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-10 rounded-lg text-xl inline-block transition-transform hover:scale-105">Find My Perfect System</a>
         </div>
     </section>
 
-    <!-- WHY CHOOSE US SECTION -->
+    <!-- WHY CHOOSE US -->
     <section id="about" class="bg-gray-800 py-20 px-6 text-white">
         <div class="container mx-auto text-center">
             <h2 class="text-3xl md:text-4xl font-bold mb-12">The Mechanical Temp Difference</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                <div>
-                    <h3 class="text-xl font-bold text-sky-400 mb-2">24/7 Emergency Service</h3>
-                    <p class="text-slate-300">HVAC emergencies don't wait. We're here for you day or night for urgent furnace and AC repairs.</p>
-                </div>
-                <div>
-                    <h3 class="text-xl font-bold text-sky-400 mb-2">Certified Technicians</h3>
-                    <p class="text-slate-300">Our team is licensed, insured, and highly trained to service all major brands and models.</p>
-                </div>
-                <div>
-                    <h3 class="text-xl font-bold text-sky-400 mb-2">Local & Trusted</h3>
-                    <p class="text-slate-300">As a Southfield-based company, we're proud to serve our neighbors throughout Metro Detroit with honesty and integrity.</p>
-                </div>
+                <div><h3 class="text-xl font-bold text-sky-400 mb-2">24/7 Emergency Service</h3><p class="text-slate-300">HVAC emergencies don't wait. We're here for you day or night for urgent furnace and AC repairs.</p></div>
+                <div><h3 class="text-xl font-bold text-sky-400 mb-2">Certified Technicians</h3><p class="text-slate-300">Our team is licensed, insured, and highly trained to service all major brands and models.</p></div>
+                <div><h3 class="text-xl font-bold text-sky-400 mb-2">Local & Trusted</h3><p class="text-slate-300">As a Southfield-based company, we're proud to serve our neighbors throughout Metro Detroit with honesty and integrity.</p></div>
             </div>
         </div>
     </section>
     
-    <!-- BRANDS WE TRUST -->
+    <!-- BRANDS -->
     <section class="bg-white py-20 px-6">
         <div class="container mx-auto text-center max-w-4xl">
              <h2 class="text-3xl md:text-4xl font-bold">Brands We Trust</h2>
@@ -515,43 +244,35 @@
         </div>
     </section>
 
-    <!-- TESTIMONIALS SECTION -->
+    <!-- TESTIMONIALS -->
     <section id="testimonials" class="bg-slate-50 py-20 px-6">
         <div class="container mx-auto text-center">
             <h2 class="text-3xl md:text-4xl font-bold mb-2">What Our Customers Are Saying</h2>
             <p class="max-w-2xl mx-auto text-slate-600 mb-12">We're proud to have earned the trust of homeowners and businesses across Metro Detroit.</p>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                 <div class="bg-white p-8 rounded-lg shadow-md flex flex-col text-left">
-                    <div class="flex mb-4">
-                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                    </div>
+                    <div class="flex mb-4"><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg></div>
                     <p class="text-slate-600 italic flex-grow">"Great professional work and advice.. great competitive price and very happy with response... one word Phenomenal"</p>
                     <p class="font-bold text-gray-800 mt-4">- Chirag R M., Southfield, MI</p>
                 </div>
                 <div class="bg-white p-8 rounded-lg shadow-md flex flex-col text-left">
-                    <div class="flex mb-4">
-                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                    </div>
+                    <div class="flex mb-4"><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg></div>
                     <p class="text-slate-600 italic flex-grow">"It was a pleasure doing business with Mechanical Temp. They were professional, courteous and even showed up a half hour early. If you are looking for a new HVAC company I would give them a call."</p>
                     <p class="font-bold text-gray-800 mt-4">- Jason B., Novi, MI</p>
                 </div>
                 <div class="bg-white p-8 rounded-lg shadow-md flex flex-col text-left">
-                    <div class="flex mb-4">
-                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                    </div>
+                    <div class="flex mb-4"><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg></div>
                     <p class="text-slate-600 italic flex-grow">"Excellent service...have used them on several occasions. Very responsive to a quick appointment"</p>
                     <p class="font-bold text-gray-800 mt-4">- D M., Canton, MI</p>
                 </div>
             </div>
             <div class="mt-12">
-                <a href="https://www.google.com/search?hl=en-US&gl=us&q=Mechanical+Temp,+23093+Telegraph+Rd,+Southfield,+MI+48033&ludocid=6961767730263095122&lsig=AB86z5W8I6loYhp2hKgGjj9thY9C#lrd=0x8824b434d3a9339f:0x609d2add9b1bf752,3" target="_blank" rel="noopener noreferrer" class="bg-gray-800 hover:bg-black text-white font-bold py-3 px-8 rounded-lg text-lg inline-block transition-transform hover:scale-105">
-                    Leave a Review on Google
-                </a>
+                <a href="https://www.google.com/search?hl=en-US&gl=us&q=Mechanical+Temp,+23093+Telegraph+Rd,+Southfield,+MI+48033&ludocid=6961767730263095122&lsig=AB86z5W8I6loYhp2hKgGjj9thY9C#lrd=0x8824b434d3a9339f:0x609d2add9b1bf752,3" target="_blank" rel="noopener noreferrer" class="bg-gray-800 hover:bg-black text-white font-bold py-3 px-8 rounded-lg text-lg inline-block transition-transform hover:scale-105">Leave a Review on Google</a>
             </div>
         </div>
     </section>
 
-    <!-- BLOG PREVIEW -->
+    <!-- BLOG -->
     <section id="blog-preview" class="bg-slate-50 py-20 px-6">
         <div class="container mx-auto text-center max-w-4xl">
             <h2 class="text-3xl md:text-4xl font-bold">From Our Blog</h2>
@@ -562,12 +283,8 @@
                 </a>
                 <div class="p-8 flex flex-col flex-grow text-left">
                      <p class="text-sm text-slate-500 mb-2">September 24, 2025 • Furnace Maintenance</p>
-                     <h3 class="text-2xl font-bold mb-3">
-                         <a href="5-signs-furnace-repair-fall.html" class="hover:text-sky-600 transition-colors">5 Signs Your Furnace Needs Repair This Fall</a>
-                     </h3>
-                     <p class="text-slate-600 mb-6 flex-grow">
-                         As the leaves start to change color, it's crucial to make sure your furnace is in top working condition. Ignoring small warning signs now can lead to a complete breakdown...
-                     </p>
+                     <h3 class="text-2xl font-bold mb-3"><a href="5-signs-furnace-repair-fall.html" class="hover:text-sky-600 transition-colors">5 Signs Your Furnace Needs Repair This Fall</a></h3>
+                     <p class="text-slate-600 mb-6 flex-grow">As the leaves start to change color, it's crucial to make sure your furnace is in top working condition. Ignoring small warning signs now can lead to a complete breakdown...</p>
                      <a href="5-signs-furnace-repair-fall.html" class="text-sky-600 font-bold hover:underline self-start">Read Full Article →</a>
                 </div>
             </div>
@@ -579,30 +296,17 @@
         <div class="container mx-auto text-center max-w-4xl">
             <h2 class="text-3xl md:text-4xl font-bold mb-4">Total Peace of Mind is Here</h2>
             <p class="text-sky-400 font-semibold text-lg uppercase tracking-wider mb-4">Introducing The Mechanical Temp Service Plan</p>
-            <p class="max-w-2xl mx-auto text-slate-300 mb-8 text-lg">
-                For just $29/month, you can stop worrying about unexpected HVAC breakdowns. Our comprehensive plan covers preventative maintenance, basic parts, and gives you priority service when you need it most.
-            </p>
+            <p class="max-w-2xl mx-auto text-slate-300 mb-8 text-lg">For just $29/month, you can stop worrying about unexpected HVAC breakdowns. Our comprehensive plan covers preventative maintenance, basic parts, and gives you priority service when you need it most.</p>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
-                <div class="bg-gray-700 p-6 rounded-lg">
-                    <h3 class="text-xl font-bold mb-2">Priority Service</h3>
-                    <p class="text-slate-400">Jump to the front of the line with guaranteed faster service calls.</p>
-                </div>
-                <div class="bg-gray-700 p-6 rounded-lg">
-                    <h3 class="text-xl font-bold mb-2">Save Money</h3>
-                    <p class="text-slate-400">Includes two annual tune-ups and covers many common parts at no extra cost.</p>
-                </div>
-                <div class="bg-gray-700 p-6 rounded-lg">
-                    <h3 class="text-xl font-bold mb-2">No Worries</h3>
-                    <p class="text-slate-400">Enjoy year-round comfort knowing your system is professionally maintained.</p>
-                </div>
+                <div class="bg-gray-700 p-6 rounded-lg"><h3 class="text-xl font-bold mb-2">Priority Service</h3><p class="text-slate-400">Jump to the front of the line with guaranteed faster service calls.</p></div>
+                <div class="bg-gray-700 p-6 rounded-lg"><h3 class="text-xl font-bold mb-2">Save Money</h3><p class="text-slate-400">Includes two annual tune-ups and covers many common parts at no extra cost.</p></div>
+                <div class="bg-gray-700 p-6 rounded-lg"><h3 class="text-xl font-bold mb-2">No Worries</h3><p class="text-slate-400">Enjoy year-round comfort knowing your system is professionally maintained.</p></div>
             </div>
-            <a href="service-plan.html" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-4 px-10 rounded-lg text-xl inline-block transition-transform hover:scale-105">
-                Learn More & Sign Up
-            </a>
+            <a href="service-plan.html" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-4 px-10 rounded-lg text-xl inline-block transition-transform hover:scale-105">Learn More & Sign Up</a>
         </div>
     </section>
 
-    <!-- CURRENT OFFERS -->
+    <!-- OFFERS -->
     <section id="offers" class="bg-white py-20 px-6">
         <div class="container mx-auto text-center">
             <h2 class="text-3xl md:text-4xl font-bold mb-2">Current HVAC Offers</h2>
@@ -613,47 +317,32 @@
                     <h3 class="text-2xl font-bold text-gray-800">Furnace Tune-Up Special</h3>
                     <p class="text-5xl font-black text-sky-600 my-3">$69</p>
                     <p class="text-slate-600 flex-grow">Get your Furnace ready for winter with our comprehensive 21-point inspection and tune-up.</p>
-                    <button onclick="openScheduler()" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-6 rounded-lg text-lg inline-block mt-6 transition-transform hover:scale-105">
-                        Schedule My Tune-Up
-                    </button>
+                    <button onclick="openScheduler()" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-6 rounded-lg text-lg inline-block mt-6 transition-transform hover:scale-105">Schedule My Tune-Up</button>
                 </div>
                 <div class="bg-white rounded-lg shadow-lg border-2 border-orange-500 text-center p-8 flex flex-col">
                     <div class="w-16 h-16 mx-auto bg-orange-100 rounded-full flex items-center justify-center mb-4"><svg class="w-8 h-8 text-orange-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.362-1.44m3.362-2.946V7.5a2.25 2.25 0 00-2.25-2.25H12A2.25 2.25 0 009.75 7.5v1.138M15.362 5.214a2.252 2.252 0 01-1.232 2.146l-2.25.75a2.25 2.25 0 01-2.332 0l-2.25-.75a2.252 2.252 0 01-1.232-2.146V6.75A2.25 2.25 0 016.75 4.5h.75a2.25 2.25 0 012.25 2.25v.375m3.362 2.946a2.25 2.25 0 012.25-2.25h.75a2.25 2.25 0 012.25 2.25v.375m-3.362 2.946a2.25 2.25 0 01-2.25.75h-1.5a2.25 2.25 0 01-2.25-.75" /></svg></div>
                     <h3 class="text-2xl font-bold text-gray-800">New System Discount</h3>
                     <p class="text-5xl font-black text-orange-600 my-3">$500 OFF</p>
                     <p class="text-slate-600 flex-grow">Save big on a new high-efficiency furnace or air conditioner installation. Free estimate included.</p>
-                    <p class="text-sm text-slate-500 mt-3">
-                        Financing available! 
-                        <a href="#financing-cta" class="text-sky-600 hover:underline">Learn More</a>
-                    </p>
-                     <button onclick="openScheduler()" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg text-lg inline-block mt-6 transition-transform hover:scale-105">
-                         Get My Free Estimate
-                    </button>
+                    <p class="text-sm text-slate-500 mt-3">Financing available! <a href="#financing-cta" class="text-sky-600 hover:underline">Learn More</a></p>
+                     <button onclick="openScheduler()" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg text-lg inline-block mt-6 transition-transform hover:scale-105">Get My Free Estimate</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- FINANCING CTA -->
+    <!-- FINANCING -->
     <section id="financing-cta" class="bg-slate-50 py-20 px-6">
         <div class="container mx-auto text-center max-w-3xl">
-            <svg class="w-16 h-16 mx-auto mb-6 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6A.75.75 0 012.25 5.25v-.75m0 0A.75.75 0 013 4.5A.75.75 0 013.75 4.5m0 0v.75A.75.75 0 013 6A.75.75 0 012.25 5.25v-.75m3.75 0v.75A.75.75 0 016 6A.75.75 0 015.25 5.25v-.75m0 0A.75.75 0 016 4.5A.75.75 0 016.75 4.5m0 0v.75A.75.75 0 016 6A.75.75 0 015.25 5.25v-.75m3.75 0v.75A.75.75 0 019 6A.75.75 0 018.25 5.25v-.75m0 0A.75.75 0 019 4.5A.75.75 0 019.75 4.5m0 0v.75A.75.75 0 019 6A.75.75 0 018.25 5.25v-.75m3.75 0v.75A.75.75 0 0112 6A.75.75 0 0111.25 5.25v-.75m0 0A.75.75 0 0112 4.5A.75.75 0 0112.75 4.5m0 0v.75A.75.75 0 0112 6A.75.75 0 0111.25 5.25v-.75m3.75 0v.75A.75.75 0 0115 6A.75.75 0 0114.25 5.25v-.75m0 0A.75.75 0 0115 4.5A.75.75 0 0115.75 4.5m0 0v.75A.75.75 0 0115 6A.75.75 0 0114.25 5.25v-.75m3.75 0v.75A.75.75 0 0118 6A.75.75 0 0117.25 5.25v-.75m0 0A.75.75 0 0118 4.5A.75.75 0 0118.75 4.5m0 0v.75A.75.75 0 0118 6A.75.75 0 0117.25 5.25v-.75m3 15V15m-3 0v-2.25a2.25 2.25 0 012.25-2.25c1.026 0 1.945.694 2.152 1.662M18.75 18.75c.621 0 1.125-.504 1.125-1.125V15m0 0v-2.25A2.25 2.25 0 0018 10.5a2.25 2.25 0 00-2.25 2.25v.632m0 0V15m0 0a2.25 2.25 0 01-2.25-2.25V10.5A2.25 2.25 0 0115.75 12.75v.632m0 0V15m0 0A2.25 2.25 0 0113.5 12.75V10.5A2.25 2.25 0 0115.75 12.75v.632m0 0V15m0 0a2.25 2.25 0 01-2.25-2.25V10.5A2.25 2.25 0 0113.5 12.75v.632M10.5 18.75v-2.25a2.25 2.25 0 012.25-2.25c1.026 0 1.945.694 2.152 1.662M10.5 18.75c.621 0 1.125-.504 1.125-1.125V15m0 0v-2.25A2.25 2.25 0 0010.5 10.5a2.25 2.25 0 00-2.25 2.25v.632m0 0V15m0 0a2.25 2.25 0 01-2.25-2.25V10.5A2.25 2.25 0 018.25 12.75v.632m0 0V15m0 0A2.25 2.25 0 016 12.75V10.5A2.25 2.25 0 018.25 12.75v.632m0 0V15m0 0a2.25 2.25 0 01-2.25-2.25V10.5A2.25 2.25 0 016 12.75v.632" />
-            </svg>
+            <svg class="w-16 h-16 mx-auto mb-6 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6A.75.75 0 012.25 5.25v-.75m0 0A.75.75 0 013 4.5A.75.75 0 013.75 4.5m0 0v.75A.75.75 0 013 6A.75.75 0 012.25 5.25v-.75m3.75 0v.75A.75.75 0 016 6A.75.75 0 015.25 5.25v-.75m0 0A.75.75 0 016 4.5A.75.75 0 016.75 4.5m0 0v.75A.75.75 0 016 6A.75.75 0 015.25 5.25v-.75m3 15V15m-3 0v-2.25a2.25 2.25 0 012.25-2.25c1.026 0 1.945.694 2.152 1.662" /></svg>
             <h2 class="text-3xl md:text-4xl font-bold">Affordable Financing Options</h2>
-            <p class="max-w-2xl mx-auto text-slate-600 mt-4 mb-8 text-lg">
-                Don't let cost stop you from getting the comfort you need. We've partnered with Acorn Finance to offer flexible payment plans for your new HVAC system or emergency repair.
-            </p>
-            <p class="text-slate-600 mb-8">
-                See if you pre-qualify in seconds with <strong>no impact on your credit score</strong>.
-            </p>
-            <a href="https://www.acornfinance.com/pre-qualify/?d=1FK6S&utm_medium=web_pre_qual_link_copy_welcome" target="_blank" rel="noopener noreferrer" class="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-10 rounded-lg text-xl inline-block transition-transform hover:scale-105">
-                Get Pre-Qualified Now
-            </a>
+            <p class="max-w-2xl mx-auto text-slate-600 mt-4 mb-8 text-lg">Don't let cost stop you from getting the comfort you need. We've partnered with Acorn Finance to offer flexible payment plans for your new HVAC system or emergency repair.</p>
+            <p class="text-slate-600 mb-8">See if you pre-qualify in seconds with <strong>no impact on your credit score</strong>.</p>
+            <a href="https://www.acornfinance.com/pre-qualify/?d=1FK6S&utm_medium=web_pre_qual_link_copy_welcome" target="_blank" rel="noopener noreferrer" class="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-10 rounded-lg text-xl inline-block transition-transform hover:scale-105">Get Pre-Qualified Now</a>
         </div>
     </section>
 
-    <!-- SERVICE AREA -->
+    <!-- LOCATIONS -->
     <section id="locations" class="bg-white py-20 px-6">
         <div class="container mx-auto text-center">
             <h2 class="text-3xl md:text-4xl font-bold mb-4">Proudly Serving Metro Detroit</h2>
@@ -681,30 +370,20 @@
         <div class="container mx-auto text-center text-slate-400">
             <h3 class="text-2xl font-bold text-white mb-4">Ready for Total Comfort?</h3>
             <p class="mb-6">Contact Mechanical Temp today for a free, no-obligation estimate on your HVAC needs.</p>
-            <button onclick="openScheduler()" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-8 rounded-lg text-lg inline-block transition-transform hover:scale-105 mb-10">
-                Schedule Service Now
-            </button>
+            <button onclick="openScheduler()" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-8 rounded-lg text-lg inline-block transition-transform hover:scale-105 mb-10">Schedule Service Now</button>
             <div class="border-t border-slate-700 pt-6">
                 <p class="font-bold text-white">Mechanical Temp</p>
                 <p>23093 Telegraph Rd, Southfield, MI 48033</p>
                 <div class="space-y-1 my-2">
                      <p><a href="tel:+13132824758" class="hover:text-sky-400">Call Us: (313) 282-4758</a></p>
-                     <p>
-                         <a href="https://customer.mechanicaltemp.com/" target="_blank" rel="noopener noreferrer" class="text-sky-400 hover:text-sky-300 font-semibold inline-flex items-center">
-                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                                 <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
-                                 <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm3 0a1 1 0 011-1h1a1 1 0 110 2H8a1 1 0 01-1-1z" clip-rule="evenodd" />
-                             </svg>
-                             Make a Payment Online
-                         </a>
-                    </p>
+                     <p><a href="https://customer.mechanicaltemp.com/" target="_blank" rel="noopener noreferrer" class="text-sky-400 hover:text-sky-300 font-semibold inline-flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" /><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm3 0a1 1 0 011-1h1a1 1 0 110 2H8a1 1 0 01-1-1z" clip-rule="evenodd" /></svg>Make a Payment Online</a></p>
                 </div>
                 <p class="mt-4 text-sm">&copy; 2025 Mechanical Temp. All Rights Reserved.</p>
             </div>
         </div>
     </footer>
 
-    <!-- ============== TEMPI CHAT BUBBLE ============== -->
+    <!-- TEMPI CHAT BUBBLE -->
     <div id="chat-bubble" aria-label="Open chat with Tempi">
         <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
             <circle cx="25" cy="26" r="14" fill="#fcd9b6"/>
@@ -727,7 +406,7 @@
         <span id="chat-badge" class="hidden">1</span>
     </div>
 
-    <!-- ============== TEMPI CHAT WIDGET ============== -->
+    <!-- TEMPI CHAT WIDGET -->
     <div id="chat-widget" class="hidden">
         <div class="chat-header">
             <div class="tempi-header-avatar">
@@ -753,22 +432,12 @@
             </div>
             <div class="chat-header-info">
                 <div class="name">Tempi</div>
-                <div class="status">
-                    <span class="status-dot"></span>
-                    Mechanical Temp · online
-                </div>
+                <div class="status"><span class="status-dot"></span>Mechanical Temp · online</div>
             </div>
             <button id="close-chat-btn" aria-label="Minimize chat">&times;</button>
         </div>
         
         <div id="chat-messages" class="chat-messages"></div>
-        
-        <div id="quick-replies" class="quick-replies hidden">
-            <button class="quick-reply" data-msg="I'd like to schedule a service appointment">Schedule service</button>
-            <button class="quick-reply" data-msg="Can I get a quote for a new system?">Get a quote</button>
-            <button class="quick-reply" data-msg="Tell me about the $29/month service plan">Service plan</button>
-            <button class="quick-reply" data-msg="What are your current offers?">Current offers</button>
-        </div>
         
         <div class="chat-input-row">
             <textarea id="chat-input" placeholder="Type your message..." rows="1"></textarea>
@@ -781,15 +450,11 @@
     <!-- SCHEDULER MODAL -->
     <div id="scheduler-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4 hidden">
         <div id="hvac-scheduler-widget" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
-            <button onclick="closeScheduler()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 z-20" aria-label="Close scheduler">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
+            <button onclick="closeScheduler()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 z-20" aria-label="Close scheduler"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
             <div class="bg-gradient-to-r from-sky-600 to-cyan-500 text-white p-6 sm:p-8 text-center shrink-0">
                 <h2 class="text-2xl sm:text-3xl font-bold">Schedule HVAC Service</h2>
                 <p class="text-sm sm:text-base opacity-90 mt-1">Weekdays 8am-4pm • Weekends 10am-2pm</p>
-                <div class="bg-black/20 text-xs sm:text-sm p-2 rounded-lg mt-3 inline-block">
-                    🔒 Secure Form • Spam Protected • Your Privacy Matters
-                </div>
+                <div class="bg-black/20 text-xs sm:text-sm p-2 rounded-lg mt-3 inline-block">🔒 Secure Form • Spam Protected • Your Privacy Matters</div>
             </div>
             <div class="p-6 sm:p-8 overflow-y-auto modal-body">
                 <div class="flex justify-center items-center mb-6">
@@ -804,27 +469,17 @@
                 <div id="step-1">
                     <h3 class="text-2xl font-bold text-center mb-4">Select a Date</h3>
                     <div id="calendar" class="grid grid-cols-7 gap-2"></div>
-                    <div class="text-center mt-6">
-                        <button id="next-btn-1" onclick="nextStep()" class="bg-sky-500 text-white font-bold py-3 px-10 rounded-lg disabled:bg-gray-300" disabled>Next Step</button>
-                    </div>
+                    <div class="text-center mt-6"><button id="next-btn-1" onclick="nextStep()" class="bg-sky-500 text-white font-bold py-3 px-10 rounded-lg disabled:bg-gray-300" disabled>Next Step</button></div>
                 </div>
                 <div id="step-2" class="hidden">
                     <h3 class="text-2xl font-bold text-center mb-4">Select a Time</h3>
-                    <div class="bg-slate-100 p-4 rounded-lg text-center mb-4">
-                        <h4 class="font-semibold">Selected Date: <span id="selected-date"></span></h4>
-                    </div>
+                    <div class="bg-slate-100 p-4 rounded-lg text-center mb-4"><h4 class="font-semibold">Selected Date: <span id="selected-date"></span></h4></div>
                     <div id="time-slots" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-6"></div>
-                    <div class="flex justify-center gap-4 mt-6">
-                        <button onclick="prevStep()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-10 rounded-lg">Back</button>
-                        <button id="next-btn-2" onclick="nextStep()" class="bg-sky-500 text-white font-bold py-3 px-10 rounded-lg disabled:bg-gray-300" disabled>Next Step</button>
-                    </div>
+                    <div class="flex justify-center gap-4 mt-6"><button onclick="prevStep()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-10 rounded-lg">Back</button><button id="next-btn-2" onclick="nextStep()" class="bg-sky-500 text-white font-bold py-3 px-10 rounded-lg disabled:bg-gray-300" disabled>Next Step</button></div>
                 </div>
                 <div id="step-3" class="hidden">
                     <h3 class="text-2xl font-bold text-center mb-4">Your Information</h3>
-                    <div class="bg-slate-100 p-4 rounded-lg mb-4">
-                        <h4 class="font-semibold text-center">Appointment Details:</h4>
-                        <p class="text-center text-sm"><strong class="mr-2">Date:</strong><span id="confirm-date"></span><strong class="mx-2">Time:</strong><span id="confirm-time"></span></p>
-                    </div>
+                    <div class="bg-slate-100 p-4 rounded-lg mb-4"><h4 class="font-semibold text-center">Appointment Details:</h4><p class="text-center text-sm"><strong class="mr-2">Date:</strong><span id="confirm-date"></span><strong class="mx-2">Time:</strong><span id="confirm-time"></span></p></div>
                     <form id="contact-form" class="space-y-4">
                         <div><label class="font-semibold">Service Needed *</label><select id="service-type" name="service-type" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg"><option value="">Select Service Type</option><option value="AC Repair">AC Repair</option><option value="AC Installation">AC Installation</option><option value="AC Maintenance">AC Maintenance</option><option value="Heating Repair">Heating Repair</option><option value="Heating Installation">Heating Installation</option><option value="Heating Maintenance">Heating Maintenance</option><option value="Duct Work">Duct Work</option><option value="Emergency Service">Emergency Service</option><option value="Other">Other (specify in notes)</option></select></div>
                         <div><label class="font-semibold">Full Name *</label><input type="text" id="name" name="name" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg"></div>
@@ -835,10 +490,7 @@
                         <div><label class="font-semibold">Security Check: What is <span id="math-question"></span>? *</label><input type="number" id="captcha" name="captcha" required placeholder="Enter the answer" class="w-full mt-1 p-3 border border-gray-300 rounded-lg"></div>
                         <div><label class="flex items-center cursor-pointer"><input type="checkbox" id="terms" name="terms" required class="mr-2 h-4 w-4"> I confirm this is a genuine service request.</label></div>
                     </form>
-                    <div class="flex justify-center gap-4 mt-6">
-                        <button onclick="prevStep()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-10 rounded-lg">Back</button>
-                        <button id="submit-btn" onclick="submitAppointment()" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-10 rounded-lg">Book Appointment</button>
-                    </div>
+                    <div class="flex justify-center gap-4 mt-6"><button onclick="prevStep()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-10 rounded-lg">Back</button><button id="submit-btn" onclick="submitAppointment()" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-10 rounded-lg">Book Appointment</button></div>
                 </div>
                 <div id="step-4" class="hidden">
                     <div class="text-center p-6">
@@ -855,9 +507,7 @@
                             <p><strong>Email:</strong> <span id="final-email"></span></p>
                             <p><strong>Phone:</strong> <span id="final-phone"></span></p>
                         </div>
-                        <div class="mt-6">
-                            <button onclick="closeScheduler(true)" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-10 rounded-lg">Done</button>
-                        </div>
+                        <div class="mt-6"><button onclick="closeScheduler(true)" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-10 rounded-lg">Done</button></div>
                     </div>
                 </div>
             </div>
@@ -865,221 +515,97 @@
     </div>
     
 <script>
-    // =================================================================== //
-    // EMAILJS LAZY LOADER (shared by scheduler + Tempi chat)              //
-    // =================================================================== //
+    // EmailJS lazy loader (shared by scheduler + Tempi)
     let emailjsReady = null;
     function loadEmailJS() {
         if (emailjsReady) return emailjsReady;
         emailjsReady = new Promise((resolve, reject) => {
             const script = document.createElement('script');
             script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
-            script.onload = () => {
-                emailjs.init("IJHcoSxlSQ9OPOJGS");
-                resolve();
-            };
+            script.onload = () => { emailjs.init("IJHcoSxlSQ9OPOJGS"); resolve(); };
             script.onerror = reject;
             document.head.appendChild(script);
         });
         return emailjsReady;
     }
 
-    // =================================================================== //
-    // SCHEDULER MODAL (unchanged)                                         //
-    // =================================================================== //
+    // SCHEDULER MODAL
     const schedulerModal = document.getElementById("scheduler-modal");
-
     function openScheduler() {
         schedulerModal.classList.remove("hidden");
         document.body.style.overflow = "hidden";
         loadEmailJS().catch(err => console.error('EmailJS failed to load:', err));
     }
-
     function closeScheduler(reset = false) {
         schedulerModal.classList.add("hidden");
         document.body.style.overflow = "auto";
         if (reset) resetForm();
     }
-    schedulerModal.addEventListener("click", function(e) {
-        if (e.target === schedulerModal) closeScheduler();
-    });
-
-    let currentStep = 1;
-    let selectedDate = null;
-    let selectedTime = null;
-    let appointmentData = {};
-    let mathAnswer = 0;
-    const weekdayTimeSlots = ["8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM"];
-    const weekendTimeSlots = ["10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM"];
+    schedulerModal.addEventListener("click", function(e) { if (e.target === schedulerModal) closeScheduler(); });
+    let currentStep = 1, selectedDate = null, selectedTime = null, appointmentData = {}, mathAnswer = 0;
+    const weekdayTimeSlots = ["8:00 AM","9:00 AM","10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM"];
+    const weekendTimeSlots = ["10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM"];
     const unavailableDates = [];
-
     function generateCalendar() {
-        const e = document.getElementById("calendar");
-        e.innerHTML = "";
-        const t = new Date;
-        t.setHours(0, 0, 0, 0);
-        ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].forEach(t => {
-            e.innerHTML += `<div class="text-center font-semibold text-sm text-gray-500 p-2">${t}</div>`
-        });
-        const n = new Date(t.getFullYear(), t.getMonth(), 1);
-        const o = n.getDay();
+        const e = document.getElementById("calendar"); e.innerHTML = "";
+        const t = new Date; t.setHours(0,0,0,0);
+        ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(t => { e.innerHTML += `<div class="text-center font-semibold text-sm text-gray-500 p-2">${t}</div>` });
+        const n = new Date(t.getFullYear(), t.getMonth(), 1); const o = n.getDay();
         for (let l = 0; l < o; l++) e.insertAdjacentHTML("beforeend", "<div></div>");
         for (let d = 0; d < 42; d++) {
-            const c = new Date(n);
-            c.setDate(n.getDate() + d);
-            const a = c.toISOString().split("T")[0];
-            const s = unavailableDates.includes(a) || c < t;
+            const c = new Date(n); c.setDate(n.getDate() + d);
+            const a = c.toISOString().split("T")[0]; const s = unavailableDates.includes(a) || c < t;
             const r = document.createElement("div");
             r.className = "text-center p-2 rounded-lg cursor-pointer transition-all duration-200";
-            if (s) {
-                r.classList.add("bg-gray-100", "text-gray-300", "cursor-not-allowed");
-                r.innerHTML = `<div class="font-bold text-lg">${c.getDate()}</div>`;
-            } else {
-                r.classList.add("border", "border-gray-200", "hover:bg-sky-100", "hover:border-sky-500");
-                r.onclick = () => selectDate(c, r);
-                r.innerHTML = `<div class="text-xs text-gray-400">${c.toLocaleDateString("en",{month:"short"})}</div><div class="font-bold text-lg">${c.getDate()}</div>`;
-            }
+            if (s) { r.classList.add("bg-gray-100","text-gray-300","cursor-not-allowed"); r.innerHTML = `<div class="font-bold text-lg">${c.getDate()}</div>`; }
+            else { r.classList.add("border","border-gray-200","hover:bg-sky-100","hover:border-sky-500"); r.onclick = () => selectDate(c, r); r.innerHTML = `<div class="text-xs text-gray-400">${c.toLocaleDateString("en",{month:"short"})}</div><div class="font-bold text-lg">${c.getDate()}</div>`; }
             e.appendChild(r);
         }
     }
-
     function selectDate(e, t) {
-        document.querySelectorAll("#calendar .bg-sky-500").forEach(e => {
-            e.classList.remove("bg-sky-500", "text-white", "border-sky-500");
-            e.classList.add("border-gray-200");
-        });
-        t.classList.add("bg-sky-500", "text-white", "border-sky-500");
-        t.classList.remove("border-gray-200");
-        selectedDate = e;
-        document.getElementById("next-btn-1").disabled = false;
-        document.getElementById("selected-date").textContent = e.toLocaleDateString("en", {weekday: "long", year: "numeric", month: "long", day: "numeric"});
+        document.querySelectorAll("#calendar .bg-sky-500").forEach(e => { e.classList.remove("bg-sky-500","text-white","border-sky-500"); e.classList.add("border-gray-200"); });
+        t.classList.add("bg-sky-500","text-white","border-sky-500"); t.classList.remove("border-gray-200");
+        selectedDate = e; document.getElementById("next-btn-1").disabled = false;
+        document.getElementById("selected-date").textContent = e.toLocaleDateString("en", {weekday:"long",year:"numeric",month:"long",day:"numeric"});
     }
-
     function generateTimeSlots() {
-        const e = document.getElementById("time-slots");
-        e.innerHTML = "";
-        const t = selectedDate.getDay();
-        const n = t === 0 || t === 6 ? weekendTimeSlots : weekdayTimeSlots;
-        n.forEach(t => {
-            const o = document.createElement("div");
-            o.className = "p-3 text-center border-2 border-gray-300 rounded-lg cursor-pointer hover:border-sky-500 hover:bg-sky-100 font-semibold";
-            o.textContent = t;
-            o.onclick = () => selectTime(t, o);
-            e.appendChild(o);
-        });
+        const e = document.getElementById("time-slots"); e.innerHTML = "";
+        const t = selectedDate.getDay(); const n = t === 0 || t === 6 ? weekendTimeSlots : weekdayTimeSlots;
+        n.forEach(t => { const o = document.createElement("div"); o.className = "p-3 text-center border-2 border-gray-300 rounded-lg cursor-pointer hover:border-sky-500 hover:bg-sky-100 font-semibold"; o.textContent = t; o.onclick = () => selectTime(t, o); e.appendChild(o); });
     }
-
     function selectTime(e, t) {
-        document.querySelectorAll("#time-slots .bg-sky-500").forEach(e => {
-            e.classList.remove("bg-sky-500", "text-white", "border-sky-500");
-            e.classList.add("border-gray-300");
-        });
-        t.classList.add("bg-sky-500", "text-white", "border-sky-500");
-        t.classList.remove("border-gray-300");
-        selectedTime = e;
-        document.getElementById("next-btn-2").disabled = false;
-        document.getElementById("confirm-date").textContent = selectedDate.toLocaleDateString("en", {weekday: "long", year: "numeric", month: "long", day: "numeric"});
+        document.querySelectorAll("#time-slots .bg-sky-500").forEach(e => { e.classList.remove("bg-sky-500","text-white","border-sky-500"); e.classList.add("border-gray-300"); });
+        t.classList.add("bg-sky-500","text-white","border-sky-500"); t.classList.remove("border-gray-300");
+        selectedTime = e; document.getElementById("next-btn-2").disabled = false;
+        document.getElementById("confirm-date").textContent = selectedDate.toLocaleDateString("en", {weekday:"long",year:"numeric",month:"long",day:"numeric"});
         document.getElementById("confirm-time").textContent = e;
     }
-
     function updateProgress() {
         for (let e = 1; e <= 4; e++) {
-            const t = document.getElementById(`progress-${e}`);
-            const n = document.getElementById(`progress-line-${e-1}`);
-            t.classList.remove("bg-sky-600", "text-white", "bg-green-500");
-            t.classList.add("bg-gray-200", "text-gray-500");
-            if (e < currentStep) {
-                t.classList.remove("bg-gray-200", "text-gray-500");
-                t.classList.add("bg-green-500", "text-white");
-                if (n) n.classList.add("w-full", "bg-green-500");
-            } else if (e === currentStep) {
-                t.classList.remove("bg-gray-200", "text-gray-500");
-                t.classList.add("bg-sky-600", "text-white");
-                if (n) n.classList.remove("w-full", "bg-green-500");
-            } else {
-                if (n) n.classList.remove("w-full", "bg-green-500");
-            }
+            const t = document.getElementById(`progress-${e}`); const n = document.getElementById(`progress-line-${e-1}`);
+            t.classList.remove("bg-sky-600","text-white","bg-green-500"); t.classList.add("bg-gray-200","text-gray-500");
+            if (e < currentStep) { t.classList.remove("bg-gray-200","text-gray-500"); t.classList.add("bg-green-500","text-white"); if (n) n.classList.add("w-full","bg-green-500"); }
+            else if (e === currentStep) { t.classList.remove("bg-gray-200","text-gray-500"); t.classList.add("bg-sky-600","text-white"); if (n) n.classList.remove("w-full","bg-green-500"); }
+            else { if (n) n.classList.remove("w-full","bg-green-500"); }
         }
     }
-
-    function showStep(e) {
-        document.getElementById("step-1").classList.add("hidden");
-        document.getElementById("step-2").classList.add("hidden");
-        document.getElementById("step-3").classList.add("hidden");
-        document.getElementById("step-4").classList.add("hidden");
-        document.getElementById(`step-${e}`).classList.remove("hidden");
-    }
-
-    function nextStep() {
-        if (currentStep === 1 && !selectedDate) return;
-        if (currentStep === 2 && !selectedTime) return;
-        currentStep++;
-        showStep(currentStep);
-        updateProgress();
-        if (currentStep === 2) generateTimeSlots();
-    }
-
-    function prevStep() {
-        if (currentStep === 1) return;
-        currentStep--;
-        showStep(currentStep);
-        updateProgress();
-    }
-
-    function generateMathCaptcha() {
-        const e = Math.floor(10 * Math.random()) + 1;
-        const t = Math.floor(10 * Math.random()) + 1;
-        document.getElementById("math-question").textContent = `${e} + ${t}`;
-        mathAnswer = e + t;
-    }
-
-    function validateCaptcha() {
-        const e = parseInt(document.getElementById("captcha").value);
-        if (e !== mathAnswer) {
-            generateMathCaptcha();
-            document.getElementById("captcha").value = "";
-            document.getElementById("captcha").classList.add('border-red-500');
-            return false;
-        }
-        document.getElementById("captcha").classList.remove('border-red-500');
-        return true;
-    }
-
+    function showStep(e) { document.getElementById("step-1").classList.add("hidden"); document.getElementById("step-2").classList.add("hidden"); document.getElementById("step-3").classList.add("hidden"); document.getElementById("step-4").classList.add("hidden"); document.getElementById(`step-${e}`).classList.remove("hidden"); }
+    function nextStep() { if (currentStep === 1 && !selectedDate) return; if (currentStep === 2 && !selectedTime) return; currentStep++; showStep(currentStep); updateProgress(); if (currentStep === 2) generateTimeSlots(); }
+    function prevStep() { if (currentStep === 1) return; currentStep--; showStep(currentStep); updateProgress(); }
+    function generateMathCaptcha() { const e = Math.floor(10 * Math.random()) + 1; const t = Math.floor(10 * Math.random()) + 1; document.getElementById("math-question").textContent = `${e} + ${t}`; mathAnswer = e + t; }
+    function validateCaptcha() { const e = parseInt(document.getElementById("captcha").value); if (e !== mathAnswer) { generateMathCaptcha(); document.getElementById("captcha").value = ""; document.getElementById("captcha").classList.add('border-red-500'); return false; } document.getElementById("captcha").classList.remove('border-red-500'); return true; }
     function submitAppointment() {
         const e = document.getElementById("contact-form");
-        if (!e.checkValidity() || !validateCaptcha()) {
-            e.reportValidity();
-            return;
-        }
+        if (!e.checkValidity() || !validateCaptcha()) { e.reportValidity(); return; }
         const t = new FormData(e);
-        appointmentData = {
-            date: selectedDate.toLocaleDateString("en", {weekday: "long", year: "numeric", month: "long", day: "numeric"}),
-            time: selectedTime,
-            serviceType: t.get("service-type"),
-            name: t.get("name"),
-            email: t.get("email"),
-            phone: t.get("phone"),
-            address: t.get("address"),
-            message: t.get("message") || "No additional notes"
-        };
-        const n = document.getElementById("submit-btn");
-        n.disabled = true;
-        n.textContent = "Sending...";
+        appointmentData = { date: selectedDate.toLocaleDateString("en",{weekday:"long",year:"numeric",month:"long",day:"numeric"}), time: selectedTime, serviceType: t.get("service-type"), name: t.get("name"), email: t.get("email"), phone: t.get("phone"), address: t.get("address"), message: t.get("message") || "No additional notes" };
+        const n = document.getElementById("submit-btn"); n.disabled = true; n.textContent = "Sending...";
         sendAppointmentEmail(appointmentData);
     }
-
     function sendAppointmentEmail(e) {
         const t = "template_q5fbhd8";
-        loadEmailJS().then(() => emailjs.send("service_ziwf1pg", t, e))
-        .then(function(e) {
-            showConfirmation();
-        }).catch(function(e) {
-            const t = document.getElementById("submit-btn");
-            t.disabled = false;
-            t.textContent = "Book Appointment";
-        });
+        loadEmailJS().then(() => emailjs.send("service_ziwf1pg", t, e)).then(function() { showConfirmation(); }).catch(function() { const t = document.getElementById("submit-btn"); t.disabled = false; t.textContent = "Book Appointment"; });
     }
-
     function showConfirmation() {
         document.getElementById("final-service").textContent = appointmentData.serviceType;
         document.getElementById("final-date").textContent = appointmentData.date;
@@ -1091,36 +617,23 @@
         gtag('event', 'schedule_appointment', { 'event_category': 'conversion' });
         nextStep();
     }
-
     function resetForm() {
-        currentStep = 1;
-        selectedDate = null;
-        selectedTime = null;
+        currentStep = 1; selectedDate = null; selectedTime = null;
         document.getElementById("contact-form").reset();
-        showStep(1);
-        updateProgress();
+        showStep(1); updateProgress();
         document.getElementById("next-btn-1").disabled = true;
         document.getElementById("next-btn-2").disabled = true;
-        const e = document.getElementById("submit-btn");
-        e.disabled = false;
-        e.textContent = "Book Appointment";
-        generateCalendar();
-        generateMathCaptcha();
+        const e = document.getElementById("submit-btn"); e.disabled = false; e.textContent = "Book Appointment";
+        generateCalendar(); generateMathCaptcha();
     }
 
-    // =================================================================== //
-    // MOBILE MENU                                                         //
-    // =================================================================== //
+    // MOBILE MENU
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
     mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-    document.querySelectorAll('.mobile-link').forEach(link => {
-        link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
-    });
+    document.querySelectorAll('.mobile-link').forEach(link => { link.addEventListener('click', () => mobileMenu.classList.add('hidden')); });
 
-    // =================================================================== //
-    // TEMPI CHAT WIDGET                                                   //
-    // =================================================================== //
+    // ============== TEMPI CHAT WIDGET v3 with smart inline buttons ==============
     (function() {
         const CLAUDE_PROXY_URL = 'https://tempi.summer-unit-44dd.workers.dev/';
         const EMAILJS_SERVICE = 'service_ziwf1pg';
@@ -1131,7 +644,7 @@
         let hasGreeted = false;
         let widgetEverOpened = false;
         
-        const SYSTEM_PROMPT = `You are Tempi, the friendly virtual customer service rep for Mechanical Temp, a commercial and residential HVAC company in Southfield, MI serving Metro Detroit. You're warm, helpful, and a little playful — like a knowledgeable friend at the front desk.
+        const SYSTEM_PROMPT = `You are Tempi, the friendly virtual customer service rep for Mechanical Temp, a commercial and residential HVAC company in Southfield, MI serving Metro Detroit. You're warm, helpful, and a little playful — like a knowledgeable friend at the front desk who's also great at gently moving the conversation forward.
 
 ABOUT MECHANICAL TEMP:
 - Address: 23093 Telegraph Rd, Southfield, MI 48033
@@ -1139,33 +652,79 @@ ABOUT MECHANICAL TEMP:
 - Hours: Weekdays 8am-4pm, Weekends 10am-2pm, 24/7 emergency service available
 - Services: Furnace repair/install/maintenance, AC repair/install/maintenance, Commercial HVAC, Duct work, Ductless mini-splits
 - Service area: Southfield, Dearborn, Livonia, Novi, Canton, Plymouth, Northville, West Bloomfield, Royal Oak, Ferndale, Westland, Farmington Hills, Redford and surrounding Metro Detroit
-- Authorized AirQuest dealer
-- We also service national accounts (CBRE, Cushman & Wakefield, Sodexo, SMS Assist, etc.) — when a facilities/property management rep contacts us, shift to a more professional dispatch tone and treat as urgent commercial work.
+- Authorized AirQuest dealer (main brand for new installs), but our techs service ALL brands
+- Owner: Brian
+- National accounts: CBRE, Cushman & Wakefield, Sodexo, SMS Assist — shift to professional dispatch tone for these.
 
 CURRENT OFFERS:
 - Furnace Tune-Up Special: $69 (21-point inspection)
 - New System Discount: $500 off new high-efficiency furnace or AC install (free estimate included)
 - Service Plan: $29/month - includes 2 annual tune-ups, priority service, covers many common parts
-- Financing available through Acorn Finance (no credit impact to pre-qualify)
+- Financing through Acorn Finance (no credit impact to pre-qualify)
 
-YOUR JOB:
-1. Greet warmly. Answer questions about services, pricing, offers, and service area in a friendly, conversational tone.
-2. Keep responses SHORT — 2-3 sentences max. This is a chat, not an essay.
-3. Use light, natural language. Occasional emoji is okay (1 max per message, only when it fits naturally).
-4. For any service request (repair, install, quote, emergency, commercial dispatch), collect FOUR things across the conversation: (a) name, (b) phone number, (c) service address, (d) brief description of the issue. The customer may provide these one at a time, in chunks, or all at once — track what you have.
-5. CLOSING THE LEAD: As soon as you have all 4 pieces of info — even if some were given earlier in the conversation — STOP asking more questions. Write a SHORT confirmation message that lists the 4 pieces back to the customer, says someone will follow up, and ends with the EXACT phrase: [LEAD_READY]
-Do NOT ask another confirming question after you have all 4 pieces. Closing the loop is more important than perfect detail. If the issue description is vague (like "furnace not working"), that's still enough — don't keep probing for diagnostic detail. A tech will figure that out on site.
-6. For after-hours emergencies, also tell them to call (313) 282-4758 directly while you collect their info.
-7. NEVER invent specific repair prices. For new system pricing, you can mention the general range ($3,000–$6,000+ installed for a furnace) but always say a tech will give the exact quote on-site.
-8. Don't be pushy. If they just want info, give it to them — don't force lead capture.
-9. If asked about services we don't offer (plumbing, electrical, roofing, appliance repair), politely say it's not our area and suggest they find a specialist. Don't recommend specific competing companies.
-10. For angry/frustrated customers: acknowledge their feelings first ("That's really frustrating — I'm sorry"), don't make excuses, don't promise refunds or specific actions you can't guarantee. Collect info and tell them you'll escalate to the owner. The owner is Brian.
+==== CRITICAL FORMAT RULES ====
 
-TONE EXAMPLES:
-- Good: "Oh no, a furnace acting up in Michigan is no fun! Let's get a tech out to take a look. Can I grab your name and number?"
-- Good: "Yep, we cover Livonia! Same-day service is usually doable. What's going on with your system?"
-- Good (commercial): "Got it — 5-ton Carrier RTU, compressor not engaging. I'll need your name, phone, and site address to dispatch."
-- Bad: "I would be delighted to assist you with your HVAC concerns at this time." (too stiff)`;
+**EVERY response MUST end with quick-reply buttons in this EXACT format on the last line:**
+[BTN: Option 1 | Option 2 | Option 3]
+
+- 2-4 buttons per message (3 is ideal)
+- Each button label MAX 4 words, ideally 2-3
+- Buttons must be SPECIFIC to the current conversation moment — what would the customer most likely click NEXT?
+- Use emojis sparingly in buttons (one tiny emoji per button max — like 📍 for locations, 💰 for pricing, ✓ for confirmations)
+- Always include at least one "forward" option (book / get quote / schedule)
+- Include an escape option when appropriate ("Just info" / "Different question" / "Talk to a person")
+
+BUTTON EXAMPLES BY CONTEXT:
+
+Initial greeting → [BTN: Schedule service | Get a quote | Just browsing | Service plan info]
+
+After mentioning $500 off → [BTN: ✓ Yes, free estimate | Tell me more | Not right now]
+
+After asking about service area → [BTN: 📍 Southfield | 📍 Livonia | 📍 Other city | Type my address]
+
+After collecting name → [BTN: Type my phone | Call me back | Different question]
+
+When customer mentions broken system → [BTN: ✓ Send a tech | Same-day service? | Get a quote first]
+
+When customer is angry → [BTN: Speak to owner | Schedule callback | Email instead]
+
+When customer asks brands → [BTN: New install quote | Existing system repair | Just curious]
+
+When discussing service plan → [BTN: ✓ Sign me up | What's covered? | Compare to one-time]
+
+After [LEAD_READY] confirmation → [BTN: ✓ Got it, thanks | Add more info | Different question]
+
+==== ENGAGEMENT RULES ====
+
+1. KEEP IT SHORT. Most responses 1-2 sentences plus the [BTN: ...] line.
+2. NO BULLETED LISTS unless specifically asked to compare. Lists kill chat flow.
+3. ANSWER THEN PIVOT. Give the answer, then offer the next step via buttons.
+4. COLLECT 4 PIECES across the conversation: name, phone, address, brief issue. Track what you have.
+5. Once you have ALL 4 — STOP asking. Write a short confirmation listing the 4 things, end with [LEAD_READY] AND THEN the [BTN: ...] line on a new line.
+6. After-hours emergencies: tell them to call (313) 282-4758 directly. Still include buttons.
+7. NEVER invent specific repair prices. Range OK for new systems ($3,000–$6,000+ furnace). Always "tech gives exact quote on-site."
+8. Services we DON'T offer (plumbing, electrical, roofing, appliance repair) — politely decline, don't recommend competitors by name.
+9. Angry customers: acknowledge feelings, no excuses, no refund promises. Collect info, escalate to owner Brian.
+
+==== EXAMPLE GOOD RESPONSES ====
+
+Customer: "What brand do you carry?"
+Tempi: "We install AirQuest (great warranty, solid efficiency) and service every other brand out there. Are you replacing a system or troubleshooting one you've got?
+[BTN: New install | Existing repair | Just curious]"
+
+Customer: "What are your offers?"
+Tempi: "Two big ones: $500 off a new install with free estimate, or $69 for a full tune-up. Which sounds closer to what you need?
+[BTN: 💰 $500 off install | 🔧 $69 tune-up | Tell me about both]"
+
+Customer: "Do you cover Livonia?"
+Tempi: "Yep, Livonia is right in our area — we're out there all the time. What's going on with your system?
+[BTN: ✓ Schedule a tech | Get a quote | Just info for now]"
+
+Customer: "My AC is broken."
+Tempi: "Oh no, AC down is rough! Let's get a tech out to you. What's the best name and number to reach you at?
+[BTN: Type my info | Same-day service? | Call me first]"
+
+REMEMBER: Every response = short answer + forward-moving buttons. No exceptions.`;
         
         const chatBubble = document.getElementById('chat-bubble');
         const chatWidget = document.getElementById('chat-widget');
@@ -1173,10 +732,18 @@ TONE EXAMPLES:
         const messagesEl = document.getElementById('chat-messages');
         const inputEl = document.getElementById('chat-input');
         const sendBtn = document.getElementById('send-chat-btn');
-        const quickRepliesEl = document.getElementById('quick-replies');
         const chatBadge = document.getElementById('chat-badge');
         
         const TEMPI_SMALL_SVG = `<svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" class="msg-avatar-small"><circle cx="14" cy="14" r="14" fill="#fde68a"/><circle cx="14" cy="15" r="7" fill="#fcd9b6"/><path d="M 7 14 Q 8 5 14 4 Q 20 5 21 14 Q 20 11 18 9.5 Q 16 8.5 14 8.5 Q 12 8.5 10 9.5 Q 8 11 7 14 Z" fill="#8b4513"/><circle cx="11.5" cy="15" r="0.9" fill="#1f2937"/><circle cx="16.5" cy="15" r="0.9" fill="#1f2937"/><circle cx="11.7" cy="14.8" r="0.3" fill="white"/><circle cx="16.7" cy="14.8" r="0.3" fill="white"/><path d="M 11.5 17.5 Q 14 19 16.5 17.5" stroke="#c2410c" stroke-width="0.9" fill="none" stroke-linecap="round"/><ellipse cx="9.8" cy="16.8" rx="0.9" ry="0.5" fill="#fda4af" opacity="0.6"/><ellipse cx="18.2" cy="16.8" rx="0.9" ry="0.5" fill="#fda4af" opacity="0.6"/><path d="M 7.5 12 Q 14 7 20.5 12" stroke="#1e293b" stroke-width="1.2" fill="none" stroke-linecap="round"/><circle cx="7.2" cy="13" r="1.4" fill="#1e293b"/><circle cx="20.8" cy="13" r="1.4" fill="#1e293b"/></svg>`;
+        
+        // Parse [BTN: A | B | C] markers from Tempi's response
+        function parseButtons(text) {
+            const match = text.match(/\[BTN:\s*([^\]]+)\]/);
+            if (!match) return { cleanText: text, buttons: [] };
+            const buttons = match[1].split('|').map(s => s.trim()).filter(s => s.length > 0);
+            const cleanText = text.replace(/\[BTN:[^\]]+\]/g, '').replace(/\[LEAD_READY\]/g, '').trim();
+            return { cleanText, buttons };
+        }
         
         function escapeHtml(s) {
             const div = document.createElement('div');
@@ -1184,11 +751,28 @@ TONE EXAMPLES:
             return div.innerHTML;
         }
         
-        function addBotMessage(text) {
+        function addBotMessage(text, buttons) {
             const row = document.createElement('div');
             row.className = 'msg-row bot';
             row.innerHTML = TEMPI_SMALL_SVG + `<div class="msg-bubble bot">${escapeHtml(text)}</div>`;
             messagesEl.appendChild(row);
+            
+            if (buttons && buttons.length > 0) {
+                const btnRow = document.createElement('div');
+                btnRow.className = 'inline-buttons';
+                buttons.forEach(label => {
+                    const btn = document.createElement('button');
+                    btn.className = 'inline-btn';
+                    btn.textContent = label;
+                    btn.addEventListener('click', () => {
+                        // Disable buttons in this set so user can't double-click
+                        btnRow.querySelectorAll('.inline-btn').forEach(b => b.disabled = true);
+                        handleSend(label);
+                    });
+                    btnRow.appendChild(btn);
+                });
+                messagesEl.appendChild(btnRow);
+            }
             scrollToBottom();
         }
         
@@ -1209,54 +793,37 @@ TONE EXAMPLES:
             scrollToBottom();
         }
         
-        function hideTyping() {
-            const t = document.getElementById('typing-row');
-            if (t) t.remove();
-        }
-        
-        function scrollToBottom() {
-            messagesEl.scrollTop = messagesEl.scrollHeight;
-        }
-        
-        function showBadge(n) {
-            chatBadge.textContent = n;
-            chatBadge.classList.remove('hidden');
-        }
-        
-        function hideBadge() {
-            chatBadge.classList.add('hidden');
-        }
+        function hideTyping() { const t = document.getElementById('typing-row'); if (t) t.remove(); }
+        function scrollToBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
+        function showBadge(n) { chatBadge.textContent = n; chatBadge.classList.remove('hidden'); }
+        function hideBadge() { chatBadge.classList.add('hidden'); }
         
         function openWidget() {
             chatWidget.classList.remove('hidden');
             widgetEverOpened = true;
             hideBadge();
-            
             if (!hasGreeted) {
                 hasGreeted = true;
                 setTimeout(() => {
-                    addBotMessage("Hi there! 👋 I'm Tempi from Mechanical Temp. How can I help you today?");
-                    quickRepliesEl.classList.remove('hidden');
+                    // First-time greeting with initial button set
+                    addBotMessage(
+                        "Hi there! 👋 I'm Tempi from Mechanical Temp. How can I help you today?",
+                        ["Schedule service", "Get a quote", "Just browsing", "Service plan info"]
+                    );
                 }, 300);
             }
-            
             loadEmailJS().catch(e => console.error('EmailJS load failed', e));
             setTimeout(() => inputEl.focus(), 100);
         }
         
         function closeWidget() {
             chatWidget.classList.add('hidden');
-            if (conversationHistory.length > 0 && !leadCaptured) {
-                showBadge('!');
-            }
+            if (conversationHistory.length > 0 && !leadCaptured) showBadge('!');
         }
         
         function toggleWidget() {
-            if (chatWidget.classList.contains('hidden')) {
-                openWidget();
-            } else {
-                closeWidget();
-            }
+            if (chatWidget.classList.contains('hidden')) openWidget();
+            else closeWidget();
         }
         
         async function sendToClaude(userMessage) {
@@ -1274,12 +841,12 @@ TONE EXAMPLES:
                 });
                 if (!res.ok) throw new Error('Proxy error: ' + res.status);
                 const data = await res.json();
-                const reply = data.content?.filter(b => b.type === 'text')?.map(b => b.text)?.join('\n') || "Hmm, I didn't catch that. Could you try again?";
+                const reply = data.content?.filter(b => b.type === 'text')?.map(b => b.text)?.join('\n') || "Hmm, I didn't catch that. Could you try again? [BTN: Try again | Talk to a person]";
                 conversationHistory.push({ role: 'assistant', content: reply });
                 return reply;
             } catch (err) {
                 console.error('Claude call failed:', err);
-                return "I'm having trouble connecting right now 😕 Please call us at (313) 282-4758 and we'll help you right away!";
+                return "I'm having trouble connecting right now 😕 Please call us at (313) 282-4758 and we'll help you right away! [BTN: Try again | Call now]";
             }
         }
         
@@ -1290,7 +857,7 @@ TONE EXAMPLES:
                 from_name: 'Tempi - Website Chat Lead',
                 phone: phoneMatch ? phoneMatch[0] : 'See transcript',
                 message: '🤖 NEW CHAT LEAD FROM TEMPI 🤖\n\nFull conversation transcript:\n\n' + 
-                    conversation.map(m => `[${m.role === 'user' ? 'CUSTOMER' : 'TEMPI'}]: ${m.content.replace(/\[LEAD_READY\]/g, '')}`).join('\n\n')
+                    conversation.map(m => `[${m.role === 'user' ? 'CUSTOMER' : 'TEMPI'}]: ${m.content.replace(/\[LEAD_READY\]/g,'').replace(/\[BTN:[^\]]+\]/g,'').trim()}`).join('\n\n')
             };
         }
         
@@ -1302,19 +869,13 @@ TONE EXAMPLES:
                 const leadData = extractLeadInfo(conversationHistory);
                 await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, leadData);
                 console.log('Lead email sent to DSM via EmailJS');
-                if (typeof gtag !== 'undefined') {
-                    gtag('event', 'chat_lead', { 'event_category': 'conversion' });
-                }
-            } catch (err) {
-                console.error('Lead email failed:', err);
-                leadCaptured = false;
-            }
+                if (typeof gtag !== 'undefined') gtag('event', 'chat_lead', { 'event_category': 'conversion' });
+            } catch (err) { console.error('Lead email failed:', err); leadCaptured = false; }
         }
         
         async function handleSend(text) {
             text = (text || inputEl.value).trim();
             if (!text) return;
-            quickRepliesEl.classList.add('hidden');
             addUserMessage(text);
             inputEl.value = '';
             sendBtn.disabled = true;
@@ -1322,11 +883,9 @@ TONE EXAMPLES:
             showTyping();
             const reply = await sendToClaude(text);
             hideTyping();
-            const cleanReply = reply.replace(/\[LEAD_READY\]/g, '').trim();
-            addBotMessage(cleanReply);
-            if (reply.includes('[LEAD_READY]')) {
-                fireLeadEmail();
-            }
+            const { cleanText, buttons } = parseButtons(reply);
+            addBotMessage(cleanText, buttons);
+            if (reply.includes('[LEAD_READY]')) fireLeadEmail();
             sendBtn.disabled = false;
             inputEl.disabled = false;
             inputEl.focus();
@@ -1335,66 +894,28 @@ TONE EXAMPLES:
         chatBubble.addEventListener('click', toggleWidget);
         closeBtn.addEventListener('click', closeWidget);
         sendBtn.addEventListener('click', () => handleSend());
-        inputEl.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                handleSend();
-            }
-        });
-        inputEl.addEventListener('input', () => {
-            inputEl.style.height = 'auto';
-            inputEl.style.height = Math.min(inputEl.scrollHeight, 80) + 'px';
-        });
-        document.querySelectorAll('.quick-reply').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const msg = btn.getAttribute('data-msg');
-                handleSend(msg);
-            });
-        });
-        setTimeout(() => {
-            if (!widgetEverOpened) showBadge('1');
-        }, 10000);
+        inputEl.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } });
+        inputEl.addEventListener('input', () => { inputEl.style.height = 'auto'; inputEl.style.height = Math.min(inputEl.scrollHeight, 80) + 'px'; });
+        
+        setTimeout(() => { if (!widgetEverOpened) showBadge('1'); }, 10000);
     })();
 
-    // =================================================================== //
-    // INITIALIZATION + ANALYTICS                                          //
-    // =================================================================== //
+    // INIT + GA TRACKING
     document.addEventListener('DOMContentLoaded', function() {
         generateCalendar();
         generateMathCaptcha();
-
-        const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
-        phoneLinks.forEach(link => {
-            link.addEventListener('click', function() {
-                gtag('event', 'phone_call_click', {'event_category': 'conversion'});
-            });
-        });
-
+        document.querySelectorAll('a[href^="tel:"]').forEach(link => { link.addEventListener('click', function() { gtag('event', 'phone_call_click', {'event_category': 'conversion'}); }); });
         const systemSelectorLink = document.querySelector('#system-selector-cta a');
-        if (systemSelectorLink) {
-            systemSelectorLink.addEventListener('click', function() {
-                gtag('event', 'system_selector_click', {'event_category': 'engagement'});
-            });
-        }
-
-        const offerButtons = document.querySelectorAll('#offers button[onclick="openScheduler()"]');
-        offerButtons.forEach(button => {
+        if (systemSelectorLink) systemSelectorLink.addEventListener('click', function() { gtag('event', 'system_selector_click', {'event_category': 'engagement'}); });
+        document.querySelectorAll('#offers button[onclick="openScheduler()"]').forEach(button => {
             button.addEventListener('click', function() {
                 const buttonText = button.textContent.trim();
-                if (buttonText.includes('Tune-Up')) {
-                    gtag('event', 'click_tuneup_offer', { 'event_category': 'engagement' });
-                } else if (buttonText.includes('Estimate')) {
-                    gtag('event', 'click_estimate_offer', { 'event_category': 'engagement' });
-                }
+                if (buttonText.includes('Tune-Up')) gtag('event', 'click_tuneup_offer', { 'event_category': 'engagement' });
+                else if (buttonText.includes('Estimate')) gtag('event', 'click_estimate_offer', { 'event_category': 'engagement' });
             });
         });
-
         const servicePlanLink = document.querySelector('#service-plan a[href="service-plan.html"]');
-        if (servicePlanLink) {
-            servicePlanLink.addEventListener('click', function() {
-                gtag('event', 'click_service_plan_cta', {'event_category': 'engagement'});
-            });
-        }
+        if (servicePlanLink) servicePlanLink.addEventListener('click', function() { gtag('event', 'click_service_plan_cta', {'event_category': 'engagement'}); });
     });
 </script>
 </body>
