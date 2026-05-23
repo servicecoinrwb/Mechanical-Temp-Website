@@ -156,27 +156,6 @@
 </head>
 <body class="text-gray-800">
 
-    <!-- AI Assistant banner — dismissable, tracks clicks -->
-<div id="ai-banner" class="bg-gradient-to-r from-sky-600 to-sky-700 text-white text-sm">
-    <div class="container mx-auto px-4 py-2 flex items-center justify-between gap-3">
-        <div class="flex items-center gap-2 flex-1 min-w-0">
-            <span class="inline-flex items-center gap-1.5 bg-sky-500/30 px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider flex-shrink-0">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l1.9 5.8 5.8 1.9-5.8 1.9L12 18.4l-1.9-5.8L4.3 10.7l5.8-1.9L12 3z"/></svg>
-                New
-            </span>
-            <span class="truncate">
-                Meet <strong>Tempi</strong>, our AI assistant — describe your HVAC issue, get help fast.
-                <a href="assistant.html?utm_source=mainsite_banner&utm_medium=organic&utm_campaign=banner_discovery" class="underline font-bold hover:text-sky-200 whitespace-nowrap" onclick="if(typeof gtag!=='undefined')gtag('event','click_ai_banner',{'event_category':'engagement','event_label':'top_banner'})">Try it now →</a>
-            </span>
-        </div>
-        <button onclick="document.getElementById('ai-banner').style.display='none';try{sessionStorage.setItem('mt_banner_dismissed','1')}catch(e){}" class="text-white/80 hover:text-white text-lg leading-none flex-shrink-0 px-2" aria-label="Dismiss banner">&times;</button>
-    </div>
-</div>
-<script>
-    // Hide banner if user already dismissed it this session
-    try { if (sessionStorage.getItem('mt_banner_dismissed') === '1') document.getElementById('ai-banner').style.display='none'; } catch(e) {}
-</script>
-
     <!-- HEADER & NAVIGATION -->
     <header class="bg-gray-900/80 sticky top-0 z-40 p-4 shadow-md">
         <nav class="container mx-auto flex justify-between items-center text-white">
@@ -206,6 +185,26 @@
             </ul>
         </div>
     </header>
+
+    <!-- AI Assistant banner — dismissable, tracks clicks -->
+<div id="ai-banner" class="bg-green-700 text-white text-sm border-b border-green-800">
+    <div class="container mx-auto px-4 py-2 flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2 flex-1 min-w-0">
+            <span class="inline-flex items-center gap-1.5 bg-green-600 px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider flex-shrink-0">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l1.9 5.8 5.8 1.9-5.8 1.9L12 18.4l-1.9-5.8L4.3 10.7l5.8-1.9L12 3z"/></svg>
+                New
+            </span>
+            <span class="truncate">
+                Meet <strong>Tempi</strong>, our AI assistant — describe your HVAC issue, get help fast.
+                <a href="assistant.html?utm_source=mainsite_banner&utm_medium=organic&utm_campaign=banner_discovery" class="underline font-bold hover:text-green-200 whitespace-nowrap" onclick="if(typeof gtag!=='undefined')gtag('event','click_ai_banner',{'event_category':'engagement','event_label':'top_banner'})">Try it now →</a>
+            </span>
+        </div>
+        <button onclick="document.getElementById('ai-banner').style.display='none';try{sessionStorage.setItem('mt_banner_dismissed','1')}catch(e){}" class="text-white/80 hover:text-white text-lg leading-none flex-shrink-0 px-2" aria-label="Dismiss banner">&times;</button>
+    </div>
+</div>
+<script>
+    try { if (sessionStorage.getItem('mt_banner_dismissed') === '1') document.getElementById('ai-banner').style.display='none'; } catch(e) {}
+</script>
 
     <!-- HERO -->
     <section class="min-h-screen hero-section-container -mt-[88px] pt-[88px]">
