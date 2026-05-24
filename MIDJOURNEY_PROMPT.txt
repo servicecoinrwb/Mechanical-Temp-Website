@@ -1,0 +1,9 @@
+The exact prompt you used in Midjourney:
+
+"professional young woman, late 20s, long jet black hair, warm friendly smile, 
+sitting at modern minimalist office desk with laptop, wearing sky blue blouse, 
+soft lighting, brand mascot illustration style, clean professional vibe, 
+HVAC company assistant, vector art, flat design --ar 16:9 --v 6"
+
+Generation URL: [paste the Midjourney result URL here]
+Date generated: May 23, 2026
