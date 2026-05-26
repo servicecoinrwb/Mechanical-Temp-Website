@@ -1,1 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) — same as main site -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0G63KLB2B0"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-0G63KLB2B0');
+      gtag('config', 'AW-11260644372');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talk to Tempi — Mechanical Temp AI Assistant</title>
+    <meta name="description" content="Describe your HVAC issue and get instant help from Tempi, our AI assistant. Or browse services to book directly. Serving Metro Detroit.">
+    <link rel="canonical" href="https://www.mechanicaltemp.com/assistant.html" />
+    <link rel="preconnect" href="https://tempi.summer-unit-44dd.workers.dev">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        html { scroll-behavior: smooth; background-color: #0c1a3e; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background:
+                linear-gradient(rgba(12, 26, 62, 0.82), rgba(12, 26, 62, 0.88)),
+                url('https://cdn.mechanicaltemp.com/tempi/tempi-working.png') center center / cover no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+        @keyframes blink { 0%, 80%, 100% { opacity: 0.3; } 40% { opacity: 1; } }
+        .typing-dot { animation: blink 1.2s infinite; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-up { animation: fadeUp 0.3s ease-out; }
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #38bdf8, #0ea5e9, #0284c7);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-shift 6s ease infinite;
+        }
+        .chat-scroll::-webkit-scrollbar { width: 6px; }
+        .chat-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .inline-btn {
+            background: #e0f2fe;
+            color: #0c4a6e;
+            border: 1.5px solid #7dd3fc;
+            border-radius: 14px;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.15s;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .inline-btn:hover {
+            background: #0ea5e9;
+            color: white;
+            border-color: #0ea5e9;
+        }
+        .inline-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        /* ============================================================
+           MOBILE-FIRST FIXES
+           ============================================================ */
 
+        /* Mobile: drop fixed attachment + zoom out the background so
+           Tempi's head/shoulders are visible instead of an extreme close-up. */
+        @media (max-width: 768px) {
+            body {
+                background:
+                    linear-gradient(rgba(12, 26, 62, 0.78), rgba(12, 26, 62, 0.92)),
+                    url('https://cdn.mechanicaltemp.com/tempi/tempi-working.png') center top / 180% auto no-repeat;
+                background-attachment: scroll;
+                background-color: #0c1a3e;
+            }
+        }
+
+        /* Extra-small phones: zoom out a bit more so the composition stays balanced */
+        @media (max-width: 480px) {
+            body {
+                background:
+                    linear-gradient(rgba(12, 26, 62, 0.78), rgba(12, 26, 62, 0.92)),
+                    url('https://cdn.mechanicaltemp.com/tempi/tempi-working.png') center top / 220% auto no-repeat;
+                background-attachment: scroll;
+                background-color: #0c1a3e;
+            }
+        }
+
+        /* Hero section sizing tuned for mobile */
+        @media (max-width: 768px) {
+            .hero-section {
+                min-height: 100vh !important;
+                padding-top: 5rem !important;
+                padding-bottom: 2rem !important;
+            }
+            .hero-headline {
+                font-size: 2.25rem !important;
+                line-height: 1.1 !important;
+            }
+            .hero-sub {
+                font-size: 1.125rem !important;
+            }
+            .hero-chip {
+                font-size: 0.7rem !important;
+                padding: 0.3rem 0.65rem !important;
+            }
+        }
+    </style>
+</head>
+<body class="text-white">
+
+    <!-- Minimal top nav -->
+    <header class="absolute top-0 left-0 right-0 z-30 p-4">
+        <nav class="container mx-auto flex justify-between items-center">
+            <a href="https://www.mechanicaltemp.com" class="flex items-center gap-3">
+                <img src="https://cdn.mechanicaltemp.com/logos/white/text/white_textlogo_transparent_background.png" alt="Mechanical Temp" class="h-10 w-auto" onerror="this.style.display='none'">
+            </a>
+            <div class="flex items-center gap-4">
+                <a href="https://www.mechanicaltemp.com" class="text-sm text-slate-300 hover:text-white hidden sm:inline">← Main site</a>
+                <a href="tel:+13132824758" class="bg-sky-600 hover:bg-sky-500 text-white text-sm font-bold px-4 py-2 rounded-lg flex items-center gap-2">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <span class="hidden sm:inline">(313) 282-4758</span>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- HERO: Tempi-as-the-page (full-bleed background) -->
+    <section class="hero-section min-h-[85vh] flex flex-col items-center justify-center px-4 pt-32 md:pt-40 pb-8 relative">
+        <div class="max-w-2xl w-full text-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/30 text-sky-300 text-xs font-semibold uppercase tracking-wider mb-6">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l1.9 5.8 5.8 1.9-5.8 1.9L12 18.4l-1.9-5.8L4.3 10.7l5.8-1.9L12 3z"/></svg>
+                MECHANICAL TEMP ASSISTANT
+            </div>
+
+            <h1 class="hero-headline text-4xl md:text-6xl font-black tracking-tight mb-3 leading-tight" style="text-shadow: 0 2px 20px rgba(0,0,0,0.6);">
+                Hi, I'm <span class="gradient-text">Tempi</span>.
+            </h1>
+            <p class="hero-sub text-xl md:text-2xl text-slate-200 mb-2 font-light" style="text-shadow: 0 1px 10px rgba(0,0,0,0.5);">How can I help with your HVAC today?</p>
+            <p class="text-sm text-slate-300 mb-8" style="text-shadow: 0 1px 6px rgba(0,0,0,0.4);">Tell me what's going on — or browse services below.</p>
+
+            <!-- Big input -->
+            <div class="relative max-w-xl mx-auto mb-4">
+                <input
+                    id="hero-input"
+                    type="text"
+                    placeholder="e.g. my furnace won't turn on..."
+                    class="w-full pl-5 pr-16 py-4 text-base bg-white/95 backdrop-blur border border-white/30 rounded-2xl text-slate-900 placeholder-slate-400 focus:bg-white focus:border-sky-400 outline-none transition shadow-2xl"
+                />
+                <button
+                    id="hero-send"
+                    class="absolute right-2 top-1/2 -translate-y-1/2 bg-sky-500 hover:bg-sky-400 disabled:opacity-40 text-white w-10 h-10 rounded-xl flex items-center justify-center transition"
+                >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </button>
+            </div>
+
+            <!-- Quick-start chips -->
+            <div class="flex flex-wrap gap-2 justify-center mb-10">
+                <button class="hero-chip" data-msg="My furnace won't turn on, I have no heat.">No heat</button>
+                <button class="hero-chip" data-msg="My AC is running but not cooling.">No cool</button>
+                <button class="hero-chip" data-msg="I want to schedule a seasonal tune-up.">Tune-up</button>
+                <button class="hero-chip" data-msg="I'm with a property management company and need commercial HVAC service.">Commercial</button>
+                <button class="hero-chip" data-msg="I need a W-9 or COI from you for vendor onboarding.">Paperwork</button>
+            </div>
+
+            <!-- Trust line -->
+            <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-slate-300" style="text-shadow: 0 1px 4px rgba(0,0,0,0.5);">
+                <span class="flex items-center gap-1"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="text-yellow-400"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 5-star Google</span>
+                <span>·</span>
+                <span>Southfield, MI</span>
+                <span>·</span>
+                <span>24/7 emergency service</span>
+                <span>·</span>
+                <span>20+ years experience</span>
+            </div>
+        </div>
+
+        <!-- Scroll hint -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-slate-300 text-xs animate-bounce" style="text-shadow: 0 1px 6px rgba(0,0,0,0.6);">
+            <span>Browse services</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+    </section>
+
+    <!-- MENU SECTION -->
+    <section id="menu" class="bg-slate-50 text-slate-900 py-16 px-4 relative z-10">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-10">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-100 text-sky-700 text-xs font-semibold uppercase tracking-wider mb-4">
+                    Or pick a service
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-2">Express Booking</h2>
+                <p class="text-slate-600 max-w-xl mx-auto">Know what you need? Skip the chat — pick a service and book directly.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div class="category-card bg-orange-50 hover:shadow-xl" data-cat="heating">
+                    <div class="bg-white p-3 rounded-xl shadow-sm">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-2.246-3.664-4.97-6.08a9.856 9.856 0 0 1 5.071 2.449c.5.5.5 1.5 1.5 2 2 1 2.5 3.5 2.5 5a4.5 4.5 0 0 1-4.5 4.5c-2.485 0-4.5-2.015-4.5-4.5a3.5 3.5 0 0 1 3.5-3.5c.958 0 1.5.5 1.5 1.5"/></svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-lg">Heating</h3>
+                        <p class="text-sm text-slate-600">Furnace · Boiler · Heat Pump</p>
+                        <div class="mt-1 text-sm font-bold text-orange-600">View services →</div>
+                    </div>
+                </div>
+
+                <div class="category-card bg-sky-50 hover:shadow-xl" data-cat="cooling">
+                    <div class="bg-white p-3 rounded-xl shadow-sm">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2"><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/><path d="M20 16l-4-4 4-4"/><path d="M4 8l4 4-4 4"/><path d="M16 4l-4 4-4-4"/><path d="M8 20l4-4 4 4"/></svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-lg">Cooling</h3>
+                        <p class="text-sm text-slate-600">AC · Mini-split</p>
+                        <div class="mt-1 text-sm font-bold text-sky-600">View services →</div>
+                    </div>
+                </div>
+
+                <div class="category-card bg-green-50 hover:shadow-xl" data-cat="iaq">
+                    <div class="bg-white p-3 rounded-xl shadow-sm">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/></svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-lg">Air Quality</h3>
+                        <p class="text-sm text-slate-600">Humidifier · IAQ · Filters</p>
+                        <div class="mt-1 text-sm font-bold text-green-600">View services →</div>
+                    </div>
+                </div>
+
+                <div class="category-card bg-purple-50 hover:shadow-xl" data-cat="plans">
+                    <div class="bg-white p-3 rounded-xl shadow-sm">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-lg">Service Plans</h3>
+                        <p class="text-sm text-slate-600">Monthly memberships</p>
+                        <div class="mt-1 text-sm font-bold text-purple-600">View services →</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bridge: nudge back to Tempi if menu doesn't fit -->
+            <div class="bg-white border border-sky-200 rounded-2xl p-5 flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+                <div class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 border-2 border-sky-200">
+                    <img src="https://cdn.mechanicaltemp.com/tempi/tempi-portrait.png" 
+                         alt="Tempi" 
+                         class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1">
+                    <p class="font-bold text-slate-900">Don't see what you need?</p>
+                    <p class="text-sm text-slate-600">Tempi can help with commercial dispatch, paperwork, billing questions, and more.</p>
+                </div>
+                <button id="back-to-tempi-btn" class="bg-sky-600 hover:bg-sky-700 text-white font-bold px-5 py-2.5 rounded-lg whitespace-nowrap">Ask Tempi</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 px-4 text-center relative z-10">
+        <img src="https://cdn.mechanicaltemp.com/logos/white/text/white_textlogo_transparent_background.png" alt="Mechanical Temp" class="h-10 w-auto mx-auto mb-3" onerror="this.style.display='none'">
+        <p class="font-bold mb-1">Mechanical Temp</p>
+        <p class="text-slate-400 text-sm mb-4">23093 Telegraph Rd, Southfield, MI 48033</p>
+        <p class="text-sm"><a href="tel:+13132824758" class="text-sky-400 hover:text-sky-300">Call us: (313) 282-4758</a></p>
+        <p class="text-xs text-slate-500 mt-6">&copy; 2025 Mechanical Temp. All Rights Reserved.</p>
+    </footer>
+
+    <!-- ========== TEMPI CHAT OVERLAY ========== -->
+    <div id="tempi-overlay" class="hidden fixed inset-0 z-50 bg-slate-900/95 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="w-full max-w-2xl h-[85vh] max-h-[700px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+            <div class="bg-gradient-to-r from-sky-700 to-sky-500 text-white p-4 flex items-center gap-3">
+                <div class="w-11 h-11 rounded-full border-2 border-white overflow-hidden flex-shrink-0">
+                    <img src="https://cdn.mechanicaltemp.com/tempi/tempi-portrait.png" 
+                         alt="Tempi" 
+                         class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1">
+                    <p class="font-bold">Tempi</p>
+                    <p class="text-xs opacity-90 flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 bg-green-400 rounded-full"></span> Mechanical Temp · online
+                    </p>
+                </div>
+                <button id="close-tempi" class="text-white/80 hover:text-white text-2xl leading-none w-8 h-8 flex items-center justify-center">&times;</button>
+            </div>
+
+            <a href="https://customer.mechanicaltemp.com/" target="_blank" rel="noopener noreferrer" class="bg-sky-50 hover:bg-sky-100 border-b border-sky-200 px-4 py-2 flex items-center gap-2 text-sky-900 text-xs font-bold transition">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20" fill="currentColor" class="text-sky-600"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm3 0a1 1 0 011-1h1a1 1 0 110 2H8a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
+                <span>Customer Portal · Pay Online</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="ml-auto"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+            </a>
+
+            <div id="tempi-thread" class="flex-1 overflow-y-auto p-4 chat-scroll bg-slate-50 flex flex-col gap-3"></div>
+
+            <div class="border-t border-slate-200 bg-white p-3 flex gap-2">
+                <input
+                    id="tempi-input"
+                    type="text"
+                    placeholder="Type your message..."
+                    class="flex-1 px-4 py-3 bg-slate-100 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:border-sky-400 outline-none"
+                />
+                <button id="tempi-send" class="bg-sky-600 hover:bg-sky-700 disabled:opacity-50 text-white px-5 rounded-xl font-bold text-sm">Send</button>
+            </div>
+            <p class="text-center text-[10px] text-slate-400 py-2 bg-white border-t border-slate-100">Powered by AI. For emergencies call (313) 282-4758.</p>
+        </div>
+    </div>
+
+    <!-- ========== MENU OVERLAY ========== -->
+    <div id="menu-overlay" class="hidden fixed inset-0 z-50 bg-slate-900/95 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="w-full max-w-2xl h-[85vh] max-h-[700px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden text-slate-900">
+            <div id="menu-overlay-header" class="p-5 flex item
