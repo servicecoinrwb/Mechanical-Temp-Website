@@ -15,10 +15,11 @@
     <title>Expert HVAC Services in Southfield & Metro Detroit | Mechanical Temp</title>
     <meta name="description" content="Mechanical Temp offers expert residential and commercial HVAC services in Southfield, MI and Metro Detroit. 24/7 emergency repair, installation, and maintenance for furnaces & AC.">
     
-    <link rel="canonical" href="https://www.mechanicaltemp.com/" />
-    <link rel="preload" as="image" href="https://imageview.mechanicaltemp.com/objects/uploads/563e6147-a505-4919-97da-dd365ecce41a" fetchpriority="high">
-    <link rel="preconnect" href="https://imageview.mechanicaltemp.com">
-    <link rel="preconnect" href="https://i.imgur.com">
+    <link rel="canonical" href="https://mechanicaltemp.com/" />
+    
+    <!-- Performance hints -->
+    <link rel="preload" as="image" href="https://cdn.mechanicaltemp.com/photos/van-rear-loaded.jpg" fetchpriority="high">
+    <link rel="preconnect" href="https://cdn.mechanicaltemp.com">
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     <link rel="dns-prefetch" href="https://www.googletagmanager.com">
     <link rel="dns-prefetch" href="https://tempi.summer-unit-44dd.workers.dev">
@@ -33,22 +34,21 @@
       "@context": "https://schema.org",
       "@type": "HVACBusiness",
       "name": "Mechanical Temp",
-      "image": "https://i.imgur.com/YJvJw7V.png",
-      "@id": "https://www.mechanicaltemp.com/",
-      "url": "https://www.mechanicaltemp.com/",
+      "image": "https://cdn.mechanicaltemp.com/logos/black/full/black_logo_white_background.png",
+      "@id": "https://mechanicaltemp.com/",
+      "url": "https://mechanicaltemp.com/",
       "telephone": "+1-313-282-4758",
       "priceRange": "$$",
       "address": {"@type": "PostalAddress","streetAddress": "23093 Telegraph Rd","addressLocality": "Southfield","addressRegion": "MI","postalCode": "48033","addressCountry": "US"},
       "geo": {"@type": "GeoCoordinates","latitude": 42.4982,"longitude": -83.2882},
       "openingHoursSpecification": {"@type": "OpeningHoursSpecification","dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens": "00:00","closes": "23:59"},
-      "sameAs": ["https://www.facebook.com/your-profile","https://www.yelp.com/biz/your-biz-name"],
       "areaServed": {"@type": "GeoCircle","geoMidpoint": {"@type": "GeoCoordinates","latitude": "42.4982","longitude": "-83.2882"},"geoRadius": "40233"} 
     }
     </script>
     
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; scroll-behavior: smooth; }
-        .hero-section-container { background-image: url('https://imageview.mechanicaltemp.com/objects/uploads/563e6147-a505-4919-97da-dd365ecce41a'); background-size: cover; background-position: center; }
+        .hero-section-container { background-image: url('https://cdn.mechanicaltemp.com/photos/van-rear-loaded.jpg'); background-size: cover; background-position: center; }
         .hero-overlay { background-color: rgba(12, 26, 62, 0.85); }
         .offer-price { background-color: #eff6ff; color: #1d4ed8; }
         .modal-body::-webkit-scrollbar { width: 8px; }
@@ -95,39 +95,10 @@
         .typing-dot:nth-child(3) { animation-delay: 0.4s; }
         @keyframes tempi-typingBounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-5px); opacity: 1; } }
         
-        /* INLINE QUICK REPLIES — appear under each bot message */
-        .inline-buttons {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            margin-left: 34px;
-            margin-top: 2px;
-            animation: tempi-fadeIn 0.3s ease-out;
-        }
-        .inline-btn {
-            background: #e0f2fe;
-            color: #0c4a6e;
-            border: 1.5px solid #7dd3fc;
-            border-radius: 14px;
-            padding: 5px 11px;
-            font-size: 11.5px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.15s;
-            font-family: inherit;
-            white-space: nowrap;
-        }
-        .inline-btn:hover {
-            background: #0ea5e9;
-            color: white;
-            border-color: #0ea5e9;
-            transform: translateY(-1px);
-        }
-        .inline-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
+        .inline-buttons { display: flex; gap: 6px; flex-wrap: wrap; margin-left: 34px; margin-top: 2px; animation: tempi-fadeIn 0.3s ease-out; }
+        .inline-btn { background: #e0f2fe; color: #0c4a6e; border: 1.5px solid #7dd3fc; border-radius: 14px; padding: 5px 11px; font-size: 11.5px; cursor: pointer; font-weight: 600; transition: all 0.15s; font-family: inherit; white-space: nowrap; }
+        .inline-btn:hover { background: #0ea5e9; color: white; border-color: #0ea5e9; transform: translateY(-1px); }
+        .inline-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
         
         .chat-input-row { padding: 10px 12px; border-top: 1px solid #e2e8f0; background-color: white; display: flex; gap: 6px; align-items: flex-end; }
         #chat-input { flex: 1; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 8px 12px; resize: none; font-family: inherit; font-size: 13.5px; max-height: 80px; outline: none; transition: border-color 0.15s; }
@@ -136,23 +107,13 @@
         #send-chat-btn:hover { background-color: #0284c7; }
         #send-chat-btn:disabled { background-color: #94a3b8; cursor: not-allowed; }
         .chat-disclaimer { font-size: 10px; color: #94a3b8; text-align: center; padding: 4px 8px 6px; background: white; }
-        .tempi-portal-bar {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            padding: 9px 14px;
-            background: linear-gradient(90deg, #f0f9ff 0%, #e0f2fe 100%);
-            border-bottom: 1px solid #bae6fd;
-            color: #0c4a6e;
-            font-size: 12.5px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: background 0.15s;
-        }
-        .tempi-portal-bar:hover {
-            background: linear-gradient(90deg, #e0f2fe 0%, #bae6fd 100%);
-        }
+        .tempi-portal-bar { display: flex; align-items: center; gap: 7px; padding: 9px 14px; background: linear-gradient(90deg, #f0f9ff 0%, #e0f2fe 100%); border-bottom: 1px solid #bae6fd; color: #0c4a6e; font-size: 12.5px; font-weight: 700; text-decoration: none; transition: background 0.15s; }
+        .tempi-portal-bar:hover { background: linear-gradient(90deg, #e0f2fe 0%, #bae6fd 100%); }
         .tempi-portal-bar svg:first-child { color: #0ea5e9; flex-shrink: 0; }
+
+        /* 5-star rating row helper */
+        .star-rating { display: flex; margin-bottom: 1rem; }
+        .star-rating svg { width: 1.25rem; height: 1.25rem; color: #facc15; }
     </style>
 </head>
 <body class="text-gray-800">
@@ -161,7 +122,7 @@
     <header class="bg-gray-900/80 sticky top-0 z-40 p-4 shadow-md">
         <nav class="container mx-auto flex justify-between items-center text-white">
             <a href="index.html" class="block">
-                <img src="https://i.imgur.com/YJvJw7V.png" alt="Mechanical Temp Logo" width="160" height="48" class="h-12 w-auto">
+                <img src="https://cdn.mechanicaltemp.com/logos/white/text/white_textlogo_transparent_background.png" alt="Mechanical Temp Logo" width="160" height="48" class="h-12 w-auto">
             </a>
             <ul class="hidden md:flex items-center space-x-6">
                 <li><a href="#services" class="hover:text-sky-400">Services</a></li>
@@ -274,9 +235,9 @@
                      <img src="https://www.airquestcomfort.com/en/us/media_1b3a4194f19a94470a5646ca094daaaee0fa85e00.png?width=2000&format=webply&optimize=medium" alt="AirQuest Authorized Dealer Logo" width="200" height="64" loading="lazy" decoding="async" class="h-16 mx-auto object-contain">
                      <p class="text-xs font-bold text-sky-700 uppercase tracking-wider mt-2">Authorized Dealer</p>
                  </a>
-                 <a href="https://cypher.mechanicaltemp.com/" target="_blank" rel="noopener noreferrer" class="block p-4 bg-white border border-gray-200 rounded-lg shadow-sm text-center transition-all duration-300 hover:shadow-lg hover:scale-105">
-                    <img src="https://imageview.mechanicaltemp.com/objects/uploads/a58483f3-52d2-4771-8fb3-912a04297814" alt="Cypher Authorized Dealer Logo" width="200" height="64" loading="lazy" decoding="async" class="h-16 mx-auto object-contain">
-                    <p class="text-xs font-bold text-sky-700 uppercase tracking-wider mt-2">Authorized Dealer</p>
+                 <a href="https://cypher.mechanicaltemp.com/" target="_blank" rel="noopener noreferrer" class="block p-4 bg-slate-900 border border-gray-200 rounded-lg shadow-sm text-center transition-all duration-300 hover:shadow-lg hover:scale-105">
+                    <img src="https://cdn.mechanicaltemp.com/logos/cypher/black/cypher-logo-white-on-black.png" alt="Cypher Open BAS Logo" width="200" height="64" loading="lazy" decoding="async" class="h-16 mx-auto object-contain">
+                    <p class="text-xs font-bold text-sky-400 uppercase tracking-wider mt-2">In-House Product</p>
                 </a>
             </div>
         </div>
@@ -289,17 +250,35 @@
             <p class="max-w-2xl mx-auto text-slate-600 mb-12">We're proud to have earned the trust of homeowners and businesses across Metro Detroit.</p>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                 <div class="bg-white p-8 rounded-lg shadow-md flex flex-col text-left">
-                    <div class="flex mb-4"><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg></div>
+                    <div class="star-rating" aria-label="5 out of 5 stars">
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    </div>
                     <p class="text-slate-600 italic flex-grow">"Great professional work and advice.. great competitive price and very happy with response... one word Phenomenal"</p>
                     <p class="font-bold text-gray-800 mt-4">- Chirag R M., Southfield, MI</p>
                 </div>
                 <div class="bg-white p-8 rounded-lg shadow-md flex flex-col text-left">
-                    <div class="flex mb-4"><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg></div>
+                    <div class="star-rating" aria-label="5 out of 5 stars">
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    </div>
                     <p class="text-slate-600 italic flex-grow">"It was a pleasure doing business with Mechanical Temp. They were professional, courteous and even showed up a half hour early. If you are looking for a new HVAC company I would give them a call."</p>
                     <p class="font-bold text-gray-800 mt-4">- Jason B., Novi, MI</p>
                 </div>
                 <div class="bg-white p-8 rounded-lg shadow-md flex flex-col text-left">
-                    <div class="flex mb-4"><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg></div>
+                    <div class="star-rating" aria-label="5 out of 5 stars">
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    </div>
                     <p class="text-slate-600 italic flex-grow">"Excellent service...have used them on several occasions. Very responsive to a quick appointment"</p>
                     <p class="font-bold text-gray-800 mt-4">- D M., Canton, MI</p>
                 </div>
@@ -317,6 +296,7 @@
             <p class="max-w-2xl mx-auto text-slate-600 mt-2 mb-12">Expert advice to keep your home comfortable and your system running efficiently.</p>
             <div class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col md:flex-row max-w-3xl mx-auto group">
                 <a href="5-signs-furnace-repair-fall.html" class="block md:w-1/3">
+                   <!-- TODO: Migrate to CDN - same image as on blog.html (i.imgur.com/PbsVZ0K.jpeg) -->
                    <img src="https://i.imgur.com/PbsVZ0K.jpeg" alt="A happy family enjoying their comfortable home thanks to a well-maintained furnace" width="400" height="300" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:opacity-90 transition-opacity">
                 </a>
                 <div class="p-8 flex flex-col flex-grow text-left">
@@ -444,7 +424,6 @@
             <button id="close-chat-btn" aria-label="Minimize chat">&times;</button>
         </div>
         
-        <!-- Portal quick-link bar -->
         <a href="https://customer.mechanicaltemp.com/" target="_blank" rel="noopener noreferrer" class="tempi-portal-bar" onclick="if(typeof gtag!=='undefined')gtag('event','click_customer_portal',{'event_category':'engagement','event_label':'tempi_header'})">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm3 0a1 1 0 011-1h1a1 1 0 110 2H8a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
             <span>Customer Portal · Pay Online</span>
@@ -653,11 +632,6 @@
         const EMAILJS_SERVICE = 'service_ziwf1pg';
         const EMAILJS_TEMPLATE = 'template_j68qyhk';
         
-        // =================================================================== //
-        // CAPABILITIES — Edit this object to add or remove services Tempi    //
-        // knows about. No need to touch the system prompt. Just add to the   //
-        // right tier and redeploy.                                            //
-        // =================================================================== //
         const CAPABILITIES = {
             advertised: [
                 "Furnace repair, install, and maintenance",
@@ -684,7 +658,6 @@
             ]
         };
         
-        // Format for injection into prompt
         const capabilitiesBlock = `
 ADVERTISED CORE SERVICES (confident yes, route as lead):
 ${CAPABILITIES.advertised.map(s => "- " + s).join("\n")}
@@ -792,64 +765,6 @@ Someone will follow up with you shortly. [LEAD_READY:TYPE]
 7. After-hours emergencies: tell them to call (313) 282-4758 directly while still collecting info.
 8. Once you fire [LEAD_READY:TYPE], do not keep probing.
 
-==== EXAMPLE GOOD RESPONSES ====
-
-Customer: "Hi, I need a W-9 from you guys for our vendor onboarding"
-Tempi: "Sure, happy to get that over! What's your company name and the best email to send it to?
-[BTN: 📋 W-9 only | COI also needed | Vendor packet]"
-
-Customer: "I'm with CBRE, we have an RTU down in Livonia"
-Tempi: "Got it — let's dispatch ASAP. What's your name, direct phone, and the site address?
-[BTN: ✓ Type my info | Site contact different? | Multiple sites]"
-
-Customer: "Hey, this is Mark from ABC SEO. We help HVAC companies rank higher..."
-Tempi: "Thanks for reaching out, Mark — Brian handles vendor inquiries directly. Best to send your pitch to office@mechanicaltemp.com. Have a great day!
-[BTN: Got it | Different question]"
-
-Customer: "Hey it's Sarah from Carrier — wanted to talk about our new commercial line"
-Tempi: "Hi Sarah! That's something Brian would want to hear about. What's the best phone or email to reach you, and a quick summary?
-[BTN: Type my info | Schedule a call instead]"
-
-Customer: "I have a question about an invoice from last month"
-Tempi: "No problem — let me get your info so we can look it up. What's your name and the service address from that job?
-[BTN: 💰 Type my info | Don't know address | Talk to Brian]"
-
-Customer: "What brands do you carry?"
-Tempi: "We install AirQuest (solid warranty, great efficiency) and service every other brand. Are you looking at a new install or troubleshooting one you've got?
-[BTN: New install quote | Existing repair | Just curious]"
-
-Customer: "Hi I'm Brian Smith and my furnace stopped working"
-Tempi: "Oh no, Brian — that's no fun in Michigan! Let's get a tech out fast. What's the best phone number and your service address?
-[BTN: Type my info | Same-day service? | Get quote first]"
-
-Customer: "Do you guys do restaurant walk-in coolers?"
-Tempi: "Yep, we handle commercial refrigeration — walk-ins, reach-ins, ice machines, the whole deal. It's not our main marketing focus but we've got 20+ years of refrigeration experience. What's going on with yours?
-[BTN: ✓ Send a tech | Get a quote | Other equipment too]"
-
-Customer: "We have an old boiler that needs servicing"
-Tempi: "Absolutely — boilers and hydronic heating are right in our wheelhouse. What's the address and what's it doing (or not doing)?
-[BTN: Type my info | Not heating at all | Just maintenance]"
-
-Customer: "Do you install whole-house humidifiers?"
-Tempi: "Yes, we do! IAQ systems like humidifiers, UV, and better filtration are something we install regularly. What's the home address so we can size it right?
-[BTN: Type my info | What size do I need? | What does it cost?]"
-
-Customer: "Do you do water heaters?"
-Tempi: "Yep, water heaters are right in our wheelhouse — tank, tankless, electric, gas, whatever you've got. What's going on with yours, and where are you located?
-[BTN: ✓ Send a tech | Need replacement quote | Tankless install]"
-
-Customer: "Can I pay my bill online?"
-Tempi: "Absolutely! You can pay online anytime at our customer portal: https://customer.mechanicaltemp.com/ — sign in with your email or Google account, no password to set up. We accept credit card, crypto, or smart contract payments. If you run into any sign-up trouble, just give us a call at (313) 282-4758.
-[BTN: 🔗 Open the portal | Other payment options | Question about invoice]"
-
-Customer: "How do I sign up for the customer portal?"
-Tempi: "Super easy — just head to https://customer.mechanicaltemp.com/ and click 'Log In to Portal'. You can sign in with your Google email or any email address (no password needed, just a secure link). If you hit any issues, call us at (313) 282-4758 and we'll get you set up.
-[BTN: 🔗 Go to portal | What can I do there? | Talk to someone]"
-
-Customer: "I lost my invoice, can you resend it?"
-Tempi: "No problem! The easiest way is to log into our customer portal at https://customer.mechanicaltemp.com/ — all your invoices are right there. If you'd rather we email it again, give us your name and the service address so we can pull it up.
-[BTN: 🔗 Open the portal | Type my info | Call us instead]"
-
 REMEMBER: Identify conversation type → collect ONLY the fields for that type → fire [LEAD_READY:TYPE] → done. Every response has [BTN: ...] line at the end.`;
         
         const chatBubble = document.getElementById('chat-bubble');
@@ -861,12 +776,11 @@ REMEMBER: Identify conversation type → collect ONLY the fields for that type �
         const chatBadge = document.getElementById('chat-badge');
         
         const TEMPI_SMALL_SVG = `<img src="https://cdn.mechanicaltemp.com/tempi/tempi-portrait.png" alt="Tempi" class="msg-avatar-small" style="border-radius:50%;object-fit:cover;border:1.5px solid #1e293b;">`;        
-        // Parse [BTN: A | B | C] and [LEAD_READY:TYPE] markers from Tempi's response
+
         function parseButtons(text) {
             const match = text.match(/\[BTN:\s*([^\]]+)\]/);
             if (!match) return { cleanText: text, buttons: [] };
             const buttons = match[1].split('|').map(s => s.trim()).filter(s => s.length > 0);
-            // Strip [BTN:...], [LEAD_READY:TYPE], and plain [LEAD_READY] markers from display
             const cleanText = text
                 .replace(/\[BTN:[^\]]+\]/g, '')
                 .replace(/\[LEAD_READY:[^\]]+\]/g, '')
@@ -895,7 +809,6 @@ REMEMBER: Identify conversation type → collect ONLY the fields for that type �
                     btn.className = 'inline-btn';
                     btn.textContent = label;
                     btn.addEventListener('click', () => {
-                        // Disable buttons in this set so user can't double-click
                         btnRow.querySelectorAll('.inline-btn').forEach(b => b.disabled = true);
                         handleSend(label);
                     });
@@ -935,7 +848,6 @@ REMEMBER: Identify conversation type → collect ONLY the fields for that type �
             if (!hasGreeted) {
                 hasGreeted = true;
                 setTimeout(() => {
-                    // First-time greeting with initial button set
                     addBotMessage(
                         "Hi there! 👋 I'm Tempi from Mechanical Temp. How can I help you today?",
                         ["Schedule service", "Get a quote", "Just browsing", "Service plan info"]
@@ -959,7 +871,6 @@ REMEMBER: Identify conversation type → collect ONLY the fields for that type �
         async function sendToClaude(userMessage) {
             conversationHistory.push({ role: 'user', content: userMessage });
             try {
-                // Inject capabilities JSON into prompt at request time
                 const fullSystemPrompt = SYSTEM_PROMPT + "\n\n==== CURRENT CAPABILITIES ====\n" + capabilitiesBlock;
                 const res = await fetch(CLAUDE_PROXY_URL, {
                     method: 'POST',
@@ -1032,12 +943,10 @@ REMEMBER: Identify conversation type → collect ONLY the fields for that type �
             hideTyping();
             const { cleanText, buttons } = parseButtons(reply);
             addBotMessage(cleanText, buttons);
-            // Detect [LEAD_READY:TYPE] marker and route by type
             const leadMatch = reply.match(/\[LEAD_READY:(\w+)\]/);
             if (leadMatch) {
                 fireLeadEmail(leadMatch[1]);
             } else if (reply.includes('[LEAD_READY]')) {
-                // Fallback for any plain [LEAD_READY] without type
                 fireLeadEmail('SERVICE_LEAD');
             }
             sendBtn.disabled = false;
