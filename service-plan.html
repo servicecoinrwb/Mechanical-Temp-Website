@@ -7,12 +7,18 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-0G63KLB2B0');
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Residential Service Plan | Mechanical Temp</title>
+    <meta name="description" content="$29/month HVAC service plan from Mechanical Temp. Includes 2 annual tune-ups, priority scheduling, free basic parts (capacitors/contactors/fuses), and 15% off repair labor. No contract.">
+    <link rel="canonical" href="https://mechanicaltemp.com/service-plan.html" />
+    
+    <!-- Performance hints -->
+    <link rel="preconnect" href="https://cdn.mechanicaltemp.com">
+    <link rel="dns-prefetch" href="https://tempi.summer-unit-44dd.workers.dev">
+    <link rel="dns-prefetch" href="https://buy.stripe.com">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,20 +30,65 @@
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; scroll-behavior: smooth; }
         
         .plan-hero {
-            background: linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.85)), url('https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2069&auto=format&fit=crop') center center / cover no-repeat;
+            background: linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.85)), url('https://cdn.mechanicaltemp.com/photos/thermostat-ecobee-installed.jpg') center center / cover no-repeat;
         }
-        
-        /* Chat Widget Styles */
-        #chat-bubble { position: fixed; bottom: 20px; right: 20px; z-index: 1000; cursor: pointer; background-color: #0ea5e9; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: transform 0.2s ease-in-out; }
-        #chat-bubble:hover { transform: scale(1.1); background-color: #0284c7; }
-        #chat-widget { position: fixed; bottom: 90px; right: 20px; z-index: 999; width: 350px; background-color: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); overflow: hidden; display: flex; flex-direction: column; transition: opacity 0.3s ease, transform 0.3s ease; transform-origin: bottom right; }
-        #chat-widget.hidden { opacity: 0; transform: scale(0.9); pointer-events: none; }
-        .chat-header { background-color: #0c4a6e; color: white; padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
         
         /* FAQ Accordion Transitions */
         .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
         .faq-icon { transition: transform 0.3s ease; }
         .faq-btn[aria-expanded="true"] .faq-icon { transform: rotate(45deg); }
+
+        /* ============== TEMPI CHAT WIDGET ============== */
+        #chat-bubble { position: fixed; bottom: 20px; right: 20px; z-index: 1000; cursor: pointer; background-color: #0ea5e9; width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.25); transition: transform 0.2s ease-in-out; border: 3px solid white; }
+        #chat-bubble:hover { transform: scale(1.08); background-color: #0284c7; }
+        #chat-bubble img { display: block; width: 58px; height: 58px; border-radius: 50%; object-fit: cover; }
+        #chat-badge { position: absolute; top: -4px; right: -4px; background: #ef4444; color: white; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; font-weight: bold; display: flex; align-items: center; justify-content: center; border: 2px solid white; animation: tempi-bounce 1.2s infinite; }
+        #chat-badge.hidden { display: none; }
+        @keyframes tempi-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+        #chat-widget { position: fixed; bottom: 95px; right: 20px; z-index: 999; width: 380px; max-width: calc(100vw - 40px); height: 600px; max-height: calc(100vh - 130px); background-color: white; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); overflow: hidden; display: flex; flex-direction: column; transition: opacity 0.3s ease, transform 0.3s ease; transform-origin: bottom right; }
+        #chat-widget.hidden { opacity: 0; transform: scale(0.9); pointer-events: none; }
+        .chat-header { background: linear-gradient(135deg, #0c4a6e 0%, #0369a1 100%); color: white; padding: 12px 16px; display: flex; align-items: center; gap: 12px; }
+        .tempi-header-avatar { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; overflow: hidden; border: 2px solid white; }
+        .tempi-header-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .chat-header-info { flex: 1; }
+        .chat-header-info .name { font-weight: bold; font-size: 16px; line-height: 1.2; }
+        .chat-header-info .status { font-size: 11px; opacity: 0.9; display: flex; align-items: center; gap: 5px; margin-top: 2px; }
+        .status-dot { width: 7px; height: 7px; background: #10b981; border-radius: 50%; box-shadow: 0 0 0 2px rgba(16,185,129,0.3); }
+        #close-chat-btn { background: none; border: none; color: white; font-size: 24px; cursor: pointer; opacity: 0.8; padding: 0; line-height: 1; }
+        #close-chat-btn:hover { opacity: 1; }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 16px 12px; background-color: #f1f5f9; display: flex; flex-direction: column; gap: 10px; }
+        .chat-messages::-webkit-scrollbar { width: 6px; }
+        .chat-messages::-webkit-scrollbar-track { background: transparent; }
+        .chat-messages::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .msg-row { display: flex; align-items: flex-end; gap: 6px; animation: tempi-fadeIn 0.3s ease-out; }
+        @keyframes tempi-fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .msg-row.user { justify-content: flex-end; }
+        .msg-bubble { position: relative; padding: 10px 14px; border-radius: 18px; font-size: 13.5px; line-height: 1.45; max-width: 75%; word-wrap: break-word; border: 2.5px solid #1e293b; }
+        .msg-bubble.bot { background: white; color: #1e293b; border-bottom-left-radius: 4px; }
+        .msg-bubble.bot::before { content: ''; position: absolute; bottom: -2px; left: -10px; width: 0; height: 0; border-top: 10px solid #1e293b; border-right: 10px solid transparent; }
+        .msg-bubble.bot::after { content: ''; position: absolute; bottom: 1px; left: -5px; width: 0; height: 0; border-top: 7px solid white; border-right: 7px solid transparent; }
+        .msg-bubble.user { background: #0ea5e9; color: white; border-bottom-right-radius: 4px; border-color: #0c4a6e; }
+        .msg-bubble.user::before { content: ''; position: absolute; bottom: -2px; right: -10px; width: 0; height: 0; border-top: 10px solid #0c4a6e; border-left: 10px solid transparent; }
+        .msg-bubble.user::after { content: ''; position: absolute; bottom: 1px; right: -5px; width: 0; height: 0; border-top: 7px solid #0ea5e9; border-left: 7px solid transparent; }
+        .msg-bubble.typing { display: flex; gap: 4px; padding: 14px 16px; }
+        .typing-dot { width: 6px; height: 6px; background: #64748b; border-radius: 50%; animation: tempi-typingBounce 1.2s infinite; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes tempi-typingBounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-5px); opacity: 1; } }
+        .inline-buttons { display: flex; gap: 6px; flex-wrap: wrap; margin-left: 34px; margin-top: 2px; animation: tempi-fadeIn 0.3s ease-out; }
+        .inline-btn { background: #e0f2fe; color: #0c4a6e; border: 1.5px solid #7dd3fc; border-radius: 14px; padding: 5px 11px; font-size: 11.5px; cursor: pointer; font-weight: 600; transition: all 0.15s; font-family: inherit; white-space: nowrap; }
+        .inline-btn:hover { background: #0ea5e9; color: white; border-color: #0ea5e9; transform: translateY(-1px); }
+        .inline-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .chat-input-row { padding: 10px 12px; border-top: 1px solid #e2e8f0; background-color: white; display: flex; gap: 6px; align-items: flex-end; }
+        #chat-input { flex: 1; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 8px 12px; resize: none; font-family: inherit; font-size: 13.5px; max-height: 80px; outline: none; transition: border-color 0.15s; }
+        #chat-input:focus { border-color: #0ea5e9; }
+        #send-chat-btn { background-color: #0ea5e9; color: white; border: none; border-radius: 10px; padding: 8px 14px; cursor: pointer; font-weight: bold; font-size: 13px; flex-shrink: 0; }
+        #send-chat-btn:hover { background-color: #0284c7; }
+        #send-chat-btn:disabled { background-color: #94a3b8; cursor: not-allowed; }
+        .chat-disclaimer { font-size: 10px; color: #94a3b8; text-align: center; padding: 4px 8px 6px; background: white; }
+        .tempi-portal-bar { display: flex; align-items: center; gap: 7px; padding: 9px 14px; background: linear-gradient(90deg, #f0f9ff 0%, #e0f2fe 100%); border-bottom: 1px solid #bae6fd; color: #0c4a6e; font-size: 12.5px; font-weight: 700; text-decoration: none; transition: background 0.15s; }
+        .tempi-portal-bar:hover { background: linear-gradient(90deg, #e0f2fe 0%, #bae6fd 100%); }
+        .tempi-portal-bar svg:first-child { color: #0ea5e9; flex-shrink: 0; }
     </style>
 </head>
 <body class="text-gray-800">
@@ -47,8 +98,7 @@
         <nav class="container mx-auto flex justify-between items-center text-white">
             <a href="index.html" class="block">
                 <div class="flex items-center gap-2">
-                    <img src="https://i.imgur.com/YJvJw7V.png" alt="Mechanical Temp Logo" class="h-10 w-auto">
-                    <span class="font-bold text-xl tracking-tight hidden md:block"></span>
+                    <img src="https://cdn.mechanicaltemp.com/logos/black/full/black_logo_white_background.png" alt="Mechanical Temp Logo" width="160" height="40" class="h-10 w-auto">
                 </div>
             </a>
             <ul class="hidden md:flex items-center space-x-6 text-sm font-medium">
@@ -59,7 +109,7 @@
             </ul>
             <!-- Mobile Hamburger -->
             <div class="md:hidden">
-                <button id="mobile-menu-button" class="text-white focus:outline-none">
+                <button id="mobile-menu-button" class="text-white focus:outline-none" aria-label="Open menu">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
                 </button>
             </div>
@@ -115,7 +165,6 @@
                 </div>
 
                 <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                    <!-- Benefit 1 -->
                     <div class="bg-slate-50 p-8 rounded-xl border border-slate-100 hover:shadow-lg transition-all hover:-translate-y-1 text-center">
                         <div class="w-16 h-16 bg-sky-100 rounded-full flex items-center justify-center text-sky-600 text-2xl mb-6 mx-auto">
                             <i class="fa-solid fa-bolt"></i>
@@ -124,7 +173,6 @@
                         <p class="text-slate-600 text-sm">When the heat wave hits, you jump to the front of the line. Guaranteed service within 24 hours.</p>
                     </div>
 
-                    <!-- Benefit 2 -->
                     <div class="bg-slate-50 p-8 rounded-xl border border-slate-100 hover:shadow-lg transition-all hover:-translate-y-1 text-center">
                         <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 text-2xl mb-6 mx-auto">
                             <i class="fa-solid fa-screwdriver-wrench"></i>
@@ -133,7 +181,6 @@
                         <p class="text-slate-600 text-sm">We cover the small stuff. Capacitors, contactors, and fuses are replaced <strong>free</strong> if they fail.</p>
                     </div>
 
-                    <!-- Benefit 3 -->
                     <div class="bg-slate-50 p-8 rounded-xl border border-slate-100 hover:shadow-lg transition-all hover:-translate-y-1 text-center">
                         <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 text-2xl mb-6 mx-auto">
                             <i class="fa-solid fa-snowflake"></i>
@@ -155,26 +202,11 @@
                                 <i class="fa-solid fa-check-circle text-emerald-500"></i> Included 100% Free
                             </h3>
                             <ul class="space-y-4">
-                                <li class="flex items-start gap-3">
-                                    <span class="text-emerald-500 font-bold">✓</span>
-                                    <span class="text-slate-700">Spring & Fall Maintenance Visits</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="text-emerald-500 font-bold">✓</span>
-                                    <span class="text-slate-700">Standard 1" Air Filters</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="text-emerald-500 font-bold">✓</span>
-                                    <span class="text-slate-700">Run Capacitors & Contactors</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="text-emerald-500 font-bold">✓</span>
-                                    <span class="text-slate-700">Fuses & Breakers</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="text-emerald-500 font-bold">✓</span>
-                                    <span class="text-slate-700">Condensate Drain Cleaning</span>
-                                </li>
+                                <li class="flex items-start gap-3"><span class="text-emerald-500 font-bold">✓</span><span class="text-slate-700">Spring & Fall Maintenance Visits</span></li>
+                                <li class="flex items-start gap-3"><span class="text-emerald-500 font-bold">✓</span><span class="text-slate-700">Standard 1" Air Filters</span></li>
+                                <li class="flex items-start gap-3"><span class="text-emerald-500 font-bold">✓</span><span class="text-slate-700">Run Capacitors & Contactors</span></li>
+                                <li class="flex items-start gap-3"><span class="text-emerald-500 font-bold">✓</span><span class="text-slate-700">Fuses & Breakers</span></li>
+                                <li class="flex items-start gap-3"><span class="text-emerald-500 font-bold">✓</span><span class="text-slate-700">Condensate Drain Cleaning</span></li>
                             </ul>
                         </div>
                         <div class="p-10 bg-slate-50/50">
@@ -182,22 +214,10 @@
                                 <i class="fa-solid fa-tags text-sky-500"></i> Member Discounts
                             </h3>
                             <ul class="space-y-4">
-                                <li class="flex items-start gap-3">
-                                    <span class="text-sky-500 font-bold text-sm bg-sky-100 px-2 rounded">15%</span>
-                                    <span class="text-slate-700">Off All Repair Labor</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="text-sky-500 font-bold text-sm bg-sky-100 px-2 rounded">10%</span>
-                                    <span class="text-slate-700">Off Blower Motors & Inducers</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="text-sky-500 font-bold text-sm bg-sky-100 px-2 rounded">10%</span>
-                                    <span class="text-slate-700">Off Refrigerant (Freon)</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="text-sky-500 font-bold text-sm bg-sky-100 px-2 rounded">10%</span>
-                                    <span class="text-slate-700">Off New System Installation</span>
-                                </li>
+                                <li class="flex items-start gap-3"><span class="text-sky-500 font-bold text-sm bg-sky-100 px-2 rounded">15%</span><span class="text-slate-700">Off All Repair Labor</span></li>
+                                <li class="flex items-start gap-3"><span class="text-sky-500 font-bold text-sm bg-sky-100 px-2 rounded">10%</span><span class="text-slate-700">Off Blower Motors & Inducers</span></li>
+                                <li class="flex items-start gap-3"><span class="text-sky-500 font-bold text-sm bg-sky-100 px-2 rounded">10%</span><span class="text-slate-700">Off Refrigerant (Freon)</span></li>
+                                <li class="flex items-start gap-3"><span class="text-sky-500 font-bold text-sm bg-sky-100 px-2 rounded">10%</span><span class="text-slate-700">Off New System Installation</span></li>
                             </ul>
                         </div>
                     </div>
@@ -210,7 +230,6 @@
             <div class="container mx-auto max-w-3xl">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-slate-900">Frequently Asked Questions</h2>
                 <div class="space-y-4">
-                    <!-- FAQ 1 -->
                     <div class="border border-slate-200 rounded-lg overflow-hidden">
                         <button class="faq-btn w-full px-6 py-4 text-left bg-white hover:bg-slate-50 flex justify-between items-center transition-colors">
                             <span class="font-bold text-slate-800">Is there a long-term contract?</span>
@@ -220,7 +239,6 @@
                             <p class="px-6 py-4 text-slate-600 text-sm">No. Our membership is a simple month-to-month subscription. You can cancel at any time with no fees.</p>
                         </div>
                     </div>
-                    <!-- FAQ 2 -->
                     <div class="border border-slate-200 rounded-lg overflow-hidden">
                         <button class="faq-btn w-full px-6 py-4 text-left bg-white hover:bg-slate-50 flex justify-between items-center transition-colors">
                             <span class="font-bold text-slate-800">What if my compressor fails?</span>
@@ -230,7 +248,6 @@
                             <p class="px-6 py-4 text-slate-600 text-sm">Major components like compressors aren't free, but as a member, you get 10% off the total replacement cost and priority scheduling to get it fixed fast.</p>
                         </div>
                     </div>
-                    <!-- FAQ 3 -->
                     <div class="border border-slate-200 rounded-lg overflow-hidden">
                         <button class="faq-btn w-full px-6 py-4 text-left bg-white hover:bg-slate-50 flex justify-between items-center transition-colors">
                             <span class="font-bold text-slate-800">Do you service my area?</span>
@@ -289,7 +306,7 @@
         <footer class="bg-gray-900 border-t border-gray-800 pt-12 pb-8 px-6 text-slate-400 text-sm">
             <div class="container mx-auto text-center">
                 <p class="mb-4">
-                    <strong>Mechanical Temp</strong> | (313) 282-4758 | 23093 Telegraph Rd, Southfield, MI 48033
+                    <strong>Mechanical Temp</strong> | <a href="tel:+13132824758" class="hover:text-white">(313) 282-4758</a> | 23093 Telegraph Rd, Southfield, MI 48033
                 </p>
                 <p class="mb-4">
                     <a href="index.html" class="hover:text-white">Main Website</a> |
@@ -311,17 +328,44 @@
         </div>
     </div>
 
-    <!-- CHAT & SCRIPTS -->
-    <div id="chat-bubble">
-        <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-3.04 8.25-6.75 8.25-1.425 0-2.756-.382-3.937-1.043a.75.75 0 01-.263-.761l.574-2.286a.75.75 0 00-.534-.686 8.25 8.25 0 01-3.243-5.468C3.04 12.25 6 4.5 10.5 4.5c4.634 0 8.25 3.04 8.25 6.75z" /></svg>        
-    </div>
-    <div id="chat-widget" class="hidden">
-        <div class="chat-header"><h3>Chat with Us</h3><button id="close-chat-btn">&times;</button></div>
-        <form id="chat-form">
-            <div class="p-4 bg-slate-50"><input type="text" placeholder="Your Name" class="w-full border p-2 rounded mb-2"><input type="tel" placeholder="Phone" class="w-full border p-2 rounded"><textarea placeholder="Message..." class="w-full border p-2 rounded mt-2"></textarea><button class="w-full bg-sky-500 text-white font-bold p-2 rounded mt-2">Send</button></div>
-        </form>
+    <!-- =================================================================== -->
+    <!-- TEMPI CHAT BUBBLE                                                    -->
+    <!-- =================================================================== -->
+    <div id="chat-bubble" aria-label="Open chat with Tempi">
+        <img src="https://cdn.mechanicaltemp.com/tempi/tempi-portrait.png" alt="Tempi">
+        <span id="chat-badge" class="hidden">1</span>
     </div>
 
+    <!-- TEMPI CHAT WIDGET -->
+    <div id="chat-widget" class="hidden">
+        <div class="chat-header">
+            <div class="tempi-header-avatar">
+                <img src="https://cdn.mechanicaltemp.com/tempi/tempi-portrait.png" alt="Tempi">
+            </div>
+            <div class="chat-header-info">
+                <div class="name">Tempi</div>
+                <div class="status"><span class="status-dot"></span>Mechanical Temp · online</div>
+            </div>
+            <button id="close-chat-btn" aria-label="Minimize chat">&times;</button>
+        </div>
+        
+        <a href="https://customer.mechanicaltemp.com/" target="_blank" rel="noopener noreferrer" class="tempi-portal-bar" onclick="if(typeof gtag!=='undefined')gtag('event','click_customer_portal',{'event_category':'engagement','event_label':'tempi_header'})">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm3 0a1 1 0 011-1h1a1 1 0 110 2H8a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
+            <span>Customer Portal · Pay Online</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left: auto;"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+        </a>
+        
+        <div id="chat-messages" class="chat-messages"></div>
+        
+        <div class="chat-input-row">
+            <textarea id="chat-input" placeholder="Type your message..." rows="1"></textarea>
+            <button id="send-chat-btn" type="button">Send</button>
+        </div>
+        
+        <div class="chat-disclaimer">Powered by AI. For emergencies call (313) 282-4758.</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
         // Mobile Menu
         document.getElementById('mobile-menu-button')?.addEventListener('click', () => {
@@ -339,10 +383,18 @@
             });
         });
 
-        // Form Submit
+        // Form Submit — preserves your existing Stripe redirect
         document.getElementById('membershipForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const email = new FormData(this).get('email');
+            // Track conversion before redirect
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'begin_checkout', { 
+                    'event_category': 'conversion',
+                    'event_label': 'service_plan_stripe_redirect',
+                    'value': 29
+                });
+            }
             window.location.href = `https://buy.stripe.com/6oU4gy66o5UvdBqa580Fi02?prefilled_email=${email}`;
         });
 
@@ -352,11 +404,377 @@
         document.getElementById('show-tos-link').addEventListener('click', (e) => { e.preventDefault(); main.classList.add('hidden'); tos.classList.remove('hidden'); window.scrollTo(0,0); });
         document.querySelector('.back-button').addEventListener('click', () => { tos.classList.add('hidden'); main.classList.remove('hidden'); window.scrollTo(0,0); });
 
-        // Chat Widget
-        const chatWidget = document.getElementById('chat-widget');
-        const toggleChat = () => chatWidget.classList.toggle('hidden');
-        document.getElementById('chat-bubble').addEventListener('click', toggleChat);
-        document.getElementById('close-chat-btn').addEventListener('click', toggleChat);
+        // ============== TEMPI CHAT WIDGET ==============
+        (function() {
+            const CLAUDE_PROXY_URL = 'https://tempi.summer-unit-44dd.workers.dev/';
+            const EMAILJS_SERVICE = 'service_ziwf1pg';
+            const EMAILJS_TEMPLATE = 'template_j68qyhk';
+            
+            const CAPABILITIES = {
+                advertised: [
+                    "Furnace repair, install, and maintenance",
+                    "AC repair, install, and maintenance",
+                    "Commercial HVAC",
+                    "Ductwork",
+                    "Ductless mini-splits",
+                    "Residential service plan membership ($29/mo)"
+                ],
+                quiet: [
+                    "Commercial refrigeration",
+                    "Boilers and hydronic heating",
+                    "Water heaters (tank, tankless, electric, gas)",
+                    "Indoor air quality (UV, filtration, humidifiers, dehumidifiers)",
+                    "Smart thermostats and controls",
+                    "Building automation systems (BAS)"
+                ],
+                decline: [
+                    "Plumbing leaks and repairs",
+                    "Electrical panel work",
+                    "Roofing",
+                    "Kitchen appliance repair",
+                    "New gas line runs from the meter"
+                ]
+            };
+            
+            const capabilitiesBlock = `
+ADVERTISED CORE SERVICES:
+${CAPABILITIES.advertised.map(s => "- " + s).join("\n")}
+
+QUIET CAPABILITIES (warm yes):
+${CAPABILITIES.quiet.map(s => "- " + s).join("\n")}
+
+HARD NO SERVICES (politely decline):
+${CAPABILITIES.decline.map(s => "- " + s).join("\n")}
+`;
+            
+            const conversationHistory = [];
+            let leadCaptured = false;
+            let hasGreeted = false;
+            let widgetEverOpened = false;
+            
+            const PAGE_CONTEXT = `==== PAGE CONTEXT ====
+The customer is on the RESIDENTIAL SERVICE PLAN page (mechanicaltemp.com/service-plan.html).
+
+This is a $29/month subscription product page. The customer is evaluating whether to subscribe — they're NOT looking for emergency service (mostly). They want to understand:
+- What's included
+- Whether it's worth $29/month for their situation
+- Whether there's a contract (no — month-to-month, cancel anytime)
+- What happens if their compressor or major part fails
+- Whether you service their area
+
+The plan includes:
+- 2x annual tune-ups (Spring AC, Fall furnace)
+- Standard 1" air filters
+- FREE replacement of capacitors, contactors, fuses, breakers if they fail
+- Condensate drain cleaning
+- Priority service (guaranteed within 24 hours, jump the queue)
+- 15% off all repair labor
+- 10% off blower motors, inducers, refrigerant, new system installs
+
+Major components (compressors, heat exchangers) are NOT free — but members get 10% off the full replacement cost.
+
+30-day money-back guarantee. No contract. Cancel anytime. Stripe checkout. The "Start Your Membership" or "Join Now" button takes them to a form, then redirects to Stripe.
+
+THEIR LIKELY MINDSET:
+- Curious but not ready to pay yet → answer questions, build confidence
+- Comparing to other companies' plans → emphasize no-contract, the free parts coverage, the priority service
+- Worried about getting locked in → reassure: month-to-month, cancel anytime, 30-day money back
+- Already a customer thinking about upgrading → great, walk them through the signup
+- Maybe didn't realize this exists and just stumbled in → explain the value clearly
+
+WHAT TO DO:
+- ANSWER membership questions confidently (you know the plan inside out)
+- GENTLY POINT to the signup form at the bottom of the page when they seem convinced
+- NEVER pressure-sell. The page already pitches; you're just the helpful explainer.
+- If they want to sign up, just say "scroll to the bottom — the form takes 2 minutes and you'll get an instant confirmation"
+- If they want to talk to a human first, that's totally fine — collect their info and fire a MEMBERSHIP_LEAD
+
+WHAT NOT TO DO:
+- Don't try to collect signup info IN the chat — the Stripe form handles that. Just send them to the form.
+- Don't pretend you can sign them up directly through chat.
+- Don't quote different prices. The plan is $29/mo. Period.`;
+            
+            const SYSTEM_PROMPT = `You are Tempi, the friendly virtual customer service rep for Mechanical Temp, a commercial and residential HVAC company in Southfield, MI serving Metro Detroit. You're warm, helpful, and a little playful — like a knowledgeable friend at the front desk who's also great at gently moving the conversation forward.
+
+ABOUT MECHANICAL TEMP:
+- Address: 23093 Telegraph Rd, Southfield, MI 48033
+- Phone: (313) 282-4758
+- Hours: Weekdays 8am-4pm, Weekends 10am-2pm, 24/7 emergency service available
+- Service area: Southfield, Dearborn, Livonia, Novi, Canton, Plymouth, Northville, West Bloomfield, Royal Oak, Ferndale, Westland, Farmington Hills, Redford and surrounding Metro Detroit
+- Authorized AirQuest dealer (main brand for new installs), but our techs service ALL brands
+- Owner: Brian
+- Office email: office@mechanicaltemp.com
+- CUSTOMER PORTAL: https://customer.mechanicaltemp.com/ — invoices, payments, scheduling.
+
+${PAGE_CONTEXT}
+
+==== CONVERSATION ROUTING ====
+
+8 conversation types on this page (one extra vs other pages):
+
+1. MEMBERSHIP_QUESTION — Customer asking questions about the $29/mo plan. **MOST COMMON HERE.** They're shopping. Just answer their questions confidently and point them to the signup form at the bottom of the page. No lead capture needed unless they explicitly ask to talk to someone first.
+2. MEMBERSHIP_LEAD — Customer wants to sign up but has questions a human should answer first, or wants a call before subscribing. Collect name, phone, address, what their hesitation is. End with [LEAD_READY:MEMBERSHIP_LEAD].
+3. SERVICE_LEAD — They actually have a broken AC/furnace right now and need service. Treat as urgent. Collect name, phone, address, issue. End with [LEAD_READY:SERVICE_LEAD].
+4. COMMERCIAL_DISPATCH — Facility manager (rare here, redirect to commercial-hvac.html if relevant).
+5. PAPERWORK — W-9, COI, etc.
+6. BILLING — Existing member question about their account.
+7. EXISTING_CUSTOMER — Follow-up on a past job.
+8. VENDOR_SALES — Soft-screen, no capture.
+
+==== HOW TO HANDLE EACH TYPE ====
+
+MEMBERSHIP_QUESTION (most common):
+- Answer the question. Be specific. You know the plan details.
+- If they ask "is this worth it for me?" — explain the math (2 tune-ups alone = $200-300 value, plus parts coverage)
+- If they ask "what's the catch" — be honest: no catch, no contract, cancel anytime, 30-day money back
+- POINT to the signup form: "If you want to join, scroll to the bottom of this page — the form takes 2 minutes and Stripe handles the rest."
+- NO lead capture unless they specifically ask to talk to someone
+
+MEMBERSHIP_LEAD: collect name, phone, address, what they want to discuss before signing up. End with [LEAD_READY:MEMBERSHIP_LEAD].
+SERVICE_LEAD (active problem): collect name, phone, address, issue. End with [LEAD_READY:SERVICE_LEAD].
+PAPERWORK: collect company, contact, email, what doc. End with [LEAD_READY:PAPERWORK].
+BILLING: collect name, phone, address, the question. End with [LEAD_READY:BILLING].
+EXISTING_CUSTOMER: collect name, phone, address, what they need. End with [LEAD_READY:EXISTING_CUSTOMER].
+VENDOR_SALES: "Brian handles vendor inquiries — send your pitch to office@mechanicaltemp.com." NO capture.
+
+==== CRITICAL FORMAT RULES ====
+
+EVERY response MUST end with quick-reply buttons:
+[BTN: Option 1 | Option 2 | Option 3]
+
+- 2-4 buttons (3 ideal)
+- Each label MAX 4 words
+
+==== KEY PLAN FACTS YOU MUST KNOW ====
+
+- Price: $29/month
+- Contract: NONE. Month-to-month. Cancel anytime, no fees.
+- Money-back guarantee: 30 days
+- 2 annual tune-ups (Spring AC + Fall furnace) — value alone is ~$200-300
+- FREE parts: capacitors, contactors, fuses, breakers, condensate drain cleaning, standard 1" filters
+- Discounts: 15% off labor, 10% off blower motors/inducers/refrigerant/new system installs
+- Priority service: within 24 hours, jump the queue
+- Compressors and heat exchangers: NOT FREE, but members get 10% off
+- Stripe Checkout handles payment
+- Initial inspection within 30 days (per TOS) — they can refund/cancel you if equipment is unsafe or beyond repair
+
+==== ENGAGEMENT RULES ====
+
+1. KEEP IT SHORT. 1-2 sentences + buttons.
+2. BE A KNOWLEDGEABLE EXPLAINER, NOT A SALESPERSON. The page already pitches; you just clarify.
+3. When they're ready to sign up, send them to the form: "Scroll to the bottom of the page — the form takes 2 minutes."
+4. NEVER invent additional discounts or promise things outside the plan.
+5. NEVER pretend you can sign them up via chat — that's what the Stripe form is for.
+6. If they're worried about commitment, lean hard on: "No contract. Cancel anytime. 30 days money back. Worst case, you got a tune-up for $29."
+7. After-hours emergencies: tell them to call (313) 282-4758 directly.
+8. Angry customers: acknowledge, escalate to Brian.
+
+==== SERVICE-PLAN-SPECIFIC GREETING ====
+
+Your opening is membership-focused:
+
+"Hey there! 👋 I'm Tempi. Got questions about the service plan? Happy to walk you through what's included or how it works."
+
+[BTN: What's covered? | Is there a contract? | Worth it for me? | Different question]
+
+==== CURRENT CAPABILITIES ====
+${capabilitiesBlock}
+
+REMEMBER: This is a subscription page. Most people chatting here are evaluating, not in emergency mode. Be a confident, friendly explainer. Point to the form when they're ready. Every response has [BTN: ...] at the end.`;
+            
+            const chatBubble = document.getElementById('chat-bubble');
+            const chatWidget = document.getElementById('chat-widget');
+            const closeBtn = document.getElementById('close-chat-btn');
+            const messagesEl = document.getElementById('chat-messages');
+            const inputEl = document.getElementById('chat-input');
+            const sendBtn = document.getElementById('send-chat-btn');
+            const chatBadge = document.getElementById('chat-badge');
+            
+            const TEMPI_AVATAR_IMG = `<img src="https://cdn.mechanicaltemp.com/tempi/tempi-portrait.png" alt="Tempi" style="width:24px;height:24px;border-radius:50%;flex-shrink:0;object-fit:cover;border:1.5px solid #1e293b;">`;
+            
+            function parseButtons(text) {
+                const match = text.match(/\[BTN:\s*([^\]]+)\]/);
+                if (!match) return { cleanText: text, buttons: [] };
+                const buttons = match[1].split('|').map(s => s.trim()).filter(s => s.length > 0);
+                const cleanText = text
+                    .replace(/\[BTN:[^\]]+\]/g, '')
+                    .replace(/\[LEAD_READY:[^\]]+\]/g, '')
+                    .replace(/\[LEAD_READY\]/g, '')
+                    .trim();
+                return { cleanText, buttons };
+            }
+            
+            function escapeHtml(s) {
+                const div = document.createElement('div');
+                div.textContent = s;
+                return div.innerHTML;
+            }
+            
+            function addBotMessage(text, buttons) {
+                const row = document.createElement('div');
+                row.className = 'msg-row';
+                row.innerHTML = TEMPI_AVATAR_IMG + `<div class="msg-bubble bot">${escapeHtml(text)}</div>`;
+                messagesEl.appendChild(row);
+                
+                if (buttons && buttons.length > 0) {
+                    const btnRow = document.createElement('div');
+                    btnRow.className = 'inline-buttons';
+                    buttons.forEach(label => {
+                        const btn = document.createElement('button');
+                        btn.className = 'inline-btn';
+                        btn.textContent = label;
+                        btn.addEventListener('click', () => {
+                            btnRow.querySelectorAll('.inline-btn').forEach(b => b.disabled = true);
+                            handleSend(label);
+                        });
+                        btnRow.appendChild(btn);
+                    });
+                    messagesEl.appendChild(btnRow);
+                }
+                scrollToBottom();
+            }
+            
+            function addUserMessage(text) {
+                const row = document.createElement('div');
+                row.className = 'msg-row user';
+                row.innerHTML = `<div class="msg-bubble user">${escapeHtml(text)}</div>`;
+                messagesEl.appendChild(row);
+                scrollToBottom();
+            }
+            
+            function showTyping() {
+                const row = document.createElement('div');
+                row.className = 'msg-row';
+                row.id = 'typing-row';
+                row.innerHTML = TEMPI_AVATAR_IMG + `<div class="msg-bubble bot typing"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>`;
+                messagesEl.appendChild(row);
+                scrollToBottom();
+            }
+            
+            function hideTyping() { const t = document.getElementById('typing-row'); if (t) t.remove(); }
+            function scrollToBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
+            function showBadge(n) { chatBadge.textContent = n; chatBadge.classList.remove('hidden'); }
+            function hideBadge() { chatBadge.classList.add('hidden'); }
+            
+            function openWidget() {
+                chatWidget.classList.remove('hidden');
+                widgetEverOpened = true;
+                hideBadge();
+                if (!hasGreeted) {
+                    hasGreeted = true;
+                    setTimeout(() => {
+                        addBotMessage(
+                            "Hey there! 👋 I'm Tempi. Got questions about the service plan? Happy to walk you through what's included or how it works.",
+                            ["What's covered?", "Is there a contract?", "Worth it for me?", "Different question"]
+                        );
+                    }, 300);
+                }
+                setTimeout(() => inputEl.focus(), 100);
+            }
+            
+            function closeWidget() {
+                chatWidget.classList.add('hidden');
+                if (conversationHistory.length > 0 && !leadCaptured) showBadge('!');
+            }
+            
+            function toggleWidget() {
+                if (chatWidget.classList.contains('hidden')) openWidget();
+                else closeWidget();
+            }
+            
+            async function sendToClaude(userMessage) {
+                conversationHistory.push({ role: 'user', content: userMessage });
+                try {
+                    const res = await fetch(CLAUDE_PROXY_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            model: 'claude-haiku-4-5-20251001',
+                            max_tokens: 400,
+                            system: SYSTEM_PROMPT,
+                            messages: conversationHistory
+                        })
+                    });
+                    if (!res.ok) throw new Error('Proxy error: ' + res.status);
+                    const data = await res.json();
+                    const reply = data.content?.filter(b => b.type === 'text')?.map(b => b.text)?.join('\n') || "Hmm, I didn't catch that. Could you try again? [BTN: Try again | Talk to a person]";
+                    conversationHistory.push({ role: 'assistant', content: reply });
+                    return reply;
+                } catch (err) {
+                    console.error('Claude call failed:', err);
+                    return "I'm having trouble connecting right now 😕 You can scroll down to the signup form to join the plan, or call us at (313) 282-4758 to chat with a person. [BTN: Try again | Go to signup form]";
+                }
+            }
+            
+            function extractLeadInfo(conversation, leadType) {
+                const fullText = conversation.map(m => m.content).join('\n');
+                const phoneMatch = fullText.match(/(\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/);
+                const typeLabels = {
+                    'SERVICE_LEAD': '🚨 SERVICE LEAD',
+                    'MEMBERSHIP_LEAD': '💎 MEMBERSHIP PROSPECT - Wants to talk before signing up',
+                    'COMMERCIAL_DISPATCH': '🏢 COMMERCIAL DISPATCH - URGENT',
+                    'PAPERWORK': '📋 PAPERWORK REQUEST',
+                    'BILLING': '💰 BILLING INQUIRY',
+                    'VENDOR_SALES': '🤝 VENDOR/SALES PITCH',
+                    'EXISTING_CUSTOMER': '👤 EXISTING CUSTOMER FOLLOW-UP',
+                    'GENERAL_INFO': 'ℹ️ GENERAL INFO REQUEST'
+                };
+                const label = typeLabels[leadType] || '📩 CHAT INQUIRY';
+                return {
+                    from_name: `Tempi (Service Plan Page) - ${label}`,
+                    phone: phoneMatch ? phoneMatch[0] : 'See transcript',
+                    message: `${label}\n=========================================\n\nSource: SERVICE PLAN PAGE ($29/mo membership)\nConversation Type: ${leadType}\nTime: ${new Date().toLocaleString('en-US', { timeZone: 'America/Detroit' })} ET\n\n--- FULL TRANSCRIPT ---\n\n` + 
+                        conversation.map(m => `[${m.role === 'user' ? 'CUSTOMER' : 'TEMPI'}]: ${m.content.replace(/\[LEAD_READY:[^\]]+\]/g,'').replace(/\[LEAD_READY\]/g,'').replace(/\[BTN:[^\]]+\]/g,'').trim()}`).join('\n\n')
+                };
+            }
+            
+            async function fireLeadEmail(leadType) {
+                if (leadCaptured) return;
+                leadCaptured = true;
+                try {
+                    const leadData = extractLeadInfo(conversationHistory, leadType);
+                    await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, leadData);
+                    console.log(`Lead email sent: ${leadType}`);
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'chat_lead', { 
+                            'event_category': 'conversion',
+                            'event_label': leadType + '_service_plan_page'
+                        });
+                    }
+                } catch (err) { console.error('Lead email failed:', err); leadCaptured = false; }
+            }
+            
+            async function handleSend(text) {
+                text = (text || inputEl.value).trim();
+                if (!text) return;
+                addUserMessage(text);
+                inputEl.value = '';
+                sendBtn.disabled = true;
+                inputEl.disabled = true;
+                showTyping();
+                const reply = await sendToClaude(text);
+                hideTyping();
+                const { cleanText, buttons } = parseButtons(reply);
+                addBotMessage(cleanText, buttons);
+                const leadMatch = reply.match(/\[LEAD_READY:(\w+)\]/);
+                if (leadMatch) {
+                    fireLeadEmail(leadMatch[1]);
+                } else if (reply.includes('[LEAD_READY]')) {
+                    fireLeadEmail('MEMBERSHIP_LEAD');
+                }
+                sendBtn.disabled = false;
+                inputEl.disabled = false;
+                inputEl.focus();
+            }
+            
+            chatBubble.addEventListener('click', toggleWidget);
+            closeBtn.addEventListener('click', closeWidget);
+            sendBtn.addEventListener('click', () => handleSend());
+            inputEl.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } });
+            inputEl.addEventListener('input', () => { inputEl.style.height = 'auto'; inputEl.style.height = Math.min(inputEl.scrollHeight, 80) + 'px'; });
+            
+            setTimeout(() => { if (!widgetEverOpened) showBadge('1'); }, 15000);
+        })();
     </script>
 </body>
 </html>
