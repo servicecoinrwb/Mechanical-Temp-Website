@@ -7,7 +7,6 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-0G63KLB2B0');
     </script>
     <meta charset="UTF-8">
@@ -15,6 +14,11 @@
     
     <title>HVAC System Selector Tool | Mechanical Temp</title>
     <meta name="description" content="Use our interactive tool to find the perfect new furnace, AC, or full HVAC system for your home and get a free, personalized estimate from Mechanical Temp.">
+    <link rel="canonical" href="https://mechanicaltemp.com/system-selector.html" />
+    
+    <!-- Performance hints -->
+    <link rel="preconnect" href="https://cdn.mechanicaltemp.com">
+    <link rel="dns-prefetch" href="https://tempi.summer-unit-44dd.workers.dev">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,125 +30,73 @@
             font-family: 'Inter', sans-serif;
         }
         .step-indicator.active {
-            background-color: #0ea5e9; /* sky-500 */
+            background-color: #0ea5e9;
             color: white;
         }
         .step-indicator.complete {
-            background-color: #16a34a; /* green-600 */
+            background-color: #16a34a;
             color: white;
         }
         .selection-card {
             transition: all 0.2s ease-in-out;
         }
         .selection-card.selected {
-            border-color: #0ea5e9; /* sky-500 */
+            border-color: #0ea5e9;
             box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.3);
             transform: translateY(-5px);
         }
-        /* Chat Widget Styles */
-        #chat-bubble {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
-            cursor: pointer;
-            background-color: #0ea5e9; /* sky-500 */
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            transition: transform 0.2s ease-in-out;
-        }
-        #chat-bubble:hover {
-            transform: scale(1.1);
-            background-color: #0284c7; /* sky-600 */
-        }
-        #chat-widget {
-            position: fixed;
-            bottom: 90px;
-            right: 20px;
-            z-index: 999;
-            width: 350px;
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            transform-origin: bottom right;
-        }
-         #chat-widget.hidden {
-            opacity: 0;
-            transform: scale(0.9);
-            pointer-events: none;
-        }
-        .chat-header {
-            background-color: #0c4a6e; /* sky-900 */
-            color: white;
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .chat-header h3 {
-            font-weight: bold;
-            font-size: 1.125rem;
-        }
-        #close-chat-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        .chat-body {
-            padding: 1rem;
-            background-color: #f1f5f9; /* slate-100 */
-            color: #475569; /* slate-600 */
-            font-size: 0.9rem;
-        }
-        .chat-footer {
-            padding: 1rem;
-            border-top: 1px solid #e2e8f0; /* slate-200 */
-        }
-        #chat-input {
-            width: 100%;
-            border: 1px solid #cbd5e1; /* slate-300 */
-            border-radius: 8px;
-            padding: 0.75rem;
-            resize: none;
-        }
-        #send-chat-btn {
-            width: 100%;
-            margin-top: 0.5rem;
-            background-color: #0ea5e9; /* sky-500 */
-            color: white;
-            font-weight: bold;
-            padding: 0.75rem;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        #send-chat-btn:hover {
-            background-color: #0284c7; /* sky-600 */
-        }
-        #send-chat-btn:disabled {
-            background-color: #94a3b8; /* slate-400 */
-            cursor: not-allowed;
-        }
-        #chat-confirmation {
-            text-align: center;
-            font-weight: bold;
-            color: #16a34a; /* green-600 */
-            padding: 0.5rem;
-            background-color: #dcfce7; /* green-100 */
-            border-radius: 6px;
-        }
+
+        /* ============== TEMPI CHAT WIDGET ============== */
+        #chat-bubble { position: fixed; bottom: 20px; right: 20px; z-index: 1000; cursor: pointer; background-color: #0ea5e9; width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.25); transition: transform 0.2s ease-in-out; border: 3px solid white; }
+        #chat-bubble:hover { transform: scale(1.08); background-color: #0284c7; }
+        #chat-bubble img { display: block; width: 58px; height: 58px; border-radius: 50%; object-fit: cover; }
+        #chat-badge { position: absolute; top: -4px; right: -4px; background: #ef4444; color: white; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; font-weight: bold; display: flex; align-items: center; justify-content: center; border: 2px solid white; animation: tempi-bounce 1.2s infinite; }
+        #chat-badge.hidden { display: none; }
+        @keyframes tempi-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+        #chat-widget { position: fixed; bottom: 95px; right: 20px; z-index: 999; width: 380px; max-width: calc(100vw - 40px); height: 600px; max-height: calc(100vh - 130px); background-color: white; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); overflow: hidden; display: flex; flex-direction: column; transition: opacity 0.3s ease, transform 0.3s ease; transform-origin: bottom right; }
+        #chat-widget.hidden { opacity: 0; transform: scale(0.9); pointer-events: none; }
+        .chat-header { background: linear-gradient(135deg, #0c4a6e 0%, #0369a1 100%); color: white; padding: 12px 16px; display: flex; align-items: center; gap: 12px; }
+        .tempi-header-avatar { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; overflow: hidden; border: 2px solid white; }
+        .tempi-header-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .chat-header-info { flex: 1; }
+        .chat-header-info .name { font-weight: bold; font-size: 16px; line-height: 1.2; }
+        .chat-header-info .status { font-size: 11px; opacity: 0.9; display: flex; align-items: center; gap: 5px; margin-top: 2px; }
+        .status-dot { width: 7px; height: 7px; background: #10b981; border-radius: 50%; box-shadow: 0 0 0 2px rgba(16,185,129,0.3); }
+        #close-chat-btn { background: none; border: none; color: white; font-size: 24px; cursor: pointer; opacity: 0.8; padding: 0; line-height: 1; }
+        #close-chat-btn:hover { opacity: 1; }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 16px 12px; background-color: #f1f5f9; display: flex; flex-direction: column; gap: 10px; }
+        .chat-messages::-webkit-scrollbar { width: 6px; }
+        .chat-messages::-webkit-scrollbar-track { background: transparent; }
+        .chat-messages::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .msg-row { display: flex; align-items: flex-end; gap: 6px; animation: tempi-fadeIn 0.3s ease-out; }
+        @keyframes tempi-fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .msg-row.user { justify-content: flex-end; }
+        .msg-bubble { position: relative; padding: 10px 14px; border-radius: 18px; font-size: 13.5px; line-height: 1.45; max-width: 75%; word-wrap: break-word; border: 2.5px solid #1e293b; }
+        .msg-bubble.bot { background: white; color: #1e293b; border-bottom-left-radius: 4px; }
+        .msg-bubble.bot::before { content: ''; position: absolute; bottom: -2px; left: -10px; width: 0; height: 0; border-top: 10px solid #1e293b; border-right: 10px solid transparent; }
+        .msg-bubble.bot::after { content: ''; position: absolute; bottom: 1px; left: -5px; width: 0; height: 0; border-top: 7px solid white; border-right: 7px solid transparent; }
+        .msg-bubble.user { background: #0ea5e9; color: white; border-bottom-right-radius: 4px; border-color: #0c4a6e; }
+        .msg-bubble.user::before { content: ''; position: absolute; bottom: -2px; right: -10px; width: 0; height: 0; border-top: 10px solid #0c4a6e; border-left: 10px solid transparent; }
+        .msg-bubble.user::after { content: ''; position: absolute; bottom: 1px; right: -5px; width: 0; height: 0; border-top: 7px solid #0ea5e9; border-left: 7px solid transparent; }
+        .msg-bubble.typing { display: flex; gap: 4px; padding: 14px 16px; }
+        .typing-dot { width: 6px; height: 6px; background: #64748b; border-radius: 50%; animation: tempi-typingBounce 1.2s infinite; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes tempi-typingBounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-5px); opacity: 1; } }
+        .inline-buttons { display: flex; gap: 6px; flex-wrap: wrap; margin-left: 34px; margin-top: 2px; animation: tempi-fadeIn 0.3s ease-out; }
+        .inline-btn { background: #e0f2fe; color: #0c4a6e; border: 1.5px solid #7dd3fc; border-radius: 14px; padding: 5px 11px; font-size: 11.5px; cursor: pointer; font-weight: 600; transition: all 0.15s; font-family: inherit; white-space: nowrap; }
+        .inline-btn:hover { background: #0ea5e9; color: white; border-color: #0ea5e9; transform: translateY(-1px); }
+        .inline-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .chat-input-row { padding: 10px 12px; border-top: 1px solid #e2e8f0; background-color: white; display: flex; gap: 6px; align-items: flex-end; }
+        #chat-input { flex: 1; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 8px 12px; resize: none; font-family: inherit; font-size: 13.5px; max-height: 80px; outline: none; transition: border-color 0.15s; }
+        #chat-input:focus { border-color: #0ea5e9; }
+        #send-chat-btn { background-color: #0ea5e9; color: white; border: none; border-radius: 10px; padding: 8px 14px; cursor: pointer; font-weight: bold; font-size: 13px; flex-shrink: 0; }
+        #send-chat-btn:hover { background-color: #0284c7; }
+        #send-chat-btn:disabled { background-color: #94a3b8; cursor: not-allowed; }
+        .chat-disclaimer { font-size: 10px; color: #94a3b8; text-align: center; padding: 4px 8px 6px; background: white; }
+        .tempi-portal-bar { display: flex; align-items: center; gap: 7px; padding: 9px 14px; background: linear-gradient(90deg, #f0f9ff 0%, #e0f2fe 100%); border-bottom: 1px solid #bae6fd; color: #0c4a6e; font-size: 12.5px; font-weight: 700; text-decoration: none; transition: background 0.15s; }
+        .tempi-portal-bar:hover { background: linear-gradient(90deg, #e0f2fe 0%, #bae6fd 100%); }
+        .tempi-portal-bar svg:first-child { color: #0ea5e9; flex-shrink: 0; }
     </style>
 </head>
 <body class="bg-slate-100">
@@ -153,7 +105,7 @@
     <header class="bg-gray-900/80 sticky top-0 z-20 p-4">
         <nav class="container mx-auto flex justify-between items-center text-white">
             <a href="index.html" class="block">
-                <img src="https://i.imgur.com/YJvJw7V.png" alt="Mechanical Temp Logo" class="h-12 w-auto">
+                <img src="https://cdn.mechanicaltemp.com/logos/black/full/black_logo_white_background.png" alt="Mechanical Temp Logo" width="160" height="48" class="h-12 w-auto">
             </a>
             <ul class="hidden md:flex space-x-6">
                 <li><a href="index.html#services" class="hover:text-sky-400">Services</a></li>
@@ -256,33 +208,49 @@
         </div>
     </main>
     
-    <!-- CHAT BUBBLE & WIDGET -->
-    <div id="chat-bubble">
-        <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-3.04 8.25-6.75 8.25-1.425 0-2.756-.382-3.937-1.043a.75.75 0 01-.263-.761l.574-2.286a.75.75 0 00-.534-.686 8.25 8.25 0 01-3.243-5.468C3.04 12.25 6 4.5 10.5 4.5c4.634 0 8.25 3.04 8.25 6.75z" />
-        </svg>      
+    <!-- =================================================================== -->
+    <!-- TEMPI CHAT BUBBLE                                                    -->
+    <!-- =================================================================== -->
+    <div id="chat-bubble" aria-label="Open chat with Tempi">
+        <img src="https://cdn.mechanicaltemp.com/tempi/tempi-portrait.png" alt="Tempi">
+        <span id="chat-badge" class="hidden">1</span>
     </div>
 
+    <!-- TEMPI CHAT WIDGET -->
     <div id="chat-widget" class="hidden">
         <div class="chat-header">
-            <h3>Chat with Us</h3>
-            <button id="close-chat-btn">&times;</button>
+            <div class="tempi-header-avatar">
+                <img src="https://cdn.mechanicaltemp.com/tempi/tempi-portrait.png" alt="Tempi">
+            </div>
+            <div class="chat-header-info">
+                <div class="name">Tempi</div>
+                <div class="status"><span class="status-dot"></span>Mechanical Temp · online</div>
+            </div>
+            <button id="close-chat-btn" aria-label="Minimize chat">&times;</button>
         </div>
-        <div class="chat-body">
-            <p>Questions? Send us a message and we'll text you back shortly!</p>
-            <div id="chat-confirmation" class="hidden mt-2">Message Sent! ✔️</div>
+        
+        <a href="https://customer.mechanicaltemp.com/" target="_blank" rel="noopener noreferrer" class="tempi-portal-bar" onclick="if(typeof gtag!=='undefined')gtag('event','click_customer_portal',{'event_category':'engagement','event_label':'tempi_header'})">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm3 0a1 1 0 011-1h1a1 1 0 110 2H8a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
+            <span>Customer Portal · Pay Online</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left: auto;"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+        </a>
+        
+        <div id="chat-messages" class="chat-messages"></div>
+        
+        <div class="chat-input-row">
+            <textarea id="chat-input" placeholder="Type your message..." rows="1"></textarea>
+            <button id="send-chat-btn" type="button">Send</button>
         </div>
-        <div class="chat-footer">
-            <textarea id="chat-input" placeholder="Type your message..." rows="3"></textarea>
-            <button id="send-chat-btn">Send</button>
-        </div>
+        
+        <div class="chat-disclaimer">Powered by AI. For emergencies call (313) 282-4758.</div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
         emailjs.init("IJHcoSxlSQ9OPOJGS"); 
         let currentStep = 1;
-        const selections = {};
+        // Made global so Tempi can read it
+        window.selectorState = { selections: {}, currentStep: 1 };
 
         function showStep(stepNum) {
             document.querySelectorAll('[id^="step-"]').forEach(step => step.classList.add('hidden'));
@@ -304,6 +272,8 @@
 
             document.getElementById('back-btn').classList.toggle('hidden', stepNum === 1 || stepNum === 5);
             document.getElementById('submit-btn').classList.toggle('hidden', stepNum !== 4);
+
+            window.selectorState.currentStep = stepNum;
         }
 
         function nextStep() {
@@ -324,13 +294,13 @@
             card.addEventListener('click', () => {
                 const group = card.parentElement.dataset.selectionGroup;
                 const value = card.dataset.value;
-                selections[group] = value;
+                window.selectorState.selections[group] = value;
                 
                 card.parentElement.querySelectorAll('.selection-card').forEach(c => c.classList.remove('selected'));
                 card.classList.add('selected');
 
                 if (currentStep === 3) {
-                     document.getElementById('summary-text').textContent = `${selections.system_type}, ${selections.home_size}, ${selections.efficiency_level}`;
+                     document.getElementById('summary-text').textContent = `${window.selectorState.selections.system_type}, ${window.selectorState.selections.home_size}, ${window.selectorState.selections.efficiency_level}`;
                 }
                 
                 setTimeout(nextStep, 300);
@@ -354,21 +324,26 @@
                 email: formData.get('email'),
                 phone: formData.get('phone'),
                 address: formData.get('address'),
-                system_type: selections.system_type,
-                home_size: selections.home_size,
-                efficiency_level: selections.efficiency_level,
+                system_type: window.selectorState.selections.system_type,
+                home_size: window.selectorState.selections.home_size,
+                efficiency_level: window.selectorState.selections.efficiency_level,
             };
 
             sendQuoteRequest(quoteData);
         }
 
         function sendQuoteRequest(data) {
-            // **FINAL FIX**: The code now uses the verified Template ID you provided.
             const systemSelectorTemplateID = 'template_mnzd0bm'; 
 
             emailjs.send('service_ziwf1pg', systemSelectorTemplateID, data)
                 .then(function(response) {
                     console.log('Quote request sent successfully:', response);
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'quote_request', { 
+                            'event_category': 'conversion',
+                            'event_label': 'system_selector'
+                        });
+                    }
                     nextStep(); 
                 }, function(error) {
                     console.log('Email failed:', error);
@@ -379,61 +354,388 @@
                 });
         }
         
-        // --- CHAT WIDGET SCRIPT ---
-        const chatBubble = document.getElementById('chat-bubble');
-        const chatWidget = document.getElementById('chat-widget');
-        const closeChatBtn = document.getElementById('close-chat-btn');
-        const sendChatBtn = document.getElementById('send-chat-btn');
-        const chatInput = document.getElementById('chat-input');
-        const chatConfirmation = document.getElementById('chat-confirmation');
-
-        function toggleChatWidget() {
-            chatWidget.classList.toggle('hidden');
-        }
-
-        chatBubble.addEventListener('click', toggleChatWidget);
-        closeChatBtn.addEventListener('click', toggleChatWidget);
-        
-        function sendChatMessage() {
-            const message = chatInput.value.trim();
-            if (message === '') return;
-
-            sendChatBtn.disabled = true;
-            sendChatBtn.textContent = 'Sending...';
-
-            const chatData = {
-                from_name: 'Website Visitor',
-                message: message,
-            };
-            
-            // **FINAL FIX**: The code now uses the verified Template ID you provided for the chat.
-            const chatTemplateID = 'template_j68qyhk';
-
-            emailjs.send('service_ziwf1pg', chatTemplateID, chatData)
-                .then(function(response) {
-                    console.log('Chat message sent successfully:', response);
-                    chatInput.value = '';
-                    chatConfirmation.classList.remove('hidden');
-                    setTimeout(() => {
-                        chatConfirmation.classList.add('hidden');
-                        toggleChatWidget();
-                    }, 3000);
-                }, function(error) {
-                    console.log('Chat message failed:', error);
-                    alert('Sorry, the message could not be sent. Please try again.');
-                })
-                .finally(function() {
-                    sendChatBtn.disabled = false;
-                    sendChatBtn.textContent = 'Send';
-                });
-        }
-
-        sendChatBtn.addEventListener('click', sendChatMessage);
-
         // Initial setup
         showStep(1);
+
+        // ============== TEMPI CHAT WIDGET ==============
+        (function() {
+            const CLAUDE_PROXY_URL = 'https://tempi.summer-unit-44dd.workers.dev/';
+            const EMAILJS_SERVICE = 'service_ziwf1pg';
+            const EMAILJS_TEMPLATE = 'template_j68qyhk';
+            
+            const CAPABILITIES = {
+                advertised: [
+                    "Furnace repair, install, and maintenance",
+                    "AC repair, install, and maintenance",
+                    "Commercial HVAC",
+                    "Ductwork",
+                    "Ductless mini-splits",
+                    "RTUs (rooftop units)"
+                ],
+                quiet: [
+                    "Commercial refrigeration",
+                    "Boilers and hydronic heating",
+                    "Water heaters (tank, tankless, electric, gas)",
+                    "Indoor air quality (UV, filtration, humidifiers, dehumidifiers)",
+                    "Smart thermostats and controls",
+                    "Building automation systems (BAS)"
+                ],
+                decline: [
+                    "Plumbing leaks and repairs",
+                    "Electrical panel work",
+                    "Roofing",
+                    "Kitchen appliance repair",
+                    "New gas line runs from the meter"
+                ]
+            };
+            
+            const capabilitiesBlock = `
+ADVERTISED CORE SERVICES (confident yes, route as lead):
+${CAPABILITIES.advertised.map(s => "- " + s).join("\n")}
+
+QUIET CAPABILITIES (warm yes, route as lead):
+${CAPABILITIES.quiet.map(s => "- " + s).join("\n")}
+
+HARD NO SERVICES (politely decline):
+${CAPABILITIES.decline.map(s => "- " + s).join("\n")}
+`;
+            
+            const conversationHistory = [];
+            let leadCaptured = false;
+            let hasGreeted = false;
+            let widgetEverOpened = false;
+            
+            // Build dynamic page context that includes the customer's current wizard selections
+            function buildPageContext() {
+                const sel = window.selectorState.selections;
+                const step = window.selectorState.currentStep;
+
+                let contextLine;
+                if (step === 1) {
+                    contextLine = "The customer is on STEP 1 — choosing system type (Furnace Only / AC Only / Full System). They haven't picked yet.";
+                } else if (step === 2) {
+                    contextLine = `The customer is on STEP 2 — choosing home size. They already picked: SYSTEM TYPE = "${sel.system_type}".`;
+                } else if (step === 3) {
+                    contextLine = `The customer is on STEP 3 — choosing efficiency level. So far: SYSTEM TYPE = "${sel.system_type}", HOME SIZE = "${sel.home_size}".`;
+                } else if (step === 4) {
+                    contextLine = `The customer is on STEP 4 — filling out contact info to get an estimate. Their full selections: SYSTEM TYPE = "${sel.system_type}", HOME SIZE = "${sel.home_size}", EFFICIENCY LEVEL = "${sel.efficiency_level}". If they're chatting at this point, they may have questions about the form, what happens next, or doubts about their selections.`;
+                } else if (step === 5) {
+                    contextLine = `The customer has already SUBMITTED their estimate request. Their final selections were: SYSTEM TYPE = "${sel.system_type}", HOME SIZE = "${sel.home_size}", EFFICIENCY LEVEL = "${sel.efficiency_level}". They're likely chatting now with follow-up questions while they wait.`;
+                }
+
+                return `==== PAGE CONTEXT ====
+The customer is using the SYSTEM SELECTOR WIZARD (mechanicaltemp.com/system-selector.html) — an interactive tool that walks them through picking a new furnace, AC, or full HVAC system and submits a request for a free written estimate.
+
+The wizard has 4 steps + a confirmation:
+1. System Type (Furnace Only / AC Only / Full System)
+2. Home Size (Under 1,500 / 1,500-2,500 / Over 2,500 sq ft)
+3. Efficiency Level (Good / Better / Best)
+4. Contact info → estimate request emailed
+
+CURRENT WIZARD STATE: ${contextLine}
+
+This is a HIGH-INTENT replacement/install shopping page. These aren't repair customers — they're researching a system purchase. Decision is usually $5K-$15K+ for residential. They want to feel confident before submitting contact info.
+
+WHAT TO DO:
+- If they're earlier in the wizard, help them pick if they're stuck (e.g., "What's the difference between Good/Better/Best?"). DON'T try to push them to chat-collect — let them finish the form.
+- If they're stuck on Step 4 (contact info), reassure them about privacy / what happens next / no obligation.
+- If they've already submitted (Step 5), thank them and answer follow-up questions.
+- If they want to bypass the wizard and just chat — fine, collect a SERVICE_LEAD the normal way.
+
+NEVER:
+- Quote specific install prices (always: "exact written quote after a free in-home assessment")
+- Promise efficiency claims (always: "we'll show you actual SEER/AFUE ratings during the proposal")
+- Push them off the wizard if they're actively using it`;
+            }
+            
+            const SYSTEM_PROMPT_TEMPLATE = `You are Tempi, the friendly virtual customer service rep for Mechanical Temp, a commercial and residential HVAC company in Southfield, MI serving Metro Detroit. You're warm, helpful, and a little playful — like a knowledgeable friend at the front desk who's also great at gently moving the conversation forward.
+
+ABOUT MECHANICAL TEMP:
+- Address: 23093 Telegraph Rd, Southfield, MI 48033
+- Phone: (313) 282-4758
+- Hours: Weekdays 8am-4pm, Weekends 10am-2pm, 24/7 emergency service available
+- Service area: Southfield, Dearborn, Livonia, Novi, Canton, Plymouth, Northville, West Bloomfield, Royal Oak, Ferndale, Westland, Farmington Hills, Redford and surrounding Metro Detroit
+- Authorized AirQuest dealer (main brand for new installs), but our techs service ALL brands
+- Owner: Brian
+- Office email: office@mechanicaltemp.com
+- CUSTOMER PORTAL: https://customer.mechanicaltemp.com/ — invoices, payments, scheduling.
+
+{{PAGE_CONTEXT}}
+
+==== CONVERSATION ROUTING ====
+
+7 conversation types:
+
+1. SERVICE_LEAD — Residential customer. Most common here for install/replacement shoppers.
+2. COMMERCIAL_DISPATCH — Facility manager. Rare on this page; redirect to commercial-hvac.html if needed.
+3. PAPERWORK — W-9, COI, vendor docs.
+4. BILLING — Invoice/payment question.
+5. VENDOR_SALES — Someone selling to us.
+6. EXISTING_CUSTOMER — Follow-up on past job.
+7. GENERAL_INFO — Just questions.
+
+==== HOW TO HANDLE EACH TYPE ====
+
+SERVICE_LEAD (most common — they want install/replacement quote):
+- If they already filled out the wizard form: don't re-collect, just answer their question and reassure
+- If they bypassed the wizard and want to chat: collect name, phone, address, what they're looking at (furnace/AC/full system). End with [LEAD_READY:SERVICE_LEAD].
+
+PAPERWORK: collect company, contact, email, what doc. End with [LEAD_READY:PAPERWORK].
+BILLING: collect name, phone, address or invoice #, the question. End with [LEAD_READY:BILLING].
+VENDOR_SALES (worth time): collect company, contact, phone, what they're offering. End with [LEAD_READY:VENDOR_SALES]. For spam: "Brian handles vendor inquiries — send your pitch to office@mechanicaltemp.com." NO capture.
+EXISTING_CUSTOMER: collect name, phone, address, what they need. End with [LEAD_READY:EXISTING_CUSTOMER].
+GENERAL_INFO: answer + buttons, no capture.
+
+==== CRITICAL FORMAT RULES ====
+
+EVERY response MUST end with quick-reply buttons:
+[BTN: Option 1 | Option 2 | Option 3]
+
+- 2-4 buttons (3 ideal)
+- Each label MAX 4 words
+- Always include forward option AND escape option
+
+==== ENGAGEMENT RULES ====
+
+1. KEEP IT SHORT. 1-2 sentences + buttons.
+2. EXPLAIN GOOD/BETTER/BEST when asked: 
+   - Good = single-stage, 80-92% AFUE / 13-14 SEER — budget-friendly, solid
+   - Better = two-stage, 95%+ AFUE / 15-16 SEER — quieter, lower bills
+   - Best = modulating/variable speed, 96%+ AFUE / 17+ SEER — premium comfort, lowest bills
+3. NEVER invent install prices. "Furnace installs usually run $3,000-$6,000+, full systems $7,000-$15,000+. Your tech gives the exact written quote after a free in-home visit."
+4. EMPHASIZE THE WIZARD if they seem hesitant: "If you finish picking your options the form auto-fills your selections — way faster than typing everything to me."
+5. For QUIET CAPABILITIES: warm yes — "Yep, we do that! Not the first thing we advertise but we've got 20+ years experience."
+6. For HARD NO services: politely decline.
+7. Angry customers: acknowledge, escalate to Brian.
+8. After-hours emergencies: call (313) 282-4758 directly.
+
+==== SYSTEM-SELECTOR-SPECIFIC GREETING ====
+
+Your opening adapts to what step they're on. Default:
+
+"Hi! 👋 I'm Tempi. I see you're checking out a new system — happy to help with any questions while you go through the form!"
+
+[BTN: Good vs Better vs Best? | What happens after I submit? | Talk to a person | Different question]
+
+If they've already submitted (Step 5):
+"Thanks for submitting! 🎉 We'll be in touch shortly with your written estimate. Anything else I can help with in the meantime?"
+
+[BTN: When will I hear back? | What does the visit look like? | Different question]
+
+==== CURRENT CAPABILITIES ====
+${capabilitiesBlock}
+
+REMEMBER: This is an install-shopping page. The wizard is doing the lead capture already — your job is to keep them confident enough to finish it. Identify type → collect ONLY needed fields → fire [LEAD_READY:TYPE] → done. Every response has [BTN: ...] at the end.`;
+            
+            const chatBubble = document.getElementById('chat-bubble');
+            const chatWidget = document.getElementById('chat-widget');
+            const closeBtn = document.getElementById('close-chat-btn');
+            const messagesEl = document.getElementById('chat-messages');
+            const inputEl = document.getElementById('chat-input');
+            const sendBtn = document.getElementById('send-chat-btn');
+            const chatBadge = document.getElementById('chat-badge');
+            
+            const TEMPI_AVATAR_IMG = `<img src="https://cdn.mechanicaltemp.com/tempi/tempi-portrait.png" alt="Tempi" style="width:24px;height:24px;border-radius:50%;flex-shrink:0;object-fit:cover;border:1.5px solid #1e293b;">`;
+            
+            function getCurrentSystemPrompt() {
+                return SYSTEM_PROMPT_TEMPLATE.replace('{{PAGE_CONTEXT}}', buildPageContext());
+            }
+            
+            function parseButtons(text) {
+                const match = text.match(/\[BTN:\s*([^\]]+)\]/);
+                if (!match) return { cleanText: text, buttons: [] };
+                const buttons = match[1].split('|').map(s => s.trim()).filter(s => s.length > 0);
+                const cleanText = text
+                    .replace(/\[BTN:[^\]]+\]/g, '')
+                    .replace(/\[LEAD_READY:[^\]]+\]/g, '')
+                    .replace(/\[LEAD_READY\]/g, '')
+                    .trim();
+                return { cleanText, buttons };
+            }
+            
+            function escapeHtml(s) {
+                const div = document.createElement('div');
+                div.textContent = s;
+                return div.innerHTML;
+            }
+            
+            function addBotMessage(text, buttons) {
+                const row = document.createElement('div');
+                row.className = 'msg-row';
+                row.innerHTML = TEMPI_AVATAR_IMG + `<div class="msg-bubble bot">${escapeHtml(text)}</div>`;
+                messagesEl.appendChild(row);
+                
+                if (buttons && buttons.length > 0) {
+                    const btnRow = document.createElement('div');
+                    btnRow.className = 'inline-buttons';
+                    buttons.forEach(label => {
+                        const btn = document.createElement('button');
+                        btn.className = 'inline-btn';
+                        btn.textContent = label;
+                        btn.addEventListener('click', () => {
+                            btnRow.querySelectorAll('.inline-btn').forEach(b => b.disabled = true);
+                            handleSend(label);
+                        });
+                        btnRow.appendChild(btn);
+                    });
+                    messagesEl.appendChild(btnRow);
+                }
+                scrollToBottom();
+            }
+            
+            function addUserMessage(text) {
+                const row = document.createElement('div');
+                row.className = 'msg-row user';
+                row.innerHTML = `<div class="msg-bubble user">${escapeHtml(text)}</div>`;
+                messagesEl.appendChild(row);
+                scrollToBottom();
+            }
+            
+            function showTyping() {
+                const row = document.createElement('div');
+                row.className = 'msg-row';
+                row.id = 'typing-row';
+                row.innerHTML = TEMPI_AVATAR_IMG + `<div class="msg-bubble bot typing"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>`;
+                messagesEl.appendChild(row);
+                scrollToBottom();
+            }
+            
+            function hideTyping() { const t = document.getElementById('typing-row'); if (t) t.remove(); }
+            function scrollToBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
+            function showBadge(n) { chatBadge.textContent = n; chatBadge.classList.remove('hidden'); }
+            function hideBadge() { chatBadge.classList.add('hidden'); }
+            
+            function openWidget() {
+                chatWidget.classList.remove('hidden');
+                widgetEverOpened = true;
+                hideBadge();
+                if (!hasGreeted) {
+                    hasGreeted = true;
+                    setTimeout(() => {
+                        const step = window.selectorState.currentStep;
+                        if (step === 5) {
+                            addBotMessage(
+                                "Thanks for submitting! 🎉 We'll be in touch shortly with your written estimate. Anything else I can help with in the meantime?",
+                                ["When will I hear back?", "What does the visit look like?", "Different question"]
+                            );
+                        } else {
+                            addBotMessage(
+                                "Hi! 👋 I'm Tempi. I see you're checking out a new system — happy to help with any questions while you go through the form!",
+                                ["Good vs Better vs Best?", "What happens after I submit?", "Talk to a person", "Different question"]
+                            );
+                        }
+                    }, 300);
+                }
+                setTimeout(() => inputEl.focus(), 100);
+            }
+            
+            function closeWidget() {
+                chatWidget.classList.add('hidden');
+                if (conversationHistory.length > 0 && !leadCaptured) showBadge('!');
+            }
+            
+            function toggleWidget() {
+                if (chatWidget.classList.contains('hidden')) openWidget();
+                else closeWidget();
+            }
+            
+            async function sendToClaude(userMessage) {
+                conversationHistory.push({ role: 'user', content: userMessage });
+                try {
+                    const res = await fetch(CLAUDE_PROXY_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            model: 'claude-haiku-4-5-20251001',
+                            max_tokens: 400,
+                            system: getCurrentSystemPrompt(),
+                            messages: conversationHistory
+                        })
+                    });
+                    if (!res.ok) throw new Error('Proxy error: ' + res.status);
+                    const data = await res.json();
+                    const reply = data.content?.filter(b => b.type === 'text')?.map(b => b.text)?.join('\n') || "Hmm, I didn't catch that. Could you try again? [BTN: Try again | Talk to a person]";
+                    conversationHistory.push({ role: 'assistant', content: reply });
+                    return reply;
+                } catch (err) {
+                    console.error('Claude call failed:', err);
+                    return "I'm having trouble connecting right now 😕 Please call us at (313) 282-4758 and we'll help you right away! [BTN: Try again | Call now]";
+                }
+            }
+            
+            function extractLeadInfo(conversation, leadType) {
+                const fullText = conversation.map(m => m.content).join('\n');
+                const phoneMatch = fullText.match(/(\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/);
+                const typeLabels = {
+                    'SERVICE_LEAD': '🚨 SERVICE LEAD',
+                    'COMMERCIAL_DISPATCH': '🏢 COMMERCIAL DISPATCH - URGENT',
+                    'PAPERWORK': '📋 PAPERWORK REQUEST',
+                    'BILLING': '💰 BILLING INQUIRY',
+                    'VENDOR_SALES': '🤝 VENDOR/SALES PITCH',
+                    'EXISTING_CUSTOMER': '👤 EXISTING CUSTOMER FOLLOW-UP',
+                    'GENERAL_INFO': 'ℹ️ GENERAL INFO REQUEST'
+                };
+                const label = typeLabels[leadType] || '📩 CHAT INQUIRY';
+                const sel = window.selectorState.selections;
+                const selectionSummary = (sel.system_type || sel.home_size || sel.efficiency_level)
+                    ? `\n\n--- WIZARD SELECTIONS (if any) ---\nSystem Type: ${sel.system_type || 'Not selected'}\nHome Size: ${sel.home_size || 'Not selected'}\nEfficiency Level: ${sel.efficiency_level || 'Not selected'}\n`
+                    : '';
+                return {
+                    from_name: `Tempi (System Selector) - ${label}`,
+                    phone: phoneMatch ? phoneMatch[0] : 'See transcript',
+                    message: `${label}\n=========================================\n\nSource: SYSTEM SELECTOR PAGE\nConversation Type: ${leadType}\nTime: ${new Date().toLocaleString('en-US', { timeZone: 'America/Detroit' })} ET${selectionSummary}\n\n--- FULL TRANSCRIPT ---\n\n` + 
+                        conversation.map(m => `[${m.role === 'user' ? 'CUSTOMER' : 'TEMPI'}]: ${m.content.replace(/\[LEAD_READY:[^\]]+\]/g,'').replace(/\[LEAD_READY\]/g,'').replace(/\[BTN:[^\]]+\]/g,'').trim()}`).join('\n\n')
+                };
+            }
+            
+            async function fireLeadEmail(leadType) {
+                if (leadCaptured) return;
+                leadCaptured = true;
+                try {
+                    const leadData = extractLeadInfo(conversationHistory, leadType);
+                    await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, leadData);
+                    console.log(`Lead email sent: ${leadType}`);
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'chat_lead', { 
+                            'event_category': 'conversion',
+                            'event_label': leadType + '_system_selector'
+                        });
+                    }
+                } catch (err) { console.error('Lead email failed:', err); leadCaptured = false; }
+            }
+            
+            async function handleSend(text) {
+                text = (text || inputEl.value).trim();
+                if (!text) return;
+                addUserMessage(text);
+                inputEl.value = '';
+                sendBtn.disabled = true;
+                inputEl.disabled = true;
+                showTyping();
+                const reply = await sendToClaude(text);
+                hideTyping();
+                const { cleanText, buttons } = parseButtons(reply);
+                addBotMessage(cleanText, buttons);
+                const leadMatch = reply.match(/\[LEAD_READY:(\w+)\]/);
+                if (leadMatch) {
+                    fireLeadEmail(leadMatch[1]);
+                } else if (reply.includes('[LEAD_READY]')) {
+                    fireLeadEmail('SERVICE_LEAD');
+                }
+                sendBtn.disabled = false;
+                inputEl.disabled = false;
+                inputEl.focus();
+            }
+            
+            chatBubble.addEventListener('click', toggleWidget);
+            closeBtn.addEventListener('click', closeWidget);
+            sendBtn.addEventListener('click', () => handleSend());
+            inputEl.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } });
+            inputEl.addEventListener('input', () => { inputEl.style.height = 'auto'; inputEl.style.height = Math.min(inputEl.scrollHeight, 80) + 'px'; });
+            
+            setTimeout(() => { if (!widgetEverOpened) showBadge('1'); }, 15000);
+        })();
     </script>
 
 </body>
 </html>
-
