@@ -7,7 +7,6 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-0G63KLB2B0');
     </script>
     <meta charset="UTF-8">
@@ -16,6 +15,11 @@
     <!-- SEO METADATA -->
     <title>Commercial HVAC & Building Automation | Mechanical Temp</title>
     <meta name="description" content="Mechanical Temp is Southfield's premier commercial HVAC and Controls contractor. We service RTUs, Boilers, and replace locked legacy controls with open-source Cypher technology.">
+    <link rel="canonical" href="https://mechanicaltemp.com/commercial-hvac.html" />
+    
+    <!-- Performance hints -->
+    <link rel="preconnect" href="https://cdn.mechanicaltemp.com">
+    <link rel="dns-prefetch" href="https://tempi.summer-unit-44dd.workers.dev">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,8 +35,7 @@
             scroll-behavior: smooth;
         }
         .service-hero {
-            /* Updated to a more technical/commercial image */
-            background: linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.85)), url('https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=2500&auto=format&fit=crop') center center / cover no-repeat;
+            background: linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.85)), url('https://cdn.mechanicaltemp.com/photos/commercial-rtus-church-rooftop.jpg') center center / cover no-repeat;
         }
         /* Custom scrollbar for modal content */
         .modal-body::-webkit-scrollbar { width: 8px; }
@@ -40,12 +43,57 @@
         .modal-body::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
         .modal-body::-webkit-scrollbar-thumb:hover { background: #555; }
 
-        /* Chat Widget Styles */
-        #chat-bubble { position: fixed; bottom: 20px; right: 20px; z-index: 1000; cursor: pointer; background-color: #0ea5e9; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: transform 0.2s ease-in-out; }
-        #chat-bubble:hover { transform: scale(1.1); background-color: #0284c7; }
-        #chat-widget { position: fixed; bottom: 90px; right: 20px; z-index: 999; width: 350px; background-color: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); overflow: hidden; display: flex; flex-direction: column; transition: opacity 0.3s ease, transform 0.3s ease; transform-origin: bottom right; }
+        /* ============== TEMPI CHAT WIDGET ============== */
+        #chat-bubble { position: fixed; bottom: 20px; right: 20px; z-index: 1000; cursor: pointer; background-color: #0ea5e9; width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.25); transition: transform 0.2s ease-in-out; border: 3px solid white; }
+        #chat-bubble:hover { transform: scale(1.08); background-color: #0284c7; }
+        #chat-bubble img { display: block; width: 58px; height: 58px; border-radius: 50%; object-fit: cover; }
+        #chat-badge { position: absolute; top: -4px; right: -4px; background: #ef4444; color: white; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; font-weight: bold; display: flex; align-items: center; justify-content: center; border: 2px solid white; animation: tempi-bounce 1.2s infinite; }
+        #chat-badge.hidden { display: none; }
+        @keyframes tempi-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+        #chat-widget { position: fixed; bottom: 95px; right: 20px; z-index: 999; width: 380px; max-width: calc(100vw - 40px); height: 600px; max-height: calc(100vh - 130px); background-color: white; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); overflow: hidden; display: flex; flex-direction: column; transition: opacity 0.3s ease, transform 0.3s ease; transform-origin: bottom right; }
         #chat-widget.hidden { opacity: 0; transform: scale(0.9); pointer-events: none; }
-        .chat-header { background-color: #0c4a6e; color: white; padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
+        .chat-header { background: linear-gradient(135deg, #0c4a6e 0%, #0369a1 100%); color: white; padding: 12px 16px; display: flex; align-items: center; gap: 12px; }
+        .tempi-header-avatar { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; overflow: hidden; border: 2px solid white; }
+        .tempi-header-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .chat-header-info { flex: 1; }
+        .chat-header-info .name { font-weight: bold; font-size: 16px; line-height: 1.2; }
+        .chat-header-info .status { font-size: 11px; opacity: 0.9; display: flex; align-items: center; gap: 5px; margin-top: 2px; }
+        .status-dot { width: 7px; height: 7px; background: #10b981; border-radius: 50%; box-shadow: 0 0 0 2px rgba(16,185,129,0.3); }
+        #close-chat-btn { background: none; border: none; color: white; font-size: 24px; cursor: pointer; opacity: 0.8; padding: 0; line-height: 1; }
+        #close-chat-btn:hover { opacity: 1; }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 16px 12px; background-color: #f1f5f9; display: flex; flex-direction: column; gap: 10px; }
+        .chat-messages::-webkit-scrollbar { width: 6px; }
+        .chat-messages::-webkit-scrollbar-track { background: transparent; }
+        .chat-messages::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .msg-row { display: flex; align-items: flex-end; gap: 6px; animation: tempi-fadeIn 0.3s ease-out; }
+        @keyframes tempi-fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .msg-row.user { justify-content: flex-end; }
+        .msg-bubble { position: relative; padding: 10px 14px; border-radius: 18px; font-size: 13.5px; line-height: 1.45; max-width: 75%; word-wrap: break-word; border: 2.5px solid #1e293b; }
+        .msg-bubble.bot { background: white; color: #1e293b; border-bottom-left-radius: 4px; }
+        .msg-bubble.bot::before { content: ''; position: absolute; bottom: -2px; left: -10px; width: 0; height: 0; border-top: 10px solid #1e293b; border-right: 10px solid transparent; }
+        .msg-bubble.bot::after { content: ''; position: absolute; bottom: 1px; left: -5px; width: 0; height: 0; border-top: 7px solid white; border-right: 7px solid transparent; }
+        .msg-bubble.user { background: #0ea5e9; color: white; border-bottom-right-radius: 4px; border-color: #0c4a6e; }
+        .msg-bubble.user::before { content: ''; position: absolute; bottom: -2px; right: -10px; width: 0; height: 0; border-top: 10px solid #0c4a6e; border-left: 10px solid transparent; }
+        .msg-bubble.user::after { content: ''; position: absolute; bottom: 1px; right: -5px; width: 0; height: 0; border-top: 7px solid #0ea5e9; border-left: 7px solid transparent; }
+        .msg-bubble.typing { display: flex; gap: 4px; padding: 14px 16px; }
+        .typing-dot { width: 6px; height: 6px; background: #64748b; border-radius: 50%; animation: tempi-typingBounce 1.2s infinite; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes tempi-typingBounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-5px); opacity: 1; } }
+        .inline-buttons { display: flex; gap: 6px; flex-wrap: wrap; margin-left: 34px; margin-top: 2px; animation: tempi-fadeIn 0.3s ease-out; }
+        .inline-btn { background: #e0f2fe; color: #0c4a6e; border: 1.5px solid #7dd3fc; border-radius: 14px; padding: 5px 11px; font-size: 11.5px; cursor: pointer; font-weight: 600; transition: all 0.15s; font-family: inherit; white-space: nowrap; }
+        .inline-btn:hover { background: #0ea5e9; color: white; border-color: #0ea5e9; transform: translateY(-1px); }
+        .inline-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .chat-input-row { padding: 10px 12px; border-top: 1px solid #e2e8f0; background-color: white; display: flex; gap: 6px; align-items: flex-end; }
+        #chat-input { flex: 1; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 8px 12px; resize: none; font-family: inherit; font-size: 13.5px; max-height: 80px; outline: none; transition: border-color 0.15s; }
+        #chat-input:focus { border-color: #0ea5e9; }
+        #send-chat-btn { background-color: #0ea5e9; color: white; border: none; border-radius: 10px; padding: 8px 14px; cursor: pointer; font-weight: bold; font-size: 13px; flex-shrink: 0; }
+        #send-chat-btn:hover { background-color: #0284c7; }
+        #send-chat-btn:disabled { background-color: #94a3b8; cursor: not-allowed; }
+        .chat-disclaimer { font-size: 10px; color: #94a3b8; text-align: center; padding: 4px 8px 6px; background: white; }
+        .tempi-portal-bar { display: flex; align-items: center; gap: 7px; padding: 9px 14px; background: linear-gradient(90deg, #f0f9ff 0%, #e0f2fe 100%); border-bottom: 1px solid #bae6fd; color: #0c4a6e; font-size: 12.5px; font-weight: 700; text-decoration: none; transition: background 0.15s; }
+        .tempi-portal-bar:hover { background: linear-gradient(90deg, #e0f2fe 0%, #bae6fd 100%); }
+        .tempi-portal-bar svg:first-child { color: #0ea5e9; flex-shrink: 0; }
     </style>
 </head>
 <body class="text-gray-800">
@@ -54,7 +102,7 @@
     <header class="bg-gray-900/95 sticky top-0 z-40 p-4 shadow-md backdrop-blur-sm">
         <nav class="container mx-auto flex justify-between items-center text-white">
             <a href="index.html" class="block">
-                <img src="https://i.imgur.com/YJvJw7V.png" alt="Mechanical Temp Logo" class="h-12 w-auto">
+                <img src="https://cdn.mechanicaltemp.com/logos/black/full/black_logo_white_background.png" alt="Mechanical Temp Logo" width="160" height="48" class="h-12 w-auto">
             </a>
             <ul class="hidden md:flex space-x-6 font-medium">
                 <li><a href="index.html" class="hover:text-sky-400">Home</a></li>
@@ -65,7 +113,7 @@
             </ul>
             <!-- Mobile Hamburger -->
             <div class="md:hidden">
-                <button id="mobile-menu-button" class="text-white focus:outline-none">
+                <button id="mobile-menu-button" class="text-white focus:outline-none" aria-label="Open menu">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
                 </button>
             </div>
@@ -188,7 +236,7 @@
                 <!-- Cypher Tech Specs (Visual) -->
                 <div class="bg-slate-800 rounded-2xl border border-slate-700 p-8 max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-10">
                     <div class="md:w-1/3">
-                        <img src="https://imageview.mechanicaltemp.com/objects/uploads/a58483f3-52d2-4771-8fb3-912a04297814" alt="Cypher Controller" class="rounded-lg shadow-lg border border-slate-600">
+                        <img src="https://cdn.mechanicaltemp.com/photos/commercial-rtu-controls-open.jpg" alt="Cypher Edge-X1 Controller installed in a commercial control panel" width="600" height="400" loading="lazy" decoding="async" class="rounded-lg shadow-lg border border-slate-600">
                     </div>
                     <div class="md:w-2/3">
                         <h3 class="text-2xl font-bold text-white mb-4">Meet the Edge-X1 Controller</h3>
@@ -196,7 +244,7 @@
                             This isn't just a thermostat; it's a quad-core server for your mechanical room. It speaks BACnet, Modbus, and MQTT natively, allowing us to integrate your existing equipment without ripping everything out.
                         </p>
                         <div class="flex gap-4">
-                            <a href="https://cypher.mechanicaltemp.com" target="_blank" class="text-sky-400 hover:text-sky-300 font-bold flex items-center gap-2">
+                            <a href="https://cypher.mechanicaltemp.com" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 font-bold flex items-center gap-2">
                                 View Technical Specs <i class="fa-solid fa-arrow-right"></i>
                             </a>
                         </div>
@@ -213,11 +261,10 @@
                      We are an approved vendor for major facility management platforms. We understand the specific IVR, insurance, and reporting requirements of national retail and logistics clients.
                  </p>
                  <div class="flex justify-center items-center gap-8 flex-wrap">
-                     <a href="https://www.enternest.com/" target="_blank" class="block p-6 bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-lg transition-all hover:-translate-y-1">
-                        <img src="https://www.enternest.com/hs-fs/hubfs/NESTLogo_950px_Dark.png?width=1900&height=674&name=NESTLogo_950px_Dark.png" alt="NEST Logo" class="h-12 mx-auto opacity-80 hover:opacity-100 transition-opacity">
+                     <a href="https://www.enternest.com/" target="_blank" rel="noopener" class="block p-6 bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-lg transition-all hover:-translate-y-1">
+                        <img src="https://www.enternest.com/hs-fs/hubfs/NESTLogo_950px_Dark.png?width=1900&height=674&name=NESTLogo_950px_Dark.png" alt="NEST Logo" loading="lazy" class="h-12 mx-auto opacity-80 hover:opacity-100 transition-opacity">
                         <p class="text-xs font-bold text-sky-700 uppercase tracking-wider mt-4">Elite Service Provider</p>
                      </a>
-                     <!-- Add more logos here as needed -->
                 </div>
             </div>
         </section>
@@ -265,157 +312,452 @@
         </div>
     </footer>
 
-    <!-- SCHEDULER & CHAT WIDGETS -->
-    <div id="chat-bubble">
-        <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-3.04 8.25-6.75 8.25-1.425 0-2.756-.382-3.937-1.043a.75.75 0 01-.263-.761l.574-2.286a.75.75 0 00-.534-.686 8.25 8.25 0 01-3.243-5.468C3.04 12.25 6 4.5 10.5 4.5c4.634 0 8.25 3.04 8.25 6.75z" />
-        </svg>        
-    </div>
-
-    <div id="chat-widget" class="hidden">
-        <div class="chat-header">
-            <h3>Chat with Us</h3>
-            <button id="close-chat-btn">&times;</button>
-        </div>
-        <form id="chat-form">
-            <div class="chat-body">
-                <p>Questions about commercial service? We'll text you back.</p>
-                <div class="mt-4 space-y-3">
-                    <input type="text" id="chat-name" placeholder="Your Name" required class="w-full border border-slate-300 rounded-md px-3 py-2 text-sm">
-                    <input type="tel" id="chat-phone" placeholder="Your Phone Number" required class="w-full border border-slate-300 rounded-md px-3 py-2 text-sm">
-                </div>
-                <div id="chat-confirmation" class="hidden mt-2">Message Sent! ✔️</div>
-            </div>
-            <div class="chat-footer">
-                <textarea id="chat-input" placeholder="How can we help?" rows="2" required></textarea>
-                <button id="send-chat-btn" type="submit">Send Message</button>
-            </div>
-        </form>
-    </div>
-
-    <!-- SCHEDULER MODAL (Preserved from your existing code) -->
+    <!-- SCHEDULER MODAL -->
     <div id="scheduler-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4 hidden">
         <div id="hvac-scheduler-widget" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
-            <button onclick="closeScheduler()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 z-20"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+            <button onclick="closeScheduler()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 z-20" aria-label="Close scheduler"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
             <div class="bg-gradient-to-r from-sky-600 to-cyan-500 text-white p-6 sm:p-8 text-center shrink-0">
                 <h2 class="text-2xl sm:text-3xl font-bold">Schedule Commercial Service</h2>
-                <p class="text-sm sm:text-base opacity-90 mt-1">We prioritize commercial outages.</p>
+                <p class="text-sm sm:text-base opacity-90 mt-1">We prioritize commercial outages • 24/7 dispatch available</p>
+                <div class="bg-black/20 text-xs sm:text-sm p-2 rounded-lg mt-3 inline-block">🔒 Secure Form • For After-Hours Emergencies Call (313) 282-4758</div>
             </div>
             <div class="p-6 sm:p-8 overflow-y-auto modal-body">
-                <!-- Reusing your existing scheduler logic structure -->
+                <div class="flex justify-center items-center mb-6">
+                    <div id="progress-1" class="w-10 h-10 rounded-full flex items-center justify-center font-bold bg-sky-600 text-white">1</div>
+                    <div class="flex-auto h-1 bg-gray-200"><div id="progress-line-1" class="h-1 bg-sky-600 w-0 transition-all duration-300"></div></div>
+                    <div id="progress-2" class="w-10 h-10 rounded-full flex items-center justify-center font-bold bg-gray-200 text-gray-500">2</div>
+                    <div class="flex-auto h-1 bg-gray-200"><div id="progress-line-2" class="h-1 bg-sky-600 w-0 transition-all duration-300"></div></div>
+                    <div id="progress-3" class="w-10 h-10 rounded-full flex items-center justify-center font-bold bg-gray-200 text-gray-500">3</div>
+                    <div class="flex-auto h-1 bg-gray-200"><div id="progress-line-3" class="h-1 bg-sky-600 w-0 transition-all duration-300"></div></div>
+                    <div id="progress-4" class="w-10 h-10 rounded-full flex items-center justify-center font-bold bg-gray-200 text-gray-500">4</div>
+                </div>
                 <div id="step-1">
                     <h3 class="text-2xl font-bold text-center mb-4">Select a Date</h3>
                     <div id="calendar" class="grid grid-cols-7 gap-2"></div>
                     <div class="text-center mt-6"><button id="next-btn-1" onclick="nextStep()" class="bg-sky-500 text-white font-bold py-3 px-10 rounded-lg disabled:bg-gray-300" disabled>Next Step</button></div>
                 </div>
-                <!-- ... additional steps hidden for brevity but logic works ... -->
                 <div id="step-2" class="hidden">
-                    <h3 class="text-2xl font-bold text-center mb-4">Select Time</h3>
-                    <div id="time-slots" class="grid grid-cols-3 gap-4"></div>
-                    <div class="text-center mt-6"><button onclick="prevStep()" class="bg-gray-500 text-white font-bold py-3 px-6 rounded-lg mr-2">Back</button><button id="next-btn-2" onclick="nextStep()" class="bg-sky-500 text-white font-bold py-3 px-10 rounded-lg disabled:bg-gray-300" disabled>Next</button></div>
+                    <h3 class="text-2xl font-bold text-center mb-4">Select a Time</h3>
+                    <div class="bg-slate-100 p-4 rounded-lg text-center mb-4"><h4 class="font-semibold">Selected Date: <span id="selected-date"></span></h4></div>
+                    <div id="time-slots" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-6"></div>
+                    <div class="flex justify-center gap-4 mt-6"><button onclick="prevStep()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-10 rounded-lg">Back</button><button id="next-btn-2" onclick="nextStep()" class="bg-sky-500 text-white font-bold py-3 px-10 rounded-lg disabled:bg-gray-300" disabled>Next Step</button></div>
                 </div>
                 <div id="step-3" class="hidden">
-                    <h3 class="text-2xl font-bold text-center mb-4">Contact Details</h3>
+                    <h3 class="text-2xl font-bold text-center mb-4">Facility Information</h3>
+                    <div class="bg-slate-100 p-4 rounded-lg mb-4"><h4 class="font-semibold text-center">Appointment Details:</h4><p class="text-center text-sm"><strong class="mr-2">Date:</strong><span id="confirm-date"></span><strong class="mx-2">Time:</strong><span id="confirm-time"></span></p></div>
                     <form id="contact-form" class="space-y-4">
-                        <input type="text" name="company-name" placeholder="Company Name" class="w-full border p-3 rounded">
-                        <input type="text" name="name" placeholder="Contact Name" class="w-full border p-3 rounded" required>
-                        <input type="tel" name="phone" placeholder="Phone" class="w-full border p-3 rounded" required>
-                        <input type="email" name="email" placeholder="Email" class="w-full border p-3 rounded" required>
-                        <textarea name="message" placeholder="Issue Description" class="w-full border p-3 rounded"></textarea>
+                        <div><label class="font-semibold">Service Needed *</label><select id="service-type" name="service-type" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg"><option value="">Select Service Type</option><option value="Commercial RTU Repair" selected>Commercial RTU Repair</option><option value="Commercial RTU Install">Commercial RTU Install</option><option value="Commercial Preventative Maintenance">Preventative Maintenance Contract</option><option value="Boiler / Chiller Service">Boiler / Chiller Service</option><option value="Building Automation / Controls">Building Automation / Controls (Cypher)</option><option value="Emergency Commercial Service">Emergency Commercial Service</option><option value="Other">Other (specify in notes)</option></select></div>
+                        <div><label class="font-semibold">Company / Facility Name *</label><input type="text" id="company-name" name="company-name" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg" placeholder="e.g., ABC Logistics, Suburban Office Park"></div>
+                        <div><label class="font-semibold">Contact Name *</label><input type="text" id="name" name="name" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg"></div>
+                        <div><label class="font-semibold">Email Address *</label><input type="email" id="email" name="email" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg"></div>
+                        <div><label class="font-semibold">Phone Number *</label><input type="tel" id="phone" name="phone" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg"></div>
+                        <div><label class="font-semibold">Service Address *</label><input type="text" id="address" name="address" placeholder="Building address where work is needed" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg"></div>
+                        <div><label class="font-semibold">Equipment Details / Issue Description</label><textarea id="message" name="message" rows="3" placeholder="Equipment make/model, RTU count, what's failing, any IVR/work-order requirements..." class="w-full mt-1 p-3 border border-gray-300 rounded-lg"></textarea></div>
+                        <div><label class="font-semibold">Security Check: What is <span id="math-question"></span>? *</label><input type="number" id="captcha" name="captcha" required placeholder="Enter the answer" class="w-full mt-1 p-3 border border-gray-300 rounded-lg"></div>
+                        <div><label class="flex items-center cursor-pointer"><input type="checkbox" id="terms" name="terms" required class="mr-2 h-4 w-4"> I confirm this is a genuine service request.</label></div>
                     </form>
-                    <div class="text-center mt-6"><button onclick="prevStep()" class="bg-gray-500 text-white font-bold py-3 px-6 rounded-lg mr-2">Back</button><button id="submit-btn" onclick="submitAppointment()" class="bg-sky-500 text-white font-bold py-3 px-10 rounded-lg">Book Now</button></div>
+                    <div class="flex justify-center gap-4 mt-6"><button onclick="prevStep()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-10 rounded-lg">Back</button><button id="submit-btn" onclick="submitAppointment()" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-10 rounded-lg">Request Dispatch</button></div>
                 </div>
-                <div id="step-4" class="hidden text-center p-10">
-                    <h3 class="text-2xl font-bold text-green-600">Request Received!</h3>
-                    <p>Dispatch will contact you shortly.</p>
-                    <button onclick="closeScheduler(true)" class="mt-4 bg-gray-500 text-white py-2 px-6 rounded">Close</button>
+                <div id="step-4" class="hidden">
+                    <div class="text-center p-6">
+                        <div class="text-6xl text-green-500 mb-4">✓</div>
+                        <h3 class="text-2xl font-bold">Dispatch Request Received!</h3>
+                        <p class="text-slate-600 mt-2">Thanks — our dispatch team will reach out shortly to confirm the appointment and any access requirements.</p>
+                        <div class="bg-slate-100 p-4 rounded-lg text-left mt-6 text-sm"><h4 class="font-bold text-center mb-2">Your Service Request:</h4><p><strong>Service:</strong> <span id="final-service"></span></p><p><strong>Date:</strong> <span id="final-date"></span></p><p><strong>Time:</strong> <span id="final-time"></span></p><p><strong>Address:</strong> <span id="final-address"></span></p><p><strong>Name:</strong> <span id="final-name"></span></p><p><strong>Email:</strong> <span id="final-email"></span></p><p><strong>Phone:</strong> <span id="final-phone"></span></p></div>
+                        <div class="mt-6"><button onclick="closeScheduler(true)" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-10 rounded-lg">Done</button></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Scripts (Reused from your original file) -->
+    <!-- =================================================================== -->
+    <!-- TEMPI CHAT BUBBLE                                                    -->
+    <!-- =================================================================== -->
+    <div id="chat-bubble" aria-label="Open chat with Tempi">
+        <img src="https://cdn.mechanicaltemp.com/tempi/tempi-portrait.png" alt="Tempi">
+        <span id="chat-badge" class="hidden">1</span>
+    </div>
+
+    <!-- TEMPI CHAT WIDGET -->
+    <div id="chat-widget" class="hidden">
+        <div class="chat-header">
+            <div class="tempi-header-avatar">
+                <img src="https://cdn.mechanicaltemp.com/tempi/tempi-portrait.png" alt="Tempi">
+            </div>
+            <div class="chat-header-info">
+                <div class="name">Tempi</div>
+                <div class="status"><span class="status-dot"></span>Mechanical Temp · online</div>
+            </div>
+            <button id="close-chat-btn" aria-label="Minimize chat">&times;</button>
+        </div>
+        
+        <a href="https://customer.mechanicaltemp.com/" target="_blank" rel="noopener noreferrer" class="tempi-portal-bar" onclick="if(typeof gtag!=='undefined')gtag('event','click_customer_portal',{'event_category':'engagement','event_label':'tempi_header'})">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm3 0a1 1 0 011-1h1a1 1 0 110 2H8a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
+            <span>Customer Portal · Pay Online</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left: auto;"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+        </a>
+        
+        <div id="chat-messages" class="chat-messages"></div>
+        
+        <div class="chat-input-row">
+            <textarea id="chat-input" placeholder="Type your message..." rows="1"></textarea>
+            <button id="send-chat-btn" type="button">Send</button>
+        </div>
+        
+        <div class="chat-disclaimer">Powered by AI. For commercial emergencies call (313) 282-4758.</div>
+    </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
-        // ... (Keeping your exact existing JS logic for Calendar/Chat/EmailJS) ...
-        // Included simplified logic block here to ensure functionality
+    document.addEventListener("DOMContentLoaded",function(){
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if(mobileMenuButton) mobileMenuButton.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+        generateCalendar();
+        generateMathCaptcha();
+    });
+
+    // SCHEDULER MODAL LOGIC
+    const schedulerModal=document.getElementById("scheduler-modal");function openScheduler(){schedulerModal.classList.remove("hidden"),document.body.style.overflow="hidden"}function closeScheduler(e=!1){schedulerModal.classList.add("hidden"),document.body.style.overflow="auto",e&&resetForm()}schedulerModal.addEventListener("click",function(e){e.target===schedulerModal&&closeScheduler()}),emailjs.init("IJHcoSxlSQ9OPOJGS");let currentStep=1,selectedDate=null,selectedTime=null,appointmentData={},mathAnswer=0;const weekdayTimeSlots=["8:00 AM","9:00 AM","10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM"],weekendTimeSlots=["10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM"],unavailableDates=[];function generateCalendar(){const e=document.getElementById("calendar");e.innerHTML="";const t=new Date;t.setHours(0,0,0,0);["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(t=>{e.innerHTML+=`<div class="text-center font-semibold text-sm text-gray-500 p-2">${t}</div>`});const n=new Date(t.getFullYear(),t.getMonth(),1),o=n.getDay();for(let l=0;l<o;l++)e.insertAdjacentHTML("beforeend","<div></div>");for(let d=0;d<42;d++){const c=new Date(n);c.setDate(n.getDate()+d);const a=c.toISOString().split("T")[0],s=unavailableDates.includes(a)||c<t,r=document.createElement("div");r.className="text-center p-2 rounded-lg cursor-pointer transition-all duration-200",s?(r.classList.add("bg-gray-100","text-gray-300","cursor-not-allowed"),r.innerHTML=`<div class="font-bold text-lg">${c.getDate()}</div>`):(r.classList.add("border","border-gray-200","hover:bg-sky-100","hover:border-sky-500"),r.onclick=()=>selectDate(c,r),r.innerHTML=`<div class="text-xs text-gray-400">${c.toLocaleDateString("en",{month:"short"})}</div><div class="font-bold text-lg">${c.getDate()}</div>`),e.appendChild(r)}}function selectDate(e,t){document.querySelectorAll("#calendar .bg-sky-500").forEach(e=>{e.classList.remove("bg-sky-500","text-white","border-sky-500"),e.classList.add("border-gray-200")}),t.classList.add("bg-sky-500","text-white","border-sky-500"),t.classList.remove("border-gray-200"),selectedDate=e,document.getElementById("next-btn-1").disabled=!1,document.getElementById("selected-date").textContent=e.toLocaleDateString("en",{weekday:"long",year:"numeric",month:"long",day:"numeric"})}function generateTimeSlots(){const e=document.getElementById("time-slots");e.innerHTML="";const t=selectedDate.getDay(),n=0===t||6===t?weekendTimeSlots:weekdayTimeSlots;n.forEach(t=>{const o=document.createElement("div");o.className="p-3 text-center border-2 border-gray-300 rounded-lg cursor-pointer hover:border-sky-500 hover:bg-sky-100 font-semibold",o.textContent=t,o.onclick=()=>selectTime(t,o),e.appendChild(o)})}function selectTime(e,t){document.querySelectorAll("#time-slots .bg-sky-500").forEach(e=>{e.classList.remove("bg-sky-500","text-white","border-sky-500"),e.classList.add("border-gray-300")}),t.classList.add("bg-sky-500","text-white","border-sky-500"),t.classList.remove("border-gray-300"),selectedTime=e,document.getElementById("next-btn-2").disabled=!1,document.getElementById("confirm-date").textContent=selectedDate.toLocaleDateString("en",{weekday:"long",year:"numeric",month:"long",day:"numeric"}),document.getElementById("confirm-time").textContent=e}function updateProgress(){for(let e=1;e<=4;e++){const t=document.getElementById(`progress-${e}`),n=document.getElementById(`progress-line-${e-1}`);t.classList.remove("bg-sky-600","text-white","bg-green-500"),t.classList.add("bg-gray-200","text-gray-500"),e<currentStep?(t.classList.remove("bg-gray-200","text-gray-500"),t.classList.add("bg-green-500","text-white"),n&&n.classList.add("w-full","bg-green-500")):e===currentStep?(t.classList.remove("bg-gray-200","text-gray-500"),t.classList.add("bg-sky-600","text-white"),n&&n.classList.remove("w-full","bg-green-500")):n&&n.classList.remove("w-full","bg-green-500")}}function showStep(e){document.getElementById("step-1").classList.add("hidden"),document.getElementById("step-2").classList.add("hidden"),document.getElementById("step-3").classList.add("hidden"),document.getElementById("step-4").classList.add("hidden"),document.getElementById(`step-${e}`).classList.remove("hidden")}function nextStep(){(1!==currentStep||selectedDate)&&(2!==currentStep||selectedTime)&&(currentStep++,showStep(currentStep),updateProgress(),2===currentStep&&generateTimeSlots())}function prevStep(){1!==currentStep&&(currentStep--,showStep(currentStep),updateProgress())}function generateMathCaptcha(){const e=Math.floor(10*Math.random())+1,t=Math.floor(10*Math.random())+1;document.getElementById("math-question").textContent=`${e} + ${t}`,mathAnswer=e+t}function validateCaptcha(){const e=parseInt(document.getElementById("captcha").value);return e!==mathAnswer?(alert("Security check failed. Please solve the math problem correctly."),generateMathCaptcha(),document.getElementById("captcha").value="",!1):!0}function submitAppointment(){const e=document.getElementById("contact-form");if(!e.checkValidity()||!validateCaptcha())return void e.reportValidity();const t=new FormData(e);appointmentData={date:selectedDate.toLocaleDateString("en",{weekday:"long",year:"numeric",month:"long",day:"numeric"}),time:selectedTime,serviceType:t.get("service-type"),companyName:t.get("company-name")||"Not provided",name:t.get("name"),email:t.get("email"),phone:t.get("phone"),address:t.get("address"),message:t.get("message")||"No additional notes"};const n=document.getElementById("submit-btn");n.disabled=!0,n.textContent="Sending...",sendAppointmentEmail(appointmentData)}function sendAppointmentEmail(e){const t={to_email:"office@mechanicaltemp.com",cc_email:"mthvacr@gmail.com",bcc_email:"3132824758@vtext.com,3136004012@vtext.com",from_name:`[COMMERCIAL] ${e.companyName} - ${e.name}`,from_email:e.email,phone:e.phone,service_type:e.serviceType,service_address:e.address,appointment_date:e.date,appointment_time:e.time,message:`COMMERCIAL DISPATCH REQUEST\n\nCompany: ${e.companyName}\nContact: ${e.name}\n\n${e.message}`,subject:`🏢 COMMERCIAL: ${e.serviceType} - ${e.companyName} - ${e.date} ${e.time}`};emailjs.send("service_ziwf1pg","template_q5fbhd8",t).then(function(e){console.log("Email sent successfully:",e),"undefined"!=typeof gtag&&gtag("event","schedule_appointment",{event_category:"conversion",event_label:"commercial"}),showConfirmation()},function(e){console.log("Email failed:",e),alert("There was an error submitting your request. Please try again or call us directly at (313) 282-4758.");const t=document.getElementById("submit-btn");t.disabled=!1,t.textContent="Request Dispatch"})}function showConfirmation(){document.getElementById("final-service").textContent=appointmentData.serviceType,document.getElementById("final-date").textContent=appointmentData.date,document.getElementById("final-time").textContent=appointmentData.time,document.getElementById("final-address").textContent=appointmentData.address,document.getElementById("final-name").textContent=appointmentData.name,document.getElementById("final-email").textContent=appointmentData.email,document.getElementById("final-phone").textContent=appointmentData.phone,nextStep()}function resetForm(){currentStep=1,selectedDate=null,selectedTime=null,document.getElementById("contact-form").reset(),showStep(1),updateProgress(),document.getElementById("next-btn-1").disabled=!0,document.getElementById("next-btn-2").disabled=!0;const e=document.getElementById("submit-btn");e.disabled=!1,e.textContent="Request Dispatch",generateCalendar(),generateMathCaptcha()};
+
+    // ============== TEMPI CHAT WIDGET ==============
+    (function() {
+        const CLAUDE_PROXY_URL = 'https://tempi.summer-unit-44dd.workers.dev/';
+        const EMAILJS_SERVICE = 'service_ziwf1pg';
+        const EMAILJS_TEMPLATE = 'template_j68qyhk';
         
-        emailjs.init("IJHcoSxlSQ9OPOJGS");
+        const CAPABILITIES = {
+            advertised: [
+                "Commercial RTU repair and replacement (Trane, Carrier, York, Lennox, all major brands)",
+                "Commercial preventative maintenance contracts",
+                "Hydronics, boilers, and chiller service",
+                "Building automation systems (Cypher Open BAS)",
+                "Legacy controls retrofit (replacing JACE/FX/proprietary systems)",
+                "BACnet/Modbus/MQTT integration",
+                "Commercial ductwork",
+                "Commercial refrigeration"
+            ],
+            quiet: [
+                "Boiler trim, pumps, expansion tanks",
+                "Smart thermostats and zone controls",
+                "Indoor air quality (UV, filtration, humidifiers, dehumidifiers)",
+                "Water heaters (commercial)",
+                "Energy management consulting"
+            ],
+            decline: [
+                "Plumbing leaks and repairs",
+                "Electrical panel work",
+                "Roofing",
+                "New gas line runs from the meter"
+            ]
+        };
         
-        // Chat Widget Toggle
+        const capabilitiesBlock = `
+ADVERTISED CORE SERVICES (confident yes, route as commercial lead):
+${CAPABILITIES.advertised.map(s => "- " + s).join("\n")}
+
+QUIET CAPABILITIES (we do these, warm yes, route as commercial lead):
+${CAPABILITIES.quiet.map(s => "- " + s).join("\n")}
+
+HARD NO SERVICES (politely decline, don't recommend competitors by name):
+${CAPABILITIES.decline.map(s => "- " + s).join("\n")}
+`;
+        
+        const conversationHistory = [];
+        let leadCaptured = false;
+        let hasGreeted = false;
+        let widgetEverOpened = false;
+        
+        // Page context — tells Tempi customer is on COMMERCIAL page
+        const PAGE_CONTEXT = `==== PAGE CONTEXT ====
+The customer is on the COMMERCIAL HVAC & BUILDING AUTOMATION page (mechanicaltemp.com/commercial-hvac.html). 
+
+They are most likely:
+- A facility manager, property manager, or building owner
+- A national accounts dispatcher (CBRE, Cushman & Wakefield, Sodexo, SMS Assist, Nest, Roth, etc.)
+- A contractor evaluating us for a subcontract
+- Someone researching Cypher (our open BAS product) for a controls retrofit
+
+DEFAULT ASSUMPTION: B2B/commercial intent. Speak professionally — they're at work, not at home. They know HVAC terminology. They care about: downtime, response time, after-hours dispatch, COI/insurance, IVR work-order systems, recurring maintenance contracts, and (for controls) licensing fees and openness.
+
+DO NOT default to residential framing ("is your AC giving you trouble?"). DO default to: "What's going on at the facility?" or "Are you looking for service or controls work?"
+
+If they mention a national account platform (CBRE, Nest, Sodexo, SMS Assist, etc.), they are a dispatcher — treat as COMMERCIAL_DISPATCH and prioritize speed.
+
+If they mention Cypher, JACE, Niagara, Tridium, FX, BACnet, Modbus, or "controls" — they are interested in building automation. Pitch the Cypher angle (no licensing fees, open architecture, mobile-friendly).`;
+        
+        const SYSTEM_PROMPT = `You are Tempi, the friendly virtual customer service rep for Mechanical Temp, a commercial and residential HVAC company in Southfield, MI serving Metro Detroit. On this page you're talking to commercial customers — facility managers, dispatchers, building owners — so you're warm but professional, and you know your stuff.
+
+ABOUT MECHANICAL TEMP:
+- Address: 23093 Telegraph Rd, Southfield, MI 48033
+- Phone: (313) 282-4758 (24/7 commercial emergency dispatch)
+- Hours: Weekdays 8am-4pm office, 24/7 emergency service for commercial outages
+- Service area: Southfield, Dearborn, Livonia, Novi, Canton, Plymouth, Northville, West Bloomfield, Royal Oak, Ferndale, Westland, Farmington Hills, Redford and surrounding Metro Detroit
+- Owner: Brian
+- National accounts (approved vendor): CBRE, Cushman & Wakefield, Sodexo, SMS Assist, Nest Facilitate, Boss Facility Services, CLS, Roth
+- Brands we service: Trane, Carrier, York, Lennox, Daikin, Goodman, AAON, Bryant — basically all major commercial brands
+- Cypher Open BAS: our in-house controls platform. Open architecture, BACnet/Modbus/MQTT native, HTML5 mobile-friendly dashboard, $0 recurring licensing. Replaces proprietary JACE/FX/Niagara systems. More info: https://cypher.mechanicaltemp.com
+- Office email: office@mechanicaltemp.com
+- CUSTOMER PORTAL: https://customer.mechanicaltemp.com/ — invoices, payments, scheduling.
+
+${PAGE_CONTEXT}
+
+==== CONVERSATION ROUTING ====
+
+7 conversation types:
+
+1. SERVICE_LEAD — Residential customer. On commercial page this is rare; redirect gently if needed.
+2. COMMERCIAL_DISPATCH — Facility manager, dispatcher, or property manager needs service NOW. **This is the most common type on this page.** Treat as URGENT.
+3. CONTROLS_LEAD — Someone asking about Cypher, BAS retrofits, JACE/Niagara replacement, or controls work. Route as commercial lead with controls flag.
+4. PAPERWORK — Someone needs W-9, COI, vendor packet, or to add us to a vendor system. Very common from national accounts.
+5. BILLING — Question about an invoice, PO, or past job.
+6. VENDOR_SALES — Someone selling something TO us. Soft-screen.
+7. EXISTING_CUSTOMER — Customer following up on a job.
+
+==== HOW TO HANDLE EACH TYPE ====
+
+COMMERCIAL_DISPATCH (most common):
+- Collect: company/facility name, contact name, phone, building address, brief issue (RTU down? boiler? what brand/equipment?)
+- For national accounts: ask which platform (CBRE/Nest/Sodexo/etc) and if there's a work order # or IVR number
+- End with: [LEAD_READY:COMMERCIAL_DISPATCH]
+
+CONTROLS_LEAD:
+- Collect: company name, contact name, email, phone, what equipment they want controlled, current control system (if any), building size or # of RTUs
+- Mention Cypher: open architecture, no licensing fees, replaces JACE/Niagara
+- End with: [LEAD_READY:COMMERCIAL_DISPATCH] (route as commercial)
+- Mention they can read more at cypher.mechanicaltemp.com if they want technical details
+
+PAPERWORK: collect company name, contact name, email, what doc they need, by when. End with [LEAD_READY:PAPERWORK].
+BILLING: collect company name, contact name, phone, invoice # or service address, the question. End with [LEAD_READY:BILLING].
+VENDOR_SALES: if worth it, collect contact info. Spam → "Brian handles vendor inquiries directly — send your pitch to office@mechanicaltemp.com." NO capture.
+EXISTING_CUSTOMER: collect name, phone, address, what they need follow-up on. End with [LEAD_READY:EXISTING_CUSTOMER].
+SERVICE_LEAD (residential, rare here): collect name, phone, address, issue. End with [LEAD_READY:SERVICE_LEAD].
+
+==== CRITICAL FORMAT RULES ====
+
+EVERY response MUST end with quick-reply buttons:
+[BTN: Option 1 | Option 2 | Option 3]
+
+- 2-4 buttons (3 ideal)
+- Each label MAX 4 words
+- Always include forward option AND escape option
+
+==== ENGAGEMENT RULES ====
+
+1. KEEP IT SHORT. Commercial customers are at work, don't bury them in text.
+2. SPEAK THE LANGUAGE. RTU, AHU, BAS, BACnet, JACE, SMA, COI, IVR — use these terms when they do.
+3. NO BULLETED LISTS unless comparing options.
+4. NEVER invent specific commercial repair prices (commercial work varies wildly; "tech will assess on-site and provide a written quote").
+5. For Cypher questions: be confident. Open architecture, no licensing, integrates with existing equipment, mobile dashboard. Point to cypher.mechanicaltemp.com.
+6. For after-hours commercial outages: tell them to call (313) 282-4758 NOW while you also collect info.
+7. Angry/frustrated dispatchers: acknowledge the urgency, no excuses. Get the facility address and brief issue, fire the lead, tell them dispatch is being notified.
+
+==== COMMERCIAL-SPECIFIC GREETING ====
+
+Your opening on this page is commercial-focused. Example:
+
+"Hi there 👋 I'm Tempi. What can I help with at the facility today — service call, a controls question, or something else?"
+
+[BTN: 🏢 Need service | 🔧 Controls / Cypher | 📋 Paperwork / Vendor docs | 💰 Billing question]
+
+==== CURRENT CAPABILITIES ====
+${capabilitiesBlock}
+
+REMEMBER: Identify type → collect ONLY the fields for that type → fire [LEAD_READY:TYPE] → done. Every response has [BTN: ...] at the end. Keep the tone professional and to-the-point. These customers don't want a long chat — they want their building handled.`;
+        
         const chatBubble = document.getElementById('chat-bubble');
         const chatWidget = document.getElementById('chat-widget');
-        const closeChatBtn = document.getElementById('close-chat-btn');
-        const chatForm = document.getElementById('chat-form');
+        const closeBtn = document.getElementById('close-chat-btn');
+        const messagesEl = document.getElementById('chat-messages');
+        const inputEl = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-chat-btn');
+        const chatBadge = document.getElementById('chat-badge');
         
-        function toggleChat() { chatWidget.classList.toggle('hidden'); }
-        chatBubble.addEventListener('click', toggleChat);
-        closeChatBtn.addEventListener('click', toggleChat);
-
-        chatForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            document.getElementById('chat-confirmation').classList.remove('hidden');
-            // Mock send for UI demo
-            setTimeout(() => { toggleChat(); }, 2000);
-        });
-
-        // Scheduler Logic (Simplified for this file block, assumes your full JS is used)
-        const schedulerModal = document.getElementById("scheduler-modal");
-        let currentStep = 1; 
+        const TEMPI_AVATAR_IMG = `<img src="https://cdn.mechanicaltemp.com/tempi/tempi-portrait.png" alt="Tempi" style="width:24px;height:24px;border-radius:50%;flex-shrink:0;object-fit:cover;border:1.5px solid #1e293b;">`;
         
-        function openScheduler() { 
-            schedulerModal.classList.remove("hidden"); 
-            generateCalendar(); // Call your existing calendar function
-        }
-        function closeScheduler(reset) { 
-            schedulerModal.classList.add("hidden"); 
-            if(reset) { currentStep = 1; showStep(1); }
+        function parseButtons(text) {
+            const match = text.match(/\[BTN:\s*([^\]]+)\]/);
+            if (!match) return { cleanText: text, buttons: [] };
+            const buttons = match[1].split('|').map(s => s.trim()).filter(s => s.length > 0);
+            const cleanText = text
+                .replace(/\[BTN:[^\]]+\]/g, '')
+                .replace(/\[LEAD_READY:[^\]]+\]/g, '')
+                .replace(/\[LEAD_READY\]/g, '')
+                .trim();
+            return { cleanText, buttons };
         }
         
-        // Calendar Generator (Mini version for display)
-        function generateCalendar() {
-            const cal = document.getElementById("calendar");
-            cal.innerHTML = "";
-            for(let i=1; i<=30; i++) {
-                cal.innerHTML += `<div onclick="selectDate(this)" class="border p-2 text-center cursor-pointer hover:bg-sky-100 rounded">${i}</div>`;
+        function escapeHtml(s) {
+            const div = document.createElement('div');
+            div.textContent = s;
+            return div.innerHTML;
+        }
+        
+        function addBotMessage(text, buttons) {
+            const row = document.createElement('div');
+            row.className = 'msg-row';
+            row.innerHTML = TEMPI_AVATAR_IMG + `<div class="msg-bubble bot">${escapeHtml(text)}</div>`;
+            messagesEl.appendChild(row);
+            
+            if (buttons && buttons.length > 0) {
+                const btnRow = document.createElement('div');
+                btnRow.className = 'inline-buttons';
+                buttons.forEach(label => {
+                    const btn = document.createElement('button');
+                    btn.className = 'inline-btn';
+                    btn.textContent = label;
+                    btn.addEventListener('click', () => {
+                        btnRow.querySelectorAll('.inline-btn').forEach(b => b.disabled = true);
+                        handleSend(label);
+                    });
+                    btnRow.appendChild(btn);
+                });
+                messagesEl.appendChild(btnRow);
+            }
+            scrollToBottom();
+        }
+        
+        function addUserMessage(text) {
+            const row = document.createElement('div');
+            row.className = 'msg-row user';
+            row.innerHTML = `<div class="msg-bubble user">${escapeHtml(text)}</div>`;
+            messagesEl.appendChild(row);
+            scrollToBottom();
+        }
+        
+        function showTyping() {
+            const row = document.createElement('div');
+            row.className = 'msg-row';
+            row.id = 'typing-row';
+            row.innerHTML = TEMPI_AVATAR_IMG + `<div class="msg-bubble bot typing"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>`;
+            messagesEl.appendChild(row);
+            scrollToBottom();
+        }
+        
+        function hideTyping() { const t = document.getElementById('typing-row'); if (t) t.remove(); }
+        function scrollToBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
+        function showBadge(n) { chatBadge.textContent = n; chatBadge.classList.remove('hidden'); }
+        function hideBadge() { chatBadge.classList.add('hidden'); }
+        
+        function openWidget() {
+            chatWidget.classList.remove('hidden');
+            widgetEverOpened = true;
+            hideBadge();
+            if (!hasGreeted) {
+                hasGreeted = true;
+                setTimeout(() => {
+                    addBotMessage(
+                        "Hi there 👋 I'm Tempi. What can I help with at the facility today — service call, a controls question, or something else?",
+                        ["🏢 Need service", "🔧 Controls / Cypher", "📋 Paperwork", "💰 Billing question"]
+                    );
+                }, 300);
+            }
+            setTimeout(() => inputEl.focus(), 100);
+        }
+        
+        function closeWidget() {
+            chatWidget.classList.add('hidden');
+            if (conversationHistory.length > 0 && !leadCaptured) showBadge('!');
+        }
+        
+        function toggleWidget() {
+            if (chatWidget.classList.contains('hidden')) openWidget();
+            else closeWidget();
+        }
+        
+        async function sendToClaude(userMessage) {
+            conversationHistory.push({ role: 'user', content: userMessage });
+            try {
+                const res = await fetch(CLAUDE_PROXY_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: 'claude-haiku-4-5-20251001',
+                        max_tokens: 400,
+                        system: SYSTEM_PROMPT,
+                        messages: conversationHistory
+                    })
+                });
+                if (!res.ok) throw new Error('Proxy error: ' + res.status);
+                const data = await res.json();
+                const reply = data.content?.filter(b => b.type === 'text')?.map(b => b.text)?.join('\n') || "Hmm, I didn't catch that. Could you try again? [BTN: Try again | Talk to dispatch]";
+                conversationHistory.push({ role: 'assistant', content: reply });
+                return reply;
+            } catch (err) {
+                console.error('Claude call failed:', err);
+                return "I'm having trouble connecting right now 😕 For commercial dispatch please call us at (313) 282-4758 — we're 24/7. [BTN: Try again | Call dispatch]";
             }
         }
-        function selectDate(el) {
-            document.querySelectorAll('#calendar div').forEach(d => d.classList.remove('bg-sky-500', 'text-white'));
-            el.classList.add('bg-sky-500', 'text-white');
-            document.getElementById('next-btn-1').disabled = false;
+        
+        function extractLeadInfo(conversation, leadType) {
+            const fullText = conversation.map(m => m.content).join('\n');
+            const phoneMatch = fullText.match(/(\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/);
+            const typeLabels = {
+                'SERVICE_LEAD': '🚨 SERVICE LEAD',
+                'COMMERCIAL_DISPATCH': '🏢 COMMERCIAL DISPATCH - URGENT',
+                'PAPERWORK': '📋 PAPERWORK REQUEST',
+                'BILLING': '💰 BILLING INQUIRY',
+                'VENDOR_SALES': '🤝 VENDOR/SALES PITCH',
+                'EXISTING_CUSTOMER': '👤 EXISTING CUSTOMER FOLLOW-UP',
+                'GENERAL_INFO': 'ℹ️ GENERAL INFO REQUEST'
+            };
+            const label = typeLabels[leadType] || '📩 CHAT INQUIRY';
+            return {
+                from_name: `Tempi (Commercial Page) - ${label}`,
+                phone: phoneMatch ? phoneMatch[0] : 'See transcript',
+                message: `${label}\n=========================================\n\nSource: COMMERCIAL HVAC PAGE\nConversation Type: ${leadType}\nTime: ${new Date().toLocaleString('en-US', { timeZone: 'America/Detroit' })} ET\n\n--- FULL TRANSCRIPT ---\n\n` + 
+                    conversation.map(m => `[${m.role === 'user' ? 'CUSTOMER' : 'TEMPI'}]: ${m.content.replace(/\[LEAD_READY:[^\]]+\]/g,'').replace(/\[LEAD_READY\]/g,'').replace(/\[BTN:[^\]]+\]/g,'').trim()}`).join('\n\n')
+            };
         }
-        function nextStep() {
-            document.getElementById(`step-${currentStep}`).classList.add('hidden');
-            currentStep++;
-            document.getElementById(`step-${currentStep}`).classList.remove('hidden');
-            if(currentStep === 2) generateTimeSlots();
+        
+        async function fireLeadEmail(leadType) {
+            if (leadCaptured) return;
+            leadCaptured = true;
+            try {
+                const leadData = extractLeadInfo(conversationHistory, leadType);
+                await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, leadData);
+                console.log(`Lead email sent: ${leadType}`);
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'chat_lead', { 
+                        'event_category': 'conversion',
+                        'event_label': leadType + '_commercial_page'
+                    });
+                }
+            } catch (err) { console.error('Lead email failed:', err); leadCaptured = false; }
         }
-        function prevStep() {
-            document.getElementById(`step-${currentStep}`).classList.add('hidden');
-            currentStep--;
-            document.getElementById(`step-${currentStep}`).classList.remove('hidden');
+        
+        async function handleSend(text) {
+            text = (text || inputEl.value).trim();
+            if (!text) return;
+            addUserMessage(text);
+            inputEl.value = '';
+            sendBtn.disabled = true;
+            inputEl.disabled = true;
+            showTyping();
+            const reply = await sendToClaude(text);
+            hideTyping();
+            const { cleanText, buttons } = parseButtons(reply);
+            addBotMessage(cleanText, buttons);
+            const leadMatch = reply.match(/\[LEAD_READY:(\w+)\]/);
+            if (leadMatch) {
+                fireLeadEmail(leadMatch[1]);
+            } else if (reply.includes('[LEAD_READY]')) {
+                fireLeadEmail('COMMERCIAL_DISPATCH');
+            }
+            sendBtn.disabled = false;
+            inputEl.disabled = false;
+            inputEl.focus();
         }
-        function generateTimeSlots() {
-            const slots = document.getElementById('time-slots');
-            slots.innerHTML = "";
-            ['8am','10am','12pm','2pm'].forEach(t => {
-                slots.innerHTML += `<div onclick="selectTime(this)" class="border p-2 text-center cursor-pointer hover:bg-sky-100 rounded">${t}</div>`;
-            });
-        }
-        function selectTime(el) {
-            document.querySelectorAll('#time-slots div').forEach(d => d.classList.remove('bg-sky-500', 'text-white'));
-            el.classList.add('bg-sky-500', 'text-white');
-            document.getElementById('next-btn-2').disabled = false;
-        }
-        function submitAppointment() {
-            nextStep(); // Go to success screen
-            // Add your EmailJS send logic here
-        }
-        function showStep(step) {
-            for(let i=1; i<=4; i++) document.getElementById(`step-${i}`).classList.add('hidden');
-            document.getElementById(`step-${step}`).classList.remove('hidden');
-        }
+        
+        chatBubble.addEventListener('click', toggleWidget);
+        closeBtn.addEventListener('click', closeWidget);
+        sendBtn.addEventListener('click', () => handleSend());
+        inputEl.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } });
+        inputEl.addEventListener('input', () => { inputEl.style.height = 'auto'; inputEl.style.height = Math.min(inputEl.scrollHeight, 80) + 'px'; });
+        
+        setTimeout(() => { if (!widgetEverOpened) showBadge('1'); }, 10000);
+    })();
     </script>
 </body>
 </html>
