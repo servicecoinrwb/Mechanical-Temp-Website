@@ -148,21 +148,33 @@
         </div>
     </header>
 
-    <!-- AI Assistant banner — dismissable, tracks clicks -->
-<div id="ai-banner" style="background-color: #166534; color: white; font-size: 14px; border-bottom: 1px solid #14532d;">
-    <div style="max-width: 1280px; margin: 0 auto; padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-        <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0;">
+     <!-- AI Assistant banner — dismissable, fully clickable, tracks clicks -->
+<style>
+    #ai-banner a.banner-link:hover { background-color: #14532d !important; }
+    .banner-text-full { display: inline; }
+    .banner-text-short { display: none; }
+    @media (max-width: 640px) {
+        .banner-text-full { display: none; }
+        .banner-text-short { display: inline; }
+    }
+</style>
+<div id="ai-banner" style="background-color: #166534; color: white; font-size: 14px; border-bottom: 1px solid #14532d; position: relative;">
+    <a href="assistant.html?utm_source=mainsite_banner&utm_medium=organic&utm_campaign=banner_discovery"
+       class="banner-link"
+       onclick="if(typeof gtag!=='undefined')gtag('event','click_ai_banner',{'event_category':'engagement','event_label':'top_banner'})"
+       style="display: block; color: white; text-decoration: none; transition: background-color 0.15s;">
+        <div style="max-width: 1280px; margin: 0 auto; padding: 10px 44px 10px 16px; display: flex; align-items: center; justify-content: center; gap: 10px; text-align: center;">
             <span style="display: inline-flex; align-items: center; gap: 6px; background-color: #15803d; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; flex-shrink: 0;">
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l1.9 5.8 5.8 1.9-5.8 1.9L12 18.4l-1.9-5.8L4.3 10.7l5.8-1.9L12 3z"/></svg>
                 NEW
             </span>
-            <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                Meet <strong>Tempi</strong>, our AI assistant — describe your HVAC issue, get help fast.
-                <a href="assistant.html?utm_source=mainsite_banner&utm_medium=organic&utm_campaign=banner_discovery" style="color: white; text-decoration: underline; font-weight: 700; white-space: nowrap;" onclick="if(typeof gtag!=='undefined')gtag('event','click_ai_banner',{'event_category':'engagement','event_label':'top_banner'})">Try it now →</a>
+            <span>
+                <span class="banner-text-full">Meet <strong>Tempi</strong>, our AI assistant — describe your HVAC issue, get help fast. <span style="text-decoration: underline; font-weight: 700;">Try it now →</span></span>
+                <span class="banner-text-short"><strong>Meet Tempi</strong> — Talk to our AI <span style="text-decoration: underline;">→</span></span>
             </span>
         </div>
-        <button onclick="document.getElementById('ai-banner').style.display='none';try{sessionStorage.setItem('mt_banner_dismissed','1')}catch(e){}" style="background: none; border: none; color: rgba(255,255,255,0.8); font-size: 20px; line-height: 1; padding: 0 8px; cursor: pointer; flex-shrink: 0;" aria-label="Dismiss banner">&times;</button>
-    </div>
+    </a>
+    <button onclick="event.stopPropagation();document.getElementById('ai-banner').style.display='none';try{sessionStorage.setItem('mt_banner_dismissed','1')}catch(e){}" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: rgba(255,255,255,0.8); font-size: 20px; line-height: 1; padding: 4px 8px; cursor: pointer; z-index: 2;" aria-label="Dismiss banner">&times;</button>
 </div>
     <script>
         try { if (sessionStorage.getItem('mt_banner_dismissed') === '1') document.getElementById('ai-banner').style.display='none'; } catch(e) {}
