@@ -149,21 +149,21 @@
     </header>
 
     <!-- AI Assistant banner — dismissable, tracks clicks -->
-    <div id="ai-banner" style="background-color: #166534; color: white; font-size: 14px; border-bottom: 1px solid #14532d;">
-        <div style="max-width: 1280px; margin: 0 auto; padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-            <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0;">
-                <span style="display: inline-flex; align-items: center; gap: 6px; background-color: #15803d; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; flex-shrink: 0;">
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l1.9 5.8 5.8 1.9-5.8 1.9L12 18.4l-1.9-5.8L4.3 10.7l5.8-1.9L12 3z"/></svg>
-                    NEW
-                </span>
-                <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                    Meet <strong>Tempi</strong>, our AI assistant — describe your HVAC issue, get help fast.
-                    <a href="assistant.html?utm_source=mainsite_banner&utm_medium=organic&utm_campaign=banner_discovery" style="color: white; text-decoration: underline; font-weight: 700; white-space: nowrap;" onclick="if(typeof gtag!=='undefined')gtag('event','click_ai_banner',{'event_category':'engagement','event_label':'top_banner'})">Try it now →</a>
-                </span>
-            </div>
-            <button onclick="document.getElementById('ai-banner').style.display='none';try{sessionStorage.setItem('mt_banner_dismissed','1')}catch(e){}" style="background: none; border: none; color: rgba(255,255,255,0.8); font-size: 20px; line-height: 1; padding: 0 8px; cursor: pointer; flex-shrink: 0;" aria-label="Dismiss banner">&times;</button>
+<div id="ai-banner" style="background-color: #166534; color: white; font-size: 14px; border-bottom: 1px solid #14532d;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0;">
+            <span style="display: inline-flex; align-items: center; gap: 6px; background-color: #15803d; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; flex-shrink: 0;">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l1.9 5.8 5.8 1.9-5.8 1.9L12 18.4l-1.9-5.8L4.3 10.7l5.8-1.9L12 3z"/></svg>
+                NEW
+            </span>
+            <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                Meet <strong>Tempi</strong>, our AI assistant — describe your HVAC issue, get help fast.
+                <a href="assistant.html?utm_source=mainsite_banner&utm_medium=organic&utm_campaign=banner_discovery" style="color: white; text-decoration: underline; font-weight: 700; white-space: nowrap;" onclick="if(typeof gtag!=='undefined')gtag('event','click_ai_banner',{'event_category':'engagement','event_label':'top_banner'})">Try it now →</a>
+            </span>
         </div>
+        <button onclick="document.getElementById('ai-banner').style.display='none';try{sessionStorage.setItem('mt_banner_dismissed','1')}catch(e){}" style="background: none; border: none; color: rgba(255,255,255,0.8); font-size: 20px; line-height: 1; padding: 0 8px; cursor: pointer; flex-shrink: 0;" aria-label="Dismiss banner">&times;</button>
     </div>
+</div>
     <script>
         try { if (sessionStorage.getItem('mt_banner_dismissed') === '1') document.getElementById('ai-banner').style.display='none'; } catch(e) {}
     </script>
