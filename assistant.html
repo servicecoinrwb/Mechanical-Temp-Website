@@ -304,14 +304,14 @@
 
             <div id="tempi-thread" class="flex-1 overflow-y-auto p-4 chat-scroll bg-slate-50 flex flex-col gap-3"></div>
 
-            <div class="border-t border-slate-200 bg-white p-3 flex gap-2">
+            <div class="border-t border-slate-200 bg-white p-3 flex gap-2 items-center">
                 <input
                     id="tempi-input"
                     type="text"
                     placeholder="Type your message..."
-                    class="flex-1 px-4 py-3 bg-slate-100 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:border-sky-400 outline-none"
+                    class="flex-1 min-w-0 px-4 py-3 bg-slate-100 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:border-sky-400 outline-none"
                 />
-                <button id="tempi-send" class="bg-sky-600 hover:bg-sky-700 disabled:opacity-50 text-white px-5 rounded-xl font-bold text-sm">Send</button>
+                <button id="tempi-send" class="flex-shrink-0 bg-sky-600 hover:bg-sky-700 disabled:opacity-50 text-white px-5 py-3 rounded-xl font-bold text-sm whitespace-nowrap">Send</button>
             </div>
             <p class="text-center text-[10px] text-slate-400 py-2 bg-white border-t border-slate-100">Powered by AI. For emergencies call (313) 282-4758.</p>
         </div>
