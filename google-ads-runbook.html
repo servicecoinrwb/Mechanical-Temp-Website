@@ -256,9 +256,33 @@
     </div>
   </section>
 
+  <!-- LSA -->
+  <section>
+    <div class="sec-head"><span class="num">04</span><h3>Local Services Ads (LSA) &mdash; The Other Channel</h3><span class="hint">pay-per-lead &middot; Google Guaranteed</span></div>
+    <div class="card cool-accent">
+      <p style="font-size:14px;margin-bottom:12px">LSA is separate from Search Ads. It's the <b>"Google Guaranteed"</b> badge ads at the very top. You pay <b>per lead</b> (call/message), not per click. <b>Different rules than search ads &mdash; read this:</b></p>
+      <ul class="steps">
+        <li><span class="chk"></span><span class="txt"><b>Leave job types ON year-round.</b> Unlike search ads, you pay per lead not per impression &mdash; so extra job types cost nothing until someone actually contacts you. Turn on everything you're licensed and willing to do; no seasonal toggling needed.</span></li>
+        <li><span class="chk"></span><span class="txt">Key job types to keep ON: <b>Repair AC, Repair HVAC, AC maintenance, Install AC, Repair heating system, Heating maintenance, Install heating system, Repair/Install thermostat</b>.</span></li>
+        <li><span class="chk"></span><span class="txt"><b>Bidding:</b> Automated (maximize leads). Leave target CPL <b>unchecked</b> at first &mdash; setting it too low starves volume. Watch actual cost-per-lead for ~2 weeks, then add a target only if leads run pricey.</span></li>
+        <li><span class="chk"></span><span class="txt"><b>Control spend with weekly budget</b>, not per-lead caps. Don't go below ~$75/week or you barely enter the auction. ~$40/lead means $230/wk &asymp; 5-6 leads.</span></li>
+        <li><span class="chk"></span><span class="txt"><b>Dispute junk leads</b> (wrong number, spam, out of area) &mdash; you get refunded AND it protects your ranking. Do this regularly.</span></li>
+        <li><span class="chk"></span><span class="txt"><b>"Direct Business" leads</b> = people who searched your name (existing/referral). <b>"Category" leads</b> = new customers searching "ac repair near me." If you only see Direct Business, your job types for that category are probably OFF.</span></li>
+      </ul>
+      <p class="note">LSA ranking is driven by: review count/recency, <b>response speed</b>, and proximity. Fast callbacks rank you higher AND close more &mdash; it matters more than budget.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--amber)">
+      <h4><span class="ic" style="background:var(--heat-soft);color:var(--amber)">KEY DIFFERENCE</span> LSA vs. Search Ads</h4>
+      <ul class="steps">
+        <li><span class="chk"></span><span class="txt"><b>Search Ads:</b> pay per click. Budget waste is real &mdash; so you DO toggle ad groups by season (the runbook above).</span></li>
+        <li><span class="chk"></span><span class="txt"><b>LSA:</b> pay per lead. No impression waste &mdash; so you DON'T toggle by season. Set it once, leave it, just dispute junk and answer fast.</span></li>
+      </ul>
+    </div>
+  </section>
+
   <!-- TROUBLESHOOT -->
   <section>
-    <div class="sec-head"><span class="num">04</span><h3>Troubleshooting &mdash; Every Trap We Hit</h3><span class="hint">click to expand</span></div>
+    <div class="sec-head"><span class="num">05</span><h3>Troubleshooting &mdash; Every Trap We Hit</h3><span class="hint">click to expand</span></div>
 
     <details class="tb">
       <summary><span class="sym">0 IMPR</span> Ad group is Enabled but getting zero impressions <span class="arrow">&#9656;</span></summary>
@@ -289,7 +313,7 @@
         <p>Google flags ALL-CAPS words in ad text (and on the landing page). One flagged word limits the whole ad. Killed our CTR (0.38%).</p>
         <div class="fix">
           <div class="lab">Fix</div>
-          <p>Edit the ad &mdash; convert ALL-CAPS to Title/sentence case. "FREE ESTIMATE" &rarr; "Free Estimate", "$50 OFF" &rarr; "$50 off". <b>AC</b>, <b>HVAC</b>, <b>24/7</b> are allowed acronyms. Same rule on the landing page. Re-review clears in hours&ndash;1 day.</p>
+          <p>Edit the ad &mdash; convert ALL-CAPS to Title/sentence case. <b>The sneaky one that bit us: "OFF" in "$50 OFF Any Repair"</b> &mdash; one tiny capped word flagged EVERY ad. Watch for capped <b>OFF, FREE, NOW, FAST, BEST, SAME-DAY</b>. <b>AC</b>, <b>HVAC</b>, <b>24/7</b> are allowed acronyms. Same rule on the landing page. Re-review clears in hours&ndash;1 day.</p>
           <p>If you believe it's wrong: <span class="path">Tools &rarr; Troubleshooting &rarr; Policy manager &rarr; Appeal</span>.</p>
         </div>
       </div>
@@ -340,11 +364,22 @@
         </div>
       </div>
     </details>
+
+    <details class="tb">
+      <summary><span class="sym">LSA</span> "My LSA doesn't do squat / only getting Direct Business leads" <span class="arrow">&#9656;</span></summary>
+      <div class="body">
+        <p>LSA running but no new-customer (Category) leads &mdash; only "Direct Business" (people searching your name). Cause: the relevant <b>job types are turned OFF</b>. We hit this with all the AC job types off in summer.</p>
+        <div class="fix">
+          <div class="lab">Fix</div>
+          <p>Open LSA &rarr; <b>Job types</b> &rarr; turn ON everything you're licensed for (Repair AC, Repair HVAC, AC maintenance, Install AC, etc.). They're pay-per-lead, so leaving them all on costs nothing until someone contacts you. Also confirm service areas cover your metro and budget is &ge;$75/week.</p>
+        </div>
+      </div>
+    </details>
   </section>
 
   <!-- HEALTH CHECK -->
   <section>
-    <div class="sec-head"><span class="num">05</span><h3>Monthly 60-Second Health Check</h3><span class="hint">catch problems early</span></div>
+    <div class="sec-head"><span class="num">06</span><h3>Monthly 60-Second Health Check</h3><span class="hint">catch problems early</span></div>
     <div class="card">
       <ul class="steps">
         <li><span class="chk"></span><span class="txt">Right season's ad groups <b>Enabled</b>, off-season ones <b>Paused</b>?</span></li>
@@ -354,6 +389,8 @@
         <li><span class="chk"></span><span class="txt">Conversions &gt; 0 &mdash; is <b>call tracking</b> firing? Check Goals.</span></li>
         <li><span class="chk"></span><span class="txt">CTR above ~3%? If stuck near 0.4%, suspect a policy limit or wrong-season ad.</span></li>
         <li><span class="chk"></span><span class="txt"><b>Answer the phone fast.</b> Missed paid calls = wasted spend + lower ranking.</span></li>
+        <li><span class="chk"></span><span class="txt"><b>LSA:</b> dispute any junk leads (wrong number, spam, out of area) for refunds.</span></li>
+        <li><span class="chk"></span><span class="txt"><b>LSA:</b> getting Category leads, not just Direct Business? If only Direct Business, a job type is off.</span></li>
       </ul>
     </div>
     <p class="note">Tip: bookmark this file. Open it twice a year (spring + fall) and run the switch list.</p>
