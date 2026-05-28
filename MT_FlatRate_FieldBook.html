@@ -31,6 +31,7 @@ header{position:sticky;top:0;z-index:40;background:var(--chrome);color:#fff;
   padding:env(safe-area-inset-top) 0 0}
 .bar{display:flex;align-items:center;gap:12px;padding:12px 16px 12px}
 .brand{display:flex;flex-direction:column;line-height:1;flex:1;min-width:0}
+.brand .logo{height:26px;width:auto;max-width:210px;object-fit:contain;display:block}
 .brand .co{font-family:var(--disp);font-weight:700;font-size:19px;text-transform:uppercase;
   letter-spacing:.04em;white-space:nowrap}
 .brand .tg{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#9AA3AD;margin-top:3px}
@@ -229,7 +230,8 @@ main{max-width:900px;margin:0 auto;padding:6px 16px 120px}
 <header>
   <div class="bar">
     <div class="brand">
-      <span class="co">Mechanical Temp</span>
+      <img class="logo" src="https://cdn.mechanicaltemp.com/logos/white/text/white_textlogo_transparent_background.png" alt="Mechanical Temp" onerror="this.style.display='none';document.getElementById('coText').style.display='block'">
+      <span class="co" id="coText" style="display:none">Mechanical Temp</span>
       <span class="tg">Flat-Rate · <b>Field Book</b></span>
     </div>
     <button class="iconbtn" onclick="openSettings()" aria-label="Settings">
