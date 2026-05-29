@@ -521,8 +521,41 @@ function renderSettings(){
    </div>
    <button class="reset" onclick="resetAll()">Reset rates & spread to defaults</button>
    <button class="reset" onclick="if(confirm('Restore all suggested names?')){nameOverrides={};save();render();closeSettings();}" style="margin-top:9px">Reset names to suggested</button>
-   <div class="note">Every price recalculates instantly from these numbers. Tap the pencil beside any category or option to rename it — changes save on this device.</div>`;
+   <div class="set" style="margin-top:22px"><h4>Sync & Backup</h4>
+     <button class="reset" onclick="exportConfig()" style="background:var(--chrome);color:#fff">⬇ Export my settings & names (.json)</button>
+     <button class="reset" onclick="document.getElementById('cfgFile').click()" style="margin-top:9px">⬆ Import a settings file</button>
+     <input type="file" id="cfgFile" accept="application/json,.json" style="display:none" onchange="importConfig(this)">
+     <div class="custnote" id="ioMsg" style="margin-top:8px"></div>
+   </div>
+   <div class="note">Every price recalculates instantly from these numbers. Tap the pencil beside any category or option to rename it — changes save on this device. Use Export to back up your custom names &amp; rates or send them to the office; Import restores them on any device.</div>`;
 }
+function exportConfig(){
+  const payload={app:'MT_FlatRate_FieldBook',version:1,exported:new Date().toISOString(),
+    settings:S,tierMult:MULT,nameOverrides:nameOverrides};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download='MT_FieldBook_settings_'+new Date().toISOString().slice(0,10)+'.json';
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1500);
+  const n=Object.keys(nameOverrides).length;
+  ioMsgSet('Exported — '+n+' custom name'+(n===1?'':'s')+' + your rates. Check your downloads.');
+}
+function importConfig(input){
+  const file=input.files&&input.files[0]; if(!file)return;
+  const r=new FileReader();
+  r.onload=e=>{try{
+    const d=JSON.parse(e.target.result);
+    if(d.settings)S=Object.assign({},DATA.settings,d.settings);
+    if(d.tierMult)MULT=Object.assign({},DATA.tierMult,d.tierMult);
+    if(d.nameOverrides)nameOverrides=d.nameOverrides;
+    save();renderSettings();render();
+    const n=Object.keys(nameOverrides||{}).length;
+    ioMsgSet('Imported '+n+' custom name'+(n===1?'':'s')+' + rates ✓');
+  }catch(err){ioMsgSet('Could not read that file — make sure it is an exported settings .json',true);}
+  };
+  r.readAsText(file); input.value='';
+}
+function ioMsgSet(t,err){const el=document.getElementById('ioMsg');if(el){el.textContent=t;el.style.color=err?'#C0392B':'#1F8A52';}}
 function setS(k,v,int){S[k]=int?Math.round(+v):+v;save();render();renderSettings();if(document.getElementById('drawerQ').classList.contains('on'))renderQuote();}
 function setMult(t,v){MULT[t]=+v;save();render();renderSettings();}
 function resetAll(){S=Object.assign({},DATA.settings);MULT=Object.assign({},DATA.tierMult);save();renderSettings();render();}
