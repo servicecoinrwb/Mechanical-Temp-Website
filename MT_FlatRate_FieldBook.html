@@ -137,6 +137,29 @@ body.tech .techbar{display:block}
 .photonote{font-size:11.5px;color:#A39B8B;margin-top:9px;display:flex;align-items:center;gap:6px}
 .photoOnPdf{display:flex;align-items:center;gap:9px;margin-top:11px;font-size:13px;color:var(--ink2);cursor:pointer}
 
+/* ---- signature ---- */
+.sigsec{margin:16px 0 4px}
+.sigsec h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);font-weight:700;margin:0 0 10px}
+.sigpad{position:relative;background:#fff;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;touch-action:none}
+.sigpad canvas{display:block;width:100%;height:160px}
+.sigpad .base{position:absolute;left:14px;right:14px;bottom:34px;border-bottom:1.5px dashed #C3BDB0;pointer-events:none}
+.sigpad .xmark{position:absolute;left:16px;bottom:36px;font-family:var(--disp);color:#C3BDB0;font-size:18px;pointer-events:none}
+.sigpad .hint{position:absolute;left:0;right:0;bottom:11px;text-align:center;font-size:11.5px;color:#A39B8B;pointer-events:none}
+.sigrow{display:flex;gap:8px;margin-top:9px}
+.sigrow button{flex:1;padding:11px;border-radius:10px;font-weight:600;font-size:13px}
+.sigrow .clr2{background:#ECE8DF;color:var(--ink2)}
+.sigrow .acc{background:#1F8A52;color:#fff;display:flex;align-items:center;justify-content:center;gap:7px}
+.sigrow .acc svg{width:16px;height:16px;stroke:#fff;stroke-width:2.4;fill:none}
+.signed{background:#D7EFE0;border:1px solid #1F8A52;border-radius:12px;padding:14px;display:flex;align-items:center;gap:13px}
+.signed img{height:46px;width:auto;max-width:160px;object-fit:contain;background:#fff;border-radius:6px;padding:3px}
+.signed .si{flex:1;min-width:0}
+.signed .si b{display:block;font-size:14px}
+.signed .si small{color:var(--ink2);font-size:12px}
+.signed .redo{color:var(--heat);font-weight:600;font-size:12px;flex:none}
+.signfield{margin-bottom:10px}
+.signfield input{width:100%;padding:11px 13px;border-radius:10px;border:1.5px solid var(--line);font-size:15px;outline:none;background:#fff}
+.signfield input:focus{border-color:var(--cool)}
+
 /* search */
 .searchwrap{padding:12px 16px;background:var(--chrome2);position:sticky;top:0;z-index:30}
 .search{display:flex;align-items:center;gap:10px;background:#fff;border-radius:12px;padding:11px 14px}
@@ -411,6 +434,8 @@ let CART=[], CUST={name:'',addr:'',job:'',email:''}, taxOn=true, nameOverrides={
 let SB=null, USER=null, QID=null, QSTATUS='draft', saveTimer=null, syncState='idle';
 let PHOTOS=[];          // [{id, path, dataUrl}]  dataUrl kept in-memory for thumbnail + pdf
 let photosOnPdf=true;
+let SIG=null;           // {name, dataUrl, path, at}
+let sigCtx=null, sigDrawing=false, sigDirty=false;
 try{ if(window.supabase&&window.SB_URL){SB=window.supabase.createClient(window.SB_URL,window.SB_ANON,{auth:{persistSession:true,autoRefreshToken:true}});} }catch(e){console.warn('SB init',e);}
 const famByCode={}; DATA.fams.forEach(f=>famByCode[f.code]=f);
 const conceptByFam={}; DATA.concepts.forEach(c=>conceptByFam[c.f]=c);
@@ -618,11 +643,27 @@ function renderQuote(){
      <div class="photonote" id="photoNote"></div>
      <input type="file" id="photoFile" accept="image/*" capture="environment" style="display:none" onchange="addPhotos(this)" multiple>
    </div>`:''}
+   ${SB&&USER?`<div class="sigsec">
+     <h5>Customer Approval</h5>
+     ${SIG?`<div class="signed">
+        <img src="${SIG.dataUrl}" alt="signature">
+        <div class="si"><b>${esc(SIG.name||'Signed')}</b><small>Approved ${SIG.at?new Date(SIG.at).toLocaleDateString('en-US'):''}</small></div>
+        <button class="redo" onclick="clearSig()">Redo</button>
+      </div>`:`
+      <div class="signfield"><input id="sigName" value="${esc(CUST.name||'')}" placeholder="Name of person approving" oninput="SIG_name=this.value"></div>
+      <div class="sigpad" id="sigPad">
+        <canvas id="sigCanvas"></canvas>
+        <div class="base"></div><div class="xmark">✕</div>
+        <div class="hint">Sign above to approve this quote</div>
+      </div>
+      <div class="sigrow"><button class="clr2" onclick="clearSigPad()">Clear</button><button class="acc" onclick="acceptSig()"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Accept &amp; Approve</button></div>`}
+   </div>`:''}
    <button class="printbtn" onclick="sendQuote()"><svg viewBox="0 0 24 24"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg> Send Quote to Customer</button>
    <button class="reset" style="margin-top:9px;background:var(--chrome);color:#fff" onclick="downloadPdf()">⬇ Download PDF</button>
    <button class="clearq" onclick="newQuote()">Clear &amp; start new quote</button>`;
   renderSyncPill();
   if(SB&&USER)renderPhotos();
+  if(SB&&USER&&!SIG)initSigPad();
 }
 function removeLine(i){CART.splice(i,1);save();scheduleSave();updateBadge();renderQuote();render();}
 function setQty(i,d){CART[i].qty=Math.max(1,CART[i].qty+d);save();scheduleSave();renderQuote();updateBadge();}
@@ -751,6 +792,21 @@ function buildPdf(){
   doc.setDrawColor(21,24,30);doc.setLineWidth(0.6);doc.line(tx,ty-2,tv,ty-2);ty+=2;
   doc.setFont('helvetica','bold');doc.setFontSize(15);doc.setTextColor(20);
   doc.text('Total',tx,ty+2);doc.text(money(sub+tax),tv,ty+2,{align:'right'});
+  // signature block (if signed)
+  if(SIG&&SIG.dataUrl){
+    let sy=ty+16;
+    if(sy>238)sy=238;
+    doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(31,138,82);
+    doc.text('APPROVED & ACCEPTED',M,sy);
+    try{
+      const pr=doc.getImageProperties(SIG.dataUrl);const ar=pr.width/pr.height;
+      let sh=18, sw=sh*ar; if(sw>70){sw=70;sh=sw/ar;}
+      doc.addImage(SIG.dataUrl,'PNG',M,sy+3,sw,sh);
+      doc.setDrawColor(120);doc.setLineWidth(0.3);doc.line(M,sy+3+sh+1,M+72,sy+3+sh+1);
+    }catch(e){}
+    doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(70);
+    doc.text((SIG.name||'')+(SIG.at?'   ·   '+new Date(SIG.at).toLocaleDateString('en-US'):''),M,sy+30);
+  }
   // footer
   doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(120);
   const fy=270;
@@ -945,10 +1001,11 @@ async function loadQuote(id){
     QID=q.id;QSTATUS=q.status;CUST={name:q.customer_name||'',addr:q.customer_addr||'',job:q.job_po||'',email:q.customer_email||''};taxOn=q.tax_applied;
     CART=(items||[]).map(it=>{const m=optByCode[it.family+'-'+it.tier];return{code:(m?m.o.code:it.family+'-'+it.tier),fam:it.family,tier:it.tier,qty:it.qty,override:Number(it.unit_price)};});
     await loadPhotos(QID);
+    await loadSig(QID,q);
     setSync('ok');closeHistory();updateBadge();render();openQuote();renderSyncPill();
   }catch(e){alert('Could not open quote: '+(e.message||''));}
 }
-function newQuote(){CART=[];CUST={name:'',addr:'',job:'',email:''};QID=null;QSTATUS='draft';taxOn=true;PHOTOS=[];setSync('idle');
+function newQuote(){CART=[];CUST={name:'',addr:'',job:'',email:''};QID=null;QSTATUS='draft';taxOn=true;PHOTOS=[];SIG=null;SIG_name='';setSync('idle');
   save();updateBadge();closeHistory();render();renderQuote();}
 function setStatus(s){QSTATUS=s;scheduleSave();renderQuote();}
 
@@ -1031,6 +1088,70 @@ async function loadPhotos(quoteId){
         PHOTOS.push({path:row.storage_path,dataUrl,uploading:false});
       }catch(e){}
     }
+  }catch(e){}
+}
+
+/* ---- signature ---- */
+let SIG_name='';
+function initSigPad(){
+  const cv=document.getElementById('sigCanvas');if(!cv)return;
+  const pad=document.getElementById('sigPad');
+  const ratio=window.devicePixelRatio||1;
+  const w=pad.clientWidth, h=160;
+  cv.width=w*ratio; cv.height=h*ratio;
+  sigCtx=cv.getContext('2d'); sigCtx.scale(ratio,ratio);
+  sigCtx.lineWidth=2.2; sigCtx.lineCap='round'; sigCtx.lineJoin='round'; sigCtx.strokeStyle='#15181E';
+  sigDirty=false;
+  const pos=e=>{const r=cv.getBoundingClientRect();const t=e.touches?e.touches[0]:e;return{x:t.clientX-r.left,y:t.clientY-r.top};};
+  const start=e=>{e.preventDefault();sigDrawing=true;const p=pos(e);sigCtx.beginPath();sigCtx.moveTo(p.x,p.y);};
+  const move=e=>{if(!sigDrawing)return;e.preventDefault();const p=pos(e);sigCtx.lineTo(p.x,p.y);sigCtx.stroke();sigDirty=true;
+    const hint=pad.querySelector('.hint');if(hint)hint.style.display='none';};
+  const end=()=>{sigDrawing=false;};
+  cv.onmousedown=start;cv.onmousemove=move;window.addEventListener('mouseup',end);
+  cv.ontouchstart=start;cv.ontouchmove=move;cv.ontouchend=end;
+}
+function clearSigPad(){if(sigCtx){const cv=document.getElementById('sigCanvas');sigCtx.clearRect(0,0,cv.width,cv.height);sigDirty=false;
+  const h=document.querySelector('#sigPad .hint');if(h)h.style.display='';}}
+async function acceptSig(){
+  if(!sigDirty){alert('Have the customer sign first.');return;}
+  if(!CART.length){alert('Add a repair first.');return;}
+  await ensureQuoteSaved();
+  if(!QID){alert('Could not save the quote — check signal.');return;}
+  const cv=document.getElementById('sigCanvas');
+  // trim to a tidy white-background PNG
+  const out=document.createElement('canvas');out.width=cv.width;out.height=cv.height;
+  const octx=out.getContext('2d');octx.fillStyle='#fff';octx.fillRect(0,0,out.width,out.height);octx.drawImage(cv,0,0);
+  const dataUrl=out.toDataURL('image/png');
+  const nameEl=document.getElementById('sigName');
+  const signerName=(nameEl&&nameEl.value.trim())||SIG_name||CUST.name||'Customer';
+  const at=new Date().toISOString();
+  const path=`${USER.id}/${QID}/signature.png`;
+  try{
+    const blob=dataUrlToBlob(dataUrl);
+    const {error}=await SB.storage.from('quote-signatures').upload(path,blob,{contentType:'image/png',upsert:true});
+    if(error)throw error;
+    await SB.from('quotes').update({signed_name:signerName,signed_at:at,signature_path:path,status:'won'}).eq('id',QID);
+    SIG={name:signerName,dataUrl,path,at}; QSTATUS='won';
+    renderQuote();
+  }catch(e){alert('Could not save signature: '+(e.message||'unknown'));}
+}
+function clearSig(){
+  if(!confirm('Remove the signature? This sets the quote back to presented.'))return;
+  const path=SIG&&SIG.path;
+  SIG=null;QSTATUS='presented';
+  (async()=>{try{
+    if(path)await SB.storage.from('quote-signatures').remove([path]);
+    if(QID)await SB.from('quotes').update({signed_name:null,signed_at:null,signature_path:null,status:'presented'}).eq('id',QID);
+  }catch(e){}})();
+  renderQuote();
+}
+async function loadSig(quoteId,q){
+  SIG=null;
+  if(!SB||!USER||!q||!q.signature_path)return;
+  try{
+    const {data:dl}=await SB.storage.from('quote-signatures').download(q.signature_path);
+    const dataUrl=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(dl);});
+    SIG={name:q.signed_name||'Signed',dataUrl,path:q.signature_path,at:q.signed_at};
   }catch(e){}
 }
 
