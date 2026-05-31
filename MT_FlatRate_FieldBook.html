@@ -118,6 +118,25 @@ body.tech .techbar{display:block}
 .statusrow button.on.s-lost{background:var(--heat);color:#fff;border-color:var(--heat)}
 .newq{width:100%;padding:13px;border-radius:12px;background:#ECE8DF;color:var(--ink2);font-weight:600;font-size:13.5px;margin-bottom:14px}
 
+/* ---- photos ---- */
+.photosec{margin:16px 0 4px}
+.photosec h5{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);font-weight:700;margin:0 0 10px}
+.photogrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.photocell{position:relative;aspect-ratio:1;border-radius:11px;overflow:hidden;background:#ECE8DF;border:1px solid var(--line)}
+.photocell img{width:100%;height:100%;object-fit:cover;display:block}
+.photocell .px{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;background:rgba(21,24,30,.7);
+  display:grid;place-items:center}
+.photocell .px svg{width:13px;height:13px;stroke:#fff;stroke-width:2.5;fill:none}
+.photocell.up{display:grid;place-items:center}
+.photocell.up .ld{width:22px;height:22px;border:2.5px solid #C3BDB0;border-top-color:var(--cool);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.addphoto{aspect-ratio:1;border-radius:11px;border:1.5px dashed #C3BDB0;background:#F4F1EA;display:grid;place-items:center;
+  color:var(--ink2);transition:.12s}
+.addphoto:active{transform:scale(.96);background:#ECE8DF}
+.addphoto svg{width:26px;height:26px;stroke:var(--ink2);stroke-width:1.8;fill:none}
+.photonote{font-size:11.5px;color:#A39B8B;margin-top:9px;display:flex;align-items:center;gap:6px}
+.photoOnPdf{display:flex;align-items:center;gap:9px;margin-top:11px;font-size:13px;color:var(--ink2);cursor:pointer}
+
 /* search */
 .searchwrap{padding:12px 16px;background:var(--chrome2);position:sticky;top:0;z-index:30}
 .search{display:flex;align-items:center;gap:10px;background:#fff;border-radius:12px;padding:11px 14px}
@@ -390,6 +409,8 @@ let MULT=Object.assign({},DATA.tierMult);
 let CART=[], CUST={name:'',addr:'',job:'',email:''}, taxOn=true, nameOverrides={}, editing=null, techMode=false;
 /* --- supabase / auth state --- */
 let SB=null, USER=null, QID=null, QSTATUS='draft', saveTimer=null, syncState='idle';
+let PHOTOS=[];          // [{id, path, dataUrl}]  dataUrl kept in-memory for thumbnail + pdf
+let photosOnPdf=true;
 try{ if(window.supabase&&window.SB_URL){SB=window.supabase.createClient(window.SB_URL,window.SB_ANON,{auth:{persistSession:true,autoRefreshToken:true}});} }catch(e){console.warn('SB init',e);}
 const famByCode={}; DATA.fams.forEach(f=>famByCode[f.code]=f);
 const conceptByFam={}; DATA.concepts.forEach(c=>conceptByFam[c.f]=c);
@@ -590,10 +611,18 @@ function renderQuote(){
      ${taxOn?`<div class="tr"><span>Tax</span><span>${money(tax)}</span></div>`:''}
      <div class="tr g"><span>Total</span><span class="gv">${money(sub+tax)}</span></div>
    </div>
+   ${SB&&USER?`<div class="photosec">
+     <h5>Job Photos</h5>
+     <div class="photogrid" id="photoGrid"></div>
+     ${PHOTOS.length?`<label class="photoOnPdf"><span class="sw ${photosOnPdf?'on':''}" onclick="togglePhotosPdf()"></span>Include photos on the PDF</label>`:''}
+     <div class="photonote" id="photoNote"></div>
+     <input type="file" id="photoFile" accept="image/*" capture="environment" style="display:none" onchange="addPhotos(this)" multiple>
+   </div>`:''}
    <button class="printbtn" onclick="sendQuote()"><svg viewBox="0 0 24 24"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg> Send Quote to Customer</button>
    <button class="reset" style="margin-top:9px;background:var(--chrome);color:#fff" onclick="downloadPdf()">⬇ Download PDF</button>
    <button class="clearq" onclick="newQuote()">Clear &amp; start new quote</button>`;
   renderSyncPill();
+  if(SB&&USER)renderPhotos();
 }
 function removeLine(i){CART.splice(i,1);save();scheduleSave();updateBadge();renderQuote();render();}
 function setQty(i,d){CART[i].qty=Math.max(1,CART[i].qty+d);save();scheduleSave();renderQuote();updateBadge();}
@@ -727,6 +756,33 @@ function buildPdf(){
   const fy=270;
   doc.setDrawColor(221);doc.setLineWidth(0.3);doc.line(M,fy-5,W-M,fy-5);
   doc.text('Prices include parts and labor. Quote valid 30 days. Thank you for choosing Mechanical Temp.',M,fy);
+  // ---- photos page(s) ----
+  const pics=(photosOnPdf?PHOTOS:[]).filter(p=>p.dataUrl&&!p.uploading);
+  if(pics.length){
+    doc.addPage();
+    let py=M;
+    doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor(225,84,42);
+    doc.text('JOB PHOTOS',M,py);py+=7;
+    doc.setDrawColor(21,24,30);doc.setLineWidth(0.6);doc.line(M,py,W-M,py);py+=6;
+    const colW=(W-2*M-6)/2;        // 2 columns
+    const cellH=colW*0.75+4;       // 4:3 area
+    let col=0;
+    for(const p of pics){
+      if(py+cellH>262){doc.addPage();py=M;}
+      const x=M+col*(colW+6);
+      try{
+        // fit image into colW x (cellH-4) keeping aspect
+        const props=doc.getImageProperties(p.dataUrl);
+        const ar=props.width/props.height;
+        let iw=colW, ih=iw/ar, maxH=cellH-4;
+        if(ih>maxH){ih=maxH;iw=ih*ar;}
+        const ox=x+(colW-iw)/2;
+        doc.addImage(p.dataUrl,'JPEG',ox,py,iw,ih);
+      }catch(e){}
+      col++;
+      if(col===2){col=0;py+=cellH;}
+    }
+  }
   const safe=(CUST.name||'Quote').replace(/[^a-z0-9]+/gi,'_').slice(0,40);
   const fname='MT_Quote_'+safe+'_'+new Date().toISOString().slice(0,10)+'.pdf';
   return {doc,blob:doc.output('blob'),fname,sub,tax};
@@ -888,12 +944,95 @@ async function loadQuote(id){
     const {data:items}=await SB.from('quote_items').select('*').eq('quote_id',id).order('sort_order');
     QID=q.id;QSTATUS=q.status;CUST={name:q.customer_name||'',addr:q.customer_addr||'',job:q.job_po||'',email:q.customer_email||''};taxOn=q.tax_applied;
     CART=(items||[]).map(it=>{const m=optByCode[it.family+'-'+it.tier];return{code:(m?m.o.code:it.family+'-'+it.tier),fam:it.family,tier:it.tier,qty:it.qty,override:Number(it.unit_price)};});
+    await loadPhotos(QID);
     setSync('ok');closeHistory();updateBadge();render();openQuote();renderSyncPill();
   }catch(e){alert('Could not open quote: '+(e.message||''));}
 }
-function newQuote(){CART=[];CUST={name:'',addr:'',job:'',email:''};QID=null;QSTATUS='draft';taxOn=true;setSync('idle');
+function newQuote(){CART=[];CUST={name:'',addr:'',job:'',email:''};QID=null;QSTATUS='draft';taxOn=true;PHOTOS=[];setSync('idle');
   save();updateBadge();closeHistory();render();renderQuote();}
 function setStatus(s){QSTATUS=s;scheduleSave();renderQuote();}
+
+/* ---- photos ---- */
+function togglePhotosPdf(){photosOnPdf=!photosOnPdf;renderQuote();}
+function renderPhotos(){
+  const g=document.getElementById('photoGrid');if(!g)return;
+  g.innerHTML=PHOTOS.map((p,i)=>p.uploading
+    ? `<div class="photocell up"><div class="ld"></div></div>`
+    : `<div class="photocell"><img src="${p.dataUrl}" alt=""><button class="px" onclick="delPhoto(${i})"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>`
+  ).join('')+`<button class="addphoto" onclick="document.getElementById('photoFile').click()"><svg viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3.5"/></svg></button>`;
+  const note=document.getElementById('photoNote');
+  if(note)note.textContent=PHOTOS.length?`${PHOTOS.length} photo${PHOTOS.length>1?'s':''} attached`:'Add before/after or nameplate photos — they upload automatically.';
+}
+function compressImage(file,maxPx,quality){
+  return new Promise((res,rej)=>{
+    const img=new Image();const url=URL.createObjectURL(file);
+    img.onload=()=>{
+      let{width:w,height:h}=img;
+      if(w>h&&w>maxPx){h=Math.round(h*maxPx/w);w=maxPx;}
+      else if(h>maxPx){w=Math.round(w*maxPx/h);h=maxPx;}
+      const cv=document.createElement('canvas');cv.width=w;cv.height=h;
+      cv.getContext('2d').drawImage(img,0,0,w,h);
+      URL.revokeObjectURL(url);
+      res(cv.toDataURL('image/jpeg',quality));
+    };
+    img.onerror=()=>{URL.revokeObjectURL(url);rej(new Error('bad image'));};
+    img.src=url;
+  });
+}
+function dataUrlToBlob(d){const[meta,b64]=d.split(',');const mime=meta.match(/:(.*?);/)[1];
+  const bin=atob(b64);const arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);
+  return new Blob([arr],{type:mime});}
+async function ensureQuoteSaved(){
+  if(!QID){ if(saveTimer)clearTimeout(saveTimer); await syncQuote(); }
+  return QID;
+}
+async function addPhotos(input){
+  const files=[...(input.files||[])];input.value='';
+  if(!files.length)return;
+  if(!CART.length){alert('Add at least one repair before attaching photos.');return;}
+  await ensureQuoteSaved();
+  if(!QID){alert('Could not start the quote — check signal and try again.');return;}
+  for(const file of files){
+    const slot={uploading:true,dataUrl:'',path:''};PHOTOS.push(slot);renderPhotos();
+    try{
+      const dataUrl=await compressImage(file,1600,0.7);
+      slot.dataUrl=dataUrl;
+      const blob=dataUrlToBlob(dataUrl);
+      const path=`${USER.id}/${QID}/${Date.now()}_${Math.random().toString(36).slice(2,7)}.jpg`;
+      const {error}=await SB.storage.from('quote-photos').upload(path,blob,{contentType:'image/jpeg',upsert:false});
+      if(error)throw error;
+      await SB.from('quote_photos').insert({quote_id:QID,storage_path:path});
+      slot.path=path;slot.uploading=false;
+    }catch(e){
+      console.warn('photo upload',e);
+      PHOTOS=PHOTOS.filter(p=>p!==slot);
+      alert('A photo failed to upload: '+(e.message||'unknown')+'. It was not saved.');
+    }
+    renderPhotos();
+  }
+}
+async function delPhoto(i){
+  const p=PHOTOS[i];if(!p)return;
+  PHOTOS.splice(i,1);renderPhotos();
+  try{
+    if(p.path){await SB.storage.from('quote-photos').remove([p.path]);
+      await SB.from('quote_photos').delete().eq('quote_id',QID).eq('storage_path',p.path);}
+  }catch(e){console.warn('photo delete',e);}
+}
+async function loadPhotos(quoteId){
+  PHOTOS=[];
+  if(!SB||!USER)return;
+  try{
+    const {data}=await SB.from('quote_photos').select('storage_path').eq('quote_id',quoteId).order('created_at');
+    for(const row of (data||[])){
+      try{
+        const {data:dl}=await SB.storage.from('quote-photos').download(row.storage_path);
+        const dataUrl=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(dl);});
+        PHOTOS.push({path:row.storage_path,dataUrl,uploading:false});
+      }catch(e){}
+    }
+  }catch(e){}
+}
 
 /* ============================================================ */
 function initApp(){
