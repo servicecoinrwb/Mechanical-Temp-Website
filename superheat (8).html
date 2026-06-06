@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SUPERHEAT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#06080a; --phos:#27e07a; --phos-dim:#149b50;
+    --amber:#ffb23e; --cyan:#3ad6ff; --magenta:#ff4fa3; --warn:#ff5a3c;
+    --flame:#ff8a2b; --panel:#0c1410; --panel-edge:#1d3327; --ink:#cfeede;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;height:100%;background:#000;overflow:hidden;}
+  body{font-family:'VT323',monospace;color:var(--ink);display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(ellipse at center,#0a0f0c 0%,#000 75%);}
+  #cab{position:relative;width:min(96vw,880px);height:min(95vh,660px);border-radius:18px;padding:14px;
+    background:linear-gradient(160deg,#171b1d,#0a0c0d 60%,#070809);
+    box-shadow:0 30px 60px rgba(0,0,0,.7),inset 0 0 0 2px #2a2f31,inset 0 0 30px rgba(0,0,0,.9);}
+  #screen{position:relative;width:100%;height:100%;border-radius:14px;overflow:hidden;background:var(--bg);
+    box-shadow:inset 0 0 60px rgba(0,0,0,.95),inset 0 0 8px var(--phos-dim);filter:saturate(1.05) contrast(1.05);}
+  #screen::before{content:"";position:absolute;inset:0;z-index:50;pointer-events:none;
+    background:repeating-linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,0) 2px,rgba(0,0,0,.28) 3px,rgba(0,0,0,.28) 4px);mix-blend-mode:multiply;}
+  #screen::after{content:"";position:absolute;inset:0;z-index:51;pointer-events:none;
+    background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.6) 100%);box-shadow:inset 0 0 120px rgba(0,0,0,.9);}
+  #flick{position:absolute;inset:0;z-index:52;pointer-events:none;background:var(--phos);opacity:0;mix-blend-mode:screen;}
+  @keyframes flick{0%,97%{opacity:0}98%{opacity:.025}100%{opacity:0}}
+  #screen.on #flick{animation:flick 6s infinite;}
+  .stage{position:absolute;inset:0;padding:16px 18px 14px;display:none;flex-direction:column;z-index:5;}
+  .stage.active{display:flex;}
+  h1,h2,h3,.pix{font-family:'Press Start 2P',monospace;}
+  .glow{text-shadow:0 0 6px currentColor,0 0 14px currentColor;}
+
+  /* TITLE */
+  #title{align-items:center;justify-content:center;text-align:center;gap:4px;}
+  #title h1{font-size:clamp(26px,6.4vw,52px);color:var(--phos);margin:0;letter-spacing:2px;line-height:1.15;
+    text-shadow:0 0 8px var(--phos),0 0 24px var(--phos-dim),3px 3px 0 #003e1f;animation:hue 8s linear infinite;}
+  @keyframes hue{0%,100%{filter:none}50%{filter:hue-rotate(-18deg) brightness(1.1)}}
+  #title .sub{font-family:'Press Start 2P';font-size:clamp(7px,1.7vw,11px);color:var(--amber);margin-top:4px;}
+  #title .blurb{font-size:clamp(15px,3.2vw,20px);color:var(--cyan);max-width:32ch;line-height:1.15;margin-top:14px;}
+  .pulpchip{font-size:50px;margin-bottom:0;filter:drop-shadow(0 0 10px var(--amber));}
+  .gaugemark{width:118px;height:64px;margin-bottom:2px;filter:drop-shadow(0 0 7px var(--cyan)) drop-shadow(0 0 7px var(--warn));}
+  .mtlogo{display:block;width:min(58%,210px);margin:0 auto 3px;opacity:.9;filter:drop-shadow(0 0 6px var(--phos-dim));}
+  .credit .cline{font-size:12px;color:var(--phos-dim);letter-spacing:1px;}
+  .press{font-family:'Press Start 2P';font-size:clamp(9px,2vw,13px);color:#fff;margin-top:18px;animation:blink 1s steps(1) infinite;}
+  @keyframes blink{50%{opacity:0}}
+  .credit{position:absolute;bottom:8px;font-size:13px;color:var(--phos-dim);width:100%;text-align:center;left:0;}
+  .modepick{margin-top:16px;display:flex;gap:10px;}
+  .modebtn{font-family:'Press Start 2P';font-size:9px;padding:9px 12px;border-radius:6px;cursor:pointer;
+    border:2px solid var(--panel-edge);background:transparent;color:var(--phos-dim);}
+  .modebtn.sel{background:var(--phos);color:var(--bg);border-color:var(--phos);box-shadow:0 0 12px var(--phos-dim);}
+  .modehint{font-size:14px;color:var(--phos-dim);margin-top:8px;max-width:34ch;}
+  .linkbtn{font-family:'Press Start 2P';font-size:8px;margin-top:12px;padding:8px 10px;border-radius:6px;cursor:pointer;
+    border:1px solid #1c5566;background:transparent;color:var(--cyan);}
+  /* PRIMER */
+  #primer .title2{text-align:center;font-family:'Press Start 2P';color:var(--cyan);font-size:14px;margin:2px 0 8px;}
+  .primerwrap{flex:1;overflow-y:auto;font-size:17px;line-height:1.3;color:var(--ink);padding-right:4px;}
+  .primerwrap::-webkit-scrollbar{width:8px;} .primerwrap::-webkit-scrollbar-thumb{background:var(--panel-edge);}
+  .primerwrap p{margin:0 0 9px;} .primerwrap .big2{color:var(--amber);font-family:'Press Start 2P';font-size:9px;}
+  .primerwrap .eq{color:var(--phos);background:var(--panel);border:1px solid var(--panel-edge);border-radius:5px;padding:5px 8px;display:inline-block;}
+  .quad{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0 10px;}
+  .qcell{border:2px solid var(--panel-edge);border-radius:6px;padding:7px 9px;background:var(--panel);}
+  .qcell .cond{color:var(--cyan);font-size:15px;} .qcell .ans{color:var(--amber);font-family:'Press Start 2P';font-size:8px;display:block;margin-top:4px;}
+  .primerwrap .foot{color:var(--phos-dim);font-size:15px;}
+
+  #hud{display:flex;gap:8px;align-items:center;justify-content:space-between;font-family:'Press Start 2P';font-size:9px;
+    color:var(--phos);border-bottom:2px solid var(--panel-edge);padding-bottom:8px;margin-bottom:8px;flex:0 0 auto;flex-wrap:wrap;}
+  #hud .rep{color:var(--amber);} #hud .cash{color:var(--cyan);} #hud .lives{color:var(--warn);letter-spacing:2px;}
+
+  .card{flex:1;display:flex;flex-direction:column;justify-content:center;gap:12px;text-align:center;}
+  .marquee{font-family:'Press Start 2P';font-size:clamp(11px,2.6vw,16px);}
+  .marquee.cool{color:var(--cyan);} .marquee.gas{color:var(--flame);} .marquee.hp{color:var(--magenta);}
+  .marquee.boiler{color:var(--flame);} .marquee.chiller{color:var(--cyan);}
+  .bldg{font-size:clamp(19px,4.2vw,27px);color:var(--amber);line-height:1.1;}
+  .complaint{font-size:clamp(17px,3.4vw,21px);color:var(--ink);max-width:34ch;margin:0 auto;line-height:1.18;
+    border-left:3px solid var(--warn);padding:6px 0 6px 14px;text-align:left;}
+  .complaint b{color:var(--warn);}
+  .briefbtns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+  #b-pending{font-size:15px;min-height:18px;}
+  #b-owned{font-size:13px;color:var(--phos-dim);}
+
+  #diag{padding-top:12px;}
+  #diag .top{display:flex;gap:12px;flex:1;min-height:0;}
+  .scene{flex:0 0 36%;display:flex;flex-direction:column;gap:8px;min-height:0;}
+  .scene canvas{width:100%;border:2px solid var(--panel-edge);border-radius:6px;background:#04110a;image-rendering:pixelated;}
+  .meta{font-family:'Press Start 2P';font-size:7px;color:var(--phos-dim);text-align:center;}
+  .comfort-wrap{font-family:'Press Start 2P';font-size:8px;color:var(--ink);}
+  .bar{height:13px;border:2px solid var(--panel-edge);border-radius:3px;overflow:hidden;background:#04110a;margin-top:4px;}
+  .bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--warn),var(--amber),var(--phos));transition:width .2s;}
+  .right{flex:1;display:flex;flex-direction:column;min-height:0;}
+  .readout{flex:1;background:var(--panel);border:2px solid var(--panel-edge);border-radius:6px;padding:8px 10px;
+    overflow-y:auto;font-size:17px;line-height:1.25;color:var(--phos);box-shadow:inset 0 0 18px rgba(0,0,0,.6);}
+  .readout::-webkit-scrollbar{width:8px;} .readout::-webkit-scrollbar-thumb{background:var(--panel-edge);}
+  .readout p{margin:0 0 5px;}
+  .readout .obs{color:var(--cyan);} .readout .rd{color:var(--amber);} .readout .calc{color:#fff;}
+  .readout .sys{color:var(--phos-dim);} .readout .hi{color:var(--warn);} .readout .ok{color:var(--phos);}
+  .readout .ref{color:var(--cyan);border:1px dashed var(--panel-edge);padding:3px 6px;border-radius:4px;}
+  .tag{font-family:'Press Start 2P';font-size:7px;padding:1px 4px;border:1px solid currentColor;border-radius:3px;margin-right:5px;}
+  .seqok{color:var(--phos);} .seqbad{color:var(--warn);}
+
+  .tools{flex:0 0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px;}
+  .btn{font-family:'Press Start 2P';font-size:8px;line-height:1.25;color:var(--bg);background:var(--phos);border:none;
+    border-radius:5px;padding:7px 4px;cursor:pointer;box-shadow:0 3px 0 var(--phos-dim);transition:transform .05s,box-shadow .05s;}
+  .btn:active{transform:translateY(3px);box-shadow:0 0 0 var(--phos-dim);}
+  .btn .cb{font-size:7px;opacity:.75;}
+  .btn.alt{background:var(--cyan);box-shadow:0 3px 0 #1c87a5;}
+  .btn.used{opacity:.4;filter:grayscale(.5);}
+  .btn.big{font-size:11px;padding:14px;background:var(--amber);box-shadow:0 4px 0 #a36400;}
+  .btn.dx{background:var(--magenta);box-shadow:0 3px 0 #a32b67;font-size:9px;}
+  .btn.danger{background:var(--warn);box-shadow:0 3px 0 #a02a16;}
+  .btn.danger.seld{background:var(--amber);color:#1a0d00;box-shadow:0 0 0 3px #fff,0 3px 0 #a36400;}
+  .btn.shopb{background:var(--cyan);box-shadow:0 4px 0 #1c87a5;font-size:11px;padding:14px;}
+  .diagbtns{flex:0 0 auto;display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;}
+  .hidden{display:none!important;}
+
+  /* SHOP */
+  #shop .title2{text-align:center;font-family:'Press Start 2P';color:var(--cyan);font-size:14px;margin:2px 0 8px;}
+  .shopwrap{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:7px;padding-right:4px;}
+  .shopwrap::-webkit-scrollbar{width:8px;} .shopwrap::-webkit-scrollbar-thumb{background:var(--panel-edge);}
+  .shopitem{display:flex;align-items:center;gap:10px;background:var(--panel);border:2px solid var(--panel-edge);
+    border-radius:6px;padding:8px 10px;}
+  .shopitem .info{flex:1;min-width:0;}
+  .shopitem .nm{font-family:'Press Start 2P';font-size:9px;color:var(--amber);}
+  .shopitem .ds{font-size:15px;color:var(--ink);line-height:1.1;margin-top:3px;}
+  .buybtn{font-family:'Press Start 2P';font-size:9px;color:var(--bg);background:var(--phos);border:none;border-radius:5px;
+    padding:8px 8px;cursor:pointer;box-shadow:0 3px 0 var(--phos-dim);white-space:nowrap;}
+  .buybtn:active{transform:translateY(3px);box-shadow:0 0 0 var(--phos-dim);}
+  .buybtn[disabled]{background:var(--panel-edge);color:#5a6a62;box-shadow:none;cursor:default;}
+  .buybtn.ownd{background:transparent;border:1px solid var(--phos);color:var(--phos);box-shadow:none;cursor:default;}
+
+  .verdict{font-family:'Press Start 2P';font-size:clamp(14px,3.2vw,22px);line-height:1.3;}
+  .verdict.good{color:var(--phos);} .verdict.bad{color:var(--warn);}
+  .truth{font-size:clamp(16px,3.3vw,20px);color:var(--cyan);max-width:38ch;margin:0 auto;line-height:1.2;}
+  .scoreline{font-family:'Press Start 2P';font-size:11px;color:var(--amber);}
+
+  #topbtns{position:absolute;top:8px;right:10px;z-index:60;display:flex;gap:6px;}
+  #topbtns button{font-family:'Press Start 2P';font-size:9px;background:transparent;color:var(--phos-dim);
+    border:1px solid var(--panel-edge);border-radius:4px;padding:4px 6px;cursor:pointer;}
+
+  @media (max-width:560px){
+    .readout{font-size:15px;} .tools{grid-template-columns:repeat(2,1fr);}
+    #diag .top{flex-direction:column;}
+    .scene{flex-basis:auto;flex-direction:row;align-items:stretch;}
+    .scene canvas{flex:1;width:auto;} .comfort-wrap{flex:1;align-self:center;}
+    .meta{display:none;}
+  }
+</style>
+</head>
+<body>
+<div id="cab">
+  <div id="screen" class="on">
+    <div id="flick"></div>
+    <div id="topbtns"><button id="mute">&#9834; ON</button></div>
+
+    <!-- TITLE -->
+    <section class="stage active" id="title">
+      <svg class="gaugemark" viewBox="0 0 124 66" xmlns="http://www.w3.org/2000/svg" aria-label="manifold gauges">
+        <circle cx="35" cy="33" r="23" fill="#06140d" stroke="#3ad6ff" stroke-width="2.5"/>
+        <circle cx="89" cy="33" r="23" fill="#160a08" stroke="#ff5a3c" stroke-width="2.5"/>
+        <g stroke="#3ad6ff" stroke-width="1.4" opacity=".8">
+          <line x1="35" y1="13" x2="35" y2="16"/><line x1="55" y1="33" x2="52" y2="33"/>
+          <line x1="35" y1="53" x2="35" y2="50"/><line x1="15" y1="33" x2="18" y2="33"/>
+          <line x1="21" y1="19" x2="23" y2="21"/><line x1="49" y1="19" x2="47" y2="21"/></g>
+        <g stroke="#ff5a3c" stroke-width="1.4" opacity=".8">
+          <line x1="89" y1="13" x2="89" y2="16"/><line x1="109" y1="33" x2="106" y2="33"/>
+          <line x1="89" y1="53" x2="89" y2="50"/><line x1="69" y1="33" x2="72" y2="33"/>
+          <line x1="75" y1="19" x2="77" y2="21"/><line x1="103" y1="19" x2="101" y2="21"/></g>
+        <line x1="35" y1="33" x2="23" y2="22" stroke="#3ad6ff" stroke-width="2.4" stroke-linecap="round"/>
+        <line x1="89" y1="33" x2="102" y2="20" stroke="#ff5a3c" stroke-width="2.4" stroke-linecap="round"/>
+        <circle cx="35" cy="33" r="3.4" fill="#cfeede"/><circle cx="89" cy="33" r="3.4" fill="#cfeede"/>
+        <rect x="33" y="56" width="4" height="8" fill="#1d3327"/><rect x="87" y="56" width="4" height="8" fill="#3a1c14"/>
+      </svg>
+      <h1 class="glow">SUPER<br>HEAT</h1>
+      <div class="sub glow">&#9656; THE SERVICE CALL &#9666;</div>
+      <div class="blurb">Cooling and heating calls. Read the numbers, work the differential, make the call.</div>
+      <div class="modepick">
+        <button class="modebtn sel" data-mode="rookie">ROOKIE</button>
+        <button class="modebtn" data-mode="pro">PRO</button>
+      </div>
+      <div class="modehint" id="modehint">ROOKIE: gauges auto-compute superheat / subcooling and flag what's out of range.</div>
+      <button class="linkbtn" id="primer-btn">&#128214; HOW TO READ THE GAUGES</button>
+      <div class="press">PRESS START</div>
+      <div class="credit"><img class="mtlogo" src="data:image/png;base64,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" alt="Mechanical Temp Heating and Air Conditioning Service"><div class="cline">&copy; 198X · A MECHANICAL TEMP PRODUCTION</div></div>
+    </section>
+
+    <!-- PRIMER -->
+    <section class="stage" id="primer">
+      <div class="title2">&#128214; READING THE GAUGES</div>
+      <div class="primerwrap">
+        <p>Two numbers tell the story of a cooling system. Get both and you can name almost any fault.</p>
+        <p><span class="big2">SUPERHEAT</span><br>How much the refrigerant gas warmed up <i>past</i> boiling on the cold (suction) side. Take it as:</p>
+        <p><span class="eq">suction line temp &minus; suction saturation temp</span></p>
+        <p><span class="big2">SUBCOOLING</span><br>How much the liquid cooled <i>below</i> condensing on the hot (liquid) side. Take it as:</p>
+        <p><span class="eq">head saturation temp &minus; liquid line temp</span></p>
+        <p>Your gauges give you the saturation temps; a clamp thermometer gives the line temps. Healthy is roughly <b>8&ndash;14&deg;</b> for each.</p>
+        <p class="big2" style="color:var(--cyan)">THE FOUR-BOX READ</p>
+        <div class="quad">
+          <div class="qcell"><span class="cond">High superheat<br>LOW subcooling</span><span class="ans">LOW CHARGE / LEAK</span></div>
+          <div class="qcell"><span class="cond">High superheat<br>HIGH subcooling</span><span class="ans">RESTRICTION</span></div>
+          <div class="qcell"><span class="cond">LOW superheat<br>HIGH subcooling</span><span class="ans">OVERCHARGE</span></div>
+          <div class="qcell"><span class="cond">Normal SH &amp; SC<br>but high head + amps</span><span class="ans">DIRTY CONDENSER</span></div>
+        </div>
+        <p>When two readings look alike, the <i>other</i> one breaks the tie: low charge and a restriction both run high superheat &mdash; subcooling (low vs high) tells them apart.</p>
+        <p class="foot">You don't have to memorize this. ROOKIE mode does the subtraction and flags what's out of range. PRO mode hands you the raw numbers and lets you call it. Either way &mdash; match the pattern, make the call.</p>
+      </div>
+      <button class="btn big" id="primer-back" style="margin-top:8px;">BACK &#9656;</button>
+    </section>
+
+    <!-- BRIEFING -->
+    <section class="stage" id="briefing">
+      <div id="hud"></div>
+      <div class="card">
+        <div class="marquee glow" id="b-season">&#9698; DISPATCH &#9699;</div>
+        <div class="bldg" id="b-bldg"></div>
+        <div class="complaint" id="b-complaint"></div>
+        <div id="b-pending"></div>
+        <div class="briefbtns">
+          <button class="btn shopb" id="b-shop">&#128666; SUPPLY HOUSE</button>
+          <button class="btn big" id="b-go">ROLL THE TRUCK &#9656;</button>
+        </div>
+        <div id="b-owned"></div>
+      </div>
+    </section>
+
+    <!-- SHOP -->
+    <section class="stage" id="shop">
+      <div id="hud"></div>
+      <div class="title2">&#128295; SUPPLY HOUSE</div>
+      <div class="shopwrap" id="shoplist"></div>
+      <button class="btn big" id="shop-close" style="margin-top:8px;">BACK TO DISPATCH &#9656;</button>
+    </section>
+
+    <!-- DIAGNOSE -->
+    <section class="stage" id="diag">
+      <div id="hud"></div>
+      <div class="top">
+        <div class="scene">
+          <canvas id="unit" width="150" height="150"></canvas>
+          <div class="meta" id="sysmeta"></div>
+          <div class="comfort-wrap">
+            CUSTOMER COMFORT
+            <div class="bar"><i id="comfortBar" style="width:100%"></i></div>
+            <div style="margin-top:8px">SHIFT CLOCK</div>
+            <div class="bar"><i id="timeBar" style="width:100%;background:linear-gradient(90deg,#3ad6ff,#27e07a)"></i></div>
+          </div>
+        </div>
+        <div class="right">
+          <div class="readout" id="readout"></div>
+          <div class="tools" id="tools"></div>
+        </div>
+      </div>
+      <div class="diagbtns hidden" id="diagbtns"></div>
+    </section>
+
+    <!-- DRIVE -->
+    <section class="stage" id="drive">
+      <div class="card">
+        <div class="marquee glow" style="color:var(--amber);">&#128739; ON THE ROAD</div>
+        <div class="bldg" id="drive-t"></div>
+        <div class="truth" id="drive-m"></div>
+        <div class="scoreline" id="drive-mod"></div>
+        <button class="btn big" id="drive-go">KEEP DRIVING &#9656;</button>
+      </div>
+    </section>
+
+    <!-- RESULT -->
+    <section class="stage" id="result">
+      <div id="hud"></div>
+      <div class="card">
+        <div class="verdict" id="r-verdict"></div>
+        <div class="truth" id="r-truth"></div>
+        <div class="scoreline" id="r-score"></div>
+        <button class="btn big" id="r-next">NEXT CALL &#9656;</button>
+      </div>
+    </section>
+
+    <!-- END -->
+    <section class="stage" id="end">
+      <div class="card">
+        <div class="verdict" id="e-title"></div>
+        <div class="truth" id="e-body"></div>
+        <div class="scoreline" id="e-score"></div>
+        <button class="btn big" id="e-again">INSERT COIN &#9656;</button>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const screens={title:$('#title'),primer:$('#primer'),briefing:$('#briefing'),shop:$('#shop'),diag:$('#diag'),drive:$('#drive'),result:$('#result'),end:$('#end')};
+function show(n){for(const k in screens)screens[k].classList.toggle('active',k===n);}
+
+const R={f:(a,b)=>a+Math.random()*(b-a),i:(a,b)=>Math.round(a+Math.random()*(b-a)),
+  pick:a=>a[(Math.random()*a.length)|0],chance:p=>Math.random()<p};
+
+/* R-410A PT */
+const PT=[[15,69],[20,78],[25,88],[30,99],[35,109],[40,118],[45,130],[50,142],[55,156],[60,170],
+[65,185],[70,201],[80,236],[90,274],[100,317],[110,365],[120,418],[125,446],[130,476],[135,508],[140,541]];
+function psig410(t){if(t<=PT[0][0])return PT[0][1];const L=PT[PT.length-1];if(t>=L[0])return L[1];
+  for(let i=0;i<PT.length-1;i++){const[a,pa]=PT[i],[b,pb]=PT[i+1];if(t>=a&&t<=b)return Math.round(pa+(pb-pa)*(t-a)/(b-a));}return 0;}
+const PT134=[[10,12],[15,15],[20,18],[25,22],[30,26],[35,30],[40,35],[45,40],[50,45],[55,51],[60,57],[70,71],[80,87],[90,105],[100,124],[105,135],[110,147],[115,159],[120,171],[130,199]];
+function psig134(t){if(t<=PT134[0][0])return PT134[0][1];const L=PT134[PT134.length-1];if(t>=L[0])return L[1];
+  for(let i=0;i<PT134.length-1;i++){const[a,pa]=PT134[i],[b,pb]=PT134[i+1];if(t>=a&&t<=b)return Math.round(pa+(pb-pa)*(t-a)/(b-a));}return 0;}
+function capRated(){return R.pick(['45/5','40/5','35/5','60/5','50/5']);}
+function capGood(r){const[h,f]=r.split('/').map(Number);return (h-R.f(0.2,1.0)).toFixed(1)+' / '+(f-R.f(0,0.2)).toFixed(1);}
+function capDead(r){const[h,f]=r.split('/').map(Number);return (R.f(0.18,0.30)*h).toFixed(1)+' / '+(R.f(0.3,0.6)*f).toFixed(1);}
+function capWeak(r){const[h,f]=r.split('/').map(Number);return (R.f(0.60,0.72)*h).toFixed(1)+' / '+(R.f(0.6,0.8)*f).toFixed(1);}
+function sameSet(a,b){if(a.length!==b.length)return false;const s=new Set(b);return a.every(x=>s.has(x));}
+
+const DX={
+  low_charge:'LOW CHARGE / LEAK',overcharge:'OVERCHARGE',dirty_cond:'DIRTY CONDENSER',
+  restriction:'LIQUID-LINE RESTRICTION',low_airflow_cool:'AIRFLOW / ICED COIL',
+  bad_cap:'FAILED RUN CAP',bad_contactor:'BAD CONTACTOR',
+  flame_sensor:'DIRTY FLAME SENSOR',hsi_igniter:'BAD HSI IGNITER',
+  gas_valve:'GAS VALVE NOT OPENING',pressure_switch:'PRESSURE SWITCH / FLUE',
+  high_limit:'HIGH-LIMIT / AIRFLOW',reversing_valve:'REVERSING VALVE STUCK',defrost:'DEFROST FAULT',
+  lwco_lockout:'LOW-WATER LOCKOUT',dead_circulator:'DEAD CIRCULATOR / AIR',waterlogged_expansion:'WATERLOGGED EXP. TANK',
+  boiler_noflame:'GAS VALVE / NO FLAME',low_charge_chiller:'LOW CHARGE (CHILLER)',fouled_evaporator:'FOULED EVAPORATOR',
+  fouled_condenser_chiller:'FOULED CONDENSER',low_cond_water_flow:'LOW COND-WATER FLOW',low_oil_pressure:'LOW OIL PRESSURE'};
+const SYS_OPTIONS={
+  cool:['low_charge','overcharge','dirty_cond','restriction','low_airflow_cool','bad_cap','bad_contactor'],
+  gas :['flame_sensor','hsi_igniter','gas_valve','pressure_switch','high_limit'],
+  hp  :['reversing_valve','defrost','bad_cap','bad_contactor'],
+  boiler:['lwco_lockout','dead_circulator','waterlogged_expansion','boiler_noflame'],
+  chiller:['low_charge_chiller','fouled_evaporator','fouled_condenser_chiller','low_cond_water_flow','low_oil_pressure']};
+const SYS_ANSWERS={cool:SYS_OPTIONS.cool,gas:SYS_OPTIONS.gas,hp:['reversing_valve','defrost'],
+  boiler:SYS_OPTIONS.boiler,chiller:SYS_OPTIONS.chiller};
+
+const BLDGS={
+  cool:['OAKWOOD DENTAL','GRECO\u2019S PIZZA','RILEY RESIDENCE','NORTHLINE SUITE 200','HASTINGS HOME','CEDAR VIEW APTS','LAKESIDE DELI','BRADY LAW OFFICE'],
+  gas :['ST. MARK\u2019S CHURCH','WALSH RESIDENCE','MAPLE GROVE DUPLEX','DETROIT MACHINE CO','KOWALSKI HOME','UNITY HALL','FERN ST. RENTAL'],
+  hp  :['SUMMIT TOWNHOMES','PINE RIDGE HOME','CLEARFIELD CONDO','VANDENBERG HOUSE','HARBOR FLATS #4'],
+  boiler:['ST. ALOYSIUS PARISH','RIVERFRONT TOWER','DETROIT ARMS HOTEL','LINCOLN MIDDLE SCHOOL','MERIDIAN OFFICE PLAZA'],
+  chiller:['ONE WOODWARD','MERCY HOSPITAL WING B','TECHTOWN DATA HALL','GRANDVIEW MALL','CIVIC CENTER']};
+const EQUIP={cool:['ROOFTOP RTU','SPLIT SYSTEM','PACKAGE UNIT','CONDENSER'],
+  gas:['80% FURNACE','HIGH-EFF FURNACE','GAS PACK','UPFLOW FURNACE'],hp:['HEAT PUMP','SPLIT HEAT PUMP','PACKAGE HEAT PUMP'],
+  boiler:['HOT-WATER BOILER','HYDRONIC PLANT','CAST-IRON BOILER'],chiller:['WATER-COOLED CHILLER','SCREW CHILLER','CENTRIFUGAL CHILLER']};
+
+/* ===== FAULT GENERATORS (validated) ===== */
+const FAULTS={
+  low_charge:{sys:'cool',art:'leak',
+    complaint:()=>R.pick(["\"Runs all day but the air's just <b>warm</b>.\"","\"Cooling bill is <b>through the roof</b> and it's barely cold.\""]),
+    inspect:()=>[`<span class='obs'>Supply only ${R.i(7,10)}\u00b0 cooler than return. Long run times.</span>`,
+      `<span class='obs'>Oily film weeping at a service valve.</span>`,`<span class='obs'>Sight glass: flash gas / bubbles streaming.</span>`],
+    gen(){const sucSat=R.i(27,34),headSat=R.i(95,108),sh=R.i(19,27),sc=R.i(2,6),rla=R.i(17,20);
+      return cool({sucSat,headSat,sh,sc,amps:+(R.f(.55,.72)*rla).toFixed(1),rla,capOk:true,
+        multi:'24V at contactor OK \u00b7 line voltage OK \u00b7 contacts clean.',
+        truth:`Superheat ${sh}\u00b0 (high) with subcooling only ${sc}\u00b0 (low) means it's short on refrigerant. Find the leak, repair, weigh in the charge.`});}},
+  overcharge:{sys:'cool',art:'over',
+    complaint:()=>"\"Someone 'topped it off' last week and now it <b>trips the breaker</b>.\"",
+    inspect:()=>[`<span class='obs'>Compressor laboring, discharge line very hot.</span>`,
+      `<span class='obs'>No leaks, sight glass full and clear.</span>`,`<span class='obs'>Recent service tag on the unit.</span>`],
+    gen(){const sucSat=R.i(46,52),headSat=R.i(122,134),sh=R.i(1,4),sc=R.i(16,22),rla=R.i(16,19);
+      return cool({sucSat,headSat,sh,sc,amps:+(R.f(1.05,1.18)*rla).toFixed(1),rla,capOk:true,
+        multi:'Electrical nominal. High amps are from high head.',
+        truth:`Low superheat ${sh}\u00b0 + high subcooling ${sc}\u00b0 + ${psig410(headSat)} head = overcharged. Recover refrigerant back to spec.`});}},
+  dirty_cond:{sys:'cool',art:'dirty',
+    complaint:()=>"\"Cools a little but the breaker keeps <b>tripping</b> on hot afternoons.\"",
+    inspect:()=>[`<span class='obs'>Condenser coil packed with cottonwood & grease film.</span>`,
+      `<span class='obs'>Discharge line screaming hot. Fan spinning fine.</span>`,`<span class='obs'>Gets worse as outdoor temp climbs.</span>`],
+    gen(){const sucSat=R.i(40,45),headSat=R.i(128,140),sh=R.i(8,13),sc=R.i(10,15),rla=R.i(17,19);
+      return cool({sucSat,headSat,sh,sc,amps:+(R.f(1.15,1.3)*rla).toFixed(1),rla,capOk:true,
+        multi:'Electrical nominal \u2014 high head is airflow/heat-rejection.',
+        truth:`Superheat & subcooling are basically normal, but head is ${psig410(headSat)} (${headSat}\u00b0 sat) and the compressor is over-amping. A coil that can't reject heat does exactly this. Wash the condenser.`});}},
+  restriction:{sys:'cool',art:'restrict',
+    complaint:()=>"\"New unit, cools <b>poorly</b>, and there's frost on a little canister outside.\"",
+    inspect:()=>[`<span class='obs'>Frost/sweat AT the filter-drier, real temp drop across it.</span>`,
+      `<span class='obs'>Evaporator starved \u2014 barely any load on it.</span>`,`<span class='obs'>No oil leaks anywhere; charge was weighed in at install.</span>`],
+    gen(){const sucSat=R.i(16,25),headSat=R.i(80,92),sh=R.i(24,33),sc=R.i(15,21),rla=R.i(16,18);
+      return cool({sucSat,headSat,sh,sc,amps:+(R.f(.5,.62)*rla).toFixed(1),rla,capOk:true,
+        multi:'Electrical nominal. Charge is correct.',
+        truth:`High superheat ${sh}\u00b0 AND high subcooling ${sc}\u00b0 is the tell: liquid is stacking ahead of a blockage while the evap starves. The frost & temp drop across the drier point right at a restricted liquid line / clogged drier.`});}},
+  low_airflow_cool:{sys:'cool',art:'ice',
+    complaint:()=>"\"It froze into a <b>block of ice</b>, now there's water all over the floor.\"",
+    inspect:()=>[`<span class='obs'>Ice on the evaporator & suction line. Water pooling.</span>`,
+      `<span class='obs'>Filter is black \u2014 light won't pass through it.</span>`,`<span class='obs'>Blower running but airflow at the registers is feeble.</span>`],
+    gen(){const sucSat=R.i(6,17),headSat=R.i(74,86),sh=R.i(4,8),sc=R.i(9,13),rla=R.i(16,18);
+      return cool({sucSat,headSat,sh,sc,iceNote:true,amps:+(R.f(.6,.75)*rla).toFixed(1),rla,capOk:true,
+        multi:'Charge & electrical check out \u2014 problem is on the air side.',
+        truth:`Subcooling is normal (${sc}\u00b0), so the charge is fine \u2014 not a refrigerant problem. A choked filter starves the coil, suction drops below freezing (${sucSat}\u00b0 sat) and it ices over. Thaw it, replace the filter, check the blower.`});}},
+  bad_cap:{sys:'cool',art:'cap',
+    complaint:()=>"\"Outside unit just <b>hums and buzzes</b> then clicks off. No cold air.\"",
+    inspect:()=>[`<span class='obs'>Condenser fan barely twitches. Compressor hums, trips on overload.</span>`,
+      `<span class='obs'>Top of the dual cap looks slightly domed.</span>`,`<span class='obs'>System won't build pressure \u2014 nothing's pumping.</span>`],
+    gen(){const st=R.i(38,46),rated=capRated();
+      return {sys:'cool',
+        gauges:{suc:psig410(st),sucSat:st,head:psig410(st+R.i(2,5)),headSat:st+R.i(2,5),note:'pressures equalized \u2014 not pumping'},
+        thermo:{noRun:true},clamp:{amps:0.0,rla:R.i(18,22),note:'fan 0A \u00b7 comp spikes to LRA then drops on overload'},
+        cap:{rated,meas:capDead(rated),ok:false},
+        multi:'24V present, contactor pulled IN, line voltage good \u2014 it IS getting power.',
+        truth:`Electrical, not refrigerant. Run cap reads way under its ${rated} rating \u2014 failed. Motors can't start, so they sit and hum on the overload. Swap the dual run capacitor.`};}},
+  bad_contactor:{sys:'cool',art:'contactor',
+    complaint:()=>"\"Thermostat calls but the outdoor unit is <b>dead silent</b>. Nothing happens.\"",
+    inspect:()=>[`<span class='obs'>No hum, no fan, no compressor \u2014 completely still.</span>`,
+      `<span class='obs'>Contactor points look pitted/burnt.</span>`,`<span class='obs'>Indoor blower runs fine; it's only the outdoor unit.</span>`],
+    gen(){const st=R.i(70,80);
+      return {sys:'cool',
+        gauges:{suc:psig410(st),sucSat:st,head:psig410(st),headSat:st,note:'standing pressure \u2014 unit never started'},
+        thermo:{noRun:true},clamp:{amps:0.0,rla:R.i(17,20),note:'0A everywhere \u2014 nothing is energized'},
+        cap:{rated:capRated(),meas:'reads fine',ok:true},
+        multi:'24V at the contactor COIL is present, but contacts are open/pitted \u2014 no L1\u2013T1 continuity through them.',
+        truth:`Not the capacitor \u2014 the cap is fine and there's no hum because nothing's even trying to start. 24V is reaching the contactor coil but the burnt contacts won't pass power. Replace the contactor.`};}},
+  flame_sensor:{sys:'gas',art:'f_flame',
+    complaint:()=>"\"Furnace fires up then <b>shuts right back off</b>, over and over.\"",
+    inspect:()=>[`<span class='obs'>Burners light, run a few seconds, then gas cuts.</span>`,
+      `<span class='obs'>Flame sensor rod is sooty / oxidized.</span>`,`<span class='obs'>Locks out after three tries.</span>`],
+    gen(){const ua=+R.f(0.2,1.0).toFixed(1);
+      return gas({seq:['Inducer starts','Pressure switch closes','HSI glows','Burners IGNITE',
+        '!Flame drops out after ~'+R.i(3,6)+'s','!Retry\u2026 lockout after 3 tries'],
+        flame:ua,mano:R.pick([3.4,3.5,3.6]),hsiOhms:R.i(45,70)+'\u03a9 (OK)',
+        rise:R.i(45,60),nameplate:'40\u201370\u00b0F',filter:'ok',
+        multi:'24V OK \u00b7 limits closed \u00b7 pressure switch OK.',
+        truth:`Flame signal is ${ua}\u00b5A (healthy is ~4\u20136). The burner lights but the dirty sensor can't prove flame, so the board drops gas in a few seconds. Clean or replace the flame sensor.`});}},
+  hsi_igniter:{sys:'gas',art:'f_noign',
+    complaint:()=>"\"Blower comes on but I get <b>no heat at all</b>, ever.\"",
+    inspect:()=>[`<span class='obs'>Inducer runs, but the igniter never glows.</span>`,
+      `<span class='obs'>No ignition attempt \u2014 straight to lockout.</span>`,`<span class='obs'>Hot-surface igniter looks cracked.</span>`],
+    gen(){return gas({seq:['Inducer starts','Pressure switch closes','!HSI does NOT glow','!No ignition','!Lockout'],
+        flame:0,mano:'n/a (no attempt)',hsiOhms:'OL / open',rise:0,nameplate:'40\u201370\u00b0F',filter:'ok',
+        multi:'24V to the igniter is present \u2014 but it is not heating.',
+        truth:`The igniter measures open (no continuity). It never heats, so nothing lights. Replace the hot-surface igniter.`});}},
+  gas_valve:{sys:'gas',art:'f_gas',
+    complaint:()=>"\"It tries and tries \u2014 I hear the click and glow \u2014 but <b>never lights</b>.\"",
+    inspect:()=>[`<span class='obs'>Igniter glows bright orange on cue.</span>`,
+      `<span class='obs'>No flame whatsoever, then lockout.</span>`,`<span class='obs'>Gas is on at the meter; pilot tubing intact.</span>`],
+    gen(){return gas({seq:['Inducer starts','Pressure switch closes','HSI glows hot','24V to gas valve','!NO flame','!Lockout'],
+        flame:0,mano:0,hsiOhms:R.i(45,70)+'\u03a9 (OK)',rise:0,nameplate:'40\u201370\u00b0F',filter:'ok',
+        multi:'24V IS present at the gas-valve terminals on the heat call.',
+        truth:`Igniter glows and the valve is commanded (24V present) but manifold pressure reads 0\" WC \u2014 the valve isn't opening. Confirm gas supply, then replace the gas valve.`});}},
+  pressure_switch:{sys:'gas',art:'f_flue',
+    complaint:()=>"\"It hums for a second then <b>quits</b> before it even tries to light.\"",
+    inspect:()=>[`<span class='obs'>Inducer spins up, but the sequence stalls right there.</span>`,
+      `<span class='obs'>Never advances to the igniter.</span>`,`<span class='obs'>Flue/intake looks partly blocked; condensate trap gurgling.</span>`],
+    gen(){return gas({seq:['Inducer starts','!Pressure switch does NOT close','!Sequence stalls \u2014 never reaches igniter','!Lockout'],
+        flame:0,mano:'n/a',hsiOhms:R.i(45,70)+'\u03a9 (would be OK)',rise:0,nameplate:'40\u201370\u00b0F',filter:'ok',
+        multi:'Pressure switch reads OPEN under draft \u2014 it never proves venting.',
+        truth:`The pressure switch never proves draft, so the board won't advance to ignition. Look for a blocked flue/intake, plugged condensate, or a weak inducer / cracked sensing hose.`});}},
+  high_limit:{sys:'gas',art:'f_limit',
+    complaint:()=>"\"It heats for a while then <b>shuts off</b>, fan keeps blowing, then restarts.\"",
+    inspect:()=>[`<span class='obs'>Full ignition, runs several minutes, then cuts on the limit.</span>`,
+      `<span class='obs'>Cabinet very hot. Filter is filthy.</span>`,`<span class='obs'>Airflow at the registers is weak.</span>`],
+    gen(){const rise=R.i(76,92);
+      return gas({seq:['Full ignition','Runs ~'+R.i(5,8)+' min','!Shuts off on HIGH LIMIT','Blower keeps running','Recycles'],
+        flame:R.i(4,6),mano:R.pick([3.4,3.5,3.6]),hsiOhms:R.i(45,70)+'\u03a9 (OK)',
+        rise,nameplate:'40\u201370\u00b0F',filter:'dirty',
+        multi:'Limit opens on overheat. Flame signal fine \u2014 it is airflow.',
+        truth:`Temperature rise is ${rise}\u00b0F against a 40\u201370\u00b0F nameplate \u2014 not enough air over the heat exchanger, so it overheats and trips the limit. Flame signal is healthy. Replace the filter, check blower & ductwork.`});}},
+  reversing_valve:{sys:'hp',art:'hp_valve',
+    complaint:()=>"\"Set to heat but it's blowing <b>cold air</b> in the middle of winter.\"",
+    inspect:()=>[`<span class='obs'>Thermostat in HEAT, compressor running \u2014 but supply air is cool.</span>`,
+      `<span class='obs'>Outdoor coil is clear, no ice at all.</span>`,`<span class='obs'>Charge verified, no leaks on record.</span>`],
+    gen(){const supply=R.i(58,66);
+      return hp({supply,room:70,coilTemp:R.i(38,46),iced:false,
+        valveNote:'Almost no temp split across the valve \u2014 solenoid buzzing, not shifting.',
+        coilNote:'Outdoor coil clear and rejecting heat \u2014 it\u2019s acting like A/C.',amps:R.i(11,15),
+        truth:`It's set to HEAT but supply air is only ${supply}\u00b0 \u2014 the reversing valve is stuck/not shifting, so it's effectively running in cooling. The coil is clear, so it isn't a defrost problem. Free or replace the reversing valve.`});}},
+  lwco_lockout:{sys:'boiler',art:'boiler_lwco',
+    complaint:()=>"\"Big boiler in the basement \u2014 <b>no heat in the building</b> and it won't fire.\"",
+    inspect:()=>[`<span class='obs'>Gauge glass low \u2014 water level down. Burner not lit.</span>`,
+      `<span class='obs'>Small weep at a fitting on the return.</span>`,`<span class='obs'>Low-water cutoff indicator is lit.</span>`],
+    gen(){const psi=R.i(3,7);return {sys:'boiler',
+      seq:['Call for heat','!Low-water cutoff OPEN','!Burner will NOT fire','!Safety lockout'],
+      gauge:{psi,supply:R.i(70,90),ret:R.i(68,86),note:'system pressure LOW (should be ~12\u201325 psi)'},
+      flame:{ua:0,gas:'n/a',note:'never attempts ignition'},
+      flow:{running:false,dt:'n/a',note:'not firing'},
+      controls:'Low-water cutoff is OPEN \u2014 it never proves water, so the burner stays locked out.',
+      truth:`System pressure is only ${psi} psi and the low-water cutoff tripped \u2014 the boiler locks out the burner when it can't prove water. Find why it's low (leak, failed auto-feed, or a closed makeup valve), restore water, and reset.`};}},
+  dead_circulator:{sys:'boiler',art:'boiler_flow',
+    complaint:()=>"\"Boiler's roaring hot but the <b>radiators stay cold</b>. No heat to the building.\"",
+    inspect:()=>[`<span class='obs'>Boiler is HOT, supply pipe hot \u2014 but the zones stay cold.</span>`,
+      `<span class='obs'>Circulator pump is silent / not spinning.</span>`,`<span class='obs'>Gurgling \u2014 possible air in the loop.</span>`],
+    gen(){const sup=R.i(170,190);return {sys:'boiler',
+      seq:['Call for heat','Circulator commanded','Burner fires','Boiler reaches temp','!No heat delivered to zones'],
+      gauge:{psi:R.i(15,22),supply:sup,ret:R.i(150,168),note:'boiler hot, but heat isn\u2019t moving out'},
+      flame:{ua:R.i(4,6),gas:'3.5\" WC',note:'combustion fine'},
+      flow:{running:false,dt:'~0\u00b0 across the system',note:'circulator NOT moving water (seized or air-bound)'},
+      controls:'24V to the circulator is present, but the pump isn\u2019t turning.',
+      truth:`The boiler is making plenty of heat (supply ${sup}\u00b0) but the circulator isn't moving water \u2014 no flow, no delta-T across the system. The pump is seized or the loop is air-bound. Replace/free the circulator and purge the air.`};}},
+  waterlogged_expansion:{sys:'boiler',art:'boiler_xtank',
+    complaint:()=>"\"Water's <b>dripping from a valve</b> on the boiler and it spits when it gets hot.\"",
+    inspect:()=>[`<span class='obs'>Relief valve discharging once the boiler heats up.</span>`,
+      `<span class='obs'>Expansion tank feels heavy/waterlogged \u2014 no air cushion.</span>`,`<span class='obs'>Pressure gauge climbs fast as it fires.</span>`],
+    gen(){return {sys:'boiler',
+      seq:['Call for heat','Circulator runs','Burner fires','Heats normally','!Relief valve discharges as pressure spikes'],
+      gauge:{psi:'12 cold \u2192 32+ hot',supply:R.i(170,185),ret:R.i(150,165),note:'pressure SPIKES when hot and dumps the relief'},
+      flame:{ua:R.i(4,6),gas:'3.5\" WC',note:'combustion fine'},
+      flow:{running:true,dt:'~20\u00b0 (normal)',note:'flow is fine'},
+      controls:'Controls fine. The relief valve is doing its job \u2014 dumping excess pressure.',
+      truth:`Heating and flow are fine, but pressure climbs from ~12 cold to 30+ hot and pops the relief. The expansion tank is waterlogged \u2014 it's lost its air charge, so the water has nowhere to expand. Recharge or replace the expansion tank (and check the relief valve).`};}},
+  boiler_noflame:{sys:'boiler',art:'boiler_flame',
+    complaint:()=>"\"It runs and clicks but <b>never lights</b> \u2014 no heat at all.\"",
+    inspect:()=>[`<span class='obs'>Sequence reaches ignition but no flame establishes.</span>`,
+      `<span class='obs'>Water level & pressure look fine.</span>`,`<span class='obs'>Igniter glows but the burners stay dark.</span>`],
+    gen(){return {sys:'boiler',
+      seq:['Call for heat','LWCO proves water','Igniter glows','24V to gas valve','!No flame','!Lockout'],
+      gauge:{psi:R.i(15,22),supply:R.i(120,140),ret:R.i(118,138),note:'water & pressure OK'},
+      flame:{ua:0,gas:'0\" WC',note:'no gas at the manifold'},
+      flow:{running:true,dt:'n/a (no heat yet)',note:'circulator fine'},
+      controls:'Water proven, igniter hot, 24V to the valve present \u2014 but no gas.',
+      truth:`Water and pressure are fine and the igniter glows, but manifold pressure is 0" WC with 24V on the valve \u2014 the gas valve isn't opening. Confirm gas supply, then replace the valve.`};}},
+  low_charge_chiller:{sys:'chiller',art:'chiller_charge',
+    complaint:()=>"\"The chiller can't <b>hold setpoint</b> \u2014 building's warm and it keeps alarming.\"",
+    inspect:()=>[`<span class='obs'>Sight glass flashing/bubbling. Low-pressure alarm history.</span>`,
+      `<span class='obs'>Chilled water leaving warmer than the 44\u00b0 setpoint.</span>`,`<span class='obs'>Faint oil trace near a fitting.</span>`],
+    gen(){const sucSat=R.i(26,32),disSat=R.i(95,105),sh=R.i(18,26),sc=R.i(2,5),lwt=R.i(50,56);
+      return chiller({sucSat,disSat,sh,sc,lwt,ewt:lwt+R.i(6,10),cwE:R.i(83,87),cwL:R.i(93,97),oilNet:R.i(20,28),amps:R.i(70,85),
+        truth:`Low suction (${sucSat}\u00b0 sat), high superheat ${sh}\u00b0, LOW subcooling ${sc}\u00b0, and a big evaporator approach \u2014 the chiller is short on refrigerant and can't pull the chilled water to setpoint. Leak-check, repair, recharge.`});}},
+  fouled_evaporator:{sys:'chiller',art:'chiller_evap',
+    complaint:()=>"\"Chiller trips on low temp and the building isn't getting enough cooling.\"",
+    inspect:()=>[`<span class='obs'>Evaporator tubes scaled/fouled; chilled-water strainer dirty.</span>`,
+      `<span class='obs'>Charge & sight glass look fine \u2014 clear and full.</span>`,`<span class='obs'>Chilled-water flow seems low.</span>`],
+    gen(){const sucSat=R.i(33,38),disSat=R.i(98,108),sh=R.i(8,12),sc=R.i(8,12),lwt=R.i(46,50);
+      return chiller({sucSat,disSat,sh,sc,lwt,ewt:lwt+R.i(5,8),cwE:R.i(83,87),cwL:R.i(94,98),oilNet:R.i(20,28),amps:R.i(70,85),
+        truth:`Evaporator approach is high (chilled water ${lwt}\u00b0 vs ${sucSat}\u00b0 refrigerant) but superheat ${sh}\u00b0 and subcooling ${sc}\u00b0 are NORMAL \u2014 the refrigerant side is fine. The chilled water isn't transferring heat into the barrel: fouled evaporator tubes or low chilled-water flow. De-scale the tubes / restore flow.`});}},
+  fouled_condenser_chiller:{sys:'chiller',art:'chiller_cond',
+    complaint:()=>"\"Keeps <b>tripping on high pressure</b> on hot afternoons.\"",
+    inspect:()=>[`<span class='obs'>Condenser tubes scaled; discharge pressure high.</span>`,
+      `<span class='obs'>Condenser-water flow looks normal at the pump.</span>`,`<span class='obs'>Refrigerant charge & oil fine.</span>`],
+    gen(){const sucSat=R.i(38,42),disSat=R.i(118,128),sh=R.i(8,12),sc=R.i(12,18),lwt=R.i(44,47);
+      return chiller({sucSat,disSat,sh,sc,lwt,ewt:lwt+R.i(8,10),cwE:R.i(84,88),cwL:R.i(94,98),oilNet:R.i(20,28),amps:R.i(96,110),
+        truth:`Condenser approach is way up (refrigerant ${disSat}\u00b0 vs leaving condenser water ~96\u00b0) while the condenser-water \u0394T is a normal ~10\u00b0 \u2014 the water's flowing fine but the tubes are scaled and can't reject heat. High head, over-amping, high-pressure trips. De-scale the condenser tubes.`});}},
+  low_cond_water_flow:{sys:'chiller',art:'chiller_flow',
+    complaint:()=>"\"High-pressure trips again \u2014 they think the <b>tower or pump</b> is acting up.\"",
+    inspect:()=>[`<span class='obs'>Condenser water barely moving; pump strainer/valve suspect.</span>`,
+      `<span class='obs'>Big temperature jump across the condenser barrel.</span>`,`<span class='obs'>Tubes look clean; charge fine.</span>`],
+    gen(){const sucSat=R.i(38,42),disSat=R.i(116,124),sh=R.i(8,12),sc=R.i(10,15),lwt=R.i(44,47);
+      return chiller({sucSat,disSat,sh,sc,lwt,ewt:lwt+R.i(8,10),cwE:R.i(83,87),cwL:R.i(104,110),oilNet:R.i(20,28),amps:R.i(96,110),
+        truth:`Head's high and the condenser-water rise across the barrel is ~20\u00b0 (should be ~10\u00b0) \u2014 not enough condenser water moving. The tubes are clean; it's a flow problem. Check the condenser pump, cooling tower, strainer, and valves.`});}},
+  low_oil_pressure:{sys:'chiller',art:'chiller_oil',
+    complaint:()=>"\"Chiller faulted out and the panel says <b>low oil pressure</b>.\"",
+    inspect:()=>[`<span class='obs'>Oil level low in the sight glass; oil filter looks dirty.</span>`,
+      `<span class='obs'>Locked out on the oil-pressure safety.</span>`,`<span class='obs'>Refrigerant side looks normal.</span>`],
+    gen(){const sucSat=R.i(38,42),disSat=R.i(100,110),sh=R.i(8,12),sc=R.i(8,12),lwt=R.i(44,47);
+      return chiller({sucSat,disSat,sh,sc,lwt,ewt:lwt+R.i(8,10),cwE:R.i(84,88),cwL:R.i(94,98),oilNet:R.i(5,12),amps:R.i(70,85),
+        truth:`Net oil pressure is only a few psi against an ~18 psi cutout, so the chiller locks out to protect the compressor bearings. The refrigerant side looks fine \u2014 it's lube. Check oil level, change the oil filter, and check the oil pump.`});}},
+  defrost:{sys:'hp',art:'hp_ice',
+    complaint:()=>"\"Barely any heat, and the <b>outdoor unit is a block of ice</b>.\"",
+    inspect:()=>[`<span class='obs'>Outdoor coil iced solid; fan struggling.</span>`,
+      `<span class='obs'>Compressor running but heat output is weak.</span>`,`<span class='obs'>Never seems to run a defrost cycle.</span>`],
+    gen(){const supply=R.i(78,86);
+      return hp({supply,room:68,coilTemp:R.i(20,30),iced:true,
+        valveNote:'Normal heat-mode temp split across the valve \u2014 it IS shifting correctly.',
+        coilNote:'Outdoor coil is a solid block of ice \u2014 no air through it.',amps:R.i(10,14),
+        truth:`The reversing valve is working (good split), but the outdoor coil is iced over and the unit never initiates defrost, so heat output craters. Check the defrost board/sensor and run a manual defrost.`});}},
+};
+function cool({sucSat,headSat,sh,sc,amps,rla,capOk,iceNote,multi,truth}){
+  return {sys:'cool',
+    gauges:{suc:psig410(sucSat),sucSat,head:psig410(headSat),headSat,note:iceNote?'suction sat below freezing':null},
+    thermo:{sucLine:sucSat+sh,liqLine:headSat-sc,sh,sc,note:iceNote?'readings skewed by ice on the coil':null},
+    clamp:{amps,rla},cap:{rated:capRated(),meas:'within tolerance',ok:capOk},multi,truth};
+}
+function gas({seq,flame,mano,hsiOhms,rise,nameplate,filter,multi,truth}){
+  return {sys:'gas',seq,flame:{ua:flame},mano:{wc:mano},ohms:{val:hsiOhms},
+    temprise:{ret:70,sup:70+(rise||0),rise:rise||0,nameplate,filter},multi,truth};
+}
+function hp({supply,room,coilTemp,iced,valveNote,coilNote,amps,truth}){
+  return {sys:'hp',air:{supply,room},coil:{temp:coilTemp,iced,note:coilNote},
+    valve:{note:valveNote},clamp:{amps,rla:R.i(13,17)},truth};
+}
+function chiller({sucSat,disSat,sh,sc,lwt,ewt,cwE,cwL,oilNet,amps,truth}){
+  return {sys:'chiller',
+    gauges:{suc:psig134(sucSat),sucSat,dis:psig134(disSat),disSat,sh,sc},
+    chw:{lwt,ewt,setpoint:44,approach:lwt-sucSat},
+    cw:{ewt:cwE,lwt:cwL,dt:cwL-cwE,approach:disSat-cwL},
+    oil:{net:oilNet,cutout:18},amps:{pct:amps},truth};
+}
+
+/* ===== COMPOUND (TWO-FAULT) CALLS \u2014 late game ===== */
+const COMPOUNDS={
+  charge_airflow:{art:'ice',correct:['low_charge','low_airflow_cool'],
+    complaint:()=>"\"Froze into a block of ice. We changed nothing \u2014 it just got worse all summer.\"",
+    inspect:()=>[`<span class='obs'>Coil iced, water pooling. Filter is filthy \u2014 light won't pass through it.</span>`,
+      `<span class='obs'>And there's a faint oily trace at a fitting.</span>`,
+      `<span class='obs'>Weak airflow AND it never really got cold even before it iced.</span>`],
+    gen(){const sucSat=R.i(8,16),headSat=R.i(86,98),sh=R.i(9,14),sc=R.i(2,6),rla=R.i(16,18);
+      return cool({sucSat,headSat,sh,sc,iceNote:true,amps:+(R.f(.6,.72)*rla).toFixed(1),rla,capOk:true,
+        multi:'Electrical fine \u2014 the trouble is split across the air & charge sides.',
+        truth:`Two faults at once: subcooling is only ${sc}\u00b0 (LOW \u2014 it's short on charge / leaking) AND the filter is choked and the coil iced (airflow). Repair the leak and weigh in charge, plus replace the filter and thaw the coil. Fix only one and you're back next week.`});}},
+  cond_cap:{art:'dirty',correct:['dirty_cond','bad_cap'],
+    complaint:()=>"\"Trips the breaker on hot days, and lately it's <b>slow to even kick on</b>.\"",
+    inspect:()=>[`<span class='obs'>Condenser coil packed solid; discharge line screaming hot.</span>`,
+      `<span class='obs'>Cap top looks slightly domed; compressor is sluggish to start.</span>`,
+      `<span class='obs'>It does run \u2014 just hot and hard.</span>`],
+    gen(){const sucSat=R.i(40,45),headSat=R.i(128,140),sh=R.i(8,13),sc=R.i(10,15),rla=R.i(17,19),rated=capRated();
+      const d=cool({sucSat,headSat,sh,sc,amps:+(R.f(1.18,1.32)*rla).toFixed(1),rla,capOk:false,
+        multi:'24V & line voltage OK. High head AND a weak cap.',
+        truth:`Two faults: head is sky-high with the compressor over-amping (dirty condenser coil) AND the run cap measures below tolerance (weak \u2014 it still turns, but it's failing and the high-head load is cooking it). Wash the coil and replace the capacitor. Clean the coil but leave the tired cap and you'll get a no-start callback.`});
+      d.cap={rated,meas:capWeak(rated),ok:false};return d;}},
+  contactor_cap:{art:'contactor',correct:['bad_contactor','bad_cap'],
+    complaint:()=>"\"Totally dead outside. Last guy swapped a part but it's <b>still not working</b>.\"",
+    inspect:()=>[`<span class='obs'>Dead silent \u2014 no hum, no fan. Contactor points are pitted/burnt.</span>`,
+      `<span class='obs'>And the dual cap up top is visibly domed.</span>`,
+      `<span class='obs'>Indoor blower runs fine; it's all on the outdoor unit.</span>`],
+    gen(){const st=R.i(70,80),rated=capRated();
+      return {sys:'cool',
+        gauges:{suc:psig410(st),sucSat:st,head:psig410(st),headSat:st,note:'standing pressure \u2014 unit never started'},
+        thermo:{noRun:true},
+        clamp:{amps:0.0,rla:R.i(17,20),note:'0A everywhere \u2014 nothing is energized'},
+        cap:{rated,meas:capDead(rated),ok:false},
+        multi:'24V at the contactor COIL is present, but the contacts are open/pitted \u2014 no power passes through them.',
+        truth:`Two faults hiding behind one symptom: the contactor contacts are burnt open (the obvious no-power fault) AND the run cap is also dead. You only catch the cap by ohming it \u2014 the open contactor never lets the unit try to start, so it can't show the hum/trip. Replace BOTH. Swap just the contactor and it'll energize, fail to start on the dead cap, and you're back tomorrow.`};}},
+};
+
+
+/* ===== TOOLS, COSTS, SHOP ===== */
+const BENCH={
+  cool:[['inspect','&#128269; INSPECT','alt'],['gauges','&#9201; GAUGES',''],['thermo','&#127777; THERMO',''],
+        ['clamp','&#9889; CLAMP',''],['cap','&#128267; CAP TEST',''],['multi','&#128223; MULTI','alt']],
+  gas :[['inspect','&#128269; INSPECT','alt'],['sequence','&#9654; SEQUENCE',''],['flame','&#128293; FLAME','' ],
+        ['mano','&#128208; MANOMETER',''],['ohms','&#937; OHMS',''],['temprise','&#127777; TEMP RISE',''],['multi','&#128223; MULTI','alt']],
+  hp  :[['inspect','&#128269; INSPECT','alt'],['air','&#10052; AIR TEMP',''],['coil','&#10052; COIL',''],
+        ['valve','&#8646; VALVE',''],['clamp','&#9889; CLAMP','']],
+  boiler:[['inspect','&#128269; INSPECT','alt'],['bseq','&#9654; SEQUENCE',''],['bgauge','&#127777; PRESS/TEMP',''],
+        ['bflame','&#128293; COMBUSTION',''],['bflow','&#127744; FLOW/\u0394T',''],['bcontrols','&#128223; CONTROLS','alt']],
+  chiller:[['inspect','&#128269; INSPECT','alt'],['cgauge','&#9201; REFRIG',''],['chw','&#128167; CHW LOOP',''],
+        ['cw','&#127786; COND WTR',''],['oil','&#128738; OIL',''],['camps','&#9889; AMPS','']]
+};
+const COST={inspect:5,gauges:18,thermo:18,clamp:12,cap:12,multi:10,
+  sequence:18,flame:12,mano:12,ohms:12,temprise:14,air:12,coil:14,valve:14,
+  bseq:16,bgauge:14,bflame:12,bflow:14,bcontrols:10,cgauge:16,chw:14,cw:14,oil:10,camps:10};
+const UPGRADES=[
+  {id:'manifold',name:'PRO MANIFOLD SET',cost:260,desc:'Gauges & thermo read in half the time.',tools:['gauges','thermo']},
+  {id:'clampkit',name:'INDUCTIVE CLAMP KIT',cost:200,desc:'Clamp, cap test & multimeter twice as fast.',tools:['clamp','cap','multi']},
+  {id:'combustion',name:'COMBUSTION ANALYZER',cost:300,desc:'Every furnace tool twice as fast.',tools:['sequence','flame','mano','ohms','temprise']},
+  {id:'hpkit',name:'HEAT-PUMP DIAG KIT',cost:240,desc:'Air, coil & valve checks twice as fast.',tools:['air','coil','valve']},
+  {id:'plantkit',name:'COMMERCIAL PLANT KIT',cost:320,desc:'Every boiler & chiller tool twice as fast.',tools:['bseq','bgauge','bflame','bflow','bcontrols','cgauge','chw','cw','oil','camps']},
+  {id:'refcard',name:'REFERENCE CARD',cost:150,desc:'Shows normal target ranges on every call \u2014 even in Pro mode.',ref:true},
+];
+const SPARE={id:'spare',name:'SPARE TRUCK PARTS',cost:170,desc:'Banks one free wrong call (no callback charge). Stackable.'};
+const REF={
+  cool:'NORMAL \u00b7 superheat 8\u201314\u00b0 \u00b7 subcooling 8\u201314\u00b0 \u00b7 amps below rated load',
+  gas :'NORMAL \u00b7 flame 4\u20136\u00b5A \u00b7 manifold ~3.5\" WC \u00b7 HSI 40\u201375\u03a9 \u00b7 temp rise 40\u201370\u00b0',
+  hp  :'NORMAL (heat) \u00b7 supply warmer than room \u00b7 outdoor coil clear \u00b7 good valve split',
+  boiler:'NORMAL \u00b7 system 12\u201325 psi \u00b7 supply/return \u0394T ~20\u00b0 \u00b7 LWCO proven \u00b7 relief not weeping',
+  chiller:'NORMAL \u00b7 evap approach 2\u20135\u00b0 \u00b7 cond approach 2\u20136\u00b0 \u00b7 cond-water \u0394T ~10\u00b0 \u00b7 oil net >18 psi'};
+function toolCost(id){let c=COST[id]||8;for(const u of UPGRADES)if(u.tools&&u.tools.includes(id)&&G.owned.has(u.id))c=Math.ceil(c/2);return c;}
+const hasRef=()=>G.owned.has('refcard');
+
+/* ===== STATE ===== */
+let MODE='rookie';
+let G;
+function newGame(){G={rep:3,cash:0,lives:3,idx:0,total:8,comfort:100,time:100,timer:null,
+  call:null,seenAns:[],owned:new Set(),spares:0,pending:null};startBriefing();}
+
+function hudHTML(){return `<span>CALL ${Math.min(G.idx+1,G.total)}/${G.total}</span>`+
+  `<span class="rep glow">REP ${'\u2605'.repeat(G.rep)}${'\u00b7'.repeat(Math.max(0,5-G.rep))}</span>`+
+  `<span class="cash glow">$${G.cash}</span>`+
+  `<span class="lives glow">${'\u2665'.repeat(G.lives)}${G.spares?' +'+G.spares+'\u26e8':''}</span>`;}
+function paintHud(){document.querySelectorAll('#hud').forEach(h=>h.innerHTML=hudHTML());}
+
+function makeCall(){
+  const hard=G.idx>=4 && R.chance(0.25+(G.idx-4)*0.12); // ramps ~25% -> ~70%
+  if(hard){
+    const key=R.pick(Object.keys(COMPOUNDS)),C=COMPOUNDS[key],data=C.gen(),sys='cool';
+    const bldg=R.pick(BLDGS[sys])+' \u2014 '+R.pick(EQUIP[sys]);
+    return {sys,compound:true,correctSet:C.correct.slice(),F:C,data,bldg,
+      complaint:C.complaint(),inspect:C.inspect(),noisy:R.chance(0.5),_calc:false};
+  }
+  const sys=R.pick(['cool','cool','cool','gas','gas','hp','boiler','boiler','chiller','chiller']);
+  let pool=SYS_ANSWERS[sys].filter(f=>!G.seenAns.includes(f));
+  if(!pool.length)pool=SYS_ANSWERS[sys];
+  const correct=R.pick(pool);G.seenAns.push(correct);
+  const F=FAULTS[correct],data=F.gen();
+  const bldg=R.pick(BLDGS[sys])+' \u2014 '+R.pick(EQUIP[sys]);
+  return {sys,correct,F,data,bldg,complaint:F.complaint(),inspect:F.inspect(),noisy:R.chance(G.idx>=4?0.45:0.32),_calc:false};
+}
+
+/* ===== BRIEFING ===== */
+function startBriefing(){
+  if(G.idx>=G.total)return endGame(true);
+  G.call=makeCall();paintHud();
+  const labels={cool:'\u2600 COOLING CALL',gas:'\u2744 HEATING \u00b7 GAS FURNACE',hp:'\u2744 HEATING \u00b7 HEAT PUMP',boiler:'\u2744 HEATING \u00b7 BOILER PLANT',chiller:'\u2600 COOLING \u00b7 CHILLER PLANT'};
+  const s=$('#b-season');s.className='marquee glow '+G.call.sys;s.textContent=labels[G.call.sys];
+  $('#b-bldg').textContent=G.call.bldg;$('#b-complaint').innerHTML=G.call.complaint;
+  const p=$('#b-pending');
+  if(G.pending&&G.pending.note){p.style.color=G.pending.good?'var(--phos)':'var(--warn)';p.innerHTML='&#9656; '+G.pending.note;}
+  else p.innerHTML='';
+  const owned=[...G.owned].map(id=>(UPGRADES.find(u=>u.id===id)||{}).name).filter(Boolean);
+  $('#b-owned').textContent=owned.length?('VAN: '+owned.join(' \u00b7 ')):'';
+  show('briefing');
+}
+$('#b-go').onclick=()=>{Audio2.click();startDiag();};
+$('#b-shop').onclick=()=>{Audio2.click();renderShop();show('shop');};
+$('#shop-close').onclick=()=>{Audio2.click();show('briefing');};
+
+/* ===== SHOP ===== */
+function renderShop(){
+  paintHud();const L=$('#shoplist');L.innerHTML='';
+  UPGRADES.forEach(u=>{const owned=G.owned.has(u.id);
+    L.appendChild(shopItem(u.name,u.desc,u.cost,owned?'owned':(G.cash>=u.cost?'buy':'broke'),()=>buy(u)));});
+  L.appendChild(shopItem(SPARE.name,SPARE.desc+(G.spares?` (have ${G.spares})`:''),SPARE.cost,
+    G.cash>=SPARE.cost?'buy':'broke',()=>buySpare()));
+}
+function shopItem(name,desc,price,state,onBuy){
+  const d=document.createElement('div');d.className='shopitem';
+  d.innerHTML=`<div class="info"><div class="nm">${name}</div><div class="ds">${desc}</div></div>`;
+  const b=document.createElement('button');
+  if(state==='owned'){b.className='buybtn ownd';b.textContent='OWNED';}
+  else{b.className='buybtn';b.textContent='$'+price;if(state==='broke')b.disabled=true;else b.onclick=onBuy;}
+  d.appendChild(b);return d;
+}
+function buy(u){if(G.owned.has(u.id)||G.cash<u.cost)return;G.cash-=u.cost;G.owned.add(u.id);Audio2.coin();renderShop();}
+function buySpare(){if(G.cash<SPARE.cost)return;G.cash-=SPARE.cost;G.spares++;Audio2.coin();renderShop();}
+
+/* ===== DIAGNOSE ===== */
+function startDiag(){
+  let t=100,c=100;
+  if(G.pending){t=Math.max(35,Math.min(100,100+(G.pending.time||0)));c=Math.max(35,Math.min(100,100+(G.pending.comfort||0)));}
+  G.pending=null;G.time=t;G.comfort=c;
+  let intro=`<p class="sys">&#9656; ON SITE. ${G.call.bldg}.</p>`+
+    `<p class="sys">&#9656; ${MODE==='pro'?'PRO \u2014 raw readings only. Each tool costs clock; pull only what you need.':'ROOKIE \u2014 gauges auto-compute & flag. Each tool costs clock; pull only what you need.'}</p>`;
+  if(hasRef())intro+=`<p class="ref">${REF[G.call.sys]}</p>`;
+  $('#readout').innerHTML=intro;
+  $('#diagbtns').classList.add('hidden');
+  const metaTxt={cool:'R-410A \u00b7 SH/SC differential',gas:'GAS FURNACE \u00b7 ignition sequence',hp:'HEAT PUMP \u00b7 heating mode',boiler:'BOILER \u00b7 hydronic plant',chiller:'CHILLER \u00b7 chilled-water plant'};
+  $('#sysmeta').textContent=metaTxt[G.call.sys];
+  buildTools();paintHud();drawUnit(G.call.F.art,0);
+  $('#timeBar').style.width=G.time+'%';$('#comfortBar').style.width=G.comfort+'%';
+  show('diag');
+  clearInterval(G.timer);
+  G.timer=setInterval(()=>{
+    G.comfort-=0.16;G.time-=0.05;
+    if(G.time<0)G.time=0;if(G.comfort<0)G.comfort=0;
+    $('#timeBar').style.width=G.time+'%';$('#comfortBar').style.width=G.comfort+'%';
+    if(G.comfort<=0){clearInterval(G.timer);resolve('__timeout');}
+  },120);
+}
+function buildTools(){
+  const t=$('#tools');t.innerHTML='';
+  BENCH[G.call.sys].forEach(([id,label,cls])=>{
+    const b=document.createElement('button');b.className='btn '+cls;b.dataset.id=id;
+    b.innerHTML=`${label}<br><span class="cb">\u2212${toolCost(id)}m</span>`;
+    b.onclick=()=>useTool(id,b);t.appendChild(b);});
+  const dx=document.createElement('button');dx.className='btn dx';dx.innerHTML='&#10003; MAKE THE CALL';
+  dx.style.gridColumn='1 / -1';dx.onclick=openDiagnosis;t.appendChild(dx);
+}
+function add(h){const r=$('#readout');r.insertAdjacentHTML('beforeend',h);r.scrollTop=r.scrollHeight;}
+const ROOKIE=()=>MODE==='rookie';
+
+function useTool(id,btn){
+  if(btn.classList.contains('used'))return;
+  const c=toolCost(id);
+  if(G.time<c){Audio2.bad();add(`<p class="hi">&#9888; OUT OF TIME for that \u2014 make the call with what you have.</p>`);return;}
+  G.time-=c;$('#timeBar').style.width=G.time+'%';
+  Audio2.beep();btn.classList.add('used');
+  const d=G.call.data;
+  if(id==='inspect'){add(`<p><span class="tag" style="color:var(--cyan)">LOOK</span></p>`);
+    G.call.inspect.forEach(l=>add(`<p>${l}</p>`));drawUnit(G.call.F.art,1);return;}
+  if(id==='gauges'){const g=d.gauges;
+    add(`<p><span class="tag" style="color:var(--amber)">GAUGES (R-410A)</span></p>`);
+    add(`<p class="rd">SUCTION ${g.suc} psig &rarr; ${g.sucSat}\u00b0F sat</p>`);
+    add(`<p class="rd">HEAD &nbsp;&nbsp;&nbsp;${g.head} psig &rarr; ${g.headSat}\u00b0F sat</p>`);
+    if(g.note)add(`<p class="hi">&#9888; ${g.note}</p>`);maybeCalc();return;}
+  if(id==='thermo'){const t=d.thermo;
+    add(`<p><span class="tag" style="color:var(--amber)">LINE TEMPS</span></p>`);
+    if(t.noRun){add(`<p class="hi">&#9888; Lines at ambient \u2014 compressor isn't running. No superheat/subcooling to read.</p>`);return;}
+    add(`<p class="rd">SUCTION LINE ${t.sucLine}\u00b0F \u00b7 LIQUID LINE ${t.liqLine}\u00b0F</p>`);
+    if(t.note)add(`<p class="hi">&#9888; ${t.note}</p>`);maybeCalc();return;}
+  if(id==='clamp'){const cl=d.clamp;
+    add(`<p><span class="tag" style="color:var(--amber)">CLAMP METER</span></p>`);
+    add(`<p class="rd">COMP ${cl.amps}A &nbsp;(rated load ${cl.rla}A)${G.call.noisy&&cl.amps>0?' <span class="sys">[needle drifting \u00b1]</span>':''}</p>`);
+    if(ROOKIE()){const r=cl.amps/cl.rla;
+      add(`<p class="${(cl.amps===0||r>1.05||r<0.45)?'hi':'ok'}">${cl.amps===0?'&#9888; not drawing current':(r>1.05?'&#9888; over rated load':(r<0.45?'&#9888; drawing low':'within range'))}</p>`);}
+    if(cl.note)add(`<p class="hi">&#9888; ${cl.note}</p>`);return;}
+  if(id==='cap'){const cp=d.cap;
+    add(`<p><span class="tag" style="color:var(--amber)">CAPACITOR</span></p>`);
+    add(`<p class="rd">RATED ${cp.rated} \u00b5F \u00b7 MEASURED ${cp.meas} \u00b5F</p>`);
+    add(`<p class="${cp.ok?'ok':'hi'}">${cp.ok?'within tolerance \u2713':'&#9888; OUT OF SPEC \u2014 failed'}</p>`);return;}
+  if(id==='multi'){add(`<p><span class="tag" style="color:var(--cyan)">MULTIMETER</span></p>`);add(`<p class="rd">${d.multi}</p>`);return;}
+  if(id==='sequence'){add(`<p><span class="tag" style="color:var(--flame)">IGNITION SEQUENCE</span></p>`);
+    d.seq.forEach(s=>{const bad=s.startsWith('!');add(`<p class="${bad?'seqbad':'seqok'}">${bad?'&#10007;':'&#10003;'} ${bad?s.slice(1):s}</p>`);});return;}
+  if(id==='flame'){const f=d.flame.ua;
+    add(`<p><span class="tag" style="color:var(--amber)">FLAME SIGNAL</span></p>`);
+    add(`<p class="rd">${f} &micro;A &nbsp;(healthy &asymp; 4\u20136 &micro;A)</p>`);
+    if(ROOKIE())add(`<p class="${f<2?'hi':(f<3.5?'rd':'ok')}">${f<2?'&#9888; too low to prove flame':(f<3.5?'marginal \u2014 your call':'good flame signal')}</p>`);return;}
+  if(id==='mano'){const w=d.mano.wc;
+    add(`<p><span class="tag" style="color:var(--amber)">MANOMETER</span></p>`);
+    add(`<p class="rd">MANIFOLD ${w}${typeof w==='number'?'\" WC':''} &nbsp;(nat gas &asymp; 3.5\" WC)</p>`);
+    if(ROOKIE()&&w===0)add(`<p class="hi">&#9888; no gas \u2014 valve not opening</p>`);return;}
+  if(id==='ohms'){add(`<p><span class="tag" style="color:var(--amber)">RESISTANCE</span></p>`);
+    add(`<p class="rd">HSI IGNITER: ${d.ohms.val} &nbsp;(good &asymp; 40\u201375\u03a9)</p>`);
+    if(ROOKIE()&&/OL|open/i.test(d.ohms.val))add(`<p class="hi">&#9888; open circuit \u2014 igniter won't heat</p>`);return;}
+  if(id==='temprise'){const t=d.temprise;
+    add(`<p><span class="tag" style="color:var(--amber)">TEMP RISE</span></p>`);
+    if(t.rise===0)add(`<p class="rd">No stable heat \u2014 can't establish a rise.</p>`);
+    else{add(`<p class="rd">RETURN ${t.ret}\u00b0F \u00b7 SUPPLY ${t.sup}\u00b0F \u00b7 RISE ${t.rise}\u00b0F (nameplate ${t.nameplate})</p>`);
+      if(ROOKIE())add(`<p class="${t.rise>72?'hi':'ok'}">${t.rise>72?'&#9888; rise above nameplate \u2014 low airflow':'rise within range'}</p>`);}
+    add(`<p class="${t.filter==='dirty'?'hi':'ok'}">FILTER: ${t.filter==='dirty'?'&#9888; filthy/clogged':'clean'}</p>`);return;}
+  if(id==='air'){const a=d.air;
+    add(`<p><span class="tag" style="color:var(--cyan)">SUPPLY AIR</span></p>`);
+    add(`<p class="rd">SUPPLY ${a.supply}\u00b0F \u00b7 ROOM ${a.room}\u00b0F</p>`);
+    if(ROOKIE())add(`<p class="${a.supply<a.room?'hi':'ok'}">${a.supply<a.room?'&#9888; blowing BELOW room temp on a heat call':'delivering warm air'}</p>`);return;}
+  if(id==='coil'){const cc=d.coil;
+    add(`<p><span class="tag" style="color:var(--cyan)">OUTDOOR COIL</span></p>`);
+    add(`<p class="rd">COIL TEMP ${cc.temp}\u00b0F</p>`);
+    add(`<p class="${cc.iced?'hi':'ok'}">${cc.iced?'&#9888; ICED OVER \u2014 solid block':'clear, no ice'}</p>`);
+    add(`<p class="obs">${cc.note}</p>`);return;}
+  if(id==='valve'){add(`<p><span class="tag" style="color:var(--cyan)">REVERSING VALVE</span></p>`);add(`<p class="rd">${d.valve.note}</p>`);return;}
+  /* ---- boiler ---- */
+  if(id==='bseq'){add(`<p><span class="tag" style="color:var(--flame)">FIRING SEQUENCE</span></p>`);
+    d.seq.forEach(s=>{const bad=s.startsWith('!');add(`<p class="${bad?'seqbad':'seqok'}">${bad?'&#10007;':'&#10003;'} ${bad?s.slice(1):s}</p>`);});return;}
+  if(id==='bgauge'){const g=d.gauge;
+    add(`<p><span class="tag" style="color:var(--amber)">PRESSURE / TEMP</span></p>`);
+    add(`<p class="rd">SYSTEM ${g.psi}${typeof g.psi==='number'?' psi':''} \u00b7 SUPPLY ${g.supply}\u00b0F \u00b7 RETURN ${g.ret}\u00b0F</p>`);
+    if(g.note)add(`<p class="hi">&#9888; ${g.note}</p>`);return;}
+  if(id==='bflame'){const f=d.flame;
+    add(`<p><span class="tag" style="color:var(--amber)">COMBUSTION</span></p>`);
+    add(`<p class="rd">FLAME ${f.ua} &micro;A \u00b7 GAS ${f.gas}</p>`);
+    add(`<p class="${(f.ua===0)?'hi':'ok'}">${f.note}</p>`);return;}
+  if(id==='bflow'){const fl=d.flow;
+    add(`<p><span class="tag" style="color:var(--cyan)">FLOW / \u0394T</span></p>`);
+    add(`<p class="rd">CIRCULATOR ${fl.running?'running':'NOT running'} \u00b7 \u0394T ${fl.dt}</p>`);
+    add(`<p class="${fl.running?'ok':'hi'}">${fl.note}</p>`);return;}
+  if(id==='bcontrols'){add(`<p><span class="tag" style="color:var(--cyan)">CONTROLS</span></p>`);add(`<p class="rd">${d.controls}</p>`);return;}
+  /* ---- chiller ---- */
+  if(id==='cgauge'){const g=d.gauges;
+    add(`<p><span class="tag" style="color:var(--amber)">REFRIGERANT (R-134a)</span></p>`);
+    add(`<p class="rd">SUCTION ${g.suc} psig &rarr; ${g.sucSat}\u00b0F \u00b7 DISCHARGE ${g.dis} psig &rarr; ${g.disSat}\u00b0F</p>`);
+    add(`<p class="rd">SUPERHEAT <b>${g.sh}\u00b0</b>${ROOKIE()?' '+rng(g.sh):''} \u00b7 SUBCOOLING <b>${g.sc}\u00b0</b>${ROOKIE()?' '+rng(g.sc):''}</p>`);return;}
+  if(id==='chw'){const w=d.chw;
+    add(`<p><span class="tag" style="color:var(--cyan)">CHILLED-WATER LOOP</span></p>`);
+    add(`<p class="rd">LEAVING ${w.lwt}\u00b0F \u00b7 ENTERING ${w.ewt}\u00b0F \u00b7 SETPOINT ${w.setpoint}\u00b0F</p>`);
+    add(`<p class="rd">EVAP APPROACH <b>${w.approach}\u00b0</b> (normal 2\u20135\u00b0)</p>`);
+    if(ROOKIE())add(`<p class="${w.approach>6?'hi':'ok'}">${w.approach>6?'&#9888; high evaporator approach':'approach OK'}</p>`);
+    if(ROOKIE()&&w.lwt>w.setpoint+3)add(`<p class="hi">&#9888; not holding setpoint</p>`);return;}
+  if(id==='cw'){const w=d.cw;
+    add(`<p><span class="tag" style="color:var(--cyan)">CONDENSER WATER</span></p>`);
+    add(`<p class="rd">ENTERING ${w.ewt}\u00b0F \u00b7 LEAVING ${w.lwt}\u00b0F \u00b7 \u0394T ${w.dt}\u00b0</p>`);
+    add(`<p class="rd">COND APPROACH <b>${w.approach}\u00b0</b> (normal 2\u20136\u00b0) \u00b7 \u0394T normal ~10\u00b0</p>`);
+    if(ROOKIE()){if(w.dt>14)add(`<p class="hi">&#9888; wide water \u0394T \u2014 low condenser flow</p>`);
+      else if(w.approach>7)add(`<p class="hi">&#9888; high approach with normal \u0394T \u2014 fouled tubes</p>`);
+      else add(`<p class="ok">condenser side OK</p>`);}return;}
+  if(id==='oil'){const o=d.oil;
+    add(`<p><span class="tag" style="color:var(--amber)">OIL PRESSURE</span></p>`);
+    add(`<p class="rd">NET OIL ${o.net} psi \u00b7 cutout ${o.cutout} psi</p>`);
+    if(ROOKIE())add(`<p class="${o.net<o.cutout?'hi':'ok'}">${o.net<o.cutout?'&#9888; below cutout \u2014 safety lockout':'oil pressure OK'}</p>`);return;}
+  if(id==='camps'){const a=d.amps;
+    add(`<p><span class="tag" style="color:var(--amber)">COMPRESSOR AMPS</span></p>`);
+    add(`<p class="rd">${a.pct}% RLA</p>`);
+    if(ROOKIE())add(`<p class="${a.pct>100?'hi':'ok'}">${a.pct>100?'&#9888; over rated load \u2014 high lift':'within range'}</p>`);return;}
+}
+function maybeCalc(){
+  if(!ROOKIE())return;
+  const g=$('[data-id=gauges]'),t=$('[data-id=thermo]'),d=G.call.data;
+  if(g&&t&&g.classList.contains('used')&&t.classList.contains('used')&&!d.thermo.noRun){
+    if(G.call._calc)return;G.call._calc=true;
+    const sh=d.thermo.sucLine-d.gauges.sucSat,sc=d.gauges.headSat-d.thermo.liqLine;
+    add(`<p class="calc">&#9656; SUPERHEAT &nbsp;= ${d.thermo.sucLine} &minus; ${d.gauges.sucSat} = <b>${sh}\u00b0F</b> ${rng(sh)}</p>`);
+    add(`<p class="calc">&#9656; SUBCOOLING = ${d.gauges.headSat} &minus; ${d.thermo.liqLine} = <b>${sc}\u00b0F</b> ${rng(sc)}</p>`);
+  } else if(g&&t&&(g.classList.contains('used')^t.classList.contains('used'))){
+    add(`<p class="sys">(take both GAUGES + THERMO to compute superheat / subcooling)</p>`);
+  }
+}
+function rng(v){let l,c;
+  if(v<5){l='LOW';c='var(--warn)';}
+  else if(v<=7){l='MARGINAL';c='var(--amber)';}
+  else if(v<=14){l='OK';c='var(--phos)';}
+  else if(v<=17){l='MARGINAL';c='var(--amber)';}
+  else{l='HIGH';c='var(--warn)';}
+  return `<span class="tag" style="color:${c}">${l}</span>`;}
+
+function dxBtn(id){const b=document.createElement('button');b.className='btn danger';b.style.fontSize='9px';
+  b.textContent=DX[id];b.dataset.opt=id;return b;}
+function openDiagnosis(){
+  Audio2.click();$('#diagbtns').classList.remove('hidden');
+  const box=$('#diagbtns');box.innerHTML='';
+  const want=G.call.compound?G.call.correctSet:[G.call.correct];
+  const wrong=SYS_OPTIONS[G.call.sys].filter(o=>!want.includes(o));shuffle(wrong);
+  const multi=G.idx>=4; // late game: you decide how many faults
+  const pool=shuffle([...want,...wrong.slice(0,multi?5-want.length:3)]);
+  if(!multi){
+    pool.forEach(id=>{const b=dxBtn(id);b.onclick=()=>resolve(id);box.appendChild(b);});
+    add(`<p class="sys">&#9656; Commit to a fault:</p>`);
+  } else {
+    G.call._sel=new Set();
+    pool.forEach(id=>{const b=dxBtn(id);b.onclick=()=>{
+      if(G.call._sel.has(id)){G.call._sel.delete(id);b.classList.remove('seld');}
+      else{if(G.call._sel.size>=2){Audio2.bad();return;}G.call._sel.add(id);b.classList.add('seld');}
+      Audio2.click();const c=$('#dxconf');if(c)c.textContent=`CONFIRM (${G.call._sel.size} selected) \u25b8`;};
+      box.appendChild(b);});
+    const conf=document.createElement('button');conf.className='btn dx';conf.id='dxconf';conf.style.gridColumn='1 / -1';
+    conf.textContent='CONFIRM (0 selected) \u25b8';
+    conf.onclick=()=>{if(!G.call._sel.size){Audio2.bad();return;}resolve([...G.call._sel]);};
+    box.appendChild(conf);
+    add(`<p class="sys">&#9656; Select the fault(s) \u2014 a unit can have more than one. Pick 1 or 2, then confirm.</p>`);
+  }
+}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function resolve(picked){
+  clearInterval(G.timer);
+  const timedOut=picked==='__timeout';
+  const want=G.call.compound?G.call.correctSet:[G.call.correct];
+  const got=timedOut?[]:(Array.isArray(picked)?picked:[picked]);
+  const correct=!timedOut&&sameSet(got,want);
+  if(correct){
+    const base=G.call.compound?220:160,speed=Math.round(G.time),bonus=Math.round(G.comfort),pay=base+speed+bonus;
+    G.cash+=pay;if(G.rep<5&&R.chance(0.6))G.rep++;Audio2.good();
+    $('#r-verdict').className='verdict good glow';
+    $('#r-verdict').textContent=G.call.compound?'\u2714 BOTH FAULTS FIXED!':'\u2714 FIXED IT \u2014 HAPPY CUSTOMER';
+    $('#r-truth').innerHTML=G.call.data.truth;
+    $('#r-score').innerHTML=`+ $${pay} &nbsp;(base $${base} \u00b7 clock $${speed} \u00b7 comfort $${bonus})`;
+  } else {
+    let saved=false;
+    if(G.spares>0){G.spares--;saved=true;} else {G.lives--;if(G.rep>0)G.rep--;}
+    Audio2.bad();
+    $('#r-verdict').className='verdict bad glow';
+    $('#r-verdict').textContent=timedOut?'\u23f0 CUSTOMER WALKED \u2014 CALLBACK':'\u2718 WRONG CALL \u2014 CALLBACK';
+    const youSaid=timedOut?'(ran out the clock)':got.map(id=>DX[id]).join(' + ');
+    const real=want.map(id=>DX[id]).join(' + ');
+    $('#r-truth').innerHTML=`You said <b>${youSaid}</b>. The real ${want.length>1?'faults were':'fault was'} <b>${real}</b>.<br>${G.call.data.truth}`;
+    $('#r-score').innerHTML=saved?`\u26e8 SPARE PART USED \u2014 no callback charge`:`\u2212 1 \u2665 &nbsp; reputation took a hit`;
+  }
+  paintHud();
+  $('#r-next').textContent=G.lives<=0?'GAME OVER \u25b8':'NEXT CALL \u25b8';
+  show('result');
+}
+$('#r-next').onclick=()=>{Audio2.click();if(G.lives<=0)return endGame(false);G.idx++;driveOrNext();};
+
+/* ===== DRIVE EVENTS ===== */
+const DRIVE=[
+  {t:'Van threw a serpentine belt.',m:'Rolled in late \u2014 customer is already annoyed.',mod:{comfort:-22},good:false},
+  {t:'Every light was green.',m:'Got there early. Extra time on the clock.',mod:{time:18},good:true},
+  {t:'Supply house had the exact part in stock.',m:'Quick grab, small bonus for the upsell.',mod:{cash:60},good:true},
+  {t:'Customer left a tip for last week\u2019s job.',m:'Cash in the door.',mod:{cash:90},good:true},
+  {t:'Stuck behind a snow plow.',m:'Crawled across town \u2014 clock is tighter next call.',mod:{time:-16},good:false},
+  {t:'Twenty bucks in the cup holder.',m:'Finders keepers.',mod:{cash:20},good:true},
+  {t:'Grabbed a coffee and a minute to think.',m:'Sharp and early on the next one.',mod:{time:14,comfort:10},good:true},
+  {t:'Referral from a happy customer.',m:'Padded the next invoice.',mod:{cash:75},good:true},
+  {t:'Detour for road work.',m:'Customer waited longer than they\u2019d like.',mod:{comfort:-15},good:false},
+];
+function driveOrNext(){
+  if(G.idx<G.total&&R.chance(0.6)){
+    const e=R.pick(DRIVE);
+    $('#drive-t').textContent=e.t;$('#drive-m').textContent=e.m;
+    const parts=[];if(e.mod.cash)parts.push((e.mod.cash>0?'+$':'-$')+Math.abs(e.mod.cash));
+    if(e.mod.time)parts.push((e.mod.time>0?'+':'')+e.mod.time+' clock');
+    if(e.mod.comfort)parts.push((e.mod.comfort>0?'+':'')+e.mod.comfort+' comfort');
+    $('#drive-mod').textContent=parts.join('  \u00b7  ');
+    $('#drive-mod').style.color=e.good?'var(--phos)':'var(--warn)';
+    // cash applied now; time/comfort carried into next call
+    if(e.mod.cash)G.cash+=e.mod.cash;
+    G.pending={time:e.mod.time||0,comfort:e.mod.comfort||0,note:e.t+' '+(parts.length?'('+parts.join(', ')+')':''),good:e.good};
+    paintHud();show('drive');
+  } else {G.pending=null;startBriefing();}
+}
+$('#drive-go').onclick=()=>{Audio2.click();startBriefing();};
+
+/* ===== END ===== */
+function endGame(won){
+  clearInterval(G.timer);
+  if(won){$('#e-title').className='verdict good glow';$('#e-title').textContent='SHIFT COMPLETE!';
+    $('#e-body').innerHTML=`You cleared the board at reputation <b>${'\u2605'.repeat(G.rep)}</b>. Phone's ringing with referrals.`;}
+  else{$('#e-title').className='verdict bad glow';$('#e-title').textContent='TOO MANY CALLBACKS';
+    $('#e-body').innerHTML=`Dispatch pulled you off the schedule. Walk it off and try again.`;}
+  $('#e-score').innerHTML=`FINAL TAKE: $${G.cash} &nbsp;\u00b7&nbsp; CALLS DONE: ${won?G.total:G.idx}`;
+  show('end');
+}
+$('#e-again').onclick=()=>{Audio2.coin();newGame();};
+
+/* ===== CANVAS ART ===== */
+function drawUnit(art,inspected){
+  const c=$('#unit'),x=c.getContext('2d'),W=150,H=150;x.imageSmoothingEnabled=false;
+  x.fillStyle='#04110a';x.fillRect(0,0,W,H);x.strokeStyle='#0c241a';x.lineWidth=1;
+  for(let i=0;i<=W;i+=10){x.beginPath();x.moveTo(i,0);x.lineTo(i,H);x.stroke();x.beginPath();x.moveTo(0,i);x.lineTo(W,i);x.stroke();}
+  const px=(a,b,w,h,col)=>{x.fillStyle=col;x.fillRect(a,b,w,h);};
+  const label=t=>{x.font='10px "Press Start 2P",monospace';x.fillStyle='#27e07a';x.textAlign='center';x.fillText(t,75,16);};
+  function condenser(){px(35,55,80,75,'#14304a');px(35,55,80,8,'#1d4a6e');
+    x.strokeStyle='#0a1a28';x.lineWidth=2;for(let r=8;r<=28;r+=6){x.beginPath();x.arc(75,92,r,0,7);x.stroke();}px(73,90,4,4,'#0a1a28');}
+  const lineset=()=>{px(115,70,30,5,'#caa15a');px(115,80,30,4,'#caa15a');};
+  function furnace(){px(45,40,60,95,'#3a2230');px(45,40,60,8,'#52303f');px(52,48,46,30,'#1a0d14');
+    px(52,86,46,6,'#222');for(let i=0;i<4;i++)px(56+i*11,84,3,4,'#444');}
+  function heatpump(){px(35,55,80,75,'#3a1f30');px(35,55,80,8,'#5a2f48');
+    x.strokeStyle='#1a0d14';x.lineWidth=2;for(let r=8;r<=28;r+=6){x.beginPath();x.arc(75,92,r,0,7);x.stroke();}}
+  function boiler(){px(50,46,50,84,'#2a2230');px(50,46,50,8,'#3a2f40');px(70,34,10,12,'#444'); // body + flue
+    px(40,72,10,6,'#caa15a');px(100,72,10,6,'#caa15a'); // supply/return pipes
+    x.fillStyle='#0a1a14';x.beginPath();x.arc(88,58,6,0,7);x.fill();
+    x.strokeStyle='#27e07a';x.lineWidth=2;x.beginPath();x.moveTo(88,58);x.lineTo(91,55);x.stroke();} // gauge
+  function chillerBody(){px(36,72,78,28,'#1f3040');px(36,72,78,5,'#2f4458'); // barrel
+    px(60,52,32,20,'#2a3a4a');px(60,52,32,4,'#3a4a5c'); // compressor
+    px(36,100,78,6,'#14222e'); // base
+    px(32,80,6,8,'#3ad6ff');px(112,80,6,8,'#3ad6ff');} // water nozzles
+  switch(art){
+    case'leak':condenser();lineset();px(112,84,8,8,'#2a1c0c');
+      if(inspected)for(let i=0;i<5;i++)px(110+i*2,86+(i%2)*2,2,2,'#5a3a14');label('LOW CHG');break;
+    case'over':condenser();lineset();
+      if(inspected){x.strokeStyle='#ff5a3c';x.lineWidth=2;for(let i=0;i<3;i++){x.beginPath();x.arc(130+i*4,75,6+i*4,-0.6,0.6);x.stroke();}}label('OVERCHG');break;
+    case'dirty':condenser();for(let i=0;i<60;i++)px(37+Math.random()*76,64+Math.random()*60,2,2,Math.random()<.5?'#3a2f12':'#4a3a1a');
+      lineset();if(inspected){x.strokeStyle='#ff5a3c';x.lineWidth=2;for(let i=0;i<3;i++){x.beginPath();x.moveTo(45+i*25,52);x.quadraticCurveTo(50+i*25,42,45+i*25,32);x.stroke();}}label('HI HEAD');break;
+    case'restrict':condenser();lineset();px(118,66,10,16,'#8a9096');px(118,66,10,3,'#aab0b6');
+      if(inspected)for(let i=0;i<10;i++)px(116+Math.random()*14,64+Math.random()*20,2,2,'#bfe9ff');label('RESTRICT');break;
+    case'ice':px(40,45,70,85,'#22303a');px(40,45,70,8,'#33414b');x.strokeStyle='#5a6a72';x.lineWidth=2;
+      for(let i=50;i<100;i+=8){x.beginPath();x.moveTo(48,i);x.lineTo(102,i);x.stroke();}
+      for(let i=0;i<70;i++)px(46+Math.random()*60,52+Math.random()*70,2,2,'#bfe9ff');if(inspected)px(45,128,62,4,'#3a8fd6');label('ICED');break;
+    case'cap':condenser();px(95,40,16,20,'#9aa0a6');px(95,38,16,4,inspected?'#ff5a3c':'#b0b6bc');
+      if(inspected){px(96,34,14,4,'#ff5a3c');spark(x,103,30);}label('NO START');break;
+    case'contactor':condenser();px(95,42,18,14,'#2a2a2a');px(98,45,12,3,'#0a0a0a');
+      if(inspected){px(99,44,2,2,'#ff5a3c');px(106,47,2,2,'#ff8a2b');}label('DEAD');break;
+    case'f_flame':furnace();flame(x,inspected,true);label('FLAME');break;
+    case'f_noign':furnace();if(inspected)px(70,76,10,3,'#555');label('NO IGN');break;
+    case'f_gas':furnace();px(70,76,12,3,inspected?'#ff8a2b':'#7a4a1a');if(inspected)glow(x,76,77);label('NO GAS');break;
+    case'f_flue':furnace();px(70,30,10,12,'#222');if(inspected){px(70,30,10,4,'#3a2f12');px(72,26,6,6,'#4a3a1a');}label('FLUE');break;
+    case'f_limit':furnace();flame(x,true,false);if(inspected){px(45,120,60,6,'#1a0d14');px(50,121,50,4,'#3a2f12');
+      x.strokeStyle='#ff5a3c';x.lineWidth=2;x.beginPath();x.moveTo(105,48);x.quadraticCurveTo(112,40,105,32);x.stroke();}label('LIMIT');break;
+    case'hp_valve':heatpump();lineset();if(inspected){x.fillStyle='#3ad6ff';x.font='13px monospace';x.fillText('\u21c4',120,66);}label('VALVE');break;
+    case'hp_ice':heatpump();for(let i=0;i<60;i++)px(37+Math.random()*76,60+Math.random()*64,2,2,'#bfe9ff');
+      lineset();if(inspected)px(35,128,80,4,'#3a8fd6');label('ICED');break;
+    case'boiler_lwco':boiler();px(104,60,5,40,'#0a1a14');if(inspected){px(104,84,5,16,'#3ad6ff');}else{px(104,72,5,28,'#3ad6ff');}label('LOW H2O');break;
+    case'boiler_flow':boiler();x.fillStyle=inspected?'#555':'#888';x.beginPath();x.arc(40,90,8,0,7);x.fill();
+      if(inspected){x.strokeStyle='#ff5a3c';x.lineWidth=2;x.beginPath();x.moveTo(35,85);x.lineTo(45,95);x.moveTo(45,85);x.lineTo(35,95);x.stroke();}label('NO FLOW');break;
+    case'boiler_xtank':boiler();px(104,52,12,16,'#5a6a72');px(104,52,12,4,'#7a8a92'); // expansion tank
+      if(inspected){px(101,74,4,4,'#3ad6ff');px(100,80,3,6,'#3a8fd6');}label('RELIEF');break;
+    case'boiler_flame':boiler();px(60,118,30,6,'#1a0d14');if(inspected)for(let i=0;i<5;i++)px(62+i*6,116,3,3,'#7a4a1a');
+      else flame(x,true,true);label('NO FLAME');break;
+    case'chiller_charge':chillerBody();if(inspected)for(let i=0;i<8;i++)px(70+Math.random()*16,84+Math.random()*8,2,2,'#bfe9ff');label('LOW CHG');break;
+    case'chiller_evap':chillerBody();for(let i=0;i<26;i++)px(40+Math.random()*32,76+Math.random()*20,2,2,'#5a6a3a');label('EVAP');break;
+    case'chiller_cond':chillerBody();for(let i=0;i<26;i++)px(78+Math.random()*32,76+Math.random()*20,2,2,'#6a5a3a');
+      if(inspected){x.strokeStyle='#ff5a3c';x.lineWidth=2;for(let i=0;i<2;i++){x.beginPath();x.moveTo(70+i*14,50);x.quadraticCurveTo(74+i*14,42,70+i*14,34);x.stroke();}}label('HI HEAD');break;
+    case'chiller_flow':chillerBody();if(inspected){x.fillStyle='#ff5a3c';x.font='9px monospace';x.fillText('\u0394T!',112,96);}
+      px(112,80,6,8,inspected?'#1c5566':'#3ad6ff');label('CW FLOW');break;
+    case'chiller_oil':chillerBody();px(94,90,8,8,'#1a0d08');if(inspected){px(94,96,8,2,'#caa15a');}else{px(94,92,8,6,'#caa15a');}label('OIL');break;
+    default:condenser();
+  }
+}
+function spark(x,cx,cy){x.strokeStyle='#ffe14f';x.lineWidth=2;for(let a=0;a<6;a++){const r=a*Math.PI/3;
+  x.beginPath();x.moveTo(cx,cy);x.lineTo(cx+Math.cos(r)*7,cy+Math.sin(r)*7);x.stroke();}}
+function flame(x,on,flicker){if(!on)return;const cols=['#ff5a3c','#ff8a2b','#ffd23e'];
+  for(let i=0;i<5;i++){x.fillStyle=cols[i%3];const fx=58+i*8,h=10+Math.random()*(flicker?10:6);
+    x.beginPath();x.moveTo(fx,84);x.quadraticCurveTo(fx+2,84-h,fx+4,84);x.fill();}}
+function glow(x,cx,cy){x.fillStyle='rgba(255,138,43,.5)';x.beginPath();x.arc(cx,cy,8,0,7);x.fill();}
+
+/* ===== AUDIO ===== */
+const Audio2=(()=>{
+  let ctx=null,musicGain=null,sfxGain=null,on=true,loopTimer=null,step=0;const A=440;
+  const note=n=>A*Math.pow(2,(n-9)/12);
+  function ensure(){if(!ctx){ctx=new(window.AudioContext||window.webkitAudioContext)();
+    musicGain=ctx.createGain();musicGain.gain.value=0.05;musicGain.connect(ctx.destination);
+    sfxGain=ctx.createGain();sfxGain.gain.value=0.18;sfxGain.connect(ctx.destination);}}
+  function blip(freq,dur,type='square',gain=1,target){if(!on||!ctx)return;
+    const o=ctx.createOscillator(),g=ctx.createGain();o.type=type;o.frequency.value=freq;
+    g.gain.setValueAtTime(0.0001,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.9*gain,ctx.currentTime+0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+dur);o.connect(g);g.connect(target||sfxGain);
+    o.start();o.stop(ctx.currentTime+dur+0.02);}
+  const bass=[-5,-5,0,-2],arp=[7,12,16,19,12,16,19,24];
+  function tick(){if(!on)return;const b=bass[Math.floor(step/4)%bass.length];
+    if(step%4===0)blip(note(b)/2,0.22,'triangle',0.9,musicGain);
+    blip(note(arp[step%arp.length]),0.12,'square',0.55,musicGain);step++;}
+  function startMusic(){ensure();if(loopTimer)return;loopTimer=setInterval(tick,150);}
+  function stopMusic(){clearInterval(loopTimer);loopTimer=null;}
+  return{init:ensure,toggle(){on=!on;if(on){ensure();startMusic();}else stopMusic();return on;},isOn:()=>on,
+    click(){blip(660,0.05,'square',0.6);},beep(){ensure();blip(880,0.07,'square');blip(1320,0.05,'square',0.4);},
+    good(){ensure();[0,4,7,12].forEach((n,i)=>setTimeout(()=>blip(note(n)*2,0.13,'square'),i*70));},
+    bad(){ensure();[0,-1,-2,-4].forEach((n,i)=>setTimeout(()=>blip(note(n),0.16,'sawtooth',0.8),i*90));},
+    coin(){ensure();blip(988,0.08,'square');setTimeout(()=>blip(1319,0.18,'square'),80);},startMusic};
+})();
+
+/* ===== WIRING ===== */
+document.querySelectorAll('.modebtn').forEach(b=>b.onclick=e=>{e.stopPropagation();
+  document.querySelectorAll('.modebtn').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');MODE=b.dataset.mode;
+  $('#modehint').textContent=MODE==='pro'
+    ?'PRO: raw psig, line temps and signals only \u2014 you compute superheat/subcooling and decide.'
+    :'ROOKIE: gauges auto-compute superheat / subcooling and flag what\u2019s out of range.';});
+$('#title').addEventListener('click',e=>{if(!e.target.classList.contains('modebtn')&&e.target.id!=='primer-btn')start();});
+$('#primer-btn').onclick=e=>{e.stopPropagation();Audio2.click();show('primer');};
+$('#primer-back').onclick=()=>{Audio2.click();show('title');};
+document.addEventListener('keydown',()=>{if(screens.title.classList.contains('active'))start();});
+function start(){Audio2.coin();Audio2.startMusic();newGame();}
+$('#mute').onclick=e=>{e.stopPropagation();const o=Audio2.toggle();
+  $('#mute').innerHTML=o?'&#9834; ON':'&#9834; OFF';$('#mute').style.color=o?'var(--phos)':'var(--panel-edge)';};
+</script>
+</body>
+</html>
