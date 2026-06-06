@@ -644,7 +644,7 @@ const hasRef=()=>G.owned.has('refcard');
 let MODE='rookie';
 let G;
 function newGame(){G={rep:3,cash:0,lives:3,idx:0,total:8,comfort:100,time:100,timer:null,
-  call:null,seenAns:[],owned:new Set(),spares:0,pending:null};startBriefing();}
+  call:null,seenAns:[],owned:new Set(),spares:0,pending:null,recentSys:[],lastFault:null,lastCompound:null};startBriefing();}
 
 function hudHTML(){return `<span>CALL ${Math.min(G.idx+1,G.total)}/${G.total}</span>`+
   `<span class="rep glow">REP ${'\u2605'.repeat(G.rep)}${'\u00b7'.repeat(Math.max(0,5-G.rep))}</span>`+
@@ -653,17 +653,29 @@ function hudHTML(){return `<span>CALL ${Math.min(G.idx+1,G.total)}/${G.total}</s
 function paintHud(){document.querySelectorAll('#hud').forEach(h=>h.innerHTML=hudHTML());}
 
 function makeCall(){
-  const hard=G.idx>=4 && R.chance(0.25+(G.idx-4)*0.12); // ramps ~25% -> ~70%
-  if(hard){
-    const key=R.pick(Object.keys(COMPOUNDS)),C=COMPOUNDS[key],data=C.gen(),sys='cool';
-    const bldg=R.pick(BLDGS[sys])+' \u2014 '+R.pick(EQUIP[sys]);
-    return {sys,compound:true,correctSet:C.correct.slice(),F:C,data,bldg,
+  // late-game two-fault compound \u2014 only when it won't repeat the previous system, and never the same compound twice
+  if(G.idx>=4 && G.recentSys[0]!=='cool' && R.chance(0.30+(G.idx-4)*0.10)){
+    let keys=Object.keys(COMPOUNDS).filter(k=>k!==G.lastCompound);
+    if(!keys.length)keys=Object.keys(COMPOUNDS);
+    const key=R.pick(keys);G.lastCompound=key;
+    const C=COMPOUNDS[key],data=C.gen();G.recentSys=['cool',G.recentSys[0]];
+    const bldg=R.pick(BLDGS.cool)+' \u2014 '+R.pick(EQUIP.cool);
+    return {sys:'cool',compound:true,correctSet:C.correct.slice(),F:C,data,bldg,
       complaint:C.complaint(),inspect:C.inspect(),noisy:R.chance(0.5),_calc:false};
   }
-  const sys=R.pick(['cool','cool','cool','gas','gas','hp','boiler','boiler','chiller','chiller']);
-  let pool=SYS_ANSWERS[sys].filter(f=>!G.seenAns.includes(f));
+  // pick a system, never the same as last call, and never one whose faults are already used up this shift
+  const ALL=['cool','cool','gas','gas','hp','boiler','chiller'];
+  const hasUnseen=s=>SYS_ANSWERS[s].some(f=>!G.seenAns.includes(f));
+  let cand=ALL.filter(s=>s!==G.recentSys[0]&&hasUnseen(s));
+  if(!cand.length)cand=ALL.filter(s=>s!==G.recentSys[0]);
+  if(!cand.length)cand=ALL;
+  const sys=R.pick(cand);
+  G.recentSys=[sys,G.recentSys[0]];
+  // pick a fault: never one already seen this shift, never the immediately previous fault
+  let pool=SYS_ANSWERS[sys].filter(f=>!G.seenAns.includes(f)&&f!==G.lastFault);
+  if(!pool.length)pool=SYS_ANSWERS[sys].filter(f=>f!==G.lastFault);
   if(!pool.length)pool=SYS_ANSWERS[sys];
-  const correct=R.pick(pool);G.seenAns.push(correct);
+  const correct=R.pick(pool);G.seenAns.push(correct);G.lastFault=correct;
   const F=FAULTS[correct],data=F.gen();
   const bldg=R.pick(BLDGS[sys])+' \u2014 '+R.pick(EQUIP[sys]);
   return {sys,correct,F,data,bldg,complaint:F.complaint(),inspect:F.inspect(),noisy:R.chance(G.idx>=4?0.45:0.32),_calc:false};
