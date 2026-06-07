@@ -139,6 +139,11 @@
         <label class="filebtn">Upload logo<input type="file" accept="image/*" id="logoFile" style="display:none"></label>
         <span class="fname" id="logoStatus">loading from mt-assets…</span>
       </div>
+      <label style="margin-top:10px">Logo color</label>
+      <div class="fmt" id="logoMode">
+        <button data-m="white" class="active">White</button>
+        <button data-m="dark">Dark</button>
+      </div>
       <div class="hint">Auto-loads your white text logo from cdn.mechanicaltemp.com (same one the site header uses). Upload overrides it. Job photos go in the Photos section below, not here.</div>
     </div>
 
@@ -204,6 +209,31 @@ function setLogoStatus(t){
   const el = document.getElementById('logoStatus');
   if(el) el.textContent = t;
 }
+
+// ---- logo color toggle: tints the white logo to navy-black via composite ----
+let logoMode = 'white';
+const tintCache = {for:null, mode:null, cv:null};
+function logoSrc(){
+  if(!logoImg) return null;
+  if(logoMode==='white') return logoImg;
+  if(tintCache.for!==logoImg || tintCache.mode!==logoMode){
+    const oc = document.createElement('canvas');
+    oc.width = logoImg.width; oc.height = logoImg.height;
+    const o = oc.getContext('2d');
+    o.drawImage(logoImg, 0, 0);
+    o.globalCompositeOperation = 'source-in';
+    o.fillStyle = '#0e1a2e';
+    o.fillRect(0, 0, oc.width, oc.height);
+    tintCache.for = logoImg; tintCache.mode = logoMode; tintCache.cv = oc;
+  }
+  return tintCache.cv;
+}
+document.getElementById('logoMode').addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  logoMode = b.dataset.m;
+  document.querySelectorAll('#logoMode button').forEach(x=>x.classList.toggle('active', x===b));
+  draw();
+});
 
 const cv = document.getElementById('cv');
 const ctx = cv.getContext('2d');
@@ -421,7 +451,7 @@ function chip(text, x, y, bg, fg){
 }
 
 function drawLogo(x, yCenter, h){
-  // returns width consumed; draws logo if loaded, else returns 0
+  // footer/navy-band placements: always the white logo (dark would vanish on navy)
   if(!logoImg) return 0;
   const w = logoImg.width * (h/logoImg.height);
   ctx.drawImage(logoImg, x, yCenter-h/2, w, h);
@@ -525,14 +555,17 @@ function draw(){
     ctx.fillText(textVals['spot.detail'], 56, H-150);
     // footer strip
     // logo top-right over photo — no box, just a soft shadow for contrast
-    if(logoImg){
-      const lh = 140, lw2 = logoImg.width*(lh/logoImg.height);
-      ctx.save();
-      ctx.shadowColor = 'rgba(14,26,46,.75)';
-      ctx.shadowBlur = 24;
-      ctx.shadowOffsetY = 3;
-      ctx.drawImage(logoImg, W-lw2-48, 44, lw2, lh);
-      ctx.restore();
+    {
+      const L = logoSrc();
+      if(L){
+        const lh = 140, lw2 = L.width*(lh/L.height);
+        ctx.save();
+        ctx.shadowColor = (logoMode==='white') ? 'rgba(14,26,46,.75)' : 'rgba(245,239,227,.85)';
+        ctx.shadowBlur = 24;
+        ctx.shadowOffsetY = 3;
+        ctx.drawImage(L, W-lw2-48, 44, lw2, lh);
+        ctx.restore();
+      }
     }
     ctx.fillStyle = BRAND.rust;
     ctx.fillRect(0, H-96, W, 6);
