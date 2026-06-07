@@ -139,7 +139,7 @@
         <label class="filebtn">Upload logo<input type="file" accept="image/*" id="logoFile" style="display:none"></label>
         <span class="fname" id="logoStatus">loading from mt-assets…</span>
       </div>
-      <div class="hint">Auto-loads from your mt-assets repo (edit LOGO_URL in the file). Upload overrides it for this session.</div>
+      <div class="hint">Auto-loads your white text logo from cdn.mechanicaltemp.com (same one the site header uses). Upload overrides it. Job photos go in the Photos section below, not here.</div>
     </div>
 
     <div class="card" id="photoCard">
@@ -186,17 +186,16 @@ const COMPANY = 'MECHANICAL TEMP';
 const PHONE = '(313) 282-4758';
 const SITE = 'mechanicaltemp.com';
 
-// ---- EDIT THIS LINE: point at your logo in the mt-assets repo ----
-// Use the raw URL, e.g. https://raw.githubusercontent.com/servicecoinrwb/mt-assets/main/logo-cream.png
-// Cream/light logo variant works best (it sits on navy footers).
-const LOGO_URL = 'https://raw.githubusercontent.com/servicecoinrwb/mt-assets/main/logo-cream.png';
+// ---- Logo source: white text logo from the Mechanical Temp CDN ----
+// (same asset the main site header uses — white on transparent, sits on navy)
+const LOGO_URL = 'https://cdn.mechanicaltemp.com/logos/white/text/white_textlogo_transparent_background.png';
 
 let logoImg = null;
 (function loadLogo(){
   const im = new Image();
   im.crossOrigin = 'anonymous'; // raw.githubusercontent sends CORS *, keeps canvas exportable
   im.onload = ()=>{ logoImg = im; draw(); setLogoStatus('repo logo loaded'); };
-  im.onerror = ()=>{ setLogoStatus('repo logo not found — using text wordmark (or upload one)'); };
+  im.onerror = ()=>{ setLogoStatus('CDN logo blocked (CORS) — tap Upload logo and pick your white logo PNG'); };
   im.src = LOGO_URL;
 })();
 function setLogoStatus(t){
@@ -272,13 +271,12 @@ function buildFields(){
 function updatePhotoUI(){
   const a = document.getElementById('slotA'), b = document.getElementById('slotB');
   const card = document.getElementById('photoCard');
-  if(layout==='tip' || layout==='promo'){ card.style.display='none'; }
-  else {
-    card.style.display='';
-    b.style.display = (layout==='ba') ? '' : 'none';
-    a.querySelector('.filebtn').firstChild.textContent = (layout==='ba') ? 'Before' : 'Photo';
-    b.querySelector('.filebtn').firstChild.textContent = 'After';
-  }
+  if(layout==='promo'){ card.style.display='none'; return; }
+  card.style.display='';
+  b.style.display = (layout==='ba') ? '' : 'none';
+  const lblA = (layout==='ba') ? 'Before' : (layout==='tip' ? 'Photo (optional)' : 'Photo');
+  a.querySelector('.filebtn').firstChild.textContent = lblA;
+  b.querySelector('.filebtn').firstChild.textContent = 'After';
 }
 
 document.querySelectorAll('input[type=file]').forEach(inp=>{
@@ -306,6 +304,12 @@ document.getElementById('logoFile').addEventListener('change', e=>{
 });
 
 // ---------- geometry ----------
+function tipSlot(){
+  const W = cv.width, H = cv.height;
+  const bandH = (H>1100) ? 400 : 240;
+  return {x:56, y:H-110-28-bandH, w:W-112, h:bandH};
+}
+
 function slots(){
   const W = cv.width, H = cv.height;
   const FOOT = 110; // footer bar
@@ -318,6 +322,9 @@ function slots(){
   }
   if(layout==='spot'){
     return [{x:0, y:0, w:W, h:H}];
+  }
+  if(layout==='tip'){
+    return [tipSlot()];
   }
   return [];
 }
@@ -540,6 +547,16 @@ function draw(){
     ctx.fillRect(56, yy-30, 140, 10);
     // body
     wrapText(textVals['tip.body'], 56, yy+60, W-112, 56, '500 40px Barlow', '#2a3447');
+    // optional photo band fills the lower space
+    if(photos[0].img){
+      const s = tipSlot();
+      coverDraw(photos[0], s);
+      ctx.strokeStyle = BRAND.navy;
+      ctx.lineWidth = 10;
+      ctx.strokeRect(s.x+5, s.y+5, s.w-10, s.h-10);
+      ctx.fillStyle = BRAND.rust;
+      ctx.fillRect(s.x, s.y-14, 220, 8);
+    }
     footer();
   }
 
