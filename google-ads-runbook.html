@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mechanical Temp — Google Ads Runbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e12;
+    --panel:#11171e;
+    --panel-2:#161e27;
+    --line:#222d39;
+    --line-bright:#2e3d4d;
+    --txt:#d6e0e9;
+    --txt-dim:#8094a6;
+    --txt-faint:#5a6b7c;
+    --cool:#22b8cf;
+    --cool-soft:#0e3a44;
+    --heat:#f59e0b;
+    --heat-soft:#3a2a08;
+    --green:#27c08a;
+    --red:#ff5d5d;
+    --amber:#f5c518;
+    --mono:'JetBrains Mono',monospace;
+    --sans:'Archivo',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--txt);
+    font-family:var(--sans);
+    line-height:1.55;
+    padding:0 0 80px;
+    background-image:
+      radial-gradient(circle at 12% -5%, rgba(34,184,207,.07), transparent 40%),
+      radial-gradient(circle at 90% 0%, rgba(245,158,11,.06), transparent 38%);
+  }
+  .wrap{max-width:980px;margin:0 auto;padding:0 22px;}
+
+  /* ---- header ---- */
+  header{
+    border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg,#0d1318,#0a0e12);
+    position:sticky;top:0;z-index:20;
+    backdrop-filter:blur(6px);
+  }
+  .hbar{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;max-width:980px;margin:0 auto;}
+  .brand{display:flex;align-items:center;gap:13px;}
+  .logo-mark{
+    width:38px;height:38px;border:1.5px solid var(--cool);border-radius:7px;
+    display:grid;place-items:center;font-family:var(--mono);font-weight:800;color:var(--cool);
+    font-size:15px;box-shadow:0 0 18px rgba(34,184,207,.25) inset;
+  }
+  .brand h1{font-size:15px;font-weight:800;letter-spacing:.02em;line-height:1.1;}
+  .brand .sub{font-family:var(--mono);font-size:10.5px;color:var(--txt-faint);letter-spacing:.18em;text-transform:uppercase;}
+  .live{font-family:var(--mono);font-size:10px;color:var(--txt-dim);display:flex;align-items:center;gap:7px;letter-spacing:.1em;}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 1.8s infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+  /* ---- season banner ---- */
+  .season-hero{
+    margin:26px 0 8px;border:1px solid var(--line-bright);border-radius:14px;overflow:hidden;
+    background:var(--panel);
+  }
+  .season-top{display:flex;align-items:stretch;}
+  .season-half{flex:1;padding:20px 22px;position:relative;}
+  .season-half.cool{background:linear-gradient(135deg,rgba(34,184,207,.12),transparent);}
+  .season-half.heat{background:linear-gradient(135deg,rgba(245,158,11,.10),transparent);border-left:1px solid var(--line);}
+  .season-half .tag{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--txt-faint);}
+  .season-half h2{font-size:19px;margin:6px 0 3px;font-weight:800;}
+  .season-half .months{font-family:var(--mono);font-size:11.5px;color:var(--txt-dim);}
+  .season-half .state{margin-top:11px;font-family:var(--mono);font-size:11px;display:inline-flex;align-items:center;gap:7px;padding:4px 10px;border-radius:20px;}
+  .state.on{background:rgba(39,192,138,.12);color:var(--green);border:1px solid rgba(39,192,138,.3);}
+  .state.off{background:rgba(255,93,93,.08);color:var(--red);border:1px solid rgba(255,93,93,.25);}
+  .cool h2{color:var(--cool);} .heat h2{color:var(--heat);}
+
+  .now-strip{
+    border-top:1px solid var(--line);padding:12px 22px;font-family:var(--mono);font-size:11.5px;
+    color:var(--txt-dim);display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--panel-2);
+  }
+  .now-strip b{color:var(--txt);font-weight:700;}
+  .now-pill{padding:3px 9px;border-radius:5px;background:var(--cool-soft);color:var(--cool);font-weight:700;}
+
+  /* ---- sections ---- */
+  section{margin-top:30px;}
+  .sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;padding-bottom:9px;border-bottom:1px solid var(--line);}
+  .sec-head .num{font-family:var(--mono);font-size:12px;color:var(--cool);font-weight:700;}
+  .sec-head h3{font-size:17px;font-weight:800;letter-spacing:.01em;}
+  .sec-head .hint{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--txt-faint);letter-spacing:.1em;text-transform:uppercase;}
+
+  /* ---- checklist cards ---- */
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:14px;}
+  .card.cool-accent{border-left:3px solid var(--cool);}
+  .card.heat-accent{border-left:3px solid var(--heat);}
+  .card h4{font-size:14px;font-weight:700;margin-bottom:13px;display:flex;align-items:center;gap:9px;}
+  .card h4 .ic{font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:5px;font-weight:700;}
+  .ic.cool{background:var(--cool-soft);color:var(--cool);}
+  .ic.heat{background:var(--heat-soft);color:var(--heat);}
+
+  ul.steps{list-style:none;}
+  ul.steps li{
+    display:flex;gap:12px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:13.5px;color:var(--txt);
+  }
+  ul.steps li:last-child{border-bottom:none;}
+  ul.steps li .chk{
+    flex-shrink:0;width:17px;height:17px;border:1.5px solid var(--line-bright);border-radius:4px;margin-top:2px;
+    cursor:pointer;transition:.15s;position:relative;
+  }
+  ul.steps li .chk:hover{border-color:var(--cool);}
+  ul.steps li .chk.done{background:var(--green);border-color:var(--green);}
+  ul.steps li .chk.done::after{content:"✓";position:absolute;color:#06231a;font-size:12px;font-weight:900;left:2.5px;top:-2px;}
+  ul.steps li.checked span.txt{color:var(--txt-faint);text-decoration:line-through;}
+  .steps b{color:#fff;font-weight:700;}
+  .path{font-family:var(--mono);font-size:11.5px;color:var(--cool);background:#0c1418;padding:1px 6px;border-radius:4px;border:1px solid var(--line);}
+
+  /* ---- ad group grid ---- */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+  @media(max-width:680px){.grid{grid-template-columns:1fr;}.season-top{flex-direction:column}.season-half.heat{border-left:none;border-top:1px solid var(--line)}}
+  .ag{background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:13px 15px;}
+  .ag .name{font-weight:700;font-size:13.5px;margin-bottom:5px;}
+  .ag .meta{font-family:var(--mono);font-size:10.5px;color:var(--txt-dim);}
+  .ag.c{border-top:2px solid var(--cool);} .ag.h{border-top:2px solid var(--heat);}
+
+  /* ---- troubleshoot ---- */
+  details.tb{background:var(--panel);border:1px solid var(--line);border-radius:10px;margin-bottom:10px;overflow:hidden;}
+  details.tb summary{
+    padding:14px 18px;cursor:pointer;font-weight:700;font-size:13.5px;list-style:none;display:flex;align-items:center;gap:11px;
+  }
+  details.tb summary::-webkit-details-marker{display:none;}
+  details.tb summary .sym{
+    font-family:var(--mono);font-size:10px;font-weight:800;padding:3px 8px;border-radius:5px;
+    background:rgba(255,93,93,.1);color:var(--red);border:1px solid rgba(255,93,93,.22);flex-shrink:0;
+  }
+  details.tb summary .arrow{margin-left:auto;color:var(--txt-faint);transition:.2s;font-family:var(--mono);}
+  details.tb[open] summary .arrow{transform:rotate(90deg);color:var(--cool);}
+  details.tb .body{padding:0 18px 16px 18px;border-top:1px solid var(--line);}
+  details.tb .body .fix{margin-top:13px;}
+  details.tb .body .lab{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--txt-faint);margin-bottom:5px;}
+  details.tb .body p{font-size:13px;color:var(--txt-dim);margin-bottom:4px;}
+  details.tb .body .fix p{color:var(--txt);}
+  details.tb .body b{color:#fff;}
+
+  /* nesting diagram */
+  .nest{font-family:var(--mono);font-size:12px;background:#0c1217;border:1px solid var(--line);border-radius:9px;padding:15px 18px;margin:6px 0;}
+  .nest .lvl{padding:3px 0;color:var(--txt-dim);}
+  .nest .lvl b{color:var(--cool);}
+  .nest .warn{color:var(--amber);}
+
+  footer{margin-top:40px;text-align:center;font-family:var(--mono);font-size:10.5px;color:var(--txt-faint);letter-spacing:.1em;}
+  .note{font-size:12px;color:var(--txt-faint);font-family:var(--mono);margin-top:8px;}
+  .acct{font-family:var(--mono);font-size:11px;color:var(--txt-dim);}
+  .acct b{color:var(--cool);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hbar">
+    <div class="brand">
+      <div class="logo-mark">MT</div>
+      <div>
+        <h1>Google Ads &mdash; Seasonal Runbook</h1>
+        <div class="sub">Mechanical Temp &middot; Metro Detroit</div>
+      </div>
+    </div>
+    <div class="live"><span class="dot"></span> CONTROL PANEL</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- SEASON STATE -->
+  <div class="season-hero">
+    <div class="season-top">
+      <div class="season-half cool">
+        <div class="tag">&#10052; Cooling Season</div>
+        <h2>AC Mode</h2>
+        <div class="months">~ MAR &rarr; OCT</div>
+        <div class="state on" id="coolState">&#9679; AC ad groups ENABLED</div>
+      </div>
+      <div class="season-half heat">
+        <div class="tag">&#128293; Heating Season</div>
+        <h2>Furnace Mode</h2>
+        <div class="months">~ SEP &rarr; APR</div>
+        <div class="state off" id="heatState">&#9679; Furnace ad groups PAUSED</div>
+      </div>
+    </div>
+    <div class="now-strip">
+      RIGHT NOW: <span class="now-pill">COOLING SEASON</span>
+      <b>Run AC</b> &middot; pause furnace &middot; budget on the AC campaign &middot;
+      <span style="color:var(--txt-faint)">flip in fall</span>
+    </div>
+  </div>
+  <div class="acct">ACCOUNT 591-198-3591 &middot; Campaign: <b>HVAC - Search - Metro Detroit</b> &middot; Landing: promo.mechanicaltemp.com</div>
+
+  <!-- THE ONE RULE -->
+  <section>
+    <div class="sec-head"><span class="num">00</span><h3>The One Rule That Prevents 90% of Problems</h3></div>
+    <div class="card">
+      <p style="font-size:14px;margin-bottom:10px">Three on/off switches stack. <b>All three must be ON</b> for an ad to actually show. Pausing any one upstream kills everything below it.</p>
+      <div class="nest">
+        <div class="lvl"><b>1. CAMPAIGN</b> &mdash; must be Enabled</div>
+        <div class="lvl">&nbsp;&nbsp;&#9492;&#9472; <b>2. AD GROUP</b> &mdash; must be Enabled <span class="warn">&larr; this is the season switch</span></div>
+        <div class="lvl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#9492;&#9472; <b>3a. ADS</b> &mdash; Eligible (not "Limited"/"Not eligible")</div>
+        <div class="lvl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#9492;&#9472; <b>3b. KEYWORDS</b> &mdash; Enabled <span class="warn">&larr; the silent killer</span></div>
+      </div>
+      <p class="note">"Enabled" at one level means nothing if the level above it is paused. A green dot on the ad ≠ serving.</p>
+    </div>
+  </section>
+
+  <!-- SWITCH TO COOLING -->
+  <section>
+    <div class="sec-head"><span class="num">01</span><h3>Switch to Cooling Season (Spring)</h3><span class="hint">do once each spring</span></div>
+    <div class="card cool-accent">
+      <h4><span class="ic cool">AC ON</span> Turn the AC machine on</h4>
+      <ul class="steps">
+        <li><span class="chk"></span><span class="txt"><b>ENABLE</b> the 3 AC ad groups: <b>Emergency AC Repair</b>, <b>AC Tune-Up</b>, <b>New AC Installation</b> &mdash; <span class="path">Ad groups</span> view, flip each to Enabled.</span></li>
+        <li><span class="chk"></span><span class="txt"><b>PAUSE</b> the 3 furnace ad groups: Emergency Furnace Repair, Furnace Maintenance, New Furnace Installation.</span></li>
+        <li><span class="chk"></span><span class="txt">Confirm <b>keywords are Enabled</b> inside each AC group &mdash; <span class="path">Keywords</span>, check Status column says Enabled (NOT Paused). Select all &rarr; Enable if needed.</span></li>
+        <li><span class="chk"></span><span class="txt">Confirm each AC ad shows <b>Eligible</b> (not Pending/Not eligible). New/edited ads sit "Pending" ~1 day.</span></li>
+        <li><span class="chk"></span><span class="txt">Set <b>budget</b> back up (cooling demand is high). Start ~<b>$20/day</b>, scale once leads cost what you like.</span></li>
+        <li><span class="chk"></span><span class="txt">Check <b>Locations</b> = Metro Detroit, targeting set to <b>"Presence: people in your targeted locations."</b></span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SWITCH TO HEATING -->
+  <section>
+    <div class="sec-head"><span class="num">02</span><h3>Switch to Heating Season (Fall)</h3><span class="hint">do once each fall</span></div>
+    <div class="card heat-accent">
+      <h4><span class="ic heat">HEAT ON</span> Turn the furnace machine on</h4>
+      <ul class="steps">
+        <li><span class="chk"></span><span class="txt"><b>ENABLE</b> the 3 furnace ad groups: Emergency Furnace Repair, Furnace Maintenance, New Furnace Installation.</span></li>
+        <li><span class="chk"></span><span class="txt"><b>PAUSE</b> the 3 AC ad groups.</span></li>
+        <li><span class="chk"></span><span class="txt">Confirm furnace <b>keywords are Enabled</b> (Status column) and ads are <b>Eligible</b> &mdash; the furnace ads got flagged for Capitalization once; re-check.</span></li>
+        <li><span class="chk"></span><span class="txt">Set budget for heating demand. Cold snaps = emergency calls; consider bumping during freezes.</span></li>
+        <li><span class="chk"></span><span class="txt">Locations + Presence-only targeting still correct (carries over).</span></li>
+      </ul>
+      <p class="note">Shoulder seasons (Mar/Apr, Sep/Oct): fine to run BOTH for a few weeks &mdash; demand overlaps.</p>
+    </div>
+  </section>
+
+  <!-- AD GROUP MAP -->
+  <section>
+    <div class="sec-head"><span class="num">03</span><h3>Your 6 Ad Groups</h3><span class="hint">campaign: HVAC - Search - Metro Detroit</span></div>
+    <div class="grid">
+      <div class="ag c"><div class="name">&#10052; Emergency AC Repair</div><div class="meta">cooling &middot; highest intent &middot; /ac-repair/emergency</div></div>
+      <div class="ag h"><div class="name">&#128293; Emergency Furnace Repair</div><div class="meta">heating &middot; highest intent &middot; /furnace-repair/emergency</div></div>
+      <div class="ag c"><div class="name">&#10052; AC Tune-Up</div><div class="meta">cooling &middot; spring &middot; /ac-tune-up/special</div></div>
+      <div class="ag h"><div class="name">&#128293; Furnace Maintenance</div><div class="meta">heating &middot; fall &middot; /furnace/service</div></div>
+      <div class="ag c"><div class="name">&#10052; New AC Installation</div><div class="meta">cooling &middot; install &middot; /new-ac/quote</div></div>
+      <div class="ag h"><div class="name">&#128293; New Furnace Installation</div><div class="meta">heating &middot; install &middot; /new-furnace/quote</div></div>
+    </div>
+  </section>
+
+  <!-- LSA -->
+  <section>
+    <div class="sec-head"><span class="num">04</span><h3>Local Services Ads (LSA) &mdash; The Other Channel</h3><span class="hint">pay-per-lead &middot; Google Guaranteed</span></div>
+    <div class="card cool-accent">
+      <p style="font-size:14px;margin-bottom:12px">LSA is separate from Search Ads. It's the <b>"Google Guaranteed"</b> badge ads at the very top. You pay <b>per lead</b> (call/message), not per click. <b>Different rules than search ads &mdash; read this:</b></p>
+      <ul class="steps">
+        <li><span class="chk"></span><span class="txt"><b>Leave job types ON year-round.</b> Unlike search ads, you pay per lead not per impression &mdash; so extra job types cost nothing until someone actually contacts you. Turn on everything you're licensed and willing to do; no seasonal toggling needed.</span></li>
+        <li><span class="chk"></span><span class="txt">Key job types to keep ON: <b>Repair AC, Repair HVAC, AC maintenance, Install AC, Repair heating system, Heating maintenance, Install heating system, Repair/Install thermostat</b>.</span></li>
+        <li><span class="chk"></span><span class="txt"><b>Bidding:</b> Automated (maximize leads). Leave target CPL <b>unchecked</b> at first &mdash; setting it too low starves volume. Watch actual cost-per-lead for ~2 weeks, then add a target only if leads run pricey.</span></li>
+        <li><span class="chk"></span><span class="txt"><b>Control spend with weekly budget</b>, not per-lead caps. Don't go below ~$75/week or you barely enter the auction. ~$40/lead means $230/wk &asymp; 5-6 leads.</span></li>
+        <li><span class="chk"></span><span class="txt"><b>Dispute junk leads</b> (wrong number, spam, out of area) &mdash; you get refunded AND it protects your ranking. Do this regularly.</span></li>
+        <li><span class="chk"></span><span class="txt"><b>"Direct Business" leads</b> = people who searched your name (existing/referral). <b>"Category" leads</b> = new customers searching "ac repair near me." If you only see Direct Business, your job types for that category are probably OFF.</span></li>
+      </ul>
+      <p class="note">LSA ranking is driven by: review count/recency, <b>response speed</b>, and proximity. Fast callbacks rank you higher AND close more &mdash; it matters more than budget.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--amber)">
+      <h4><span class="ic" style="background:var(--heat-soft);color:var(--amber)">KEY DIFFERENCE</span> LSA vs. Search Ads</h4>
+      <ul class="steps">
+        <li><span class="chk"></span><span class="txt"><b>Search Ads:</b> pay per click. Budget waste is real &mdash; so you DO toggle ad groups by season (the runbook above).</span></li>
+        <li><span class="chk"></span><span class="txt"><b>LSA:</b> pay per lead. No impression waste &mdash; so you DON'T toggle by season. Set it once, leave it, just dispute junk and answer fast.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- TROUBLESHOOT -->
+  <section>
+    <div class="sec-head"><span class="num">05</span><h3>Troubleshooting &mdash; Every Trap We Hit</h3><span class="hint">click to expand</span></div>
+
+    <details class="tb">
+      <summary><span class="sym">0 IMPR</span> Ad group is Enabled but getting zero impressions <span class="arrow">&#9656;</span></summary>
+      <div class="body">
+        <p>Group is on, but nothing's serving. Two causes, in order of likelihood:</p>
+        <div class="fix">
+          <div class="lab">Fix</div>
+          <p><b>1. Keywords are Paused.</b> Go to <span class="path">Keywords</span> &mdash; check the Status column. Paused keywords can't trigger ads. Select all &rarr; Enable.</p>
+          <p><b>2. No ads in the group / ads not Eligible.</b> Open <span class="path">Ads</span>, confirm there's an Eligible ad inside. (Empty group = 0 impressions even when "enabled.")</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="tb">
+      <summary><span class="sym">PAUSED</span> "Enabled but Paused" &mdash; the nesting confusion <span class="arrow">&#9656;</span></summary>
+      <div class="body">
+        <p>The green dot is at one level; "Paused" is at another. Campaign / Ad group / Keyword / Ad each have their own switch.</p>
+        <div class="fix">
+          <div class="lab">Fix</div>
+          <p>Read the <b>Status column</b>, not the colored dot. Find which level says Paused (often the ad group or the keywords) and enable <b>that</b> level. A green ad inside a paused ad group still won't run.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="tb">
+      <summary><span class="sym">CAPS</span> "Not eligible / Approved (limited) &mdash; Capitalization" <span class="arrow">&#9656;</span></summary>
+      <div class="body">
+        <p>Google flags ALL-CAPS words in ad text (and on the landing page). One flagged word limits the whole ad. Killed our CTR (0.38%).</p>
+        <div class="fix">
+          <div class="lab">Fix</div>
+          <p>Edit the ad &mdash; convert ALL-CAPS to Title/sentence case. <b>The sneaky one that bit us: "OFF" in "$50 OFF Any Repair"</b> &mdash; one tiny capped word flagged EVERY ad. Watch for capped <b>OFF, FREE, NOW, FAST, BEST, SAME-DAY</b>. <b>AC</b>, <b>HVAC</b>, <b>24/7</b> are allowed acronyms. Same rule on the landing page. Re-review clears in hours&ndash;1 day.</p>
+          <p>If you believe it's wrong: <span class="path">Tools &rarr; Troubleshooting &rarr; Policy manager &rarr; Appeal</span>.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="tb">
+      <summary><span class="sym">NAME</span> Business name "Mechanical Temp" disapproved <span class="arrow">&#9656;</span></summary>
+      <div class="body">
+        <p>Account is verified under <b>Brian Estes</b> (personal), so the business-name asset only auto-approves if it matches the verified name OR the domain &mdash; and the name must appear as <b>readable text</b> on the landing page (not just inside the logo image).</p>
+        <div class="fix">
+          <div class="lab">Quick fix</div>
+          <p>Keep "Mechanical Temp" visible as plain text high on promo.mechanicaltemp.com (it's woven into the hero subhead). Domain = mechanicaltemp.com, name under 25 chars &rarr; passes on domain-match.</p>
+          <div class="lab" style="margin-top:10px">Permanent fix</div>
+          <p>Verify the LLC as advertiser: <span class="path">Admin &rarr; Policy &rarr; Account &rarr; Reset verification</span>, re-verify as Mechanical Temp LLC. Then the name just works &mdash; no more workarounds.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="tb">
+      <summary><span class="sym">DUP</span> "Duplicate value" won't let the ad save <span class="arrow">&#9656;</span></summary>
+      <div class="body">
+        <p>Usually a wedged field in <b>Ad URL options</b> (empty/duplicate Custom parameter rows or a repeated key in the Final URL suffix) &mdash; NOT the headlines.</p>
+        <div class="fix">
+          <div class="lab">Fix</div>
+          <p>1. Clear extra Custom parameter rows. 2. Confirm Final URL suffix has no repeated key. 3. If still stuck: <b>Cancel and rebuild the ad fresh</b> &mdash; fastest path, the form state clears.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="tb">
+      <summary><span class="sym">HIDDEN</span> "My ads disappeared / ad groups look empty" <span class="arrow">&#9656;</span></summary>
+      <div class="body">
+        <p>A preset <b>filter</b> at the top of the Ads view was hiding them. The ads existed the whole time.</p>
+        <div class="fix">
+          <div class="lab">Fix</div>
+          <p>Look for the filter chip near the top (e.g. "Ad status: Enabled, Paused" or a campaign/group filter). Remove or widen it. Set the date range wide enough too.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="tb">
+      <summary><span class="sym">PENDING</span> Ad stuck on "Pending" / built months ago, never approved <span class="arrow">&#9656;</span></summary>
+      <div class="body">
+        <p>Ads in paused/dormant groups don't get prioritized for review. They sit "Pending" until they're about to serve. Normal &mdash; clears within ~1 day once active.</p>
+        <div class="fix">
+          <div class="lab">Watch for</div>
+          <p>If it goes Pending &rarr; <b>Not eligible (Capitalization)</b> instead of Eligible, apply the CAPS fix above.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="tb">
+      <summary><span class="sym">LSA</span> "My LSA doesn't do squat / only getting Direct Business leads" <span class="arrow">&#9656;</span></summary>
+      <div class="body">
+        <p>LSA running but no new-customer (Category) leads &mdash; only "Direct Business" (people searching your name). Cause: the relevant <b>job types are turned OFF</b>. We hit this with all the AC job types off in summer.</p>
+        <div class="fix">
+          <div class="lab">Fix</div>
+          <p>Open LSA &rarr; <b>Job types</b> &rarr; turn ON everything you're licensed for (Repair AC, Repair HVAC, AC maintenance, Install AC, etc.). They're pay-per-lead, so leaving them all on costs nothing until someone contacts you. Also confirm service areas cover your metro and budget is &ge;$75/week.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- HEALTH CHECK -->
+  <section>
+    <div class="sec-head"><span class="num">06</span><h3>Monthly 60-Second Health Check</h3><span class="hint">catch problems early</span></div>
+    <div class="card">
+      <ul class="steps">
+        <li><span class="chk"></span><span class="txt">Right season's ad groups <b>Enabled</b>, off-season ones <b>Paused</b>?</span></li>
+        <li><span class="chk"></span><span class="txt">Active ads all say <b>Eligible</b> (no "Limited" / "Not eligible")?</span></li>
+        <li><span class="chk"></span><span class="txt">Keywords in active groups all <b>Enabled</b>?</span></li>
+        <li><span class="chk"></span><span class="txt">Budget actually spending? (If $/day cap hit by midday, raise it.)</span></li>
+        <li><span class="chk"></span><span class="txt">Conversions &gt; 0 &mdash; is <b>call tracking</b> firing? Check Goals.</span></li>
+        <li><span class="chk"></span><span class="txt">CTR above ~3%? If stuck near 0.4%, suspect a policy limit or wrong-season ad.</span></li>
+        <li><span class="chk"></span><span class="txt"><b>Answer the phone fast.</b> Missed paid calls = wasted spend + lower ranking.</span></li>
+        <li><span class="chk"></span><span class="txt"><b>LSA:</b> dispute any junk leads (wrong number, spam, out of area) for refunds.</span></li>
+        <li><span class="chk"></span><span class="txt"><b>LSA:</b> getting Category leads, not just Direct Business? If only Direct Business, a job type is off.</span></li>
+      </ul>
+    </div>
+    <p class="note">Tip: bookmark this file. Open it twice a year (spring + fall) and run the switch list.</p>
+  </section>
+
+  <footer>
+    MECHANICAL TEMP &middot; GOOGLE ADS RUNBOOK &middot; KEEP &amp; REUSE EVERY SEASON
+  </footer>
+</div>
+
+<script>
+  // checkbox toggles (in-memory only, no storage)
+  document.querySelectorAll('ul.steps li').forEach(function(li){
+    var chk = li.querySelector('.chk');
+    if(!chk) return;
+    chk.addEventListener('click', function(){
+      chk.classList.toggle('done');
+      li.classList.toggle('checked');
+    });
+  });
+</script>
+</body>
+</html>
