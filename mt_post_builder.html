@@ -524,16 +524,15 @@ function draw(){
     ctx.font = '500 36px Barlow'; ctx.fillStyle = BRAND.sky;
     ctx.fillText(textVals['spot.detail'], 56, H-150);
     // footer strip
-    // logo top-right over photo with scrim for legibility
+    // logo top-right over photo — no box, just a soft shadow for contrast
     if(logoImg){
-      const lh = 120, lw2 = logoImg.width*(lh/logoImg.height);
-      const pad = 26;
-      const bx = W-lw2-pad*2-40, by = 40;
-      ctx.fillStyle = 'rgba(14,26,46,.55)';
-      ctx.fillRect(bx, by, lw2+pad*2, lh+pad*2);
-      ctx.fillStyle = BRAND.rust;
-      ctx.fillRect(bx, by+lh+pad*2, lw2+pad*2, 8);
-      ctx.drawImage(logoImg, bx+pad, by+pad, lw2, lh);
+      const lh = 140, lw2 = logoImg.width*(lh/logoImg.height);
+      ctx.save();
+      ctx.shadowColor = 'rgba(14,26,46,.75)';
+      ctx.shadowBlur = 24;
+      ctx.shadowOffsetY = 3;
+      ctx.drawImage(logoImg, W-lw2-48, 44, lw2, lh);
+      ctx.restore();
     }
     ctx.fillStyle = BRAND.rust;
     ctx.fillRect(0, H-96, W, 6);
