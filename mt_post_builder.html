@@ -419,7 +419,7 @@ function footer(){
   ctx.fillRect(0, H-FOOT, W, 8);
   ctx.textBaseline='middle';
   ctx.textAlign='left';
-  const lw = drawLogo(48, H-FOOT/2+4, 64);
+  const lw = drawLogo(48, H-FOOT/2+4, 84);
   ctx.font = '700 44px Oswald';
   ctx.fillStyle = BRAND.cream;
   if(lw){ /* logo replaces wordmark */ }
@@ -507,14 +507,25 @@ function draw(){
     ctx.font = '500 36px Barlow'; ctx.fillStyle = BRAND.sky;
     ctx.fillText(textVals['spot.detail'], 56, H-150);
     // footer strip
+    // logo top-right over photo with scrim for legibility
+    if(logoImg){
+      const lh = 120, lw2 = logoImg.width*(lh/logoImg.height);
+      const pad = 26;
+      const bx = W-lw2-pad*2-40, by = 40;
+      ctx.fillStyle = 'rgba(14,26,46,.55)';
+      ctx.fillRect(bx, by, lw2+pad*2, lh+pad*2);
+      ctx.fillStyle = BRAND.rust;
+      ctx.fillRect(bx, by+lh+pad*2, lw2+pad*2, 8);
+      ctx.drawImage(logoImg, bx+pad, by+pad, lw2, lh);
+    }
     ctx.fillStyle = BRAND.rust;
     ctx.fillRect(0, H-96, W, 6);
     ctx.textBaseline='middle';
-    const lw2 = drawLogo(56, H-46, 56);
     ctx.font='700 38px Oswald'; ctx.fillStyle=BRAND.cream; ctx.textAlign='left';
-    if(!lw2) ctx.fillText(COMPANY, 56, H-36);
-    ctx.textAlign='right'; ctx.fillStyle=BRAND.sky;
-    ctx.fillText(PHONE, W-56, H-36);
+    if(!logoImg) ctx.fillText(COMPANY, 56, H-46);
+    else { ctx.font='600 30px Barlow'; ctx.fillStyle=BRAND.cream; ctx.fillText(SITE, 56, H-46); }
+    ctx.textAlign='right'; ctx.font='700 38px Oswald'; ctx.fillStyle=BRAND.sky;
+    ctx.fillText(PHONE, W-56, H-46);
   }
 
   if(layout==='tip'){
@@ -531,7 +542,8 @@ function draw(){
     ctx.fillText(textVals['tip.kicker'], 56, 100);
     // logo block top-right (falls back to MT chip)
     if(logoImg){
-      drawLogo(W-260, 95, 80);
+      const lh = 110, lw = logoImg.width*(lh/logoImg.height);
+      ctx.drawImage(logoImg, W-lw-56, 90-lh/2+5, lw, lh);
     } else {
       ctx.fillStyle = BRAND.sky;
       ctx.fillRect(W-200, 60, 120, 60);
@@ -594,8 +606,8 @@ function draw(){
     ctx.font='700 72px Oswald'; ctx.fillStyle=BRAND.cream;
     ctx.fillText(PHONE, W/2, H-150);
     if(logoImg){
-      const lh = 60, lw3 = logoImg.width*(lh/logoImg.height);
-      ctx.drawImage(logoImg, W/2-lw3/2, H-110, lw3, lh);
+      const lh = 92, lw3 = logoImg.width*(lh/logoImg.height);
+      ctx.drawImage(logoImg, W/2-lw3/2, H-122, lw3, lh);
     } else {
       ctx.font='600 32px Barlow'; ctx.fillStyle=BRAND.sky;
       ctx.fillText(COMPANY + '  •  ' + SITE, W/2, H-80);
