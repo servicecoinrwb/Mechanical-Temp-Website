@@ -615,6 +615,27 @@ document.getElementById('dl').addEventListener('click', ()=>{
 });
 
 // init
+// ---- DSM deep-link support ----
+// e.g. post-builder.html?layout=spot&fmt=pt&headline=RTU%20swap&detail=Rally%20House%20—%20Novi
+(function prefillFromQuery(){
+  const q = new URLSearchParams(location.search);
+  const l = q.get('layout');
+  if(l && FIELD_DEFS[l]){
+    layout = l;
+    document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('active', x.dataset.l===l));
+  }
+  const f = q.get('fmt');
+  if(f==='pt' || f==='sq'){
+    fmt = f;
+    cv.height = (fmt==='sq') ? 1080 : 1350;
+    document.querySelectorAll('#fmt button').forEach(x=>x.classList.toggle('active', x.dataset.f===f));
+  }
+  FIELD_DEFS[layout].forEach(([key])=>{
+    const v = q.get(key);
+    if(v !== null) textVals[layout+'.'+key] = v;
+  });
+})();
+
 buildFields();
 updatePhotoUI();
 document.fonts.ready.then(draw);
