@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MT Post Builder — Mechanical Temp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#16263f;
+    --navy-deep:#0e1a2e;
+    --sky:#6fb7e3;
+    --cream:#f5efe3;
+    --rust:#b5512f;
+    --ink:#1c2330;
+    --line:rgba(22,38,63,.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Barlow',sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    min-height:100vh;
+    background-image:
+      repeating-linear-gradient(45deg, rgba(22,38,63,.025) 0 2px, transparent 2px 14px);
+  }
+  header{
+    background:var(--navy);
+    color:var(--cream);
+    padding:14px 20px;
+    display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
+    border-bottom:4px solid var(--rust);
+  }
+  header h1{font-family:'Oswald',sans-serif;font-weight:700;font-size:20px;letter-spacing:.06em;text-transform:uppercase}
+  header span{font-size:13px;color:var(--sky);letter-spacing:.04em}
+  .wrap{display:flex;gap:18px;padding:18px;max-width:1200px;margin:0 auto;flex-wrap:wrap}
+  .panel{flex:1 1 320px;min-width:300px;max-width:460px}
+  .stage{flex:1 1 380px;min-width:320px;display:flex;flex-direction:column;align-items:center;gap:12px}
+
+  .card{
+    background:#fff;border:1px solid var(--line);
+    border-radius:10px;padding:14px;margin-bottom:14px;
+    box-shadow:0 2px 0 rgba(22,38,63,.06);
+  }
+  .card h2{
+    font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;
+    text-transform:uppercase;letter-spacing:.12em;color:var(--navy);
+    margin-bottom:10px;display:flex;align-items:center;gap:8px;
+  }
+  .card h2::before{content:"";width:10px;height:10px;background:var(--rust);display:inline-block}
+
+  .tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .tabs button{
+    font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;
+    letter-spacing:.05em;text-transform:uppercase;
+    padding:10px 8px;border:2px solid var(--navy);background:#fff;color:var(--navy);
+    border-radius:6px;cursor:pointer;transition:all .12s;
+  }
+  .tabs button.active{background:var(--navy);color:var(--cream);box-shadow:inset 0 -3px 0 var(--rust)}
+  .tabs button:hover:not(.active){background:rgba(111,183,227,.18)}
+
+  .fmt{display:flex;gap:8px}
+  .fmt button{
+    flex:1;padding:8px;border:2px solid var(--navy);border-radius:6px;background:#fff;
+    font-family:'Oswald',sans-serif;font-size:12px;font-weight:600;letter-spacing:.05em;
+    color:var(--navy);cursor:pointer;text-transform:uppercase;
+  }
+  .fmt button.active{background:var(--sky);border-color:var(--sky);color:var(--navy-deep)}
+
+  label{display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--navy);margin:10px 0 4px}
+  input[type=text], textarea{
+    width:100%;padding:9px 10px;border:1.5px solid var(--line);border-radius:6px;
+    font-family:'Barlow',sans-serif;font-size:15px;background:var(--cream);
+  }
+  input[type=text]:focus, textarea:focus{outline:2px solid var(--sky);background:#fff}
+  textarea{resize:vertical;min-height:64px}
+
+  .photo-slot{margin-bottom:6px}
+  .photo-slot .row{display:flex;gap:8px;align-items:center}
+  .filebtn{
+    display:inline-block;padding:9px 14px;background:var(--rust);color:var(--cream);
+    border-radius:6px;font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;
+    letter-spacing:.05em;text-transform:uppercase;cursor:pointer;border:none;
+  }
+  .filebtn:hover{background:#9c4427}
+  .photo-slot input[type=file]{display:none}
+  .photo-slot .fname{font-size:12px;color:#667;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+  input[type=range]{width:100%;accent-color:var(--rust)}
+
+  .hint{font-size:12px;color:#56607a;margin-top:8px;line-height:1.45;border-left:3px solid var(--sky);padding-left:8px}
+
+  canvas{
+    width:100%;max-width:480px;height:auto;display:block;
+    border:1px solid var(--line);border-radius:8px;background:#fff;
+    box-shadow:0 10px 30px rgba(14,26,46,.18);
+    touch-action:none;cursor:grab;
+  }
+  canvas:active{cursor:grabbing}
+
+  .export{
+    width:100%;max-width:480px;padding:14px;border:none;border-radius:8px;
+    background:var(--navy);color:var(--cream);
+    font-family:'Oswald',sans-serif;font-size:16px;font-weight:700;
+    letter-spacing:.1em;text-transform:uppercase;cursor:pointer;
+    box-shadow:inset 0 -4px 0 var(--rust);transition:transform .1s;
+  }
+  .export:hover{transform:translateY(-1px);background:var(--navy-deep)}
+  .stage .note{font-size:12px;color:#56607a;text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <h1>MT Post Builder</h1>
+  <span>Mechanical Temp LLC — drop photos in, export PNG, load Buffer</span>
+</header>
+
+<div class="wrap">
+  <div class="panel">
+
+    <div class="card">
+      <h2>Layout</h2>
+      <div class="tabs" id="tabs">
+        <button data-l="ba" class="active">Before / After</button>
+        <button data-l="spot">Job Spotlight</button>
+        <button data-l="tip">Tech Tip</button>
+        <button data-l="promo">Promo</button>
+      </div>
+      <label style="margin-top:12px">Format</label>
+      <div class="fmt" id="fmt">
+        <button data-f="sq" class="active">Square 1080×1080</button>
+        <button data-f="pt">Portrait 1080×1350</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Logo</h2>
+      <div class="row" style="display:flex;gap:8px;align-items:center">
+        <label class="filebtn">Upload logo<input type="file" accept="image/*" id="logoFile" style="display:none"></label>
+        <span class="fname" id="logoStatus">loading from mt-assets…</span>
+      </div>
+      <div class="hint">Auto-loads from your mt-assets repo (edit LOGO_URL in the file). Upload overrides it for this session.</div>
+    </div>
+
+    <div class="card" id="photoCard">
+      <h2>Photos</h2>
+      <div class="photo-slot" id="slotA">
+        <div class="row">
+          <label class="filebtn">Photo 1<input type="file" accept="image/*" data-slot="0"></label>
+          <span class="fname" id="fnameA">none</span>
+        </div>
+        <label>Zoom</label>
+        <input type="range" min="100" max="300" value="100" data-zoom="0">
+      </div>
+      <div class="photo-slot" id="slotB">
+        <div class="row">
+          <label class="filebtn">Photo 2<input type="file" accept="image/*" data-slot="1"></label>
+          <span class="fname" id="fnameB">none</span>
+        </div>
+        <label>Zoom</label>
+        <input type="range" min="100" max="300" value="100" data-zoom="1">
+      </div>
+      <div class="hint">Drag directly on the preview to reposition a photo inside its frame.</div>
+    </div>
+
+    <div class="card" id="textCard">
+      <h2>Text</h2>
+      <div id="fields"></div>
+    </div>
+
+  </div>
+
+  <div class="stage">
+    <canvas id="cv" width="1080" height="1080"></canvas>
+    <button class="export" id="dl">Download PNG</button>
+    <div class="note">Files save as mt-post-[layout]-[date].png — sized and ready for Buffer / IG / FB / GBP / Nextdoor.</div>
+  </div>
+</div>
+
+<script>
+const BRAND = {
+  navy:'#16263f', navyDeep:'#0e1a2e', sky:'#6fb7e3',
+  cream:'#f5efe3', rust:'#b5512f', white:'#ffffff'
+};
+const COMPANY = 'MECHANICAL TEMP';
+const PHONE = '(313) 282-4758';
+const SITE = 'mechanicaltemp.com';
+
+// ---- EDIT THIS LINE: point at your logo in the mt-assets repo ----
+// Use the raw URL, e.g. https://raw.githubusercontent.com/servicecoinrwb/mt-assets/main/logo-cream.png
+// Cream/light logo variant works best (it sits on navy footers).
+const LOGO_URL = 'https://raw.githubusercontent.com/servicecoinrwb/mt-assets/main/logo-cream.png';
+
+let logoImg = null;
+(function loadLogo(){
+  const im = new Image();
+  im.crossOrigin = 'anonymous'; // raw.githubusercontent sends CORS *, keeps canvas exportable
+  im.onload = ()=>{ logoImg = im; draw(); setLogoStatus('repo logo loaded'); };
+  im.onerror = ()=>{ setLogoStatus('repo logo not found — using text wordmark (or upload one)'); };
+  im.src = LOGO_URL;
+})();
+function setLogoStatus(t){
+  const el = document.getElementById('logoStatus');
+  if(el) el.textContent = t;
+}
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+
+let layout = 'ba';
+let fmt = 'sq';
+const photos = [
+  {img:null, x:0, y:0, zoom:1},
+  {img:null, x:0, y:0, zoom:1}
+];
+
+// Per-layout text fields: key, label, default
+const FIELD_DEFS = {
+  ba: [
+    ['headline','Headline','Another one back in shape'],
+    ['detail','Detail line','Condenser coil cleaning — Southfield, MI']
+  ],
+  spot: [
+    ['headline','Headline','New 96% furnace install'],
+    ['detail','Detail line','Redford bungalow — done in a day']
+  ],
+  tip: [
+    ['kicker','Kicker','TIP FROM THE TECH'],
+    ['headline','Tip headline','Change your filter every 60–90 days'],
+    ['body','Body text','A clogged filter makes your blower work harder, raises your bill, and can freeze your AC coil. Hold it up to a light — if you can\'t see through it, swap it.']
+  ],
+  promo: [
+    ['kicker','Offer kicker','SPRING SPECIAL'],
+    ['headline','Big headline','$89 AC Tune-Up'],
+    ['body','Detail line','Full system check • coil rinse • refrigerant verify'],
+    ['cta','Call to action','Call today — limited slots']
+  ]
+};
+const textVals = {};
+for(const k in FIELD_DEFS) FIELD_DEFS[k].forEach(([key,,def])=>{ textVals[k+'.'+key]=def; });
+
+// ---------- UI wiring ----------
+document.getElementById('tabs').addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  layout = b.dataset.l;
+  document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('active', x===b));
+  buildFields(); updatePhotoUI(); draw();
+});
+document.getElementById('fmt').addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  fmt = b.dataset.f;
+  document.querySelectorAll('#fmt button').forEach(x=>x.classList.toggle('active', x===b));
+  cv.height = (fmt==='sq') ? 1080 : 1350;
+  draw();
+});
+
+function buildFields(){
+  const host = document.getElementById('fields');
+  host.innerHTML = '';
+  FIELD_DEFS[layout].forEach(([key,labelTxt])=>{
+    const id = layout+'.'+key;
+    const lab = document.createElement('label'); lab.textContent = labelTxt;
+    let inp;
+    if(key==='body'){ inp = document.createElement('textarea'); }
+    else { inp = document.createElement('input'); inp.type='text'; }
+    inp.value = textVals[id];
+    inp.addEventListener('input', ()=>{ textVals[id]=inp.value; draw(); });
+    host.appendChild(lab); host.appendChild(inp);
+  });
+}
+
+function updatePhotoUI(){
+  const a = document.getElementById('slotA'), b = document.getElementById('slotB');
+  const card = document.getElementById('photoCard');
+  if(layout==='tip' || layout==='promo'){ card.style.display='none'; }
+  else {
+    card.style.display='';
+    b.style.display = (layout==='ba') ? '' : 'none';
+    a.querySelector('.filebtn').firstChild.textContent = (layout==='ba') ? 'Before' : 'Photo';
+    b.querySelector('.filebtn').firstChild.textContent = 'After';
+  }
+}
+
+document.querySelectorAll('input[type=file]').forEach(inp=>{
+  inp.addEventListener('change', ()=>{
+    const f = inp.files[0]; if(!f) return;
+    const i = +inp.dataset.slot;
+    const img = new Image();
+    img.onload = ()=>{ photos[i].img = img; photos[i].x=0; photos[i].y=0; draw(); };
+    img.src = URL.createObjectURL(f);
+    document.getElementById(i===0?'fnameA':'fnameB').textContent = f.name;
+  });
+});
+document.querySelectorAll('input[type=range]').forEach(r=>{
+  r.addEventListener('input', ()=>{
+    photos[+r.dataset.zoom].zoom = r.value/100;
+    draw();
+  });
+});
+
+document.getElementById('logoFile').addEventListener('change', e=>{
+  const f = e.target.files[0]; if(!f) return;
+  const im = new Image();
+  im.onload = ()=>{ logoImg = im; draw(); setLogoStatus(f.name); };
+  im.src = URL.createObjectURL(f);
+});
+
+// ---------- geometry ----------
+function slots(){
+  const W = cv.width, H = cv.height;
+  const FOOT = 110; // footer bar
+  if(layout==='ba'){
+    const h = H - FOOT;
+    return [
+      {x:0, y:0, w:W/2, h:h},
+      {x:W/2, y:0, w:W/2, h:h}
+    ];
+  }
+  if(layout==='spot'){
+    return [{x:0, y:0, w:W, h:H}];
+  }
+  return [];
+}
+
+// ---------- drag ----------
+let drag = null;
+cv.addEventListener('pointerdown', e=>{
+  const r = cv.getBoundingClientRect();
+  const sx = cv.width/r.width;
+  const px = (e.clientX-r.left)*sx, py = (e.clientY-r.top)*sx;
+  const ss = slots();
+  for(let i=ss.length-1;i>=0;i--){
+    const s = ss[i];
+    if(photos[i].img && px>=s.x && px<s.x+s.w && py>=s.y && py<s.y+s.h){
+      drag = {i, lastX:px, lastY:py};
+      cv.setPointerCapture(e.pointerId);
+      break;
+    }
+  }
+});
+cv.addEventListener('pointermove', e=>{
+  if(!drag) return;
+  const r = cv.getBoundingClientRect();
+  const sx = cv.width/r.width;
+  const px = (e.clientX-r.left)*sx, py = (e.clientY-r.top)*sx;
+  photos[drag.i].x += px-drag.lastX;
+  photos[drag.i].y += py-drag.lastY;
+  drag.lastX=px; drag.lastY=py;
+  draw();
+});
+cv.addEventListener('pointerup', ()=>{ drag=null; });
+
+// ---------- draw helpers ----------
+function coverDraw(p, s){
+  if(!p.img){
+    // placeholder
+    ctx.fillStyle = '#dfe6ef';
+    ctx.fillRect(s.x,s.y,s.w,s.h);
+    ctx.fillStyle = BRAND.navy;
+    ctx.globalAlpha = .25;
+    ctx.font = '600 34px Oswald';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('ADD PHOTO', s.x+s.w/2, s.y+s.h/2);
+    ctx.globalAlpha = 1;
+    return;
+  }
+  const base = Math.max(s.w/p.img.width, s.h/p.img.height) * p.zoom;
+  const dw = p.img.width*base, dh = p.img.height*base;
+  let dx = s.x + (s.w-dw)/2 + p.x;
+  let dy = s.y + (s.h-dh)/2 + p.y;
+  // clamp so frame never shows background
+  dx = Math.min(s.x, Math.max(s.x+s.w-dw, dx));
+  dy = Math.min(s.y, Math.max(s.y+s.h-dh, dy));
+  ctx.save();
+  ctx.beginPath(); ctx.rect(s.x,s.y,s.w,s.h); ctx.clip();
+  ctx.drawImage(p.img, dx, dy, dw, dh);
+  ctx.restore();
+}
+
+function chip(text, x, y, bg, fg){
+  ctx.font = '700 38px Oswald';
+  const w = ctx.measureText(text).width + 56;
+  const h = 64;
+  ctx.fillStyle = bg;
+  ctx.beginPath();
+  // angled tag shape
+  ctx.moveTo(x, y);
+  ctx.lineTo(x+w, y);
+  ctx.lineTo(x+w-18, y+h);
+  ctx.lineTo(x, y+h);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = fg;
+  ctx.textAlign='left'; ctx.textBaseline='middle';
+  ctx.fillText(text, x+24, y+h/2+3);
+  return w;
+}
+
+function drawLogo(x, yCenter, h){
+  // returns width consumed; draws logo if loaded, else returns 0
+  if(!logoImg) return 0;
+  const w = logoImg.width * (h/logoImg.height);
+  ctx.drawImage(logoImg, x, yCenter-h/2, w, h);
+  return w;
+}
+
+function footer(){
+  const W = cv.width, H = cv.height, FOOT = 110;
+  ctx.fillStyle = BRAND.navy;
+  ctx.fillRect(0, H-FOOT, W, FOOT);
+  ctx.fillStyle = BRAND.rust;
+  ctx.fillRect(0, H-FOOT, W, 8);
+  ctx.textBaseline='middle';
+  ctx.textAlign='left';
+  const lw = drawLogo(48, H-FOOT/2+4, 64);
+  ctx.font = '700 44px Oswald';
+  ctx.fillStyle = BRAND.cream;
+  if(lw){ /* logo replaces wordmark */ }
+  else ctx.fillText(COMPANY, 48, H-FOOT/2+4);
+  ctx.textAlign='right';
+  ctx.font = '600 36px Oswald';
+  ctx.fillStyle = BRAND.sky;
+  ctx.fillText(PHONE, W-48, H-FOOT/2+4);
+}
+
+function wrapText(text, x, y, maxW, lineH, font, color, align='left'){
+  ctx.font = font; ctx.fillStyle = color; ctx.textAlign = align; ctx.textBaseline='alphabetic';
+  const words = text.split(/\s+/);
+  let line = '', yy = y;
+  for(const w of words){
+    const t = line ? line+' '+w : w;
+    if(ctx.measureText(t).width > maxW && line){
+      ctx.fillText(line, x, yy);
+      line = w; yy += lineH;
+    } else line = t;
+  }
+  if(line) ctx.fillText(line, x, yy);
+  return yy + lineH;
+}
+
+function diagStripes(x,y,w,h,color,alpha){
+  ctx.save();
+  ctx.beginPath(); ctx.rect(x,y,w,h); ctx.clip();
+  ctx.strokeStyle = color; ctx.globalAlpha = alpha; ctx.lineWidth = 3;
+  for(let i=-h;i<w+h;i+=28){
+    ctx.beginPath();
+    ctx.moveTo(x+i, y+h);
+    ctx.lineTo(x+i+h, y);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+// ---------- layouts ----------
+function draw(){
+  const W = cv.width, H = cv.height;
+  ctx.clearRect(0,0,W,H);
+
+  if(layout==='ba'){
+    const ss = slots();
+    coverDraw(photos[0], ss[0]);
+    coverDraw(photos[1], ss[1]);
+    // center divider
+    ctx.fillStyle = BRAND.cream;
+    ctx.fillRect(W/2-6, 0, 12, H-110);
+    // tags
+    chip('BEFORE', 36, 36, BRAND.rust, BRAND.cream);
+    chip('AFTER', W/2+42, 36, BRAND.sky, BRAND.navyDeep);
+    // headline band above footer
+    const bandH = 130;
+    ctx.fillStyle = 'rgba(14,26,46,.88)';
+    ctx.fillRect(0, H-110-bandH, W, bandH);
+    ctx.textAlign='left'; ctx.textBaseline='alphabetic';
+    ctx.font = '700 52px Oswald'; ctx.fillStyle = BRAND.cream;
+    ctx.fillText(textVals['ba.headline'], 48, H-110-bandH+62);
+    ctx.font = '500 32px Barlow'; ctx.fillStyle = BRAND.sky;
+    ctx.fillText(textVals['ba.detail'], 48, H-110-bandH+106);
+    footer();
+  }
+
+  if(layout==='spot'){
+    coverDraw(photos[0], {x:0,y:0,w:W,h:H});
+    // bottom gradient
+    const g = ctx.createLinearGradient(0, H*0.45, 0, H);
+    g.addColorStop(0,'rgba(14,26,46,0)');
+    g.addColorStop(1,'rgba(14,26,46,.96)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, H*0.45, W, H*0.55);
+    // corner mark
+    ctx.fillStyle = BRAND.rust;
+    ctx.fillRect(0,0,14,170);
+    ctx.save();
+    ctx.translate(54, 40); ctx.rotate(Math.PI/2);
+    ctx.font='600 30px Oswald'; ctx.fillStyle=BRAND.cream; ctx.textAlign='left'; ctx.textBaseline='middle';
+    ctx.restore();
+    // text
+    ctx.textAlign='left';
+    ctx.font = '700 72px Oswald'; ctx.fillStyle = BRAND.cream; ctx.textBaseline='alphabetic';
+    wrapText(textVals['spot.headline'], 56, H-240, W-112, 80, '700 72px Oswald', BRAND.cream);
+    ctx.font = '500 36px Barlow'; ctx.fillStyle = BRAND.sky;
+    ctx.fillText(textVals['spot.detail'], 56, H-150);
+    // footer strip
+    ctx.fillStyle = BRAND.rust;
+    ctx.fillRect(0, H-96, W, 6);
+    ctx.textBaseline='middle';
+    const lw2 = drawLogo(56, H-46, 56);
+    ctx.font='700 38px Oswald'; ctx.fillStyle=BRAND.cream; ctx.textAlign='left';
+    if(!lw2) ctx.fillText(COMPANY, 56, H-36);
+    ctx.textAlign='right'; ctx.fillStyle=BRAND.sky;
+    ctx.fillText(PHONE, W-56, H-36);
+  }
+
+  if(layout==='tip'){
+    ctx.fillStyle = BRAND.cream;
+    ctx.fillRect(0,0,W,H);
+    diagStripes(0,0,W,H,BRAND.navy,.05);
+    // header band
+    ctx.fillStyle = BRAND.navy;
+    ctx.fillRect(0,0,W,180);
+    ctx.fillStyle = BRAND.rust;
+    ctx.fillRect(0,180,W,10);
+    ctx.font='700 64px Oswald'; ctx.fillStyle=BRAND.cream;
+    ctx.textAlign='left'; ctx.textBaseline='middle';
+    ctx.fillText(textVals['tip.kicker'], 56, 100);
+    // logo block top-right (falls back to MT chip)
+    if(logoImg){
+      drawLogo(W-260, 95, 80);
+    } else {
+      ctx.fillStyle = BRAND.sky;
+      ctx.fillRect(W-200, 60, 120, 60);
+      ctx.fillStyle = BRAND.navy;
+      ctx.font='700 44px Oswald'; ctx.textAlign='center';
+      ctx.fillText('MT', W-140, 92);
+    }
+    // headline
+    ctx.textAlign='left'; ctx.textBaseline='alphabetic';
+    let yy = wrapText(textVals['tip.headline'], 56, 320, W-112, 84, '700 76px Oswald', BRAND.navy);
+    // rust rule
+    ctx.fillStyle = BRAND.rust;
+    ctx.fillRect(56, yy-30, 140, 10);
+    // body
+    wrapText(textVals['tip.body'], 56, yy+60, W-112, 56, '500 40px Barlow', '#2a3447');
+    footer();
+  }
+
+  if(layout==='promo'){
+    ctx.fillStyle = BRAND.navy;
+    ctx.fillRect(0,0,W,H);
+    diagStripes(0,0,W,H,BRAND.sky,.07);
+    // top rust corner wedge
+    ctx.fillStyle = BRAND.rust;
+    ctx.beginPath();
+    ctx.moveTo(0,0); ctx.lineTo(W*0.55,0); ctx.lineTo(W*0.42,150); ctx.lineTo(0,150);
+    ctx.closePath(); ctx.fill();
+    ctx.font='700 56px Oswald'; ctx.fillStyle=BRAND.cream;
+    ctx.textAlign='left'; ctx.textBaseline='middle';
+    ctx.fillText(textVals['promo.kicker'], 56, 80);
+    // huge headline center
+    ctx.textBaseline='alphabetic';
+    const headY = H*0.42;
+    ctx.textAlign='center';
+    let hy = wrapText(textVals['promo.headline'], W/2, headY, W-140, 130, '700 124px Oswald', BRAND.cream, 'center');
+    // sky underline
+    ctx.fillStyle = BRAND.sky;
+    ctx.fillRect(W/2-180, hy-90, 360, 12);
+    // body
+    wrapText(textVals['promo.body'], W/2, hy-10, W-160, 52, '500 38px Barlow', BRAND.sky, 'center');
+    // CTA button
+    const ctaTxt = textVals['promo.cta'];
+    ctx.font='700 46px Oswald';
+    const bw = ctx.measureText(ctaTxt).width + 100;
+    ctx.fillStyle = BRAND.rust;
+    ctx.fillRect(W/2-bw/2, H-330, bw, 96);
+    ctx.fillStyle = BRAND.cream; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(ctaTxt, W/2, H-330+52);
+    // phone huge
+    ctx.font='700 72px Oswald'; ctx.fillStyle=BRAND.cream;
+    ctx.fillText(PHONE, W/2, H-150);
+    if(logoImg){
+      const lh = 60, lw3 = logoImg.width*(lh/logoImg.height);
+      ctx.drawImage(logoImg, W/2-lw3/2, H-110, lw3, lh);
+    } else {
+      ctx.font='600 32px Barlow'; ctx.fillStyle=BRAND.sky;
+      ctx.fillText(COMPANY + '  •  ' + SITE, W/2, H-80);
+    }
+  }
+}
+
+// ---------- export ----------
+document.getElementById('dl').addEventListener('click', ()=>{
+  const d = new Date().toISOString().slice(0,10);
+  cv.toBlob(b=>{
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(b);
+    a.download = `mt-post-${layout}-${d}.png`;
+    a.click();
+  }, 'image/png');
+});
+
+// init
+buildFields();
+updatePhotoUI();
+document.fonts.ready.then(draw);
+draw();
+</script>
+</body>
+</html>
