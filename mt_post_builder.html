@@ -34,14 +34,15 @@
   }
   header h1{font-family:'Oswald',sans-serif;font-weight:700;font-size:20px;letter-spacing:.06em;text-transform:uppercase}
   header span{font-size:13px;color:var(--sky);letter-spacing:.04em}
-  .wrap{display:flex;gap:18px;padding:18px;max-width:1200px;margin:0 auto;flex-wrap:wrap}
-  .panel{flex:1 1 320px;min-width:300px;max-width:460px}
-  .stage{flex:1 1 380px;min-width:320px;display:flex;flex-direction:column;align-items:center;gap:12px}
+  .wrap{display:flex;gap:18px;padding:18px;max-width:1380px;margin:0 auto;flex-wrap:wrap;align-items:flex-start}
+  .panel{flex:1 1 560px;min-width:300px;max-width:760px;columns:2 280px;column-gap:14px}
+  .stage{flex:1 1 380px;min-width:320px;display:flex;flex-direction:column;align-items:center;gap:12px;position:sticky;top:18px}
 
   .card{
     background:#fff;border:1px solid var(--line);
     border-radius:10px;padding:14px;margin-bottom:14px;
     box-shadow:0 2px 0 rgba(22,38,63,.06);
+    break-inside:avoid;
   }
   .card h2{
     font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;
