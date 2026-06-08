@@ -128,8 +128,9 @@
       </div>
       <label style="margin-top:12px">Format</label>
       <div class="fmt" id="fmt">
-        <button data-f="sq" class="active">Square 1080×1080</button>
-        <button data-f="pt">Portrait 1080×1350</button>
+        <button data-f="sq" class="active">Square</button>
+        <button data-f="pt">4:5</button>
+        <button data-f="st">Story 9:16</button>
       </div>
     </div>
 
@@ -190,6 +191,22 @@
       <div id="fields"></div>
     </div>
 
+    <div class="card">
+      <h2>Caption</h2>
+      <label>Platform</label>
+      <div class="fmt" id="capPlat">
+        <button data-p="ig" class="active">IG</button>
+        <button data-p="fb">FB</button>
+        <button data-p="local">Nextdoor / GBP</button>
+      </div>
+      <textarea id="caption" rows="5" placeholder="Tap Generate to build a caption from your post text" style="margin-top:10px"></textarea>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button class="filebtn" id="capGen" style="flex:1">Generate</button>
+        <button class="filebtn" id="capCopy" style="flex:1;background:var(--navy)">Copy</button>
+      </div>
+      <div class="hint">Paste straight into Buffer with the downloaded image.</div>
+    </div>
+
   </div>
 
   <div class="stage">
@@ -240,6 +257,8 @@ document.getElementById('themeMode').addEventListener('click', e=>{
 const COMPANY = 'MECHANICAL TEMP';
 const PHONE = '(313) 282-4758';
 const SITE = 'mechanicaltemp.com';
+// Michigan requires your mechanical contractor license # in advertising — fill this in:
+const LICENSE = '';  // e.g. 'MI Mechanical Contractor Lic. #71-XXXXX'
 
 // ---- Logo source: white text logo from the Mechanical Temp CDN ----
 // (same asset the main site header uses — white on transparent, sits on navy)
@@ -325,11 +344,12 @@ document.getElementById('tabs').addEventListener('click', e=>{
   document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('active', x===b));
   buildFields(); updatePhotoUI(); draw();
 });
+const FMT_H = {sq:1080, pt:1350, st:1920};
 document.getElementById('fmt').addEventListener('click', e=>{
   const b = e.target.closest('button'); if(!b) return;
   fmt = b.dataset.f;
   document.querySelectorAll('#fmt button').forEach(x=>x.classList.toggle('active', x===b));
-  cv.height = (fmt==='sq') ? 1080 : 1350;
+  cv.height = FMT_H[fmt];
   draw();
 });
 
@@ -523,6 +543,14 @@ function footer(){
   ctx.font = F(600,36);
   ctx.fillStyle = BRAND.sky;
   ctx.fillText(PHONE, W-48, H-FOOT/2+4);
+  if(LICENSE){
+    ctx.textAlign='center';
+    ctx.font = B(500,20);
+    ctx.globalAlpha = .75;
+    ctx.fillStyle = BRAND.cream;
+    ctx.fillText(LICENSE, W/2, H-12);
+    ctx.globalAlpha = 1;
+  }
 }
 
 function wrapText(text, x, y, maxW, lineH, font, color, align='left'){
@@ -623,6 +651,12 @@ function draw(){
     else { ctx.font=B(600,30); ctx.fillStyle=BRAND.cream; ctx.fillText(SITE, 56, H-46); }
     ctx.textAlign='right'; ctx.font=F(700,38); ctx.fillStyle=BRAND.sky;
     ctx.fillText(PHONE, W-56, H-46);
+    if(LICENSE){
+      ctx.textAlign='center'; ctx.font=B(500,20);
+      ctx.globalAlpha=.75; ctx.fillStyle=BRAND.cream;
+      ctx.fillText(LICENSE, W/2, H-10);
+      ctx.globalAlpha=1;
+    }
   }
 
   if(layout==='tip'){
@@ -709,6 +743,12 @@ function draw(){
       ctx.font=B(600,32); ctx.fillStyle=BRAND.sky;
       ctx.fillText(COMPANY + '  •  ' + SITE, W/2, H-80);
     }
+    if(LICENSE){
+      ctx.font=B(500,20); ctx.globalAlpha=.7; ctx.fillStyle=BRAND.cream;
+      ctx.textAlign='center';
+      ctx.fillText(LICENSE, W/2, H-14);
+      ctx.globalAlpha=1;
+    }
   }
 }
 
@@ -772,6 +812,43 @@ vidBtn.addEventListener('click', ()=>{
   })();
 });
 
+// ---------- caption helper ----------
+const HASHTAGS_FULL = '#HVAC #MetroDetroit #Southfield #Redford #FurnaceRepair #ACRepair #CommercialHVAC #HeatingAndCooling';
+const HASHTAGS_FB = '#HVAC #MetroDetroit #HeatingAndCooling';
+let capPlat = 'ig';
+document.getElementById('capPlat').addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  capPlat = b.dataset.p;
+  document.querySelectorAll('#capPlat button').forEach(x=>x.classList.toggle('active', x===b));
+});
+const CAP_OPENERS = {
+  ba:    ['Night and day difference.', 'From rough shape to running right.', 'This is what regular maintenance gets you.'],
+  spot:  ['Another one in the books.', 'Job done, comfort restored.', 'Out here keeping Metro Detroit comfortable.'],
+  tip:   ['Quick one from the field:', 'Free advice from 20+ years on the tools:', 'Save this one.'],
+  promo: ['Heads up, Metro Detroit:', 'Limited slots on this one.', 'Beat the rush.']
+};
+document.getElementById('capGen').addEventListener('click', ()=>{
+  const v = k => textVals[layout+'.'+k] || '';
+  const opener = CAP_OPENERS[layout][Math.floor(Math.random()*CAP_OPENERS[layout].length)];
+  let body = '';
+  if(layout==='ba')    body = `${v('headline')} — ${v('detail')}`;
+  if(layout==='spot')  body = `${v('headline')}. ${v('detail')}.`;
+  if(layout==='tip')   body = `${v('headline')}. ${v('body')}`;
+  if(layout==='promo') body = `${v('headline')} — ${v('body')}. ${v('cta')}.`;
+  let cap = `${opener} ${body}\n\nMechanical Temp LLC — licensed & insured, serving Metro Detroit.\nCall/text ${PHONE} or visit ${SITE}`;
+  if(capPlat==='ig') cap += `\n\n${HASHTAGS_FULL}`;
+  else if(capPlat==='fb') cap += `\n\n${HASHTAGS_FB}`;
+  // local (Nextdoor/GBP): no hashtags — they read spammy there
+  document.getElementById('caption').value = cap;
+});
+document.getElementById('capCopy').addEventListener('click', e=>{
+  const t = document.getElementById('caption');
+  navigator.clipboard.writeText(t.value).then(()=>{
+    e.target.textContent='Copied!';
+    setTimeout(()=>e.target.textContent='Copy', 1200);
+  });
+});
+
 // continuous render so video sources and recording stay live
 (function renderLoop(){
   draw();
@@ -789,9 +866,9 @@ vidBtn.addEventListener('click', ()=>{
     document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('active', x.dataset.l===l));
   }
   const f = q.get('fmt');
-  if(f==='pt' || f==='sq'){
+  if(FMT_H[f]){
     fmt = f;
-    cv.height = (fmt==='sq') ? 1080 : 1350;
+    cv.height = FMT_H[fmt];
     document.querySelectorAll('#fmt button').forEach(x=>x.classList.toggle('active', x.dataset.f===f));
   }
   FIELD_DEFS[layout].forEach(([key])=>{
