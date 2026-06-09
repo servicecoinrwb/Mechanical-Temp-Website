@@ -16,6 +16,7 @@
     <meta name="description" content="Describe your HVAC issue and get instant help from Tempi, our AI assistant. Or browse services to book directly. Serving Metro Detroit.">
     <link rel="canonical" href="https://www.mechanicaltemp.com/assistant.html" />
     <link rel="preconnect" href="https://tempi.summer-unit-44dd.workers.dev">
+    <link rel="preconnect" href="https://mtobserver.digitalsecretarymachine.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -175,6 +176,7 @@
                 <button class="hero-chip" data-msg="I want to schedule a seasonal tune-up.">Tune-up</button>
                 <button class="hero-chip" data-msg="I'm with a property management company and need commercial HVAC service.">Commercial</button>
                 <button class="hero-chip" data-msg="I need a W-9 or COI from you for vendor onboarding.">Paperwork</button>
+                <button class="hero-chip" data-msg="I want to check on a recent invoice or pay a bill.">Billing</button>
             </div>
 
             <!-- Trust line -->
@@ -364,6 +366,9 @@
     // action in Google Ads (see DEPLOY.md). Until then, leave empty.
     const GOOGLE_ADS_CONVERSION_LABEL = '8Ez2COrkr7IcEJSYv_kp'; // e.g. 'AbCdEfGhIjKl'
 
+    // DSM lookup — gives Tempi access to real customer AR + service history
+    const DSM_LOOKUP_URL = 'https://mtobserver.digitalsecretarymachine.com/api/tempi/lookup';
+
     // ============================================================
     // UTM CAPTURE — pulls ad tracking params from URL
     // ============================================================
@@ -382,6 +387,93 @@
         });
         if (document.referrer && !utmData.utm_source) utmData.referrer = document.referrer;
     })();
+
+    // ============================================================
+    // DSM CUSTOMER LOOKUP — pulls real AR + service history when phone provided
+    // ============================================================
+    let dsmContextInjected = false; // only inject once per session
+    let dsmCustomerData = null;     // cached lookup result (for lead enrichment)
+
+    const PHONE_REGEX = /(?:\+?1[\s.\-]?)?\(?(\d{3})\)?[\s.\-]?(\d{3})[\s.\-]?(\d{4})/;
+
+    function extractPhone(text) {
+        const m = text.match(PHONE_REGEX);
+        if (!m) return null;
+        return m[1] + m[2] + m[3];
+    }
+
+    function looksLikeBillingIntent(text) {
+        const lower = (text || '').toLowerCase();
+        return /\b(owe|invoice|bill|balance|payment|pay|outstanding|how much|past[\s-]?due|overdue|statement|receipt|paid|unpaid|account[\s-]?balance)\b/.test(lower);
+    }
+
+    async function fetchDSMContext(phone) {
+        if (!phone) return null;
+        try {
+            const res = await fetch(`${DSM_LOOKUP_URL}?phone=${encodeURIComponent(phone)}`);
+            if (!res.ok) return null;
+            const data = await res.json();
+            if (!data || !data.identity) return null;
+            dsmCustomerData = data;
+            return data;
+        } catch (e) {
+            console.error('DSM lookup failed:', e);
+            return null;
+        }
+    }
+
+    function formatDSMContextForTempi(data) {
+        if (!data || !data.identity) return null;
+        let ctx = `MECHANICAL TEMP INTERNAL CUSTOMER LOOKUP (use this real data when answering):\n`;
+        ctx += `Customer name: ${data.identity.name}\n`;
+        if (data.identity.address) ctx += `Service address on file: ${data.identity.address}\n`;
+        if (data.identity.email) ctx += `Email on file: ${data.identity.email}\n`;
+        if (data.customer_since) ctx += `Customer since: ${data.customer_since}\n`;
+        ctx += `\nTotal open balance: $${data.total_open_balance.toFixed(2)}\n`;
+        if (data.open_invoices && data.open_invoices.length > 0) {
+            ctx += `\nOPEN INVOICES (${data.open_invoices.length} total):\n`;
+            data.open_invoices.forEach(inv => {
+                ctx += `- Invoice ${inv.invoice_number}: $${inv.amount.toFixed(2)}`;
+                if (inv.invoiced_date) ctx += ` (invoiced ${inv.invoiced_date}`;
+                if (inv.due_date) ctx += `, due ${inv.due_date})`;
+                else if (inv.invoiced_date) ctx += `)`;
+                if (inv.description) ctx += ` — ${inv.description}`;
+                ctx += `\n`;
+            });
+            ctx += `\nTo pay any of these, customer can use: https://customer.mechanicaltemp.com/`;
+        } else {
+            ctx += `\nGood news — no open invoices, customer is current on all billing!`;
+        }
+        if (data.recent_jobs && data.recent_jobs.length > 0) {
+            ctx += `\n\nRECENT SERVICE HISTORY (last ${Math.min(3, data.recent_jobs.length)} jobs):\n`;
+            data.recent_jobs.slice(0, 3).forEach(j => {
+                ctx += `- ${j.completed}: ${j.type || 'Service'} — $${j.amount.toFixed(0)}`;
+                if (j.status && j.status !== '—') ctx += ` (${j.status})`;
+                if (j.description) ctx += ` — ${j.description}`;
+                ctx += `\n`;
+            });
+        }
+        ctx += `\nIMPORTANT: Use this real information to answer accurately. If they ask "do I owe anything?", reference the actual open invoices above (don't ask them again). If they want to pay, give them https://customer.mechanicaltemp.com/`;
+        return ctx;
+    }
+
+    async function tryEnrichWithDSM(userMessage) {
+        if (dsmContextInjected) return; // only once per session
+        const phone = extractPhone(userMessage);
+        if (!phone) return;
+        const data = await fetchDSMContext(phone);
+        if (!data) return;
+        dsmContextInjected = true;
+        // Inject as a fake user message — tempi sees it but won't say it
+        const contextNote = formatDSMContextForTempi(data);
+        if (contextNote) {
+            conversationHistory.push({
+                role: 'user',
+                content: `[SYSTEM: Internal Mechanical Temp customer lookup result. Not from the customer — use this data when answering.]\n\n${contextNote}`
+            });
+            console.log('DSM context injected for:', data.identity.name);
+        }
+    }
 
     // ============================================================
     // CAPABILITIES
@@ -450,6 +542,16 @@ ABOUT MECHANICAL TEMP:
 - Office email: office@mechanicaltemp.com
 - CUSTOMER PORTAL: https://customer.mechanicaltemp.com/ — for paying invoices, scheduling, messaging us. Google login or magic link, no password.
 
+==== INTERNAL CUSTOMER LOOKUPS ====
+
+You have access to Mechanical Temp's internal customer database. When the customer shares their phone number, you'll receive a [SYSTEM:] message containing their real account info — open invoices, recent jobs, address, etc. USE THIS INFO. Don't ask them again for things you can see in the lookup. For billing/invoice questions especially: reference the actual invoice numbers and amounts.
+
+If a billing question comes in WITHOUT a phone, ask for it so you can look it up. Example:
+- "Sure thing! What phone number is on your account so I can pull up your invoices?"
+- "Happy to check — got a phone number we'd have on file?"
+
+After they give the phone, Mechanical Temp's system will auto-inject their account info into our chat. You'll see it and can answer specifically.
+
 ==== FORMATTING — VERY IMPORTANT ====
 
 DO NOT use markdown formatting. NO asterisks for bold (**word** is forbidden), NO underscores for italics, NO markdown headers (#), NO markdown links ([text](url)). The chat bubble renders plain text only, so markdown will show as literal characters and look broken.
@@ -471,7 +573,7 @@ Your FIRST job is to figure out WHY they're chatting. Don't assume every convers
 1. SERVICE_LEAD — Residential customer needs HVAC work. Collect: name, phone, address, brief issue. End with [LEAD_READY:SERVICE_LEAD].
 2. COMMERCIAL_DISPATCH — Facilities/property management rep (CBRE, Cushman, Sodexo, SMS Assist, etc). URGENT. Collect: name, direct phone, site address. End with [LEAD_READY:COMMERCIAL_DISPATCH].
 3. PAPERWORK — They need W-9, COI, vendor packet, etc. Collect: company name, contact name, email, document needed. End with [LEAD_READY:PAPERWORK].
-4. BILLING — Question about an invoice or past job. Collect: name, phone, service address, what their question is. End with [LEAD_READY:BILLING].
+4. BILLING — Question about an invoice or past job. Ask for phone first → use the auto-injected lookup info to answer specifically. If they want to pay, give them https://customer.mechanicaltemp.com/. Only fire [LEAD_READY:BILLING] if they need a human callback (dispute, complex situation).
 5. VENDOR_SALES — Someone selling TO Mechanical Temp. Soft-screen. Spam → redirect to office@mechanicaltemp.com, NO capture. Legit → collect company, contact, phone/email, what they're offering. End with [LEAD_READY:VENDOR_SALES].
 6. EXISTING_CUSTOMER — Following up on a job we already did. Collect: name, phone, service address, what they need. End with [LEAD_READY:EXISTING_CUSTOMER].
 7. GENERAL_INFO — Just asking questions. No capture unless buying intent appears.
@@ -506,12 +608,22 @@ Someone will follow up shortly. [LEAD_READY:TYPE]
 5. Angry customers: acknowledge feelings, no excuses, no refund promises. Route as BILLING.
 6. After-hours emergencies: tell them to call (313) 282-4758 while still collecting info.
 7. Once you fire [LEAD_READY:TYPE], do not keep probing.
+8. For billing intent without a phone yet: ASK for the phone first. Don't speculate about what they owe.
 
 ==== EXAMPLES (note: plain text, no asterisks anywhere) ====
 
 Customer: "My furnace won't turn on"
 Tempi: "Oh no, that's no fun in Michigan! Our No-Heat Diagnostic at $89 covers the trip plus first hour of troubleshooting — usually catches it. Want me to grab your info to dispatch a tech, or got questions first?
 [BTN: ✓ Send a tech | Same-day service? | Quote for new furnace]"
+
+Customer: "Do I owe anything?"
+Tempi: "Sure thing! What phone number do you have on the account? I'll pull it up for you.
+[BTN: ✓ Type my phone | Talk to a person]"
+
+Customer: "313-600-4012"
+(system injects lookup → 0 open invoices)
+Tempi: "Great news, Brian — you're all caught up! No open balance on your account. Anything else I can help with?
+[BTN: ✓ Schedule service | Get a quote | All good, thanks]"
 
 Customer: "I'm with CBRE, RTU down in Livonia"
 Tempi: "Got it — let's dispatch ASAP. What's your name, direct phone, and the site address?
@@ -521,7 +633,7 @@ Customer: "Do you do walk-in coolers?"
 Tempi: "Yep, commercial refrigeration is right in our wheelhouse — walk-ins, reach-ins, ice machines. Not our main marketing focus but we've got 20+ years of refrigeration experience. What's going on?
 [BTN: ✓ Send a tech | Get a quote | Other equipment too]"
 
-REMEMBER: Identify conversation type → collect ONLY the fields for that type → fire [LEAD_READY:TYPE] → done. Every response has [BTN: ...] line at the end. NO MARKDOWN — plain text only.`;
+REMEMBER: Identify conversation type → if BILLING, ask phone first → use the auto-injected lookup → answer specifically. Every response has [BTN: ...] line at the end. NO MARKDOWN — plain text only.`;
 
     // ============================================================
     // SERVICE MENU
@@ -620,7 +732,7 @@ REMEMBER: Identify conversation type → collect ONLY the fields for that type �
         return { cleanText, buttons };
     }
 
-        const TEMPI_AVATAR_SVG = `<img src="https://cdn.mechanicaltemp.com/tempi/tempi-portrait.png" alt="Tempi" style="width:24px;height:24px;border-radius:50%;flex-shrink:0;object-fit:cover;border:1.5px solid #1e293b;">`;
+    const TEMPI_AVATAR_SVG = `<img src="https://cdn.mechanicaltemp.com/tempi/tempi-portrait.png" alt="Tempi" style="width:24px;height:24px;border-radius:50%;flex-shrink:0;object-fit:cover;border:1.5px solid #1e293b;">`;
     
     function addBotMessage(text, buttons) {
         const row = document.createElement('div');
@@ -689,7 +801,9 @@ REMEMBER: Identify conversation type → collect ONLY the fields for that type �
     }
 
     function extractLeadInfo(conversation, leadType) {
-        const fullText = conversation.map(m => m.content).join('\n');
+        // Strip out our injected [SYSTEM:] notes from the transcript that goes to the lead email
+        const cleanedConv = conversation.filter(m => !(m.role === 'user' && m.content.includes('[SYSTEM:')));
+        const fullText = cleanedConv.map(m => m.content).join('\n');
         const phoneMatch = fullText.match(/(\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/);
         const typeLabels = {
             'SERVICE_LEAD': '🚨 SERVICE LEAD',
@@ -711,11 +825,16 @@ REMEMBER: Identify conversation type → collect ONLY the fields for that type �
             ? `\n\n--- AD CAMPAIGN ATTRIBUTION ---\n${utmEntries.map(([k,v]) => `${k}: ${v}`).join('\n')}`
             : '\n\n--- AD CAMPAIGN ATTRIBUTION ---\n(no UTM params — likely direct traffic or organic)';
 
+        // If DSM matched a customer, add it to the lead email so office knows it's a real account
+        const dsmSummary = dsmCustomerData && dsmCustomerData.identity
+            ? `\n\n--- MATCHED IN DSM ---\nKnown customer: ${dsmCustomerData.identity.name}\nAddress on file: ${dsmCustomerData.identity.address || 'N/A'}\nOpen balance: $${dsmCustomerData.total_open_balance.toFixed(2)}\nOpen invoices: ${dsmCustomerData.open_invoices.length}\nCustomer since: ${dsmCustomerData.customer_since || 'N/A'}`
+            : '\n\n--- MATCHED IN DSM ---\nNot found in DSM (new prospect)';
+
         return {
             from_name: `Tempi (AI page) - ${label}`,
             phone: phoneMatch ? phoneMatch[0] : 'See transcript',
-            message: `${label}\n=========================================\n\nSource: AI Assistant Landing Page\nConversation Type: ${leadType}\nTime: ${new Date().toLocaleString('en-US', { timeZone: 'America/Detroit' })} ET${utmSummary}${cartSummary}\n\n--- FULL TRANSCRIPT ---\n\n` +
-                conversation.map(m => `[${m.role === 'user' ? 'CUSTOMER' : 'TEMPI'}]: ${m.content.replace(/\[LEAD_READY:[^\]]+\]/g,'').replace(/\[LEAD_READY\]/g,'').replace(/\[BTN:[^\]]+\]/g,'').trim()}`).join('\n\n')
+            message: `${label}\n=========================================\n\nSource: AI Assistant Landing Page\nConversation Type: ${leadType}\nTime: ${new Date().toLocaleString('en-US', { timeZone: 'America/Detroit' })} ET${utmSummary}${dsmSummary}${cartSummary}\n\n--- FULL TRANSCRIPT ---\n\n` +
+                cleanedConv.map(m => `[${m.role === 'user' ? 'CUSTOMER' : 'TEMPI'}]: ${m.content.replace(/\[LEAD_READY:[^\]]+\]/g,'').replace(/\[LEAD_READY\]/g,'').replace(/\[BTN:[^\]]+\]/g,'').trim()}`).join('\n\n')
         };
     }
 
@@ -761,6 +880,10 @@ REMEMBER: Identify conversation type → collect ONLY the fields for that type �
         tempiInput.value = '';
         tempiSend.disabled = true;
         tempiInput.disabled = true;
+
+        // 🔍 DSM enrichment: if phone detected, fetch real customer AR + history
+        await tryEnrichWithDSM(text);
+
         showTempiTyping();
         const reply = await callTempi(text);
         hideTempiTyping();
@@ -783,7 +906,7 @@ REMEMBER: Identify conversation type → collect ONLY the fields for that type �
                 if (initialMessage) {
                     handleTempiSend(initialMessage);
                 } else {
-                    addBotMessage("Hi there! 👋 I'm Tempi from Mechanical Temp. How can I help you today?", ["Schedule service", "Get a quote", "Just browsing", "Service plan info"]);
+                    addBotMessage("Hi there! 👋 I'm Tempi from Mechanical Temp. How can I help you today?", ["Schedule service", "Get a quote", "Check my bill", "Service plan info"]);
                 }
             }, 200);
         } else if (initialMessage) {
