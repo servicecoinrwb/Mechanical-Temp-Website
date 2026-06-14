@@ -146,6 +146,7 @@
     line-height:1.5;padding:10px;border:1.5px solid var(--line);border-radius:6px;
     background:var(--cream);resize:vertical;
   }
+  .mtw-left textarea#mtwRules{min-height:118px}
   .mtw-gen{
     width:100%;margin-top:12px;padding:13px;border:none;border-radius:8px;
     background:var(--rust);color:var(--cream);
@@ -300,6 +301,8 @@
       <div class="mtw-left">
         <label style="margin-top:0">This week's brief</label>
         <textarea id="mtwBrief" spellcheck="false"></textarea>
+        <label>Standing rules <span style="font-weight:500;text-transform:none;letter-spacing:0;color:#8893a6">— always applied, saved on this device</span></label>
+        <textarea id="mtwRules" spellcheck="false"></textarea>
         <button class="mtw-gen" id="mtwGen">Generate the Week</button>
         <div class="mtw-status" id="mtwStatus"></div>
         <div class="mtw-endpoint" id="mtwEndpoint"></div>
@@ -1044,10 +1047,21 @@ DO NOT POST: real customer names or addresses, exact revenue/dollar amounts from
       ? '  (preview mode — change MTW_ENDPOINT to your Cloudflare Worker before deploying)'
       : '');
 
-  /* restore last brief on this device (works on your live site; harmless no-op in the sandbox) */
-  let savedBrief = null;
+  /* ---- Standing rules: persistent guardrails applied to EVERY run.
+         Edit these any time; they save on this device and ride along with every brief. ---- */
+  const MTW_DEFAULT_RULES =
+`- Use the "20 years in the trade" line sparingly — at most once or twice across the whole week, never as a default opener.
+- Keep any anecdote clearly generic ("a system I've seen do this", "a setup like that"). NEVER invent a specific customer, city, or job that isn't in the brief's REAL EVENTS — no "homeowner in Royal Oak", no fake commercial calls.
+- Go easy on em-dashes; prefer periods and short sentences.
+- Vary your openers across days and platforms — don't reuse "Here's something most people don't think about".
+- On Facebook, no "link in bio" (that's an Instagram phrase). Say "give us a call" or "message us".`;
+
+  /* restore brief + rules on this device (works on your live site; harmless no-op in the sandbox) */
+  let savedBrief = null, savedRules = null;
   try { savedBrief = localStorage.getItem('mtw_brief'); } catch(e){}
+  try { savedRules = localStorage.getItem('mtw_rules'); } catch(e){}
   $('mtwBrief').value = savedBrief || MTW_DEFAULT_BRIEF;
+  $('mtwRules').value = savedRules !== null ? savedRules : MTW_DEFAULT_RULES;
 
   $('mtwOpen').addEventListener('click', ()=> overlay.classList.add('open'));
   $('mtwClose').addEventListener('click', ()=> overlay.classList.remove('open'));
@@ -1055,13 +1069,16 @@ DO NOT POST: real customer names or addresses, exact revenue/dollar amounts from
   document.addEventListener('keydown', e=>{ if(e.key === 'Escape') overlay.classList.remove('open'); });
 
   /* ---- prompt for one day ---- */
-  function mtwPrompt(brief, day, angle){
+  function mtwPrompt(brief, rules, day, angle){
+    const rulesBlock = (rules && rules.trim())
+      ? `\nSTANDING RULES (always apply, these override generic instincts)\n${rules.trim()}\n`
+      : '';
     return (
 `You are the copywriter for Mechanical Temp LLC, a licensed & insured HVAC contractor in Southfield / Metro Detroit, Michigan. Write in owner Brian's voice: grounded, plain-spoken, ~20 years in the trade, confident but never salesy or corny. No hashtags inside the post body.
 
 THIS WEEK'S BRIEF
 ${brief}
-
+${rulesBlock}
 TASK
 Write EXACTLY 4 posts for ${day} (angle: ${angle}) — one per platform, in this order: GBP, Facebook, LinkedIn Company, LinkedIn Personal.
 
@@ -1200,7 +1217,9 @@ Return ONLY a JSON array, no markdown fences, no preamble, exactly this shape:
     for(const k in results) delete results[k];
 
     const brief = $('mtwBrief').value;
+    const rules = $('mtwRules').value;
     try { localStorage.setItem('mtw_brief', brief); } catch(e){}
+    try { localStorage.setItem('mtw_rules', rules); } catch(e){}
 
     const right = $('mtwRight'); right.innerHTML = '';
     const gen = $('mtwGen'); gen.disabled = true;
@@ -1211,7 +1230,7 @@ Return ONLY a JSON array, no markdown fences, no preamble, exactly this shape:
       status.textContent = 'Writing ' + day + '\u2026 (' + (i+1) + '/5)';
       let raw;
       try {
-        raw = await mtwCall(mtwPrompt(brief, day, angle));
+        raw = await mtwCall(mtwPrompt(brief, rules, day, angle));
       } catch(err){
         status.textContent = 'Stopped on ' + day + ': ' + err.message;
         const note = document.createElement('div'); note.className='mtw-empty';
