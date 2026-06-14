@@ -108,6 +108,70 @@
   }
   .export:hover{transform:translateY(-1px);background:var(--navy-deep)}
   .stage .note{font-size:12px;color:#56607a;text-align:center}
+
+  /* ===== Weekly Post Writer (Claude) ===== */
+  .mtw-launch{
+    width:100%;padding:13px;border:none;border-radius:8px;
+    background:var(--rust);color:var(--cream);
+    font-family:'Oswald',sans-serif;font-weight:700;font-size:14px;
+    letter-spacing:.07em;text-transform:uppercase;cursor:pointer;
+    box-shadow:inset 0 -3px 0 rgba(0,0,0,.2);
+  }
+  .mtw-launch:hover{background:#9c4427}
+  .mtw-overlay{
+    position:fixed;inset:0;background:rgba(14,26,46,.62);
+    backdrop-filter:blur(3px);z-index:1000;display:none;padding:24px;overflow:auto;
+  }
+  .mtw-overlay.open{display:block}
+  .mtw-modal{
+    max-width:1100px;margin:0 auto;background:var(--cream);
+    border-radius:12px;border:1px solid var(--line);
+    box-shadow:0 24px 60px rgba(14,26,46,.45);overflow:hidden;
+  }
+  .mtw-head{
+    background:var(--navy);color:var(--cream);padding:16px 22px;
+    display:flex;align-items:center;justify-content:space-between;
+    border-bottom:4px solid var(--rust);
+  }
+  .mtw-head h2{font-family:'Oswald',sans-serif;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:18px;color:var(--cream);margin:0;display:block}
+  .mtw-head h2 small{display:block;color:var(--sky);font-size:12px;font-weight:500;letter-spacing:.03em;margin-top:3px}
+  .mtw-x{background:none;border:2px solid rgba(245,239,227,.4);color:var(--cream);border-radius:6px;font-size:16px;width:38px;height:38px;cursor:pointer;line-height:1}
+  .mtw-x:hover{background:rgba(245,239,227,.12)}
+  .mtw-body{display:grid;grid-template-columns:340px 1fr;gap:0}
+  @media(max-width:760px){.mtw-body{grid-template-columns:1fr}}
+  .mtw-left{padding:18px;border-right:1px solid var(--line);background:#fff}
+  @media(max-width:760px){.mtw-left{border-right:none;border-bottom:1px solid var(--line)}}
+  .mtw-left textarea{
+    width:100%;min-height:340px;font-family:'Barlow',sans-serif;font-size:12.5px;
+    line-height:1.5;padding:10px;border:1.5px solid var(--line);border-radius:6px;
+    background:var(--cream);resize:vertical;
+  }
+  .mtw-gen{
+    width:100%;margin-top:12px;padding:13px;border:none;border-radius:8px;
+    background:var(--rust);color:var(--cream);
+    font-family:'Oswald',sans-serif;font-weight:700;letter-spacing:.08em;
+    text-transform:uppercase;font-size:15px;cursor:pointer;box-shadow:inset 0 -3px 0 rgba(0,0,0,.18);
+  }
+  .mtw-gen:hover{background:#9c4427}
+  .mtw-gen:disabled{opacity:.55;cursor:default}
+  .mtw-status{font-size:12px;color:#56607a;margin-top:8px;min-height:16px;line-height:1.4}
+  .mtw-endpoint{font-size:11px;color:#8893a6;margin-top:10px;word-break:break-all;line-height:1.4;border-left:3px solid var(--sky);padding-left:8px}
+  .mtw-right{padding:18px;max-height:78vh;overflow:auto}
+  .mtw-tools{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+  .mtw-tools button{
+    flex:1;min-width:130px;padding:10px;border:2px solid var(--navy);border-radius:6px;
+    background:#fff;color:var(--navy);font-family:'Oswald',sans-serif;font-weight:600;
+    font-size:12px;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;
+  }
+  .mtw-tools button:hover{background:rgba(111,183,227,.18)}
+  .mtw-day{font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--navy);font-size:13px;margin:16px 0 8px;padding-bottom:5px;border-bottom:2px solid var(--rust)}
+  .mtw-day:first-child{margin-top:0}
+  .mtw-post{background:#fff;border:1px solid var(--line);border-radius:8px;padding:11px 12px;margin-bottom:9px}
+  .mtw-post .plat{font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--rust);display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:8px}
+  .mtw-post .copy{background:var(--navy);color:var(--cream);border:none;border-radius:4px;font-size:10px;padding:4px 10px;cursor:pointer;font-family:'Oswald',sans-serif;letter-spacing:.05em;text-transform:uppercase}
+  .mtw-post .copy:hover{background:var(--navy-deep)}
+  .mtw-post p{font-size:14px;line-height:1.5;white-space:pre-wrap;margin:0}
+  .mtw-empty{color:#8893a6;font-size:14px;text-align:center;padding:40px 12px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -118,6 +182,12 @@
 
 <div class="wrap">
   <div class="panel">
+
+    <div class="card">
+      <h2>Weekly Posts</h2>
+      <button class="mtw-launch" id="mtwOpen">✦ Write the Week with Claude</button>
+      <div class="hint">Generates all 20 posts (5 days × 4 platforms) from your weekly brief — your Gemini replacement. Copy each one or grab the Buffer paste sheet.</div>
+    </div>
 
     <div class="card">
       <h2>Layout</h2>
@@ -216,6 +286,28 @@
     <button class="export" id="dlVid" style="background:#1f3354">Download Video</button>
     <div class="stage" style="display:none"></div>
     <div class="note">PNG for static posts. Video = 6s animated post, or drop a phone clip in a photo slot for a branded job video (15s max, silent — add music in IG/Buffer).</div>
+  </div>
+</div>
+
+<!-- ===== Weekly Post Writer (Claude) modal ===== -->
+<div class="mtw-overlay" id="mtwOverlay">
+  <div class="mtw-modal">
+    <div class="mtw-head">
+      <h2>Weekly Post Writer<small>Powered by Claude — 5 days × 4 platforms, in your voice</small></h2>
+      <button class="mtw-x" id="mtwClose" title="Close">✕</button>
+    </div>
+    <div class="mtw-body">
+      <div class="mtw-left">
+        <label style="margin-top:0">This week's brief</label>
+        <textarea id="mtwBrief" spellcheck="false"></textarea>
+        <button class="mtw-gen" id="mtwGen">Generate the Week</button>
+        <div class="mtw-status" id="mtwStatus"></div>
+        <div class="mtw-endpoint" id="mtwEndpoint"></div>
+      </div>
+      <div class="mtw-right" id="mtwRight">
+        <div class="mtw-empty">Edit your brief on the left, then hit <b>Generate the Week</b>.<br>Posts appear here day by day.</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -882,6 +974,269 @@ buildFields();
 updatePhotoUI();
 document.fonts.ready.then(draw);
 draw();
+</script>
+
+<!-- ===== Weekly Post Writer (Claude) — self-contained, no globals shared with the builder ===== -->
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------------------------------------------------------
+     CONFIG  — the only two lines you normally touch.
+
+     MTW_ENDPOINT:
+       • Testing INSIDE Claude.ai (this preview): leave the api.anthropic.com
+         URL below — it works with NO API key.
+       • On your DEPLOYED site (Firebase / GitHub Pages): point this at your
+         Cloudflare Worker proxy — the SAME pattern Tempi uses — so the key
+         stays server-side. The Worker must accept a POST of the Anthropic
+         Messages payload and return the Messages response JSON.
+           e.g. const MTW_ENDPOINT = 'https://tempi-proxy.YOURNAME.workers.dev';
+  ---------------------------------------------------------------- */
+  const MTW_ENDPOINT = 'https://mt-claudepost-proxy.summer-unit-44dd.workers.dev/';
+  const MTW_MODEL    = 'claude-sonnet-4-6';   // Sonnet = best copy. Swap to a Haiku string on your Worker if you want it cheaper.
+  const MTW_MAXTOK   = 1500;                   // 4 posts/call fit easily; raise on your Worker if you ever want longer posts.
+
+  /* ---- This week's brief (edit freely each week, or paste your DSM export) ---- */
+  const MTW_DEFAULT_BRIEF =
+`SEASON: Summer
+CAMPAIGN: Summer AC Tune-Up — $25 off (comprehensive AC tune-up discount)
+THEME: Beat the humidity swings — your AC needs a mid-summer tune-up before the rain rolls in
+WEATHER: Detroit highs 70-76F, lows 49-59F, ~4 days rain — big day/night swings
+
+CITY FOCUS (rotate naturally, don't force all into one post):
+  Primary:   Metro Detroit, Southfield
+  Secondary: Dearborn, Livonia
+  Tertiary:  West Bloomfield, Royal Oak
+
+KEYWORDS (weave in, never stuff):
+  Primary:   emergency HVAC repair, commercial HVAC Metro Detroit, 24/7 HVAC emergency service
+  Secondary: AC maintenance Michigan, HVAC tune-up near me, preventative maintenance HVAC
+
+E-E-A-T TRUST SIGNALS (land at least one per platform across the week):
+  Local & Trusted (Southfield-based), Acorn Finance financing, Licensed & Insured
+
+REAL EVENTS (last 14 days): 3 jobs completed, 1 new lead, 0 emergency/commercial dispatches
+
+STORY SEEDS (anchors, not full posts):
+  Mon: Dearborn commercial client's AC couldn't keep up with humidity spikes — needed a seasonal refresh, not a repair.
+  Tue: 20+ degree overnight swings make the AC work harder; a tune-up now prevents strain when humidity returns.
+  Wed: $25 tune-up now vs $2,000+ 2 AM emergency repair during a heat spike (seen it in West Bloomfield & Royal Oak).
+  Thu: Humidity + temp swings = condensation in ducts = mold risk if not serviced before the rain.
+  Fri: 3 systems serviced this week across Metro Detroit, Livonia, Southfield — all ready before summer's curveballs.
+
+DO NOT POST: real customer names or addresses, exact revenue/dollar amounts from real jobs, or anything identifying a specific commercial client.`;
+
+  const MTW_DAYS = [
+    ['Monday',    'Launch hook + campaign promo, CTA-heavy'],
+    ['Tuesday',   'Value / education with concrete technical specifics'],
+    ['Wednesday', 'Math / logic — cost-benefit, scenario A vs B'],
+    ['Thursday',  'Hidden danger / prevention angle'],
+    ['Friday',    'Weekend wrap — cozy, reliable, soft CTA']
+  ];
+  const MTW_PORDER = ['GBP','Facebook','LinkedIn Company','LinkedIn Personal'];
+
+  /* ---- DOM ---- */
+  const $ = id => document.getElementById(id);
+  const overlay = $('mtwOverlay');
+  $('mtwEndpoint').textContent = 'Sending to: ' + MTW_ENDPOINT +
+    (MTW_ENDPOINT.indexOf('api.anthropic.com') > -1
+      ? '  (preview mode — change MTW_ENDPOINT to your Cloudflare Worker before deploying)'
+      : '');
+
+  /* restore last brief on this device (works on your live site; harmless no-op in the sandbox) */
+  let savedBrief = null;
+  try { savedBrief = localStorage.getItem('mtw_brief'); } catch(e){}
+  $('mtwBrief').value = savedBrief || MTW_DEFAULT_BRIEF;
+
+  $('mtwOpen').addEventListener('click', ()=> overlay.classList.add('open'));
+  $('mtwClose').addEventListener('click', ()=> overlay.classList.remove('open'));
+  overlay.addEventListener('click', e=>{ if(e.target === overlay) overlay.classList.remove('open'); });
+  document.addEventListener('keydown', e=>{ if(e.key === 'Escape') overlay.classList.remove('open'); });
+
+  /* ---- prompt for one day ---- */
+  function mtwPrompt(brief, day, angle){
+    return (
+`You are the copywriter for Mechanical Temp LLC, a licensed & insured HVAC contractor in Southfield / Metro Detroit, Michigan. Write in owner Brian's voice: grounded, plain-spoken, ~20 years in the trade, confident but never salesy or corny. No hashtags inside the post body.
+
+THIS WEEK'S BRIEF
+${brief}
+
+TASK
+Write EXACTLY 4 posts for ${day} (angle: ${angle}) — one per platform, in this order: GBP, Facebook, LinkedIn Company, LinkedIn Personal.
+
+RULES FOR EVERY POST
+- Include one location signal from the City Focus list (rotate across the week, don't repeat the same pairing every time).
+- Weave in 1-2 keywords naturally.
+- Match the platform voice and length:
+    GBP               = short, punchy, one clear action CTA. ~30-45 words.
+    Facebook          = conversational, neighbor tone, 2-4 emojis with personality. ~60-90 words.
+    LinkedIn Company  = B2B (facility managers, OpEx, downtime, uptime). No emojis. ~70-110 words.
+    LinkedIn Personal = first-person as Brian, opinionated, a real point of view. No emojis. ~70-110 words.
+- Use the matching story seed for ${day} as the anchor when one fits.
+- Across the week each platform should land at least one E-E-A-T trust signal; use one here where it fits naturally.
+- NEVER include real customer names, addresses, exact revenue, or identify a specific commercial client.
+
+OUTPUT
+Return ONLY a JSON array, no markdown fences, no preamble, exactly this shape:
+[{"platform":"GBP","body":"..."},{"platform":"Facebook","body":"..."},{"platform":"LinkedIn Company","body":"..."},{"platform":"LinkedIn Personal","body":"..."}]`
+    );
+  }
+
+  /* ---- call Claude (Anthropic Messages shape; your Worker proxies the same shape) ---- */
+  async function mtwCall(userText){
+    const res = await fetch(MTW_ENDPOINT, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model: MTW_MODEL,
+        max_tokens: MTW_MAXTOK,
+        messages:[{ role:'user', content:userText }]
+      })
+    });
+    if(!res.ok){
+      let extra=''; try{ extra = ' — ' + (await res.text()).slice(0,180); }catch(e){}
+      throw new Error('HTTP ' + res.status + extra);
+    }
+    const data = await res.json();
+    const txt = (data.content || [])
+      .filter(b => b.type === 'text')
+      .map(b => b.text).join('\n').trim();
+    if(!txt) throw new Error('empty response');
+    return txt;
+  }
+
+  function mtwParse(txt){
+    let t = txt.replace(/```json/gi,'').replace(/```/g,'').trim();
+    const a = t.indexOf('['), b = t.lastIndexOf(']');
+    if(a >= 0 && b > a) t = t.slice(a, b+1);
+    const arr = JSON.parse(t);
+    return arr.map(o => ({ platform:(o.platform||'').trim(), body:(o.body||'').trim() }))
+              .sort((x,y)=> MTW_PORDER.indexOf(x.platform) - MTW_PORDER.indexOf(y.platform));
+  }
+
+  /* ---- render ---- */
+  const results = {};   // day -> [{platform, body}]
+
+  function copyText(text, btn){
+    navigator.clipboard.writeText(text).then(()=>{
+      const old = btn.textContent;
+      btn.textContent = 'Copied';
+      setTimeout(()=> btn.textContent = old, 1100);
+    });
+  }
+
+  function renderDay(host, day, posts){
+    const h = document.createElement('div');
+    h.className = 'mtw-day';
+    h.textContent = day;
+    host.appendChild(h);
+    posts.forEach(p=>{
+      const box = document.createElement('div'); box.className = 'mtw-post';
+      const top = document.createElement('div'); top.className = 'plat';
+      const lbl = document.createElement('span'); lbl.textContent = p.platform || '—';
+      const cp = document.createElement('button'); cp.className = 'copy'; cp.textContent = 'Copy';
+      cp.addEventListener('click', ()=> copyText(p.body, cp));
+      top.appendChild(lbl); top.appendChild(cp);
+      const body = document.createElement('p'); body.textContent = p.body;
+      box.appendChild(top); box.appendChild(body);
+      host.appendChild(box);
+    });
+  }
+
+  function renderRawFallback(host, day, raw){
+    const h = document.createElement('div'); h.className='mtw-day';
+    h.textContent = day + ' — couldn\u2019t parse JSON (raw below)';
+    host.appendChild(h);
+    const box = document.createElement('div'); box.className='mtw-post';
+    const body = document.createElement('p'); body.textContent = raw;
+    box.appendChild(body); host.appendChild(box);
+  }
+
+  function bufferSheet(){
+    const bar = '='.repeat(60);
+    let out = 'MECHANICAL TEMP — BUFFER PASTE SHEET\nCopy the text below each \u25BA label. Label lines are not part of the post.\n' + bar + '\n';
+    MTW_DAYS.forEach(([day])=>{
+      const posts = results[day]; if(!posts) return;
+      out += '\n';
+      posts.forEach(p=>{
+        out += '\n\u25BA ' + day.toUpperCase() + ' \u00B7 ' + (p.platform||'').toUpperCase() + '\n' + p.body + '\n\n----------\n';
+      });
+      out += '\n' + bar + '\n';
+    });
+    return out;
+  }
+
+  function renderTools(host){
+    const bar = document.createElement('div'); bar.className = 'mtw-tools';
+
+    const sheetBtn = document.createElement('button');
+    sheetBtn.textContent = 'Download Buffer sheet';
+    sheetBtn.addEventListener('click', ()=>{
+      const blob = new Blob([bufferSheet()], {type:'text/plain'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'MT_buffer_' + new Date().toISOString().slice(0,10) + '.txt';
+      a.click();
+    });
+
+    const copyAll = document.createElement('button');
+    copyAll.textContent = 'Copy all (sheet)';
+    copyAll.addEventListener('click', ()=> copyText(bufferSheet(), copyAll));
+
+    const regen = document.createElement('button');
+    regen.textContent = 'Regenerate';
+    regen.addEventListener('click', generate);
+
+    bar.appendChild(sheetBtn); bar.appendChild(copyAll); bar.appendChild(regen);
+    host.insertBefore(bar, host.firstChild);
+  }
+
+  /* ---- main run: one call per day, rendered as it lands ---- */
+  let busy = false;
+  async function generate(){
+    if(busy) return;
+    busy = true;
+    for(const k in results) delete results[k];
+
+    const brief = $('mtwBrief').value;
+    try { localStorage.setItem('mtw_brief', brief); } catch(e){}
+
+    const right = $('mtwRight'); right.innerHTML = '';
+    const gen = $('mtwGen'); gen.disabled = true;
+    const status = $('mtwStatus');
+
+    for(let i=0;i<MTW_DAYS.length;i++){
+      const [day, angle] = MTW_DAYS[i];
+      status.textContent = 'Writing ' + day + '\u2026 (' + (i+1) + '/5)';
+      let raw;
+      try {
+        raw = await mtwCall(mtwPrompt(brief, day, angle));
+      } catch(err){
+        status.textContent = 'Stopped on ' + day + ': ' + err.message;
+        const note = document.createElement('div'); note.className='mtw-empty';
+        note.innerHTML = 'Could not reach Claude for <b>'+day+'</b>.<br>'+err.message+
+          '<br><br>If you\u2019re on your live site, make sure MTW_ENDPOINT points at your Cloudflare Worker.';
+        right.appendChild(note);
+        gen.disabled = false; busy = false;
+        return;
+      }
+      try {
+        const posts = mtwParse(raw);
+        results[day] = posts;
+        renderDay(right, day, posts);
+      } catch(err){
+        renderRawFallback(right, day, raw);
+      }
+    }
+
+    status.textContent = 'Done — 20 posts ready.';
+    renderTools(right);
+    gen.disabled = false; busy = false;
+  }
+
+  $('mtwGen').addEventListener('click', generate);
+})();
 </script>
 </body>
 </html>
