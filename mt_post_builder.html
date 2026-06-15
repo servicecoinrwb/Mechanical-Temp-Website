@@ -333,7 +333,9 @@
             </div>
           </div>
           <button class="mtw-bufpush" id="mtwBufPush" disabled>Generate posts first</button>
+          <button class="mtw-bufbtn" id="mtwBufVerify" style="margin-top:8px">Verify: list recent posts in Buffer</button>
           <div class="mtw-status" id="mtwBufStatus"></div>
+          <div id="mtwBufVerifyOut" style="font-size:11px;color:#56607a;margin-top:8px;line-height:1.45;white-space:pre-wrap"></div>
           <div class="mtw-endpoint" id="mtwBufEndpoint"></div>
         </div>
       </div>
@@ -1379,17 +1381,19 @@ Return ONLY a JSON array, no markdown fences, no preamble, exactly this shape:
       row.appendChild(lab); row.appendChild(sel);
       host.appendChild(row);
     });
-    const note = document.createElement('div');
-    note.style.cssText = 'font-size:11px;color:#8893a6;margin-top:8px;line-height:1.4;border-left:3px solid var(--rust);padding-left:8px';
-    note.textContent = "Note: Google Business posts can't be auto-pushed — Google requires a post type. Use the Copy button on each GBP post and pick \u201CWhat\u2019s New\u201D in Buffer. Facebook + LinkedIn push fine.";
-    host.appendChild(note);
   }
 
-  // Google Business Profile can't be auto-pushed: Google requires a post type
-  // (What's New / Offer / Event) and Buffer's API field for it is deprecated/in flux.
-  function isGbpChannel(channelId){
+  // The post 'type' each network requires on createPost. Buffer rejects a
+  // typeless post for Facebook and Google Business; LinkedIn needs none.
+  function bufServiceOf(channelId){
     const c = bufChannels.find(c=>c.id===channelId);
-    return !!(c && /google|gbp|business/i.test(c.service||''));
+    return (c && c.service || '').toLowerCase();
+  }
+  function bufMetaFor(channelId){
+    const svc = bufServiceOf(channelId);
+    if(/facebook/.test(svc))            return ', metadata:{ facebook:{ type: post } }';
+    if(/google|gbp|business/.test(svc)) return ', metadata:{ google:{ type: whats_new } }';
+    return '';   // linkedin & everything else: no type needed
   }
 
   function updatePushState(){
@@ -1400,12 +1404,6 @@ Return ONLY a JSON array, no markdown fences, no preamble, exactly this shape:
     if(!bufChannels.length){ btn.disabled = true; btn.textContent = 'Load channels first'; return; }
     if(!mapped){ btn.disabled = true; btn.textContent = 'Map at least one platform'; return; }
     const count = bufPushable().length;
-    if(!count){
-      // everything mapped is GBP, which we don't auto-push
-      btn.disabled = true;
-      btn.textContent = 'GBP is copy-only — map FB / LinkedIn to push';
-      return;
-    }
     btn.disabled = false;
     btn.textContent = 'Push ' + count + ' post' + (count===1?'':'s') + ' to Buffer';
   }
@@ -1414,10 +1412,7 @@ Return ONLY a JSON array, no markdown fences, no preamble, exactly this shape:
     const items = [];
     MTW_DAYS.forEach(([day])=>{
       const posts = results[day]; if(!posts) return;
-      posts.forEach(p=>{
-        const ch = bufMap[p.platform];
-        if(ch && !isGbpChannel(ch)) items.push({ day, platform:p.platform, body:p.body });
-      });
+      posts.forEach(p=>{ if(bufMap[p.platform]) items.push({ day, platform:p.platform, body:p.body }); });
     });
     return items;
   }
@@ -1425,7 +1420,8 @@ Return ONLY a JSON array, no markdown fences, no preamble, exactly this shape:
   async function bufCreate(text, channelId, draft){
     const q =
       'mutation Push($text:String!){ createPost(input:{ text:$text, channelId:'+JSON.stringify(channelId)+
-      ', schedulingType:automatic, mode:addToQueue, saveToDraft:'+(draft?'true':'false')+', aiAssisted:true }){'+
+      ', schedulingType:automatic, mode:addToQueue, saveToDraft:'+(draft?'true':'false')+', aiAssisted:true'+
+      bufMetaFor(channelId) +' }){'+
       ' ... on PostActionSuccess { post { id } }'+
       ' ... on LimitReachedError { message }'+
       ' ... on InvalidInputError { message }'+
@@ -1469,6 +1465,56 @@ Return ONLY a JSON array, no markdown fences, no preamble, exactly this shape:
     bufMode = b.dataset.bm;
     document.querySelectorAll('#mtwBufMode button').forEach(x=>x.classList.toggle('active', x===b));
   });
+
+  // Ask Buffer to list back recent posts, so we can confirm they exist and see
+  // exactly which channel + org + status they landed under.
+  async function bufVerify(){
+    const out = $('mtwBufVerifyOut');
+    out.textContent = 'Checking Buffer\u2026';
+    try {
+      if(!bufOrgId){
+        const orgRes = await bufCall({ query: 'query{ account{ organizations{ id } } }' });
+        if(orgRes.errors && orgRes.errors.length) throw new Error(orgRes.errors[0].message);
+        const orgs = orgRes.data && orgRes.data.account && orgRes.data.account.organizations;
+        if(!orgs || !orgs.length) throw new Error('No organizations on this key');
+        bufOrgId = orgs[0].id;
+      }
+      const nameOf = id => { const c = bufChannels.find(c=>c.id===id); return c ? (c.name + ' \u00B7 ' + c.service) : id; };
+
+      const draftQ = 'query{ posts(first:25, input:{ organizationId:'+JSON.stringify(bufOrgId)+
+        ', filter:{ status:[draft] }, sort:[{ field:createdAt, direction:desc }] }){ edges{ node{ id text channelId status createdAt } } } }';
+      const allQ = 'query{ posts(first:25, input:{ organizationId:'+JSON.stringify(bufOrgId)+
+        ', sort:[{ field:createdAt, direction:desc }] }){ edges{ node{ id text channelId status createdAt } } } }';
+
+      let edges = [], label = 'drafts';
+      try {
+        const d = await bufCall({ query: draftQ });
+        if(!(d.errors && d.errors.length)) edges = (d.data && d.data.posts && d.data.posts.edges) || [];
+      } catch(e){}
+      if(!edges.length){
+        label = 'recent posts (any status)';
+        const d2 = await bufCall({ query: allQ });
+        if(d2.errors && d2.errors.length) throw new Error(d2.errors[0].message);
+        edges = (d2.data && d2.data.posts && d2.data.posts.edges) || [];
+      }
+
+      if(!edges.length){
+        out.textContent = 'Buffer returned 0 posts for org ' + bufOrgId +
+          '.\nThe 5 likely went to a DIFFERENT organization than this one. ' +
+          'In Buffer, switch orgs (top-left org switcher) and check there.';
+        return;
+      }
+      const lines = edges.slice(0,15).map(e=>{
+        const n = e.node;
+        const snip = (n.text||'').replace(/\s+/g,' ').slice(0,55);
+        return '\u2022 [' + (n.status||'?') + '] ' + nameOf(n.channelId) + ' \u2014 ' + snip;
+      });
+      out.textContent = 'Found ' + edges.length + ' ' + label + ' in org ' + bufOrgId + ':\n' + lines.join('\n');
+    } catch(err){
+      out.textContent = 'Verify failed: ' + err.message;
+    }
+  }
+  $('mtwBufVerify').addEventListener('click', bufVerify);
 })();
 </script>
 </body>
