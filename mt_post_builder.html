@@ -173,6 +173,20 @@
   .mtw-post .copy:hover{background:var(--navy-deep)}
   .mtw-post p{font-size:14px;line-height:1.5;white-space:pre-wrap;margin:0}
   .mtw-empty{color:#8893a6;font-size:14px;text-align:center;padding:40px 12px;line-height:1.5}
+
+  /* Send to Buffer panel */
+  .mtw-buffer{margin-top:16px;border-top:1px dashed var(--line);padding-top:14px}
+  .mtw-bufhead{font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:12px;color:var(--navy);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .mtw-bufhead::before{content:"";width:9px;height:9px;background:var(--rust);display:inline-block}
+  .mtw-bufbtn{width:100%;padding:10px;border:2px solid var(--navy);border-radius:6px;background:#fff;color:var(--navy);font-family:'Oswald',sans-serif;font-weight:600;font-size:12px;letter-spacing:.05em;text-transform:uppercase;cursor:pointer}
+  .mtw-bufbtn:hover{background:rgba(111,183,227,.18)}
+  .mtw-bufmap{margin-top:10px;display:none}
+  .mtw-bufmap .brow{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .mtw-bufmap .brow span{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--navy);flex:0 0 92px}
+  .mtw-bufmap select{flex:1;min-width:0;padding:7px;border:1.5px solid var(--line);border-radius:6px;background:var(--cream);font-family:'Barlow',sans-serif;font-size:12.5px}
+  .mtw-bufpush{width:100%;margin-top:12px;padding:12px;border:none;border-radius:8px;background:var(--navy);color:var(--cream);font-family:'Oswald',sans-serif;font-weight:700;letter-spacing:.07em;text-transform:uppercase;font-size:14px;cursor:pointer;box-shadow:inset 0 -3px 0 var(--rust)}
+  .mtw-bufpush:hover:not(:disabled){background:var(--navy-deep)}
+  .mtw-bufpush:disabled{opacity:.5;cursor:default}
 </style>
 </head>
 <body>
@@ -306,6 +320,22 @@
         <button class="mtw-gen" id="mtwGen">Generate the Week</button>
         <div class="mtw-status" id="mtwStatus"></div>
         <div class="mtw-endpoint" id="mtwEndpoint"></div>
+
+        <div class="mtw-buffer">
+          <div class="mtw-bufhead">Send to Buffer</div>
+          <button class="mtw-bufbtn" id="mtwBufLoad">Load my Buffer channels</button>
+          <div class="mtw-bufmap" id="mtwBufMap"></div>
+          <div id="mtwBufMode" style="display:none">
+            <label>Push as</label>
+            <div class="fmt">
+              <button type="button" data-bm="draft" class="active">Drafts (review first)</button>
+              <button type="button" data-bm="queue">Add to queue</button>
+            </div>
+          </div>
+          <button class="mtw-bufpush" id="mtwBufPush" disabled>Generate posts first</button>
+          <div class="mtw-status" id="mtwBufStatus"></div>
+          <div class="mtw-endpoint" id="mtwBufEndpoint"></div>
+        </div>
       </div>
       <div class="mtw-right" id="mtwRight">
         <div class="mtw-empty">Edit your brief on the left, then hit <b>Generate the Week</b>.<br>Posts appear here day by day.</div>
@@ -1172,7 +1202,7 @@ Return ONLY a JSON array, no markdown fences, no preamble, exactly this shape:
 
   function bufferSheet(){
     const bar = '='.repeat(60);
-    let out = 'MECHANICAL TEMP — BUFFER PASTE SHEET\nCopy the text below each \u25BA label. Label lines are not part of the post.\n' + bar + '\n';
+    let out = 'MECHANICAL TEMP — PASTE SHEET\nCopy the text below each \u25BA label. Label lines are not part of the post.\n' + bar + '\n';
     MTW_DAYS.forEach(([day])=>{
       const posts = results[day]; if(!posts) return;
       out += '\n';
@@ -1188,12 +1218,12 @@ Return ONLY a JSON array, no markdown fences, no preamble, exactly this shape:
     const bar = document.createElement('div'); bar.className = 'mtw-tools';
 
     const sheetBtn = document.createElement('button');
-    sheetBtn.textContent = 'Download Buffer sheet';
+    sheetBtn.textContent = 'Download paste sheet';
     sheetBtn.addEventListener('click', ()=>{
       const blob = new Blob([bufferSheet()], {type:'text/plain'});
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = 'MT_buffer_' + new Date().toISOString().slice(0,10) + '.txt';
+      a.download = 'MT_posts_' + new Date().toISOString().slice(0,10) + '.txt';
       a.click();
     });
 
@@ -1251,10 +1281,174 @@ Return ONLY a JSON array, no markdown fences, no preamble, exactly this shape:
 
     status.textContent = 'Done — 20 posts ready.';
     renderTools(right);
+    try { updatePushState(); } catch(e){}
     gen.disabled = false; busy = false;
   }
 
   $('mtwGen').addEventListener('click', generate);
+
+  /* =========================================================
+     SEND TO BUFFER
+     Set this to your Buffer proxy worker URL (mt-buffer-proxy).
+     Leave blank and the buttons will tell you to set it.
+     ========================================================= */
+  const MTW_BUFFER_ENDPOINT = 'https://mt-buffer-proxyworkerjs.summer-unit-44dd.workers.dev/';   // e.g. 'https://mt-buffer-proxy.summer-unit-44dd.workers.dev'
+
+  const BUF_PLATFORMS = ['GBP','Facebook','LinkedIn Company','LinkedIn Personal'];
+  let bufChannels = [];
+  let bufOrgId = '';
+  let bufMode = 'draft';
+  let bufMap = { 'GBP':'', 'Facebook':'', 'LinkedIn Company':'', 'LinkedIn Personal':'' };
+  try {
+    const saved = JSON.parse(localStorage.getItem('mtw_bufmap') || '{}');
+    BUF_PLATFORMS.forEach(p=>{ if(saved[p]) bufMap[p] = saved[p]; });
+  } catch(e){}
+
+  $('mtwBufEndpoint').textContent = MTW_BUFFER_ENDPOINT
+    ? 'Buffer via: ' + MTW_BUFFER_ENDPOINT
+    : 'Set MTW_BUFFER_ENDPOINT to your mt-buffer-proxy worker URL to enable this.';
+
+  function bufSaveMap(){
+    try { localStorage.setItem('mtw_bufmap', JSON.stringify(bufMap)); } catch(e){}
+  }
+  const sleep = ms => new Promise(r=>setTimeout(r, ms));
+
+  async function bufCall(body){
+    if(!MTW_BUFFER_ENDPOINT) throw new Error('Set MTW_BUFFER_ENDPOINT to your Buffer proxy worker URL first.');
+    const res = await fetch(MTW_BUFFER_ENDPOINT, {
+      method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)
+    });
+    if(!res.ok){
+      let x=''; try{ x=' — '+(await res.text()).slice(0,180); }catch(e){}
+      throw new Error('HTTP '+res.status+x);
+    }
+    return res.json();
+  }
+
+  async function bufLoadChannels(){
+    const bs = $('mtwBufStatus');
+    try {
+      bs.textContent = 'Loading channels\u2026';
+      const orgRes = await bufCall({ query: 'query{ account{ organizations{ id } } }' });
+      const orgs = orgRes && orgRes.data && orgRes.data.account && orgRes.data.account.organizations;
+      if(orgRes.errors && orgRes.errors.length) throw new Error(orgRes.errors[0].message);
+      if(!orgs || !orgs.length) throw new Error('No Buffer organizations on this key');
+      bufOrgId = orgs[0].id;
+      const chRes = await bufCall({ query: 'query{ channels(input:{organizationId:'+JSON.stringify(bufOrgId)+'}){ id name service } }' });
+      if(chRes.errors && chRes.errors.length) throw new Error(chRes.errors[0].message);
+      bufChannels = (chRes.data && chRes.data.channels) || [];
+      if(!bufChannels.length){ bs.textContent = 'No channels found on this Buffer account.'; return; }
+      bufGuessMap();
+      bufRenderMap();
+      $('mtwBufMode').style.display = '';
+      bs.textContent = 'Loaded ' + bufChannels.length + ' channels. Map each platform, then push.';
+      updatePushState();
+    } catch(err){
+      bs.textContent = 'Could not load channels: ' + err.message;
+    }
+  }
+
+  function bufGuessMap(){
+    // only fill blanks; never overwrite a saved choice
+    const find = re => { const c = bufChannels.find(c=>re.test((c.service||'')+' '+(c.name||''))); return c?c.id:''; };
+    const linked = bufChannels.filter(c=>/linkedin/i.test(c.service||''));
+    if(!bufMap['GBP'])      bufMap['GBP']      = find(/google|gbp|business/i);
+    if(!bufMap['Facebook']) bufMap['Facebook'] = find(/facebook/i);
+    if(!bufMap['LinkedIn Company']  && linked[0]) bufMap['LinkedIn Company']  = linked[0].id;
+    if(!bufMap['LinkedIn Personal'] && linked[1]) bufMap['LinkedIn Personal'] = linked[1].id;
+  }
+
+  function bufRenderMap(){
+    const host = $('mtwBufMap');
+    host.innerHTML = '';
+    host.style.display = '';
+    BUF_PLATFORMS.forEach(plat=>{
+      const row = document.createElement('div'); row.className = 'brow';
+      const lab = document.createElement('span'); lab.textContent = plat;
+      const sel = document.createElement('select');
+      const none = document.createElement('option'); none.value=''; none.textContent='\u2014 skip \u2014';
+      sel.appendChild(none);
+      bufChannels.forEach(c=>{
+        const o = document.createElement('option');
+        o.value = c.id;
+        o.textContent = (c.name || c.id) + '  \u00B7  ' + (c.service || '');
+        if(bufMap[plat] === c.id) o.selected = true;
+        sel.appendChild(o);
+      });
+      sel.addEventListener('change', ()=>{ bufMap[plat] = sel.value; bufSaveMap(); updatePushState(); });
+      row.appendChild(lab); row.appendChild(sel);
+      host.appendChild(row);
+    });
+  }
+
+  function updatePushState(){
+    const btn = $('mtwBufPush');
+    const havePosts = Object.keys(results).length > 0;
+    const mapped = BUF_PLATFORMS.filter(p=>bufMap[p]).length;
+    if(!havePosts){ btn.disabled = true; btn.textContent = 'Generate posts first'; return; }
+    if(!bufChannels.length){ btn.disabled = true; btn.textContent = 'Load channels first'; return; }
+    if(!mapped){ btn.disabled = true; btn.textContent = 'Map at least one platform'; return; }
+    const count = bufPushable().length;
+    btn.disabled = false;
+    btn.textContent = 'Push ' + count + ' post' + (count===1?'':'s') + ' to Buffer';
+  }
+
+  function bufPushable(){
+    const items = [];
+    MTW_DAYS.forEach(([day])=>{
+      const posts = results[day]; if(!posts) return;
+      posts.forEach(p=>{ if(bufMap[p.platform]) items.push({ day, platform:p.platform, body:p.body }); });
+    });
+    return items;
+  }
+
+  async function bufCreate(text, channelId, draft){
+    const q =
+      'mutation Push($text:String!){ createPost(input:{ text:$text, channelId:'+JSON.stringify(channelId)+
+      ', schedulingType:automatic, mode:addToQueue, saveToDraft:'+(draft?'true':'false')+', aiAssisted:true }){'+
+      ' ... on PostActionSuccess { post { id } }'+
+      ' ... on LimitReachedError { message }'+
+      ' ... on InvalidInputError { message }'+
+      ' ... on MutationError { message } } }';
+    const data = await bufCall({ query:q, variables:{ text } });
+    if(data.errors && data.errors.length) return { ok:false, message:data.errors[0].message };
+    const r = data.data && data.data.createPost;
+    if(r && r.post && r.post.id) return { ok:true };
+    return { ok:false, message:(r && r.message) || 'Unexpected response' };
+  }
+
+  let bufBusy = false;
+  async function bufPushAll(){
+    if(bufBusy) return;
+    const items = bufPushable();
+    if(!items.length){ $('mtwBufStatus').textContent = 'Nothing mapped to push.'; return; }
+    const draft = bufMode === 'draft';
+    const word = draft ? 'drafts' : 'queued posts';
+    bufBusy = true;
+    const btn = $('mtwBufPush'); btn.disabled = true;
+    const bs = $('mtwBufStatus');
+    let ok=0, fail=0, lastErr='';
+    for(let i=0;i<items.length;i++){
+      const it = items[i];
+      bs.textContent = 'Pushing ' + (i+1) + '/' + items.length + ' \u2014 ' + it.day + ' ' + it.platform + '\u2026';
+      try {
+        const r = await bufCreate(it.body, bufMap[it.platform], draft);
+        if(r.ok) ok++; else { fail++; lastErr = r.message; }
+      } catch(err){ fail++; lastErr = err.message; }
+      await sleep(280);
+    }
+    bs.textContent = 'Done \u2014 ' + ok + ' ' + word + ' created in Buffer' +
+      (fail ? (', ' + fail + ' failed (' + lastErr + ')') : '. Open Buffer to review/schedule.');
+    bufBusy = false; updatePushState();
+  }
+
+  $('mtwBufLoad').addEventListener('click', bufLoadChannels);
+  $('mtwBufPush').addEventListener('click', bufPushAll);
+  $('mtwBufMode').addEventListener('click', e=>{
+    const b = e.target.closest('button'); if(!b) return;
+    bufMode = b.dataset.bm;
+    document.querySelectorAll('#mtwBufMode button').forEach(x=>x.classList.toggle('active', x===b));
+  });
 })();
 </script>
 </body>
