@@ -1292,7 +1292,7 @@ Return ONLY a JSON array, no markdown fences, no preamble, exactly this shape:
      Set this to your Buffer proxy worker URL (mt-buffer-proxy).
      Leave blank and the buttons will tell you to set it.
      ========================================================= */
-  const MTW_BUFFER_ENDPOINT = 'https://mt-buffer-proxy.summer-unit-44dd.workers.dev/';   // e.g. 'https://mt-buffer-proxy.summer-unit-44dd.workers.dev'
+  const MTW_BUFFER_ENDPOINT = 'https://mt-buffer-proxyworkerjs.summer-unit-44dd.workers.dev/';   // e.g. 'https://mt-buffer-proxy.summer-unit-44dd.workers.dev'
 
   const BUF_PLATFORMS = ['GBP','Facebook','LinkedIn Company','LinkedIn Personal'];
   let bufChannels = [];
@@ -1379,6 +1379,17 @@ Return ONLY a JSON array, no markdown fences, no preamble, exactly this shape:
       row.appendChild(lab); row.appendChild(sel);
       host.appendChild(row);
     });
+    const note = document.createElement('div');
+    note.style.cssText = 'font-size:11px;color:#8893a6;margin-top:8px;line-height:1.4;border-left:3px solid var(--rust);padding-left:8px';
+    note.textContent = "Note: Google Business posts can't be auto-pushed — Google requires a post type. Use the Copy button on each GBP post and pick \u201CWhat\u2019s New\u201D in Buffer. Facebook + LinkedIn push fine.";
+    host.appendChild(note);
+  }
+
+  // Google Business Profile can't be auto-pushed: Google requires a post type
+  // (What's New / Offer / Event) and Buffer's API field for it is deprecated/in flux.
+  function isGbpChannel(channelId){
+    const c = bufChannels.find(c=>c.id===channelId);
+    return !!(c && /google|gbp|business/i.test(c.service||''));
   }
 
   function updatePushState(){
@@ -1389,6 +1400,12 @@ Return ONLY a JSON array, no markdown fences, no preamble, exactly this shape:
     if(!bufChannels.length){ btn.disabled = true; btn.textContent = 'Load channels first'; return; }
     if(!mapped){ btn.disabled = true; btn.textContent = 'Map at least one platform'; return; }
     const count = bufPushable().length;
+    if(!count){
+      // everything mapped is GBP, which we don't auto-push
+      btn.disabled = true;
+      btn.textContent = 'GBP is copy-only — map FB / LinkedIn to push';
+      return;
+    }
     btn.disabled = false;
     btn.textContent = 'Push ' + count + ' post' + (count===1?'':'s') + ' to Buffer';
   }
@@ -1397,7 +1414,10 @@ Return ONLY a JSON array, no markdown fences, no preamble, exactly this shape:
     const items = [];
     MTW_DAYS.forEach(([day])=>{
       const posts = results[day]; if(!posts) return;
-      posts.forEach(p=>{ if(bufMap[p.platform]) items.push({ day, platform:p.platform, body:p.body }); });
+      posts.forEach(p=>{
+        const ch = bufMap[p.platform];
+        if(ch && !isGbpChannel(ch)) items.push({ day, platform:p.platform, body:p.body });
+      });
     });
     return items;
   }
