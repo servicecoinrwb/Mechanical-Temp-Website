@@ -332,6 +332,7 @@
               <button type="button" data-bm="queue">Add to queue</button>
             </div>
           </div>
+          <div id="mtwBufImages" style="margin-top:12px"></div>
           <button class="mtw-bufpush" id="mtwBufPush" disabled>Generate posts first</button>
           <a class="mtw-bufbtn" id="mtwBufOpen" href="https://publish.buffer.com/schedule?channels[]=68d52c4864332ee3985b5f47&channels[]=68d52c9864332ee3985b5fa3&channels[]=68f651ec669affb4c97b241b&channels[]=68efd296669affb4c970bec0&tab=drafts" target="_blank" rel="noopener" style="margin-top:8px;display:block;text-align:center;text-decoration:none;line-height:normal">Open drafts in Buffer ↗</a>
           <button class="mtw-bufbtn" id="mtwBufVerify" style="margin-top:8px">Verify: list recent posts in Buffer</button>
@@ -1311,6 +1312,34 @@ Return ONLY a JSON array, no markdown fences, no preamble, exactly this shape:
     ? 'Buffer via: ' + MTW_BUFFER_ENDPOINT
     : 'Set MTW_BUFFER_ENDPOINT to your mt-buffer-proxy worker URL to enable this.';
 
+  // Optional image per day (same image used for all 4 platforms that day).
+  // Paste the RAW public URL (e.g. raw.githubusercontent.com/.../posts/mon.png).
+  const MTW_IMG = {};
+  function bufBuildImageInputs(){
+    const host = $('mtwBufImages'); if(!host) return;
+    host.innerHTML = '';
+    const head = document.createElement('div');
+    head.style.cssText = 'font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--navy);margin:0 0 6px';
+    head.textContent = 'Image per day (optional) \u2014 paste raw URL';
+    host.appendChild(head);
+    MTW_DAYS.forEach(([day])=>{
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:5px';
+      const lab = document.createElement('span');
+      lab.textContent = day.slice(0,3);
+      lab.style.cssText = 'font-size:10.5px;font-weight:700;color:var(--navy);flex:0 0 30px';
+      const inp = document.createElement('input');
+      inp.type = 'text';
+      inp.placeholder = 'https://\u2026/posts/' + day.toLowerCase() + '.png';
+      inp.style.cssText = 'flex:1;min-width:0;padding:6px 8px;border:1.5px solid var(--line);border-radius:6px;background:var(--cream);font-family:Barlow,sans-serif;font-size:12px';
+      inp.value = MTW_IMG[day] || '';
+      inp.addEventListener('input', ()=>{ MTW_IMG[day] = inp.value.trim(); });
+      row.appendChild(lab); row.appendChild(inp);
+      host.appendChild(row);
+    });
+  }
+  bufBuildImageInputs();
+
   function bufSaveMap(){
     try { localStorage.setItem('mtw_bufmap', JSON.stringify(bufMap)); } catch(e){}
   }
@@ -1418,16 +1447,22 @@ Return ONLY a JSON array, no markdown fences, no preamble, exactly this shape:
     return items;
   }
 
-  async function bufCreate(text, channelId, draft){
+  async function bufCreate(text, channelId, draft, imageUrl){
+    const hasImg = imageUrl && /^https?:\/\//i.test(imageUrl);
+    const varDecl = hasImg ? '$text:String!, $assets:[AssetInput!]!' : '$text:String!';
+    const assetsField = hasImg ? ', assets:$assets' : '';
     const q =
-      'mutation Push($text:String!){ createPost(input:{ text:$text, channelId:'+JSON.stringify(channelId)+
+      'mutation Push('+varDecl+'){ createPost(input:{ text:$text, channelId:'+JSON.stringify(channelId)+
       ', schedulingType:automatic, mode:addToQueue, saveToDraft:'+(draft?'true':'false')+', aiAssisted:true'+
-      bufMetaFor(channelId) +' }){'+
+      bufMetaFor(channelId) + assetsField + ' }){'+
       ' ... on PostActionSuccess { post { id } }'+
       ' ... on LimitReachedError { message }'+
       ' ... on InvalidInputError { message }'+
       ' ... on MutationError { message } } }';
-    const data = await bufCall({ query:q, variables:{ text } });
+    const variables = hasImg
+      ? { text, assets:[{ image:{ url:imageUrl } }] }
+      : { text };
+    const data = await bufCall({ query:q, variables });
     if(data.errors && data.errors.length) return { ok:false, message:data.errors[0].message };
     const r = data.data && data.data.createPost;
     if(r && r.post && r.post.id) return { ok:true };
@@ -1449,7 +1484,7 @@ Return ONLY a JSON array, no markdown fences, no preamble, exactly this shape:
       const it = items[i];
       bs.textContent = 'Pushing ' + (i+1) + '/' + items.length + ' \u2014 ' + it.day + ' ' + it.platform + '\u2026';
       try {
-        const r = await bufCreate(it.body, bufMap[it.platform], draft);
+        const r = await bufCreate(it.body, bufMap[it.platform], draft, MTW_IMG[it.day]);
         if(r.ok) ok++; else { fail++; lastErr = r.message; }
       } catch(err){ fail++; lastErr = err.message; }
       await sleep(280);
