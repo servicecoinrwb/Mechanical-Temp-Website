@@ -1415,6 +1415,13 @@ Return ONLY a JSON array, no markdown fences, no preamble, exactly this shape:
 
   // The post 'type' each network requires on createPost. Buffer rejects a
   // typeless post for Facebook and Google Business; LinkedIn needs none.
+  // GBP whats_new also requires detailsWhatsNew with a CTA button on create.
+  const MTW_GBP_CTA  = 'learn_more';   // none|book|order|shop|learn_more|signup|call
+  const MTW_GBP_LINK = 'https://mechanicaltemp.com';
+  function gbpDetails(){
+    if(MTW_GBP_CTA === 'none') return 'detailsWhatsNew:{ button: none }';
+    return 'detailsWhatsNew:{ button: ' + MTW_GBP_CTA + ', link: ' + JSON.stringify(MTW_GBP_LINK) + ' }';
+  }
   function bufServiceOf(channelId){
     const c = bufChannels.find(c=>c.id===channelId);
     return (c && c.service || '').toLowerCase();
@@ -1422,7 +1429,7 @@ Return ONLY a JSON array, no markdown fences, no preamble, exactly this shape:
   function bufMetaFor(channelId){
     const svc = bufServiceOf(channelId);
     if(/facebook/.test(svc))            return ', metadata:{ facebook:{ type: post } }';
-    if(/google|gbp|business/.test(svc)) return ', metadata:{ google:{ type: whats_new } }';
+    if(/google|gbp|business/.test(svc)) return ', metadata:{ google:{ type: whats_new, ' + gbpDetails() + ' } }';
     return '';   // linkedin & everything else: no type needed
   }
 
