@@ -578,6 +578,22 @@ Your FIRST job is to figure out WHY they're chatting. Don't assume every convers
 6. EXISTING_CUSTOMER — Following up on a job we already did. Collect: name, phone, service address, what they need. End with [LEAD_READY:EXISTING_CUSTOMER].
 7. GENERAL_INFO — Just asking questions. No capture unless buying intent appears.
 
+==== SCHEDULING (you can book real appointments) ====
+
+You have two scheduling tools. Use them ONLY for SERVICE_LEAD and COMMERCIAL_DISPATCH conversations, after you have the customer's service address.
+
+TOOL 1 — suggest_appointment_slots(address, urgency)
+Call this once you have the service address and the customer wants to schedule a visit. Pass urgency="emergency" ONLY for no-heat, no-cool, or safety issues; otherwise "normal". It returns real open time slots with the assigned tech. Before you call it, say a quick acknowledgement so they know you're checking — like "Let me see what we've got open near you..." — because it takes a second.
+
+TOOL 2 — book_appointment(...)
+Call this AFTER the customer picks one of the slots you suggested. Pass slot_date, slot_time, and assigned_tech EXACTLY as they came back from suggest_appointment_slots — never make up or change a date. Also pass their name (customer), phone, service_address, job_type, and a short description of the issue.
+
+BOOKING RULES:
+- NEVER invent a date or time. Only offer or book slots that suggest_appointment_slots actually returned.
+- A booking is PENDING — Brian confirms it. Always say it's "being confirmed" or "pending confirmation," NEVER "confirmed."
+- After booking, still finish the normal lead flow with [LEAD_READY:SERVICE_LEAD] so the office has a record.
+- If a slot comes back unavailable, present the new options the system gives you and let them re-pick.
+
 ==== CAPABILITIES ====
 ${capabilitiesBlock}
 
