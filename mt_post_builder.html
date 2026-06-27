@@ -275,6 +275,8 @@
     <div class="card" id="textCard">
       <h2>Text</h2>
       <div id="fields"></div>
+      <button class="filebtn" id="suggestBtn" style="width:100%;margin-top:10px;background:var(--sky);color:var(--navy-deep)">✨ Suggest from photo</button>
+      <div class="hint" id="suggestHint">Reads your uploaded photo and writes the headline &amp; detail line.</div>
     </div>
 
     <div class="card">
@@ -492,6 +494,7 @@ function buildFields(){
     let inp;
     if(key==='body'){ inp = document.createElement('textarea'); }
     else { inp = document.createElement('input'); inp.type='text'; }
+    inp.dataset.fieldkey = key;
     inp.value = textVals[id];
     inp.addEventListener('input', ()=>{ textVals[id]=inp.value; draw(); });
     host.appendChild(lab); host.appendChild(inp);
@@ -521,7 +524,7 @@ document.querySelectorAll('#photoCard input[type=file]').forEach(inp=>{
       v.src = url;
     } else {
       const img = new Image();
-      img.onload = ()=>{ photos[i].img = img; photos[i].vid = null; photos[i].x=0; photos[i].y=0; draw(); };
+      img.onload = ()=>{ photos[i].img = img; photos[i].vid = null; photos[i].file = f; photos[i].x=0; photos[i].y=0; draw(); };
       img.src = url;
     }
     document.getElementById(i===0?'fnameA':'fnameB').textContent = f.name;
@@ -957,6 +960,65 @@ const CAP_OPENERS = {
   tip:   ['Quick one from the field:', 'Free advice from 20+ years on the tools:', 'Save this one.'],
   promo: ['Heads up, Metro Detroit:', 'Limited slots on this one.', 'Beat the rush.']
 };
+
+  // ---- ✨ Suggest headline + detail from the uploaded photo (via Claude proxy) ----
+const MTW_SUGGEST_ENDPOINT = "https://mt-claudepost-proxy.summer-unit-44dd.workers.dev/";
+function fileToBase64(file){
+  return new Promise((res, rej)=>{
+    const r = new FileReader();
+    r.onload = ()=> res(r.result.split(",")[1]);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+const SUGGEST_PROMPTS = {
+  ba:    'This is a "before/after" HVAC social post. Write a short punchy headline (max 6 words) and a detail line (location + what was done, max 10 words).',
+  spot:  'This is an HVAC "job spotlight" social post. Write a short punchy headline (max 6 words) naming the work shown, and a detail line (location + timeframe, max 10 words).',
+  tip:   'This is an HVAC "tech tip" post. Write a short tip headline (max 8 words) and one or two sentences of practical homeowner advice related to what the photo shows.',
+  promo: 'This is an HVAC promo post. Write a short bold offer headline (max 6 words) and a detail line describing what is included (max 12 words).'
+};
+document.getElementById('suggestBtn').addEventListener('click', async ()=>{
+  const btn = document.getElementById('suggestBtn');
+  const hint = document.getElementById('suggestHint');
+  const p = photos.find(x => x.file);
+  if(!p){ hint.textContent = 'Upload a photo first, then tap Suggest.'; return; }
+  const orig = btn.textContent;
+  btn.textContent = 'Reading photo…'; btn.disabled = true;
+  try {
+    const b64 = await fileToBase64(p.file);
+    const media = p.file.type || 'image/jpeg';
+    const fieldKeys = FIELD_DEFS[layout].map(f => f[0]);
+    const ask = `You write social media copy for Mechanical Temp, a licensed HVAC and mechanical contractor in Southfield / Metro Detroit. ${SUGGEST_PROMPTS[layout]}
+Look at the attached photo and respond with ONLY a JSON object, no markdown, no preamble, using exactly these keys: ${JSON.stringify(fieldKeys)}. Keep copy confident and specific to what's visibly in the photo. Do not invent a city; if unsure of location, omit it.`;
+    const resp = await fetch(MTW_SUGGEST_ENDPOINT, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6', max_tokens: 400,
+        messages: [{ role: 'user', content: [
+          { type: 'image', source: { type: 'base64', media_type: media, data: b64 } },
+          { type: 'text', text: ask }
+        ]}]
+      })
+    });
+    const data = await resp.json();
+    if(!resp.ok) throw new Error((data && data.error && (data.error.message||data.error)) || ('HTTP '+resp.status));
+    const txt = (data.content || []).filter(c => c.type==='text').map(c => c.text).join('').trim();
+    const parsed = JSON.parse(txt.replace(/```json|```/g,'').trim());
+    FIELD_DEFS[layout].forEach(([key])=>{
+      if(parsed[key] != null){
+        textVals[layout+'.'+key] = String(parsed[key]);
+        const input = document.querySelector(`#fields [data-fieldkey="${key}"]`);
+        if(input) input.value = String(parsed[key]);
+      }
+    });
+    draw();
+    hint.textContent = 'Done — tweak the wording if you want, then download.';
+  } catch (e) {
+    hint.textContent = 'Suggestion failed: ' + e.message + '. You can still type it in.';
+  } finally {
+    btn.textContent = orig; btn.disabled = false;
+  }
+});
 document.getElementById('capGen').addEventListener('click', ()=>{
   const v = k => textVals[layout+'.'+k] || '';
   const opener = CAP_OPENERS[layout][Math.floor(Math.random()*CAP_OPENERS[layout].length)];
