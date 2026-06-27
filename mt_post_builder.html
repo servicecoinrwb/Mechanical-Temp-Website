@@ -757,11 +757,28 @@ function draw(){
     ctx.font=F(600,30); ctx.fillStyle=BRAND.cream; ctx.textAlign='left'; ctx.textBaseline='middle';
     ctx.restore();
     // text
+    // text — headline auto-sizes & wraps, detail sits directly beneath it
     ctx.textAlign='left';
-    ctx.font = F(700,72); ctx.fillStyle = BRAND.cream; ctx.textBaseline='alphabetic';
-    wrapText(textVals['spot.headline'], 56, H-240, W-112, 80, F(700,72), BRAND.cream);
+    const spotHead = textVals['spot.headline'] || '';
+    // shrink the headline a step if it's long, so 2 lines still fit cleanly
+    const headSize = spotHead.length > 22 ? 60 : 72;
+    const headLineH = headSize + 8;
+    // measure how many lines the headline will wrap to
+    ctx.font = F(700, headSize);
+    const words = spotHead.split(/\s+/);
+    let lineCount = 1, testLine = '';
+    for(const wd of words){
+      const t = testLine ? testLine+' '+wd : wd;
+      if(ctx.measureText(t).width > W-112 && testLine){ lineCount++; testLine = wd; }
+      else testLine = t;
+    }
+    const detailH = 46;            // space the detail line needs
+    const gap = 26;                // breathing room between headline and detail
+    const blockH = lineCount*headLineH + gap + detailH;
+    const startY = H - 110 - blockH + headLineH;   // anchor the whole block above the footer strip
+    const afterHead = wrapText(spotHead, 56, startY, W-112, headLineH, F(700,headSize), BRAND.cream);
     ctx.font = B(500,36); ctx.fillStyle = BRAND.sky;
-    ctx.fillText(textVals['spot.detail'], 56, H-150);
+    ctx.fillText(textVals['spot.detail'] || '', 56, afterHead + gap - headLineH + detailH - 10);
     // footer strip
     // logo top-right over photo — no box, just a soft shadow for contrast
     {
