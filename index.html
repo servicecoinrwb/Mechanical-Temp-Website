@@ -495,6 +495,7 @@
                         <div><label class="font-semibold">Problem Description / Notes</label><textarea id="message" name="message" rows="3" placeholder="Please describe the HVAC issue..." class="w-full mt-1 p-3 border border-gray-300 rounded-lg"></textarea></div>
                         <div><label class="font-semibold">Security Check: What is <span id="math-question"></span>? *</label><input type="number" id="captcha" name="captcha" required placeholder="Enter the answer" class="w-full mt-1 p-3 border border-gray-300 rounded-lg"></div>
                         <div><label class="flex items-center cursor-pointer"><input type="checkbox" id="terms" name="terms" required class="mr-2 h-4 w-4"> I confirm this is a genuine service request.</label></div>
+                        <div><label class="flex items-start cursor-pointer text-sm text-slate-600"><input type="checkbox" id="sms-consent" name="sms-consent" class="mr-2 mt-1 h-4 w-4 shrink-0"> I agree to receive SMS updates about my service request from Mechanical Temp LLC. Msg &amp; data rates may apply. Msg frequency varies. Reply STOP to opt out, HELP for help. See our <a href="privacy.html" class="text-sky-600 underline" onclick="event.stopPropagation()">Privacy Policy</a> and <a href="terms.html" class="text-sky-600 underline" onclick="event.stopPropagation()">Terms</a>.</label></div>
                     </form>
                     <div class="flex justify-center gap-4 mt-6"><button onclick="prevStep()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-10 rounded-lg">Back</button><button id="submit-btn" onclick="submitAppointment()" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-10 rounded-lg">Book Appointment</button></div>
                 </div>
@@ -604,7 +605,7 @@
         const e = document.getElementById("contact-form");
         if (!e.checkValidity() || !validateCaptcha()) { e.reportValidity(); return; }
         const t = new FormData(e);
-        appointmentData = { date: selectedDate.toLocaleDateString("en",{weekday:"long",year:"numeric",month:"long",day:"numeric"}), time: selectedTime, serviceType: t.get("service-type"), name: t.get("name"), email: t.get("email"), phone: t.get("phone"), address: t.get("address"), message: t.get("message") || "No additional notes" };
+        appointmentData = { date: selectedDate.toLocaleDateString("en",{weekday:"long",year:"numeric",month:"long",day:"numeric"}), time: selectedTime, serviceType: t.get("service-type"), name: t.get("name"), email: t.get("email"), phone: t.get("phone"), address: t.get("address"), message: t.get("message") || "No additional notes", smsConsent: t.get("sms-consent") ? "YES - customer opted in to SMS" : "No SMS consent" };
         const n = document.getElementById("submit-btn"); n.disabled = true; n.textContent = "Sending...";
         sendAppointmentEmail(appointmentData);
     }
