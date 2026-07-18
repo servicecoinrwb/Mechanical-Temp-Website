@@ -117,38 +117,46 @@
   .posterframe{display:flex;justify-content:center}
   /* Poster: authored at 1080px, scaled to fit the stage for preview */
   .poster{
-    width:1080px;background:var(--navy);color:#fff;padding:70px 66px;
-    transform-origin:top center;
+    width:1080px;position:relative;overflow:hidden;background:var(--navy);
+    display:flex;flex-direction:column;transform-origin:top center;
   }
-  .p-mast{background:#000;border-radius:12px;padding:24px 30px;margin-bottom:34px;
-    display:flex;align-items:center;min-height:96px}
-  .p-mast img{height:60px;width:auto;display:block}
-  .p-wordmark{font-family:Oswald;font-weight:700;font-size:44px;letter-spacing:.07em;color:#fff}
+  .p-bg{position:absolute;inset:0;z-index:0;background-size:cover;background-position:center;background-repeat:no-repeat}
+  .p-scrim{position:absolute;inset:0;z-index:1;
+    background:linear-gradient(180deg,
+      rgba(16,26,40,calc(var(--scrim,0.5) + 0.12)) 0%,
+      rgba(16,26,40,var(--scrim,0.5)) 40%,
+      rgba(16,26,40,calc(var(--scrim,0.5) + 0.05)) 100%)}
+  .p-inner{position:relative;z-index:2;padding:64px 66px 34px;flex:1}
   .p-title{font-family:Oswald;font-weight:600;font-size:60px;line-height:1.04;margin:0;
-    letter-spacing:.005em}
+    letter-spacing:.005em;color:var(--txt,#fff);text-shadow:0 2px 14px rgba(0,0,0,.55)}
   .p-loc{font-family:Barlow;font-weight:600;font-size:26px;color:var(--sky);margin:10px 0 0;
-    letter-spacing:.02em}
+    letter-spacing:.02em;text-shadow:0 1px 8px rgba(0,0,0,.5)}
   .p-rule{height:5px;width:120px;background:var(--rust);border-radius:3px;margin:22px 0 40px}
-  .p-jobs{display:flex;flex-direction:column;gap:38px}
+  .p-jobs{display:flex;flex-direction:column;gap:36px}
   .p-job{display:flex;gap:34px;align-items:flex-start}
   .p-job.right{flex-direction:row-reverse}
   .p-job.wide{flex-direction:column;gap:22px}
   .p-photo{border:4px solid var(--sky);border-radius:10px;overflow:hidden;flex:0 0 auto;
-    background:var(--navy2);display:flex;align-items:center;justify-content:center}
+    background:var(--navy2);display:flex;align-items:center;justify-content:center;
+    box-shadow:0 10px 30px rgba(0,0,0,.4)}
   .p-photo img{width:100%;height:100%;object-fit:cover;display:block}
-  .p-photo .ph{color:#61738c;font-family:Barlow;font-size:16px;padding:20px;text-align:center}
+  .p-photo .ph{color:#c9d6e6;font-family:Barlow;font-size:16px;padding:20px;text-align:center}
   .size-s .p-photo{width:220px;height:220px}
   .size-m .p-photo{width:320px;height:260px}
   .size-l .p-photo{width:440px;height:340px}
   .p-job.wide .p-photo{width:100%;height:380px}
-  .p-cap{font-family:Barlow;font-weight:500;font-size:29px;line-height:1.34;flex:1;padding-top:6px}
+  .p-cap{font-family:Barlow;font-weight:500;font-size:29px;line-height:1.34;flex:1;padding-top:6px;
+    color:var(--txt,#fff);text-shadow:0 2px 12px rgba(0,0,0,.6)}
   .p-job.wide .p-cap{padding-top:0}
   .p-signoff{font-family:Barlow;font-weight:500;font-style:italic;font-size:27px;line-height:1.4;
-    margin-top:46px;padding-top:30px;border-top:2px solid rgba(111,183,227,.35)}
-  .p-foot{display:flex;align-items:center;gap:14px;margin-top:38px;flex-wrap:wrap}
-  .p-foot .fdot{width:46px;height:46px;border-radius:10px;background:var(--sky);color:var(--navy);
-    display:flex;align-items:center;justify-content:center;font-family:Oswald;font-weight:700;font-size:22px}
-  .p-foot .ftxt{font-family:Barlow;font-size:20px;color:#cdd8e6}
+    margin-top:44px;padding-top:28px;border-top:2px solid rgba(111,183,227,.4);
+    color:var(--txt,#fff);text-shadow:0 2px 12px rgba(0,0,0,.6)}
+  /* black contact bar over the image at the bottom */
+  .p-foot{position:relative;z-index:2;background:#000;padding:26px 40px;
+    display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+  .p-foot img{height:44px;width:auto;display:block;flex:0 0 auto}
+  .p-foot .fword{font-family:Oswald;font-weight:700;font-size:26px;letter-spacing:.06em;color:#fff;flex:0 0 auto}
+  .p-foot .ftxt{font-family:Barlow;font-size:20px;color:#cdd8e6;line-height:1.3}
   .p-foot .ftxt b{color:#fff;font-weight:600}
 </style>
 </head>
@@ -170,6 +178,24 @@
         <input type="text" id="fTitle" placeholder="This week's review at Mechanical Temp"></label>
       <label class="field"><span>Location / subtitle (optional)</span>
         <input type="text" id="fLoc" placeholder="Southfield, MI"></label>
+    </div>
+
+    <div class="sec">
+      <div class="lbl">Background image</div>
+      <div class="imgrow">
+        <div class="thumb" id="heroThumb">no image</div>
+        <div class="imgctrls">
+          <div class="row2">
+            <label class="filebtn">Upload background<input type="file" accept="image/*" id="heroFile" style="display:none"></label>
+            <button class="clrbtn" id="heroClr">Clear</button>
+          </div>
+          <input type="text" class="url" id="heroUrl" placeholder="or paste image URL (e.g. your van hero)">
+        </div>
+      </div>
+      <label class="field" style="margin-top:4px"><span>Darken photo for readability</span>
+        <input type="range" id="fScrim" min="20" max="80" step="5" value="50" style="width:100%;accent-color:var(--rust)"></label>
+      <label class="field" style="margin-top:2px"><span>Text shade (white &rarr; black)</span>
+        <input type="range" id="fTextShade" min="0" max="100" step="5" value="0" style="width:100%;accent-color:var(--rust)"></label>
     </div>
 
     <div class="sec">
@@ -237,9 +263,22 @@
 
   const state = {
     title:'', loc:'', sign:'', foot:true, ratio:'feed',
+    hero:'', heroIsData:false, scrim:50, textShade:0,
     jobs:[]
   };
   function blankJob(){ return { img:'', isData:false, cap:'', size:'m', side:'left' }; }
+
+  // Fetch a remote image and return a data URL (export-safe), or null if blocked.
+  async function embedUrl(url){
+    try{
+      const r = await fetch(url, { mode:'cors', cache:'force-cache' });
+      if(!r.ok) throw new Error('bad status');
+      const blob = await r.blob();
+      return await new Promise((res,rej)=>{
+        const fr = new FileReader(); fr.onload=()=>res(fr.result); fr.onerror=rej; fr.readAsDataURL(blob);
+      });
+    }catch(e){ return null; }
+  }
 
   // ---------- persistence ----------
   function save(){
@@ -352,21 +391,26 @@
   function renderPoster(forExport){
     const p = $('poster');
     p.className = 'poster ratio-'+state.ratio;
-    // ratio min-height (1080 authored width)
     const f = RATIO[state.ratio] || 0;
     p.style.minHeight = f ? (1080*f)+'px' : '0';
+    p.style.setProperty('--scrim', (state.scrim/100).toFixed(2));
+    const tv = Math.round(255*(1 - (state.textShade||0)/100));
+    p.style.setProperty('--txt', 'rgb('+tv+','+tv+','+tv+')');
 
-    // Logo: embedded data URL is export-safe; otherwise show the remote logo
-    // only in the on-screen preview and fall back to a wordmark for the PNG.
+    // hero background: embedded data URL is export-safe; remote URL shows in
+    // preview but is dropped from the PNG (would taint the canvas)
+    const heroSrc = state.heroIsData ? state.hero : (forExport ? '' : state.hero);
+    // footer logo: embedded data URL exports; else wordmark
     const logo = LOGO_SRC || (forExport ? '' : (LOGO_URL || ''));
+
     let html = '';
-    html += '<div class="p-mast">'+(logo
-        ? '<img src="'+escAttr(logo)+'" alt="Mechanical Temp">'
-        : '<span class="p-wordmark">MECHANICAL&nbsp;TEMP</span>')+'</div>';
+    html += '<div class="p-bg" style="'+(heroSrc?'background-image:url('+escAttr(heroSrc)+')':'')+'"></div>';
+    html += '<div class="p-scrim"></div>';
+
+    html += '<div class="p-inner">';
     html += '<h2 class="p-title">'+escHtml(state.title || "This week's review at Mechanical Temp")+'</h2>';
     if(state.loc.trim()) html += '<div class="p-loc">'+escHtml(state.loc)+'</div>';
     html += '<div class="p-rule"></div>';
-
     html += '<div class="p-jobs">';
     state.jobs.forEach(job=>{
       const wide = job.size==='wide';
@@ -378,12 +422,13 @@
       html += '<div class="'+cls+'">'+photo+cap+'</div>';
     });
     html += '</div>';
-
     if(state.sign.trim())
       html += '<div class="p-signoff">'+escHtml(state.sign)+'</div>';
+    html += '</div>'; // /p-inner
 
     if(state.foot)
       html += '<div class="p-foot">'+
+        (logo ? '<img src="'+escAttr(logo)+'" alt="Mechanical Temp">' : '<span class="fword">MECHANICAL&nbsp;TEMP</span>')+
         '<div class="ftxt"><b>Mechanical Temp LLC</b> &nbsp;&middot;&nbsp; Licensed &amp; Insured '+
         '&nbsp;&middot;&nbsp; (313) 282-4758 &nbsp;&middot;&nbsp; mechanicaltemp.com</div></div>';
 
@@ -410,6 +455,32 @@
   $('fSign').addEventListener('input', e=>{ state.sign=e.target.value; save(); renderPoster(); });
   $('fFoot').addEventListener('change', e=>{ state.foot=e.target.checked; save(); renderPoster(); });
   $('addJob').addEventListener('click', ()=>{ state.jobs.push(blankJob()); save(); renderJobs(); renderPoster(); });
+
+  // hero background controls
+  function setHeroThumb(){
+    const t = $('heroThumb');
+    t.innerHTML = state.hero ? '<img src="'+escAttr(state.hero)+'" alt="">' : 'no image';
+  }
+  $('heroFile').addEventListener('change', e=>{
+    const f = e.target.files && e.target.files[0]; if(!f) return;
+    const rd = new FileReader();
+    rd.onload = ()=>{ state.hero=rd.result; state.heroIsData=true; save(); setHeroThumb(); renderPoster(); };
+    rd.readAsDataURL(f);
+  });
+  $('heroUrl').addEventListener('input', async e=>{
+    const url = e.target.value.trim();
+    if(!url){ state.hero=''; state.heroIsData=false; save(); setHeroThumb(); renderPoster(); return; }
+    state.hero = url; state.heroIsData = false; setHeroThumb(); renderPoster();
+    // try to embed so the PNG can include it
+    const data = await embedUrl(url);
+    if(data && $('heroUrl').value.trim()===url){ state.hero=data; state.heroIsData=true; save(); setHeroThumb(); renderPoster(); }
+    else save();
+  });
+  $('heroClr').addEventListener('click', ()=>{
+    state.hero=''; state.heroIsData=false; $('heroUrl').value=''; save(); setHeroThumb(); renderPoster();
+  });
+  $('fScrim').addEventListener('input', e=>{ state.scrim=+e.target.value; save(); renderPoster(); });
+  $('fTextShade').addEventListener('input', e=>{ state.textShade=+e.target.value; save(); renderPoster(); });
 
   document.querySelectorAll('.ratiobtn').forEach(b=>{
     b.addEventListener('click', ()=>{
@@ -499,6 +570,10 @@
     $('fLoc').value = state.loc || '';
     $('fSign').value = state.sign || '';
     $('fFoot').checked = !!state.foot;
+    $('fScrim').value = state.scrim || 50;
+    $('fTextShade').value = state.textShade || 0;
+    $('heroUrl').value = state.heroIsData ? '' : (state.hero || '');
+    setHeroThumb();
     document.querySelectorAll('.ratiobtn').forEach(x=>x.classList.toggle('on', x.getAttribute('data-ratio')===state.ratio));
     renderJobs();
     renderPoster();
