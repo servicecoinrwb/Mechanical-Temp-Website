@@ -440,12 +440,15 @@
   function fitPoster(){
     const p = $('poster');
     const frame = p.parentElement;
-    const avail = frame.clientWidth;
-    const scale = Math.min(1, avail/1080);
+    const naturalH = p.offsetHeight || 1;        // true height at 1080 (ignores transform)
+    const availW = frame.clientWidth;
+    const topY = frame.getBoundingClientRect().top;
+    const availH = Math.max(360, window.innerHeight - topY - 28);
+    // fit within the space, but cap so it never balloons on a wide monitor
+    let scale = Math.min(availW/1080, availH/naturalH, 0.62);
+    scale = Math.max(scale, 0.22);
     p.style.transform = 'scale('+scale+')';
-    // reserve correct vertical space for the scaled element
-    const h = p.getBoundingClientRect().height; // already scaled height
-    frame.style.height = h + 'px';
+    frame.style.height = (naturalH*scale) + 'px';
   }
   window.addEventListener('resize', fitPoster);
 
