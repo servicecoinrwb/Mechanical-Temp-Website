@@ -120,6 +120,10 @@
     width:1080px;background:var(--navy);color:#fff;padding:70px 66px;
     transform-origin:top center;
   }
+  .p-mast{background:#000;border-radius:12px;padding:24px 30px;margin-bottom:34px;
+    display:flex;align-items:center;min-height:96px}
+  .p-mast img{height:60px;width:auto;display:block}
+  .p-wordmark{font-family:Oswald;font-weight:700;font-size:44px;letter-spacing:.07em;color:#fff}
   .p-title{font-family:Oswald;font-weight:600;font-size:60px;line-height:1.04;margin:0;
     letter-spacing:.005em}
   .p-loc{font-family:Barlow;font-weight:600;font-size:26px;color:var(--sky);margin:10px 0 0;
@@ -213,6 +217,23 @@
   const LSKEY = 'mt_weekly_review_v1';
 
   const RATIO = { feed:1.25, square:1.0, story:1.7778, auto:0 };
+
+  const LOGO_URL = 'https://cdn.mechanicaltemp.com/logos/white/text/white_textlogo_black_background.png';
+  let LOGO_SRC = '';   // becomes an embedded data URL if the CDN allows it
+
+  async function loadLogo(){
+    try{
+      const r = await fetch(LOGO_URL, { mode:'cors', cache:'force-cache' });
+      if(!r.ok) throw new Error('bad status');
+      const blob = await r.blob();
+      LOGO_SRC = await new Promise((res,rej)=>{
+        const fr = new FileReader(); fr.onload=()=>res(fr.result); fr.onerror=rej; fr.readAsDataURL(blob);
+      });
+    }catch(e){
+      LOGO_SRC = '';   // CORS-blocked: preview uses the remote logo, PNG uses the wordmark
+    }
+    renderPoster();
+  }
 
   const state = {
     title:'', loc:'', sign:'', foot:true, ratio:'feed',
@@ -328,14 +349,20 @@
   function swap(a,b){ const t=state.jobs[a]; state.jobs[a]=state.jobs[b]; state.jobs[b]=t; save(); renderJobs(); renderPoster(); }
 
   // ---------- poster render ----------
-  function renderPoster(){
+  function renderPoster(forExport){
     const p = $('poster');
     p.className = 'poster ratio-'+state.ratio;
     // ratio min-height (1080 authored width)
     const f = RATIO[state.ratio] || 0;
     p.style.minHeight = f ? (1080*f)+'px' : '0';
 
+    // Logo: embedded data URL is export-safe; otherwise show the remote logo
+    // only in the on-screen preview and fall back to a wordmark for the PNG.
+    const logo = LOGO_SRC || (forExport ? '' : (LOGO_URL || ''));
     let html = '';
+    html += '<div class="p-mast">'+(logo
+        ? '<img src="'+escAttr(logo)+'" alt="Mechanical Temp">'
+        : '<span class="p-wordmark">MECHANICAL&nbsp;TEMP</span>')+'</div>';
     html += '<h2 class="p-title">'+escHtml(state.title || "This week's review at Mechanical Temp")+'</h2>';
     if(state.loc.trim()) html += '<div class="p-loc">'+escHtml(state.loc)+'</div>';
     html += '<div class="p-rule"></div>';
@@ -356,12 +383,12 @@
       html += '<div class="p-signoff">'+escHtml(state.sign)+'</div>';
 
     if(state.foot)
-      html += '<div class="p-foot"><div class="fdot">MT</div>'+
+      html += '<div class="p-foot">'+
         '<div class="ftxt"><b>Mechanical Temp LLC</b> &nbsp;&middot;&nbsp; Licensed &amp; Insured '+
         '&nbsp;&middot;&nbsp; (313) 282-4758 &nbsp;&middot;&nbsp; mechanicaltemp.com</div></div>';
 
     p.innerHTML = html;
-    fitPoster();
+    if(!forExport) fitPoster();
   }
 
   // scale the 1080px poster down to fit the stage width (preview only)
@@ -402,10 +429,11 @@
   $('dlPng').addEventListener('click', async ()=>{
     const msg = $('expMsg'); msg.style.color='var(--muted)'; msg.textContent='Rendering\u2026';
     const p = $('poster');
-    const savedTransform = p.style.transform;
     // capture at true 1080 width, off-screen to avoid a visible jump
     p.style.transform='none';
     p.style.position='fixed'; p.style.left='-10000px'; p.style.top='0'; p.style.zIndex='-1';
+    renderPoster(true);   // export-safe: uses embedded logo or wordmark, no fitPoster
+    p.style.transform='none';
     try{
       await imagesReady(p);
       const canvas = await html2canvas(p, {useCORS:true, scale:2, backgroundColor:'#16263f', logging:false});
@@ -420,8 +448,7 @@
       msg.textContent='Export blocked by a photo\u2019s host. Use Upload photo for that job.';
     }finally{
       p.style.position=''; p.style.left=''; p.style.top=''; p.style.zIndex='';
-      p.style.transform = savedTransform;
-      fitPoster();
+      renderPoster(false);   // restore preview
     }
   });
 
@@ -475,6 +502,7 @@
     document.querySelectorAll('.ratiobtn').forEach(x=>x.classList.toggle('on', x.getAttribute('data-ratio')===state.ratio));
     renderJobs();
     renderPoster();
+    loadLogo();
     $('stageHint').innerHTML = 'Uploaded photos export most reliably. Pasted URLs work too if the host allows it '+
       '(raw GitHub links usually do) \u2014 if a download is blocked, upload that one photo instead. '+
       'Your work autosaves on this device.';
