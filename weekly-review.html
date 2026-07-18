@@ -118,7 +118,7 @@
   /* Poster: authored at 1080px, scaled to fit the stage for preview */
   .poster{
     width:1080px;position:relative;background:var(--navy);
-    display:flex;flex-direction:column;transform-origin:top center;
+    transform-origin:top center;
   }
   .p-bg{position:absolute;inset:0;z-index:0;background-size:cover;background-position:center;background-repeat:no-repeat}
   .p-scrim{position:absolute;inset:0;z-index:1;
@@ -126,7 +126,7 @@
       rgba(16,26,40,calc(var(--scrim,0.5) + 0.12)) 0%,
       rgba(16,26,40,var(--scrim,0.5)) 40%,
       rgba(16,26,40,calc(var(--scrim,0.5) + 0.05)) 100%)}
-  .p-inner{position:relative;z-index:2;padding:64px 66px 34px;flex:1 0 auto}
+  .p-inner{position:relative;z-index:2;padding:64px 66px 34px}
   .p-title{font-family:Oswald;font-weight:600;font-size:60px;line-height:1.04;margin:0;
     letter-spacing:.005em;color:var(--txt,#fff);text-shadow:0 2px 14px rgba(0,0,0,.55)}
   .p-loc{font-family:Barlow;font-weight:600;font-size:26px;color:var(--sky);margin:10px 0 0;
@@ -392,7 +392,7 @@
     const p = $('poster');
     p.className = 'poster ratio-'+state.ratio;
     const f = RATIO[state.ratio] || 0;
-    p.style.minHeight = f ? (1080*f)+'px' : '0';
+    p.style.minHeight = '0';   // block poster grows with content; footer pinned via inner min-height
     p.style.setProperty('--scrim', (state.scrim/100).toFixed(2));
     const tv = Math.round(255*(1 - (state.textShade||0)/100));
     p.style.setProperty('--txt', 'rgb('+tv+','+tv+','+tv+')');
@@ -433,6 +433,10 @@
         '&nbsp;&middot;&nbsp; (313) 282-4758 &nbsp;&middot;&nbsp; mechanicaltemp.com</div></div>';
 
     p.innerHTML = html;
+    // shape height is the floor: fill the inner content so the footer sits at the
+    // bottom on short weeks, while a tall week just grows the whole card
+    const innerEl = p.querySelector('.p-inner');
+    if(innerEl) innerEl.style.minHeight = f ? Math.max(0, Math.round(1080*f) - 100) + 'px' : '0';
     if(!forExport) fitPoster();
   }
 
