@@ -117,7 +117,7 @@
   .posterframe{display:flex;justify-content:center}
   /* Poster: authored at 1080px, scaled to fit the stage for preview */
   .poster{
-    width:1080px;position:relative;overflow:hidden;background:var(--navy);
+    width:1080px;position:relative;background:var(--navy);
     display:flex;flex-direction:column;transform-origin:top center;
   }
   .p-bg{position:absolute;inset:0;z-index:0;background-size:cover;background-position:center;background-repeat:no-repeat}
@@ -126,7 +126,7 @@
       rgba(16,26,40,calc(var(--scrim,0.5) + 0.12)) 0%,
       rgba(16,26,40,var(--scrim,0.5)) 40%,
       rgba(16,26,40,calc(var(--scrim,0.5) + 0.05)) 100%)}
-  .p-inner{position:relative;z-index:2;padding:64px 66px 34px;flex:1}
+  .p-inner{position:relative;z-index:2;padding:64px 66px 34px;flex:1 0 auto}
   .p-title{font-family:Oswald;font-weight:600;font-size:60px;line-height:1.04;margin:0;
     letter-spacing:.005em;color:var(--txt,#fff);text-shadow:0 2px 14px rgba(0,0,0,.55)}
   .p-loc{font-family:Barlow;font-weight:600;font-size:26px;color:var(--sky);margin:10px 0 0;
