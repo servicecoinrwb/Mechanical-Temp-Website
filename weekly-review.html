@@ -148,6 +148,12 @@
   .p-job.wide .p-photo{width:100%;height:380px}
   .p-cap{font-family:Barlow;font-weight:500;font-size:29px;line-height:1.34;flex:1;padding-top:6px;
     color:var(--txt,#fff);text-shadow:0 2px 12px rgba(0,0,0,.6)}
+  .p-step{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+  .p-stepnum{width:52px;height:52px;border-radius:50%;background:var(--rust);color:#fff;
+    font-family:Oswald;font-weight:700;font-size:28px;display:flex;align-items:center;justify-content:center;
+    flex:0 0 auto;box-shadow:0 4px 14px rgba(0,0,0,.45)}
+  .p-phase{font-family:Oswald;font-weight:600;font-size:22px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--sky);text-shadow:0 1px 8px rgba(0,0,0,.5)}
   .p-job.wide .p-cap{padding-top:0}
   .p-signoff{font-family:Barlow;font-weight:500;font-style:italic;font-size:27px;line-height:1.4;
     margin-top:44px;padding-top:28px;border-top:2px solid rgba(111,183,227,.4);
@@ -200,7 +206,9 @@
     </div>
 
     <div class="sec">
-      <div class="lbl">The week's jobs</div>
+      <div class="lbl" id="jobsLbl">The week's jobs</div>
+      <label class="toggle" style="margin:0 0 10px"><input type="checkbox" id="fStory">
+        Photo story mode (one job, numbered steps)</label>
       <div id="jobs"></div>
       <button class="addbtn" id="addJob">+ Add a job</button>
     </div>
@@ -266,10 +274,10 @@
 
   const state = {
     title:'', loc:'', sign:'', foot:true, ratio:'feed',
-    hero:'', heroIsData:false, scrim:50, textShade:0,
+    hero:'', heroIsData:false, scrim:50, textShade:0, storyMode:false,
     jobs:[]
   };
-  function blankJob(){ return { img:'', isData:false, cap:'', size:'m', side:'left' }; }
+  function blankJob(){ return { img:'', isData:false, cap:'', size:'m', side:'left', phase:'' }; }
 
   // Fetch a remote image and return a data URL (export-safe), or null if blocked.
   async function embedUrl(url){
@@ -314,7 +322,7 @@
       const card = document.createElement('div'); card.className = 'job';
       card.innerHTML =
         '<div class="jhead">'+
-          '<span class="jnum">Job '+(i+1)+'</span>'+
+          '<span class="jnum">'+(state.storyMode?'Step ':'Job ')+(i+1)+'</span>'+
           '<div class="jtools">'+
             '<button class="icbtn" data-act="up" '+(i===0?'disabled':'')+' title="Move up">&#9650;</button>'+
             '<button class="icbtn" data-act="down" '+(i===state.jobs.length-1?'disabled':'')+' title="Move down">&#9660;</button>'+
@@ -334,6 +342,10 @@
             '<input type="text" class="url" data-act="url" placeholder="or paste raw image URL" value="'+escAttr(job.isData?'':job.img)+'">'+
           '</div>'+
         '</div>'+
+        (state.storyMode
+          ? '<label class="field" style="margin-bottom:8px"><span>Phase label (optional)</span>'+
+              '<input type="text" data-act="phase" placeholder="TEARDOWN / MIDPOINT / FINISH" value="'+escAttr(job.phase||'')+'"></label>'
+          : '')+
         '<label class="field" style="margin-bottom:8px"><span>Caption</span>'+
           '<textarea data-act="cap" placeholder="What was the job? Keep it short and human.">'+escHtml(job.cap)+'</textarea></label>'+
         '<div class="segrow">'+
@@ -367,6 +379,8 @@
         el.addEventListener('input', ()=>{ state.jobs[i].img = el.value.trim(); state.jobs[i].isData=false; save(); renderPoster(); updateThumb(card,i); });
       } else if(act==='cap'){
         el.addEventListener('input', ()=>{ state.jobs[i].cap = el.value; save(); renderPoster(); });
+      } else if(act==='phase'){
+        el.addEventListener('input', ()=>{ state.jobs[i].phase = el.value; save(); renderPoster(); });
       } else if(act==='up'){
         el.addEventListener('click', ()=>{ if(i>0){ swap(i,i-1); } });
       } else if(act==='down'){
@@ -415,13 +429,20 @@
     if(state.loc.trim()) html += '<div class="p-loc">'+escHtml(state.loc)+'</div>';
     html += '<div class="p-rule"></div>';
     html += '<div class="p-jobs">';
-    state.jobs.forEach(job=>{
+    state.jobs.forEach((job, idx)=>{
       const wide = job.size==='wide';
       const cls = 'p-job size-'+job.size+' '+(wide?'wide':job.side);
       const photo = '<div class="p-photo">'+(job.img
           ? '<img src="'+escAttr(job.img)+'" crossorigin="anonymous" alt="">'
           : '<div class="ph">Photo goes here</div>')+'</div>';
-      const cap = '<div class="p-cap">'+escHtml(job.cap||'Describe this job\u2026')+'</div>';
+      let capInner = '';
+      if(state.storyMode){
+        capInner += '<div class="p-step"><span class="p-stepnum">'+(idx+1)+'</span>';
+        if((job.phase||'').trim()) capInner += '<span class="p-phase">'+escHtml(job.phase)+'</span>';
+        capInner += '</div>';
+      }
+      capInner += escHtml(job.cap||'Describe this step\u2026');
+      const cap = '<div class="p-cap">'+capInner+'</div>';
       html += '<div class="'+cls+'">'+photo+cap+'</div>';
     });
     html += '</div>';
@@ -467,6 +488,11 @@
   $('fLoc').addEventListener('input', e=>{ state.loc=e.target.value; save(); renderPoster(); });
   $('fSign').addEventListener('input', e=>{ state.sign=e.target.value; save(); renderPoster(); });
   $('fFoot').addEventListener('change', e=>{ state.foot=e.target.checked; save(); renderPoster(); });
+  $('fStory').addEventListener('change', e=>{
+    state.storyMode = e.target.checked;
+    $('jobsLbl').textContent = state.storyMode ? 'The job, step by step' : "The week's jobs";
+    save(); renderJobs(); renderPoster();
+  });
   $('addJob').addEventListener('click', ()=>{ state.jobs.push(blankJob()); save(); renderJobs(); renderPoster(); });
 
   // hero background controls
@@ -542,7 +568,15 @@
     parts.push(state.title || "This week's review at Mechanical Temp");
     if(state.loc.trim()) parts.push(state.loc.trim());
     parts.push('');
-    state.jobs.forEach((j,idx)=>{ if(j.cap.trim()) parts.push('\u2022 '+j.cap.trim()); });
+    state.jobs.forEach((j,idx)=>{
+      if(!j.cap.trim() && !(j.phase||'').trim()) return;
+      if(state.storyMode){
+        const ph = (j.phase||'').trim();
+        parts.push((idx+1)+'. '+(ph?ph+' \u2014 ':'')+j.cap.trim());
+      } else if(j.cap.trim()){
+        parts.push('\u2022 '+j.cap.trim());
+      }
+    });
     if(state.sign.trim()){ parts.push(''); parts.push(state.sign.trim()); }
     if(state.foot){ parts.push(''); parts.push('Mechanical Temp LLC \u00B7 Licensed & Insured \u00B7 (313) 282-4758 \u00B7 mechanicaltemp.com'); }
     const text = parts.join('\n');
@@ -583,6 +617,8 @@
     $('fLoc').value = state.loc || '';
     $('fSign').value = state.sign || '';
     $('fFoot').checked = !!state.foot;
+    $('fStory').checked = !!state.storyMode;
+    $('jobsLbl').textContent = state.storyMode ? 'The job, step by step' : "The week's jobs";
     $('fScrim').value = state.scrim || 50;
     $('fTextShade').value = state.textShade || 0;
     $('heroUrl').value = state.heroIsData ? '' : (state.hero || '');
