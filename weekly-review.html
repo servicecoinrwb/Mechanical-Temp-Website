@@ -90,6 +90,18 @@
     border-radius:10px;padding:11px;font-family:Oswald;font-weight:600;font-size:13px;
     letter-spacing:.04em;text-transform:uppercase;cursor:pointer}
   .addbtn:hover{background:#eef6fc}
+  .aiglobal{width:100%;border:1.5px solid var(--rust);background:#fff;color:var(--rust);border-radius:8px;
+    padding:9px;font-family:Oswald;font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;
+    cursor:pointer;margin-bottom:12px}
+  .aiglobal:hover{background:var(--rust);color:#fff}
+  .aiglobal:disabled{opacity:.6;cursor:default}
+  .aihint{font-size:11px;color:var(--muted);margin:-6px 2px 10px;line-height:1.4}
+  .airow{display:flex;align-items:center;gap:6px;margin:-2px 0 9px}
+  .aibtn{border:1.5px solid var(--line);background:#fff;border-radius:6px;padding:5px 11px;font-size:11.5px;
+    font-family:Barlow;font-weight:600;color:var(--navy);cursor:pointer}
+  .aibtn:hover{border-color:var(--sky)}
+  .aibtn:disabled{opacity:.5;cursor:default}
+  .aistat{font-size:11px;color:var(--muted)}
 
   .toggle{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--navy);cursor:pointer;margin-top:6px}
   .toggle input{width:16px;height:16px;accent-color:var(--rust)}
@@ -209,6 +221,8 @@
       <div class="lbl" id="jobsLbl">The week's jobs</div>
       <label class="toggle" style="margin:0 0 10px"><input type="checkbox" id="fStory">
         Photo story mode (one job, numbered steps)</label>
+      <button class="aiglobal" id="proofAll">&#10024; Proofread all text</button>
+      <div class="aihint" id="proofStat">Fixes spelling &amp; grammar everywhere, keeps your words.</div>
       <div id="jobs"></div>
       <button class="addbtn" id="addJob">+ Add a job</button>
     </div>
@@ -254,6 +268,54 @@
   const LSKEY = 'mt_weekly_review_v1';
 
   const RATIO = { feed:1.25, square:1.0, story:1.7778, auto:0 };
+
+  // AI polish uses your existing Claude proxy worker (same one the post builder uses).
+  const MTW_AI_ENDPOINT = 'https://mt-claudepost-proxy.summer-unit-44dd.workers.dev/';
+  const MTW_AI_MODEL = 'claude-sonnet-4-6';
+
+  async function aiCall(prompt, maxTok){
+    const res = await fetch(MTW_AI_ENDPOINT, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ model:MTW_AI_MODEL, max_tokens:maxTok||400, messages:[{role:'user', content:prompt}] })
+    });
+    if(!res.ok) throw new Error('status '+res.status);
+    const data = await res.json();
+    const txt = (data.content||[]).filter(b=>b && b.type==='text').map(b=>b.text).join('').trim();
+    if(!txt) throw new Error('empty response');
+    return txt;
+  }
+
+  async function polishCaption(i){
+    const cur = (state.jobs[i].cap||'').trim();
+    if(!cur) return;
+    const prompt = 'Rewrite this short HVAC job caption so it reads clear, natural, and professional, but keep it brief and human (one or two sentences). Keep every fact. No hashtags, no emojis, no salesy fluff, no preamble. Return ONLY the rewritten caption text.\n\nCaption: '+cur;
+    const out = await aiCall(prompt, 300);
+    state.jobs[i].cap = out.replace(/^["'\s]+|["'\s]+$/g,'');
+    save(); renderJobs(); renderPoster();
+  }
+
+  async function proofreadAll(){
+    const payload = {
+      title: state.title || '',
+      signoff: state.sign || '',
+      items: state.jobs.map(j=>({ phase:j.phase||'', caption:j.cap||'' }))
+    };
+    const prompt = 'You are a careful proofreader for an HVAC company\u2019s social post. Correct spelling, grammar, capitalization, and punctuation ONLY. Do NOT change wording, meaning, tone, or add anything \u2014 keep the casual human voice. Return ONLY valid minified JSON with the exact same keys and structure, nothing else.\n\n'+JSON.stringify(payload);
+    const raw = await aiCall(prompt, 900);
+    const clean = raw.replace(/```json|```/g,'').trim();
+    const fixed = JSON.parse(clean);
+    if(typeof fixed.title === 'string') state.title = fixed.title;
+    if(typeof fixed.signoff === 'string') state.sign = fixed.signoff;
+    if(Array.isArray(fixed.items)) fixed.items.forEach((it,idx)=>{
+      if(state.jobs[idx] && it){
+        if(typeof it.phase === 'string') state.jobs[idx].phase = it.phase;
+        if(typeof it.caption === 'string') state.jobs[idx].cap = it.caption;
+      }
+    });
+    $('fTitle').value = state.title || '';
+    $('fSign').value = state.sign || '';
+    save(); renderJobs(); renderPoster();
+  }
 
   const LOGO_URL = 'https://cdn.mechanicaltemp.com/logos/white/text/white_textlogo_black_background.png';
   let LOGO_SRC = '';   // becomes an embedded data URL if the CDN allows it
@@ -346,8 +408,9 @@
           ? '<label class="field" style="margin-bottom:8px"><span>Phase label (optional)</span>'+
               '<input type="text" data-act="phase" placeholder="TEARDOWN / MIDPOINT / FINISH" value="'+escAttr(job.phase||'')+'"></label>'
           : '')+
-        '<label class="field" style="margin-bottom:8px"><span>Caption</span>'+
+        '<label class="field" style="margin-bottom:6px"><span>Caption</span>'+
           '<textarea data-act="cap" placeholder="What was the job? Keep it short and human.">'+escHtml(job.cap)+'</textarea></label>'+
+        '<div class="airow"><button class="aibtn" data-act="polish">&#10024; Polish this caption</button><span class="aistat"></span></div>'+
         '<div class="segrow">'+
           '<div class="seg"><div class="lbl2">Photo size</div><div class="opts" data-group="size">'+
             sizeBtn('s','S',job.size)+sizeBtn('m','M',job.size)+sizeBtn('l','L',job.size)+sizeBtn('wide','Wide',job.size)+
@@ -381,6 +444,13 @@
         el.addEventListener('input', ()=>{ state.jobs[i].cap = el.value; save(); renderPoster(); });
       } else if(act==='phase'){
         el.addEventListener('input', ()=>{ state.jobs[i].phase = el.value; save(); renderPoster(); });
+      } else if(act==='polish'){
+        el.addEventListener('click', ()=>{
+          const stat = card.querySelector('.aistat');
+          const orig = el.textContent; el.disabled=true; el.textContent='Polishing\u2026'; if(stat) stat.textContent='';
+          polishCaption(i).then(()=>{ /* card re-renders */ })
+            .catch(err=>{ el.disabled=false; el.textContent=orig; if(stat){ stat.textContent='AI error \u2014 check proxy'; } });
+        });
       } else if(act==='up'){
         el.addEventListener('click', ()=>{ if(i>0){ swap(i,i-1); } });
       } else if(act==='down'){
@@ -492,6 +562,19 @@
     state.storyMode = e.target.checked;
     $('jobsLbl').textContent = state.storyMode ? 'The job, step by step' : "The week's jobs";
     save(); renderJobs(); renderPoster();
+  });
+  $('proofAll').addEventListener('click', ()=>{
+    const btn = $('proofAll'), stat = $('proofStat');
+    const orig = btn.innerHTML; btn.disabled=true; btn.textContent='Proofreading\u2026';
+    stat.textContent='Reading every line\u2026'; stat.style.color='var(--muted)';
+    proofreadAll().then(()=>{
+      btn.disabled=false; btn.innerHTML=orig;
+      stat.textContent='Done \u2014 spelling & grammar cleaned.'; stat.style.color='var(--muted)';
+    }).catch(err=>{
+      btn.disabled=false; btn.innerHTML=orig;
+      stat.textContent='Couldn\u2019t reach the AI proxy (or bad response). Your text is unchanged.';
+      stat.style.color='var(--rust)';
+    });
   });
   $('addJob').addEventListener('click', ()=>{ state.jobs.push(blankJob()); save(); renderJobs(); renderPoster(); });
 
