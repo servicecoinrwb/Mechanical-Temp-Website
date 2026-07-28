@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Heat Inspection Form — Mechanical Temp</title>
+<style>
+  :root{
+    --navy:#16263f; --sky:#6fb7e3; --cream:#f5efe3; --rust:#b5512f;
+    --field:#dfe6f7; --ink:#111; --muted:#5b6675; --line:#c9cfd8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--cream);color:var(--ink);
+    font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+
+  header.bar{background:var(--navy);color:#fff;padding:12px 18px;display:flex;align-items:center;
+    gap:10px;flex-wrap:wrap;position:sticky;top:0;z-index:20}
+  header.bar h1{font-size:17px;margin:0;letter-spacing:.02em;font-weight:600}
+  header.bar .spacer{flex:1}
+  button{font:inherit;font-weight:600;border:0;border-radius:6px;padding:8px 14px;
+    cursor:pointer;background:var(--sky);color:var(--navy)}
+  button:hover{filter:brightness(1.06)}
+  button:disabled{opacity:.45;cursor:not-allowed;filter:none}
+  button.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.4)}
+  button:focus-visible{outline:3px solid var(--rust);outline-offset:2px}
+
+  .wrap{max-width:900px;margin:0 auto;padding:18px 16px 60px}
+  .panel{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:18px}
+  .panel h2{margin:0 0 4px;font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--navy)}
+  .how{margin:0 0 12px;font-size:12.5px;color:var(--muted)}
+  .how code{background:#eef1f6;padding:1px 4px;border-radius:3px;font-size:12px}
+  textarea#paste{width:100%;min-height:130px;resize:vertical;padding:10px;border:1px solid var(--line);
+    border-radius:6px;font:13px/1.5 ui-monospace,Menlo,Consolas,monospace}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}
+  #status{font-size:13px;color:var(--muted)}
+  #status.ok{color:#1c6b3a}
+  #status.warn{color:var(--rust)}
+
+  /* ---- unit list / quick CO entry ---- */
+  #unitsPanel{display:none}
+  #unitsPanel.on{display:block}
+  table.units{width:100%;border-collapse:collapse}
+  table.units th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
+    text-align:left;padding:0 8px 6px;font-weight:600}
+  table.units td{padding:5px 8px;border-top:1px solid #eceff3;vertical-align:middle}
+  table.units tr.active td{background:#f2f7fc}
+  .ubtn{background:transparent;color:var(--ink);padding:6px 8px;text-align:left;width:100%;border-radius:6px}
+  .ubtn:hover{background:#eef1f6}
+  .ubtn b{display:block;font-size:14px;color:var(--navy)}
+  .ubtn span{display:block;font-size:11.5px;color:var(--muted);margin-top:1px}
+  tr.active .ubtn b{color:var(--navy)}
+  .ppm{width:88px;padding:7px 8px;border:1px solid var(--line);border-radius:6px;font:inherit;
+    font-size:14px;text-align:right}
+  .ppm:focus{outline:2px solid var(--sky)}
+  .yn{display:flex;gap:4px}
+  .yn button{padding:6px 10px;font-size:12.5px;background:#eef1f6;color:var(--muted)}
+  .yn button[aria-pressed="true"]{background:var(--navy);color:#fff}
+  .unitctl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:14px;padding-top:12px;
+    border-top:1px solid var(--line)}
+  .unitctl button{background:#eef1f6;padding:7px 12px;font-size:13.5px}
+  .unitctl button.danger{color:var(--rust)}
+  .unitctl label{font-size:12.5px;color:var(--muted)}
+  .unitctl input{width:120px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;
+    font:inherit;font-size:13.5px}
+
+  /* ---- certificate ---- */
+  .sheet{background:#fff;border:1px solid var(--line);border-radius:10px;width:100%;max-width:8.5in;
+    margin:0 auto;padding:0.6in 0.65in;font-family:Arial,Helvetica,sans-serif;color:#000}
+  .sheet h2.title{text-align:center;font-size:19px;line-height:1.35;margin:6px 0 34px;font-weight:bold}
+  .fr{display:flex;align-items:flex-end;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+  .fr label{font-size:14px;font-weight:bold;white-space:nowrap}
+  .sheet input[type=text]{flex:1;min-width:80px;border:0;border-bottom:1px solid #6a7280;
+    background:var(--field);font:13px Arial,Helvetica,sans-serif;color:#000;padding:3px 5px}
+  .sheet input[type=text]:focus{outline:2px solid var(--sky)}
+  .grow2{flex:2}
+  .co{display:flex;align-items:flex-end;gap:10px;justify-content:center;margin:30px 0 26px}
+  .co label,.co span{font-size:16px;font-weight:bold}
+  .co input{flex:none;width:180px}
+  .certline{display:flex;align-items:center;gap:14px;margin:26px 0 14px}
+  .certline b{font-size:15px}
+  .cbx{width:18px;height:18px;border:1px solid #6a7280;background:var(--field);display:inline-flex;
+    align-items:center;justify-content:center;cursor:pointer;font:bold 14px Arial;line-height:1}
+  .cbx[aria-checked="true"]::after{content:"X"}
+  .cbx:focus-visible{outline:3px solid var(--rust);outline-offset:2px}
+  .sheet p.body{font-size:13.5px;line-height:1.55;margin:0 0 14px;max-width:6.2in}
+  .sig{display:flex;align-items:flex-end;gap:10px;margin-top:56px;flex-wrap:wrap}
+  .sig label{font-size:14px;font-weight:bold;white-space:nowrap}
+  .sig input.date{width:110px;flex:none}
+
+  #printStack{display:none}
+  body.print-all #printStack{display:block}
+  body.print-all #sheet{display:none}
+  #printStack .sheet{border:0;margin-bottom:24px}
+
+  @media print{
+    @page{size:letter;margin:0.5in}
+    body{background:#fff}
+    header.bar,.panel,.noprint{display:none !important}
+    .wrap{max-width:none;padding:0;margin:0}
+    .sheet{border:0;border-radius:0;padding:0;max-width:none;width:100%;margin:0}
+    .sheet input[type=text]{background:transparent;border-bottom:1px solid #000}
+    .cbx{background:transparent;border:1px solid #000}
+    .sheet h2.title{margin-top:0}
+    #printStack .sheet{break-after:page;page-break-after:always}
+    #printStack .sheet:last-child{break-after:auto;page-break-after:auto}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important}}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <h1>Heat Inspection Form</h1>
+  <div class="spacer"></div>
+  <button id="btnPrint">Print this unit</button>
+  <button id="btnPrintAll" disabled>Print all units</button>
+  <button class="ghost" id="btnClear">Clear job</button>
+</header>
+
+<div class="wrap">
+
+  <section class="panel noprint">
+    <h2>Paste job details</h2>
+    <p class="how">Paste the site name, address, and equipment rows straight out of DSM — header row or not. Columns are read as <code>Label · Type · Make · Model · Serial</code>. Every certificate fills itself; all you add is the CO reading.</p>
+    <textarea id="paste" placeholder="Spirit Halloween #61324&#10;8830 Telegraph Road, Taylor, MI 48180&#10;RTU1&#9;rtu&#9;Carrier&#9;48TCBA07A2A5A0A0A0&#9;2810G20120&#10;RTU2&#9;rtu&#9;Carrier&#9;48TCEA072A25A0A0A0&#9;2810G20041"></textarea>
+    <div class="row">
+      <button id="btnFill">Read paste</button>
+      <button id="btnPasteClear" style="background:#eef1f6">Clear paste box</button>
+      <span id="status">Nothing pasted yet.</span>
+    </div>
+  </section>
+
+  <section class="panel noprint" id="unitsPanel">
+    <h2>Units on this site</h2>
+    <p class="how">Type the CO reading and hit Certified right here — no need to open each certificate. Click a unit's name only if you want to edit its nameplate or notes on the sheet below.</p>
+    <table class="units">
+      <thead><tr><th style="width:46%">Unit</th><th style="width:22%">CO PPM</th><th>Certified</th></tr></thead>
+      <tbody id="unitRows"></tbody>
+    </table>
+    <div class="unitctl">
+      <button id="btnAddUnit" type="button">+ Add unit</button>
+      <button id="btnDupUnit" type="button">Copy this unit</button>
+      <button id="btnDelUnit" type="button" class="danger">Remove this unit</button>
+      <span style="flex:1"></span>
+      <label for="unitLabel">Unit label</label>
+      <input type="text" id="unitLabel" placeholder="RTU5">
+    </div>
+    <p class="how" style="margin:10px 0 0">Added units inherit the site address and show as <code>(RTU5)</code> on their own certificate. <b>Copy this unit</b> keeps make and model but clears serial and CO.</p>
+  </section>
+
+  <section class="panel noprint">
+    <h2>Contractor block</h2>
+    <p class="how">Pre-filled with Mechanical Temp's info and left editable. It stays put when you switch units or clear the job — only touch it if a license or category changes.</p>
+  </section>
+
+  <section class="sheet" id="sheet">
+    <h2 class="title">COMMERCIAL RE-OCCUPANCY<br>INSPECTION PROGRAM<br>HEAT CERTIFICATE</h2>
+
+    <div class="fr">
+      <label for="propaddr">Property Address:</label>
+      <input type="text" id="propaddr" data-job data-unit>
+    </div>
+
+    <div class="fr">
+      <label>Contractor Information:</label>
+      <label for="cname" style="margin-left:24px">Name:</label>
+      <input type="text" id="cname" value="Mechanical Temp LLC">
+    </div>
+
+    <div class="fr">
+      <label for="cphone">Phone#</label>
+      <input type="text" id="cphone" value="(313) 282-4758" style="flex:none;width:180px">
+      <label for="caddr" style="margin-left:14px">Address:</label>
+      <input type="text" id="caddr" value="23093 Telegraph Rd, Southfield, MI 48033" class="grow2">
+    </div>
+
+    <div class="fr">
+      <label for="clic">State License:</label>
+      <input type="text" id="clic" value="7117025" style="flex:none;width:170px">
+      <label for="ccat" style="margin-left:14px">Certification Categories:</label>
+      <input type="text" id="ccat" value="1, 2, 3, 4, 5, 6, 7, 8" style="flex:none;width:190px">
+    </div>
+
+    <div class="fr">
+      <label for="note1">Notes:</label>
+      <input type="text" id="note1" data-job data-unit>
+    </div>
+    <div class="fr" style="padding-left:0.72in">
+      <input type="text" id="note2" data-job data-unit aria-label="Notes, second line">
+    </div>
+
+    <div class="fr" style="margin-top:34px">
+      <label for="brand">Furnace Brand Name:</label>
+      <input type="text" id="brand" data-job data-unit>
+      <label for="year" style="margin-left:14px">Year Built:</label>
+      <input type="text" id="year" data-job data-unit style="flex:none;width:130px">
+    </div>
+
+    <div class="fr">
+      <label for="model">Model #</label>
+      <input type="text" id="model" data-job data-unit>
+      <label for="serial" style="margin-left:24px">Serial #</label>
+      <input type="text" id="serial" data-job data-unit class="grow2">
+    </div>
+
+    <div class="co">
+      <label for="co">C.O. TEST RESULT:</label>
+      <input type="text" id="co" data-job data-unit>
+      <span>PPM</span>
+    </div>
+
+    <div class="certline">
+      <b>CERTIFIED</b>
+      <b>YES</b>
+      <span class="cbx" id="cbYes" role="checkbox" aria-checked="false" tabindex="0" aria-label="Certified yes"></span>
+      <b style="margin-left:14px">NO</b>
+      <span class="cbx" id="cbNo" role="checkbox" aria-checked="false" tabindex="0" aria-label="Certified no"></span>
+    </div>
+
+    <p class="body">By checking yes, I certify that all safety controls have been checked and tested, and the entire system has been thoroughly inspected and is operating in a safe efficient manner.</p>
+    <p class="body">A separate certificate is required for each system.</p>
+
+    <div class="sig">
+      <label for="sig">Signature of Company Representative:</label>
+      <input type="text" id="sig" data-job data-unit>
+      <label for="sigdate" style="margin-left:14px">Date:</label>
+      <input type="text" id="sigdate" class="date" data-job data-unit>
+    </div>
+  </section>
+
+  <div id="printStack" aria-hidden="true"></div>
+
+</div>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var UNIT_FIELDS = ['propaddr','note1','note2','brand','year','model','serial','co','sig','sigdate'];
+
+  function today(){
+    var d = new Date();
+    return (d.getMonth()+1) + '/' + d.getDate() + '/' + d.getFullYear();
+  }
+  $('sigdate').value = today();
+
+  var units = [];
+  var active = -1;
+  var siteAddr = '';
+  var rowEls = [];
+
+  /* ---------- certified state ---------- */
+  function setCert(v){
+    $('cbYes').setAttribute('aria-checked', v === 'yes' ? 'true' : 'false');
+    $('cbNo').setAttribute('aria-checked',  v === 'no'  ? 'true' : 'false');
+  }
+  function getCert(){
+    if($('cbYes').getAttribute('aria-checked') === 'true') return 'yes';
+    if($('cbNo').getAttribute('aria-checked')  === 'true') return 'no';
+    return '';
+  }
+  function bindBox(id, val){
+    var box = $(id);
+    function hit(){
+      setCert(getCert() === val ? '' : val);
+      saveCurrent();
+      syncRow(active);
+    }
+    box.addEventListener('click', hit);
+    box.addEventListener('keydown', function(e){
+      if(e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); hit(); }
+    });
+  }
+  bindBox('cbYes','yes');
+  bindBox('cbNo','no');
+
+  /* ---------- unit state ---------- */
+  function blankData(){
+    var d = {};
+    UNIT_FIELDS.forEach(function(f){ d[f] = ''; });
+    d.sigdate = today();
+    d.cert = '';
+    return d;
+  }
+  function addrFor(label){
+    var base = siteAddr || ($('propaddr').value || '').replace(/\s*\([^)]*\)\s*$/,'');
+    return base + (label ? '  (' + label + ')' : '');
+  }
+  function nextLabel(){
+    for(var i=units.length-1;i>=0;i--){
+      var m = (units[i].label || '').match(/^(.*?)(\d+)\s*$/);
+      if(m) return m[1] + (parseInt(m[2],10) + 1);
+    }
+    return 'System ' + (units.length + 1);
+  }
+  function saveCurrent(){
+    if(active < 0 || !units[active]) return;
+    var d = units[active].data;
+    UNIT_FIELDS.forEach(function(f){ d[f] = $(f).value; });
+    d.cert = getCert();
+  }
+  function loadUnit(i){
+    if(!units[i]) return;
+    saveCurrent();
+    active = i;
+    var d = units[i].data;
+    UNIT_FIELDS.forEach(function(f){ $(f).value = d[f] || ''; });
+    setCert(d.cert || '');
+    $('unitLabel').value = units[i].label || '';
+    renderUnits();
+  }
+
+  /* keep one table row in sync without rebuilding the table */
+  function syncRow(i){
+    var r = rowEls[i];
+    if(!r || !units[i]) return;
+    r.ppm.value = units[i].data.co || '';
+    r.yes.setAttribute('aria-pressed', units[i].data.cert === 'yes' ? 'true':'false');
+    r.no.setAttribute('aria-pressed',  units[i].data.cert === 'no'  ? 'true':'false');
+  }
+
+  function renderUnits(){
+    var body = $('unitRows');
+    body.innerHTML = '';
+    rowEls = [];
+
+    units.forEach(function(u, i){
+      var tr = document.createElement('tr');
+      if(i === active) tr.className = 'active';
+
+      var td1 = document.createElement('td');
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'ubtn';
+      btn.innerHTML = '<b></b><span></span>';
+      btn.querySelector('b').textContent = u.label || ('Unit ' + (i+1));
+      btn.querySelector('span').textContent = [u.make, u.model].filter(Boolean).join(' ') || 'no nameplate data';
+      btn.addEventListener('click', function(){ loadUnit(i); });
+      td1.appendChild(btn);
+
+      var td2 = document.createElement('td');
+      var ppm = document.createElement('input');
+      ppm.type = 'text';
+      ppm.className = 'ppm';
+      ppm.inputMode = 'decimal';
+      ppm.placeholder = '—';
+      ppm.value = u.data.co || '';
+      ppm.setAttribute('aria-label', 'CO PPM for ' + (u.label || ('unit ' + (i+1))));
+      ppm.addEventListener('input', function(){
+        u.data.co = ppm.value;
+        if(i === active) $('co').value = ppm.value;
+      });
+      td2.appendChild(ppm);
+
+      var td3 = document.createElement('td');
+      var yn = document.createElement('div');
+      yn.className = 'yn';
+      var bY = document.createElement('button');
+      var bN = document.createElement('button');
+      bY.type = bN.type = 'button';
+      bY.textContent = 'Yes'; bN.textContent = 'No';
+      bY.setAttribute('aria-pressed', u.data.cert === 'yes' ? 'true':'false');
+      bN.setAttribute('aria-pressed', u.data.cert === 'no'  ? 'true':'false');
+      function pick(v){
+        u.data.cert = (u.data.cert === v) ? '' : v;
+        bY.setAttribute('aria-pressed', u.data.cert === 'yes' ? 'true':'false');
+        bN.setAttribute('aria-pressed', u.data.cert === 'no'  ? 'true':'false');
+        if(i === active) setCert(u.data.cert);
+      }
+      bY.addEventListener('click', function(){ pick('yes'); });
+      bN.addEventListener('click', function(){ pick('no'); });
+      yn.appendChild(bY); yn.appendChild(bN);
+      td3.appendChild(yn);
+
+      tr.appendChild(td1); tr.appendChild(td2); tr.appendChild(td3);
+      body.appendChild(tr);
+      rowEls[i] = { ppm:ppm, yes:bY, no:bN };
+    });
+
+    $('unitsPanel').classList.toggle('on', units.length > 0);
+    $('btnPrintAll').disabled = units.length < 2;
+    $('btnDupUnit').disabled = active < 0;
+    $('btnDelUnit').disabled = units.length < 2;
+    $('unitLabel').disabled = active < 0;
+  }
+
+  /* ---------- parsing ---------- */
+  var LABELED = [
+    { id:'propaddr', re:/^\s*(?:property|job|site|service|building)\s*(?:address|addr)\s*[:\-]\s*(.+)$/i },
+    { id:'brand',    re:/^\s*(?:furnace\s*)?(?:brand(?:\s*name)?|make|manufacturer|mfr|mfg)\s*[:\-]\s*(.+)$/i },
+    { id:'model',    re:/^\s*model\s*(?:#|no\.?|number)?\s*[:\-]?\s*(.+)$/i },
+    { id:'serial',   re:/^\s*(?:serial|s\/n|sn)\s*(?:#|no\.?|number)?\s*[:\-]?\s*(.+)$/i },
+    { id:'year',     re:/^\s*(?:year(?:\s*built)?|yr|mfg\.?\s*(?:date|year)|manufactured)\s*[:\-]?\s*((?:19|20)\d{2})/i },
+    { id:'co',       re:/^\s*(?:c\.?\s*o\.?|carbon\s*monoxide)\s*(?:test)?\s*(?:result)?\s*[:\-]?\s*(\d+(?:\.\d+)?)/i },
+    { id:'note1',    re:/^\s*(?:notes?|comments?|remarks?)\s*[:\-]\s*(.+)$/i },
+    { id:'propaddr', re:/^\s*(?:address|addr|location)\s*[:\-]\s*(.+)$/i, loose:true },
+    { id:'co',       re:/^\s*(\d+(?:\.\d+)?)\s*ppm\b/i, loose:true }
+  ];
+
+  var ADDR_RE = /\d{1,6}\s+[^,]+,\s*[A-Za-z .'\-]+,\s*[A-Z]{2}\s*\d{5}/;
+  var TYPE_WORDS = ['rtu','ahu','furnace','fur','htg','heater','unit heater','split','package','packaged',
+                    'boiler','makeup','mua','muah','other','condenser','heat pump','vav','duct furnace'];
+  var LABEL_RE = /^[#]?[A-Za-z]{0,6}[\s\-_]?\d{1,3}[A-Za-z]?$/;
+
+  function cleanAddr(s){ return s.replace(/,\s*USA\s*$/i,'').replace(/\s+/g,' ').trim(); }
+
+  function splitCells(line){
+    if(line.indexOf('\t') !== -1) return line.split('\t');
+    return line.split(/ {2,}|\s*\|\s*/);
+  }
+  function trimCells(cells){
+    var c = cells.map(function(x){ return (x||'').trim(); });
+    while(c.length && c[c.length-1] === '') c.pop();
+    return c;
+  }
+
+  function rowFromCells(c){
+    var n = c.length;
+    if(n >= 5) return { label:c[0], type:c[1], make:c[2], model:c[3], serial:c[4] };
+    if(n === 4){
+      var typish = c[1] === '' || TYPE_WORDS.indexOf(c[1].toLowerCase()) !== -1;
+      return typish ? { label:c[0], type:c[1], make:c[2], model:c[3], serial:'' }
+                    : { label:c[0], type:'',   make:c[1], model:c[2], serial:c[3] };
+    }
+    if(n === 3) return { label:c[0], type:'', make:c[1], model:c[2], serial:'' };
+    return null;
+  }
+
+  function parse(raw){
+    var lines = raw.split(/\r?\n/);
+    var out = { site:'', address:'', labeled:{}, rows:[] };
+
+    /* address — markdown link first, then a bare address line */
+    for(var i=0;i<lines.length && !out.address;i++){
+      var md = lines[i].match(/\[([^\]]+)\]\((?:[^)]*)\)/);
+      if(md && ADDR_RE.test(md[1])){ out.address = cleanAddr(md[1]); out.addrLine = i; }
+    }
+    if(!out.address){
+      for(var j=0;j<lines.length;j++){
+        if(lines[j].indexOf('\t') !== -1) continue;   /* skip table rows */
+        var m = lines[j].match(ADDR_RE);
+        if(m){ out.address = cleanAddr(m[0]); out.addrLine = j; break; }
+      }
+    }
+    if(typeof out.addrLine === 'number'){
+      for(var k=out.addrLine-1;k>=0;k--){
+        var t = lines[k].trim();
+        if(!t) continue;
+        if(t.length <= 70 && !ADDR_RE.test(t) && !/^\s*(label|type|make|model|serial)\b/i.test(t)) out.site = t;
+        break;
+      }
+    }
+
+    /* equipment rows — use a header if there is one, otherwise sniff the rows */
+    var hdr = -1, cols = null;
+    for(var h=0;h<lines.length;h++){
+      var c = trimCells(splitCells(lines[h])).map(function(x){ return x.toLowerCase(); });
+      if(c.indexOf('make') !== -1 && c.indexOf('model') !== -1 && (c.indexOf('label') !== -1 || c.indexOf('serial') !== -1)){
+        hdr = h; cols = c; break;
+      }
+    }
+
+    if(hdr !== -1){
+      var idx = { label:cols.indexOf('label'), make:cols.indexOf('make'), model:cols.indexOf('model'),
+                  serial:cols.indexOf('serial'), type:cols.indexOf('type') };
+      for(var r=hdr+1;r<lines.length;r++){
+        var line = lines[r];
+        if(!line.trim()) continue;
+        if(/^\s*(?:\+\s*add|📥|🛠|import from)/i.test(line)) continue;
+        var cells = splitCells(line);
+        if(cells.length < 2) continue;
+        var g = function(n){ return idx[n] > -1 && cells[idx[n]] ? cells[idx[n]].trim() : ''; };
+        var row = { label:g('label'), type:g('type'), make:g('make'), model:g('model'), serial:g('serial') };
+        if(row.label || row.make || row.model || row.serial) out.rows.push(row);
+      }
+    } else {
+      for(var q=0;q<lines.length;q++){
+        var ln = lines[q];
+        if(!ln.trim()) continue;
+        if(q === out.addrLine) continue;
+        if(/^\s*(?:\+\s*add|📥|🛠|import from)/i.test(ln)) continue;
+        var cc = trimCells(splitCells(ln));
+        if(cc.length < 3) continue;
+        if(!LABEL_RE.test(cc[0])) continue;
+        var rw = rowFromCells(cc);
+        if(rw) out.rows.push(rw);
+      }
+    }
+
+    /* labeled fallbacks */
+    [false,true].forEach(function(pass){
+      lines.forEach(function(line){
+        if(!line.trim() || line.indexOf('\t') !== -1) return;
+        LABELED.forEach(function(rule){
+          if(!!rule.loose !== pass) return;
+          if(out.labeled[rule.id]) return;
+          var mm = line.match(rule.re);
+          if(mm && mm[1] && mm[1].trim()) out.labeled[rule.id] = mm[1].trim().replace(/[,;]\s*$/,'');
+        });
+      });
+    });
+
+    return out;
+  }
+
+  function fill(){
+    var raw = $('paste').value;
+    if(!raw.trim()){ say('Paste something first, then hit Read paste.','warn'); return; }
+
+    var p = parse(raw);
+    var addr = p.labeled.propaddr || p.address || '';
+    var addrFull = p.site && addr ? (p.site + ' — ' + addr) : (addr || p.site);
+
+    units = []; active = -1; siteAddr = addrFull;
+
+    if(p.rows.length){
+      p.rows.forEach(function(r){
+        var d = blankData();
+        d.propaddr = addrFull + (r.label ? '  (' + r.label + ')' : '');
+        d.brand  = r.make || p.labeled.brand || '';
+        d.model  = r.model || '';
+        d.serial = r.serial || '';
+        d.year   = p.labeled.year || '';
+        d.note1  = p.labeled.note1 || '';
+        d.co     = p.rows.length === 1 ? (p.labeled.co || '') : '';
+        units.push({ label:r.label, make:r.make, model:r.model, serial:r.serial, data:d });
+      });
+    } else {
+      var d0 = blankData();
+      d0.propaddr = addrFull;
+      ['brand','model','serial','year','co','note1'].forEach(function(f){
+        if(p.labeled[f]) d0[f] = p.labeled[f];
+      });
+      if(!addrFull && !p.labeled.model && !p.labeled.serial && !p.labeled.brand){
+        say("Couldn't find an address or any equipment in that. Paste the site name, the address, and the equipment rows — one unit per line, columns separated by tabs.", 'warn');
+        renderUnits();
+        return;
+      }
+      units.push({ label:'System 1', make:d0.brand, model:d0.model, serial:d0.serial, data:d0 });
+    }
+
+    loadUnit(0);
+    var bits = [];
+    if(addr) bits.push('address');
+    if(p.site) bits.push('site name');
+    bits.push(units.length + ' unit' + (units.length>1?'s':''));
+    say('Read ' + bits.join(', ') + '. Everything is filled except CO — enter the readings above.', 'ok');
+    if(rowEls[0]) rowEls[0].ppm.focus();
+  }
+
+  function say(msg, cls){ var s = $('status'); s.textContent = msg; s.className = cls || ''; }
+
+  /* typing on the sheet writes back to the active unit and its table row */
+  UNIT_FIELDS.forEach(function(f){
+    $(f).addEventListener('input', function(){
+      saveCurrent();
+      if(f === 'co') syncRow(active);
+    });
+  });
+
+  /* ---------- buttons ---------- */
+  $('btnFill').addEventListener('click', fill);
+  $('btnPasteClear').addEventListener('click', function(){
+    $('paste').value = ''; say('Paste box cleared.'); $('paste').focus();
+  });
+
+  function pushUnit(u){ units.push(u); loadUnit(units.length - 1); }
+
+  $('btnAddUnit').addEventListener('click', function(){
+    saveCurrent();
+    var label = nextLabel();
+    var d = blankData();
+    d.propaddr = addrFor(label);
+    if(active > -1){ d.sig = units[active].data.sig || ''; }
+    pushUnit({ label:label, make:'', model:'', serial:'', data:d });
+    say('Added ' + label + ' on the same site. Fill in its nameplate and CO reading.', 'ok');
+    $('brand').focus();
+  });
+
+  $('btnDupUnit').addEventListener('click', function(){
+    if(active < 0) return;
+    saveCurrent();
+    var src = units[active], label = nextLabel(), d = {};
+    UNIT_FIELDS.forEach(function(f){ d[f] = src.data[f] || ''; });
+    d.cert = src.data.cert || '';
+    d.propaddr = addrFor(label);
+    d.serial = ''; d.co = '';
+    pushUnit({ label:label, make:src.make, model:src.model, serial:'', data:d });
+    say('Copied to ' + label + ' — same make and model, serial and CO cleared.', 'ok');
+    $('serial').focus();
+  });
+
+  $('btnDelUnit').addEventListener('click', function(){
+    if(units.length < 2 || active < 0) return;
+    var gone = units[active].label || 'that unit';
+    units.splice(active, 1);
+    active = -1;
+    loadUnit(0);
+    say('Removed ' + gone + '.', 'ok');
+  });
+
+  $('unitLabel').addEventListener('input', function(){
+    if(active < 0) return;
+    var label = $('unitLabel').value.trim();
+    units[active].label = label;
+    $('propaddr').value = addrFor(label);
+    saveCurrent();
+    renderUnits();
+  });
+
+  $('btnClear').addEventListener('click', function(){
+    units = []; active = -1; siteAddr = '';
+    $('unitLabel').value = '';
+    document.querySelectorAll('#sheet input[data-job]').forEach(function(el){ el.value = ''; });
+    $('sigdate').value = today();
+    setCert('');
+    $('paste').value = '';
+    renderUnits();
+    say('Job cleared. Contractor block kept.');
+    $('paste').focus();
+  });
+
+  $('btnPrint').addEventListener('click', function(){ saveCurrent(); window.print(); });
+
+  $('btnPrintAll').addEventListener('click', function(){
+    saveCurrent();
+    var stack = $('printStack');
+    stack.innerHTML = '';
+    units.forEach(function(u){
+      var clone = $('sheet').cloneNode(true);
+      clone.removeAttribute('id');
+      UNIT_FIELDS.forEach(function(f){
+        var el = clone.querySelector('#' + f);
+        if(el){ el.value = u.data[f] || ''; el.setAttribute('value', u.data[f] || ''); el.removeAttribute('id'); }
+      });
+      var y = clone.querySelector('#cbYes'), n = clone.querySelector('#cbNo');
+      if(y){ y.setAttribute('aria-checked', u.data.cert === 'yes' ? 'true':'false'); y.removeAttribute('id'); }
+      if(n){ n.setAttribute('aria-checked', u.data.cert === 'no'  ? 'true':'false'); n.removeAttribute('id'); }
+      stack.appendChild(clone);
+    });
+    document.body.classList.add('print-all');
+    window.print();
+    setTimeout(function(){ document.body.classList.remove('print-all'); stack.innerHTML = ''; }, 500);
+  });
+
+  renderUnits();
+})();
+</script>
+</body>
+</html>
