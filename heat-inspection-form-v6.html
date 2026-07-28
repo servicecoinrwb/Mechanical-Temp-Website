@@ -162,7 +162,7 @@
       <button id="btnSigClear" style="background:#eef1f6">Clear signature</button>
       <span id="sigStatus" style="font-size:13px;color:var(--muted)">Not signed yet.</span>
     </div>
-    <p class="how" style="margin:10px 0 0">The signature and date apply to the whole site, so they stay put when you switch units. They're not saved between browser sessions — you re-sign each visit.</p>
+    <p class="how" style="margin:10px 0 0">The signature and date apply to the whole site, so they stay put when you switch units. Your signature is saved on this device and comes back every morning — <b>Clear signature</b> forgets it. Saving only works from a real URL, so in a sandboxed preview you'll re-sign each time.</p>
   </section>
 
   <section class="panel noprint">
@@ -605,6 +605,17 @@
   });
 
   /* ---------- signature pad: sign once, prints on every certificate ---------- */
+  var SIG_KEY = 'mt_heatcert_signature';
+  function sigStore(op, val){
+    /* wrapped because sandboxed previews block storage — the tool still works, it just won't remember */
+    try{
+      if(op === 'get') return window.localStorage.getItem(SIG_KEY);
+      if(op === 'set') window.localStorage.setItem(SIG_KEY, val);
+      if(op === 'del') window.localStorage.removeItem(SIG_KEY);
+    }catch(e){ return null; }
+    return null;
+  }
+
   (function sigPad(){
     var cv = $('sigPad'), ctx = cv.getContext('2d');
     var drawing = false, inked = false, last = null;
@@ -635,10 +646,26 @@
     }
     function apply(){
       var img = $('sigImg');
-      img.src = cv.toDataURL('image/png');
+      var data = cv.toDataURL('image/png');
+      img.src = data;
       img.classList.add('on');
       $('sig').value = '';
-      $('sigStatus').textContent = 'Signed — this prints on every certificate.';
+      sigStore('set', data);
+      $('sigStatus').textContent = 'Signed and saved — this prints on every certificate, and it will still be here tomorrow.';
+      $('sigStatus').style.color = '#1c6b3a';
+    }
+
+    /* restore a saved signature onto the pad and the certificate */
+    var saved = sigStore('get');
+    if(saved){
+      var img0 = $('sigImg');
+      img0.src = saved;
+      img0.classList.add('on');
+      inked = true;
+      var pre = new Image();
+      pre.onload = function(){ ctx.drawImage(pre, 0, 0, cv.width, cv.height); };
+      pre.src = saved;
+      $('sigStatus').textContent = 'Using your saved signature. Draw over it to replace, or clear it.';
       $('sigStatus').style.color = '#1c6b3a';
     }
 
@@ -654,7 +681,8 @@
       var img = $('sigImg');
       img.classList.remove('on');
       img.removeAttribute('src');
-      $('sigStatus').textContent = 'Not signed yet.';
+      sigStore('del');
+      $('sigStatus').textContent = 'Signature cleared and forgotten. Sign again to save a new one.';
       $('sigStatus').style.color = '';
     });
   })();
