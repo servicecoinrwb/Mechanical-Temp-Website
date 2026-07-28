@@ -86,6 +86,12 @@
   .sig{display:flex;align-items:flex-end;gap:10px;margin-top:56px;flex-wrap:wrap}
   .sig label{font-size:14px;font-weight:bold;white-space:nowrap}
   .sig input.date{width:110px;flex:none}
+  .sigwrap{position:relative;flex:1;display:flex;min-width:180px}
+  .sigwrap input{flex:1}
+  .sigimg{position:absolute;left:8px;bottom:3px;max-height:38px;max-width:96%;display:none}
+  .sigimg.on{display:block}
+  .sigpad{border:1px solid var(--line);border-radius:8px;background:#fbfcfe;touch-action:none;
+    width:100%;max-width:420px;height:120px;display:block;cursor:crosshair}
 
   #printStack{display:none}
   body.print-all #printStack{display:block}
@@ -146,6 +152,17 @@
       <input type="text" id="unitLabel" placeholder="RTU5">
     </div>
     <p class="how" style="margin:10px 0 0">Added units inherit the site address and show as <code>(RTU5)</code> on their own certificate. <b>Copy this unit</b> keeps make and model but clears serial and CO.</p>
+  </section>
+
+  <section class="panel noprint">
+    <h2>Signature</h2>
+    <p class="how">Sign once and it prints on every certificate for this site — you don't sign four sheets by hand. Draw with a finger, stylus, or mouse. If you'd rather type your name, leave the pad blank and use the field on the certificate below.</p>
+    <canvas id="sigPad" class="sigpad" width="840" height="240" aria-label="Signature pad"></canvas>
+    <div class="row">
+      <button id="btnSigClear" style="background:#eef1f6">Clear signature</button>
+      <span id="sigStatus" style="font-size:13px;color:var(--muted)">Not signed yet.</span>
+    </div>
+    <p class="how" style="margin:10px 0 0">The signature and date apply to the whole site, so they stay put when you switch units. They're not saved between browser sessions — you re-sign each visit.</p>
   </section>
 
   <section class="panel noprint">
@@ -222,9 +239,12 @@
 
     <div class="sig">
       <label for="sig">Signature of Company Representative:</label>
-      <input type="text" id="sig" data-job data-unit>
+      <span class="sigwrap">
+        <input type="text" id="sig">
+        <img id="sigImg" class="sigimg" alt="">
+      </span>
       <label for="sigdate" style="margin-left:14px">Date:</label>
-      <input type="text" id="sigdate" class="date" data-job data-unit>
+      <input type="text" id="sigdate" class="date">
     </div>
   </section>
 
@@ -235,7 +255,7 @@
 <script>
 (function(){
   var $ = function(id){ return document.getElementById(id); };
-  var UNIT_FIELDS = ['propaddr','note1','note2','brand','year','model','serial','co','sig','sigdate'];
+  var UNIT_FIELDS = ['propaddr','note1','note2','brand','year','model','serial','co'];
 
   function today(){
     var d = new Date();
@@ -277,7 +297,6 @@
   function blankData(){
     var d = {};
     UNIT_FIELDS.forEach(function(f){ d[f] = ''; });
-    d.sigdate = today();
     d.cert = '';
     return d;
   }
@@ -400,6 +419,11 @@
   var TYPE_WORDS = ['rtu','ahu','furnace','fur','htg','heater','unit heater','split','package','packaged',
                     'boiler','makeup','mua','muah','other','condenser','heat pump','vav','duct furnace'];
   var LABEL_RE = /^[#]?[A-Za-z]{0,6}[\s\-_]?\d{1,3}[A-Za-z]?$/;
+  var STAT_RE   = /^(?:\$[\d,.]+|\d+(?:\.\d+)?%|\d+\s*d|\d+)$/;
+  var SYMBOL_RE = /^[^\w\s(]/;
+  var TILE_RE   = /^(?:total|collection|avg|average|open|paid|balance|outstanding|last|next)\b/i;
+  var COUNTS_RE = /\b(?:job|invoice|payment)s?\b.*[\u00B7|]|[\u00B7|].*\b(?:job|invoice|payment)s?\b/i;
+  function cleanCell(v){ return (v||'').replace(/[\u270F\u00D7\u2715\u2716]/g,'').trim(); }
 
   function cleanAddr(s){ return s.replace(/,\s*USA\s*$/i,'').replace(/\s+/g,' ').trim(); }
 
@@ -441,11 +465,24 @@
         if(m){ out.address = cleanAddr(m[0]); out.addrLine = j; break; }
       }
     }
-    if(typeof out.addrLine === 'number'){
+    for(var s=0;s<lines.length;s++){
+      var t = lines[s].trim();
+      if(!t) continue;
+      if(t.indexOf('\t') !== -1) break;          /* reached the equipment table */
+      if(ADDR_RE.test(t)) break;                 /* reached the address */
+      if(STAT_RE.test(t)) continue;              /* $365, 100%, 7d, 0 */
+      if(SYMBOL_RE.test(t)) continue;            /* the emoji section labels */
+      if(TILE_RE.test(t)) continue;              /* Total Billed, Open WOs, ... */
+      if(COUNTS_RE.test(t)) continue;            /* "1 AppSheet job . 1 DSM job . ..." */
+      if(t.length > 70) continue;
+      out.site = t;
+      break;
+    }
+    if(!out.site && typeof out.addrLine === 'number'){
       for(var k=out.addrLine-1;k>=0;k--){
-        var t = lines[k].trim();
-        if(!t) continue;
-        if(t.length <= 70 && !ADDR_RE.test(t) && !/^\s*(label|type|make|model|serial)\b/i.test(t)) out.site = t;
+        var t2 = lines[k].trim();
+        if(!t2) continue;
+        if(t2.length <= 70 && !ADDR_RE.test(t2) && !SYMBOL_RE.test(t2)) out.site = t2;
         break;
       }
     }
@@ -461,15 +498,16 @@
 
     if(hdr !== -1){
       var idx = { label:cols.indexOf('label'), make:cols.indexOf('make'), model:cols.indexOf('model'),
-                  serial:cols.indexOf('serial'), type:cols.indexOf('type') };
+                  serial:cols.indexOf('serial'), type:cols.indexOf('type'), note:cols.indexOf('notes') };
       for(var r=hdr+1;r<lines.length;r++){
         var line = lines[r];
         if(!line.trim()) continue;
         if(/^\s*(?:\+\s*add|📥|🛠|import from)/i.test(line)) continue;
         var cells = splitCells(line);
         if(cells.length < 2) continue;
-        var g = function(n){ return idx[n] > -1 && cells[idx[n]] ? cells[idx[n]].trim() : ''; };
-        var row = { label:g('label'), type:g('type'), make:g('make'), model:g('model'), serial:g('serial') };
+        var g = function(n){ return idx[n] > -1 && cells[idx[n]] ? cleanCell(cells[idx[n]]) : ''; };
+        var row = { label:g('label'), type:g('type'), make:g('make'), model:g('model'),
+                    serial:g('serial'), note:g('note') };
         if(row.label || row.make || row.model || row.serial) out.rows.push(row);
       }
     } else {
@@ -481,7 +519,7 @@
         var cc = trimCells(splitCells(ln));
         if(cc.length < 3) continue;
         if(!LABEL_RE.test(cc[0])) continue;
-        var rw = rowFromCells(cc);
+        var rw = rowFromCells(cc.map(cleanCell));
         if(rw) out.rows.push(rw);
       }
     }
@@ -498,6 +536,9 @@
         });
       });
     });
+
+    var ec = raw.match(/equipment\s*\((\d+)\)/i);
+    if(ec) out.expected = parseInt(ec[1], 10);
 
     return out;
   }
@@ -520,7 +561,7 @@
         d.model  = r.model || '';
         d.serial = r.serial || '';
         d.year   = p.labeled.year || '';
-        d.note1  = p.labeled.note1 || '';
+        d.note1  = r.note || p.labeled.note1 || '';
         d.co     = p.rows.length === 1 ? (p.labeled.co || '') : '';
         units.push({ label:r.label, make:r.make, model:r.model, serial:r.serial, data:d });
       });
@@ -543,7 +584,13 @@
     if(addr) bits.push('address');
     if(p.site) bits.push('site name');
     bits.push(units.length + ' unit' + (units.length>1?'s':''));
-    say('Read ' + bits.join(', ') + '. Everything is filled except CO — enter the readings above.', 'ok');
+    var msg = 'Read ' + bits.join(', ') + '. Everything is filled except CO — enter the readings above.';
+    if(p.expected && p.expected !== units.length){
+      say(msg + ' Heads up: the page says ' + p.expected + ' pieces of equipment but ' + units.length +
+          ' row' + (units.length===1?'':'s') + ' came through — check for a unit that got cut off.', 'warn');
+    } else {
+      say(msg, 'ok');
+    }
     if(rowEls[0]) rowEls[0].ppm.focus();
   }
 
@@ -555,6 +602,70 @@
       saveCurrent();
       if(f === 'co') syncRow(active);
     });
+  });
+
+  /* ---------- signature pad: sign once, prints on every certificate ---------- */
+  (function sigPad(){
+    var cv = $('sigPad'), ctx = cv.getContext('2d');
+    var drawing = false, inked = false, last = null;
+
+    ctx.lineWidth = 4;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = '#16263f';
+
+    function pos(e){
+      var r = cv.getBoundingClientRect();
+      return { x:(e.clientX - r.left) * (cv.width / r.width),
+               y:(e.clientY - r.top)  * (cv.height / r.height) };
+    }
+    function start(e){
+      drawing = true; last = pos(e); cv.setPointerCapture(e.pointerId); e.preventDefault();
+    }
+    function move(e){
+      if(!drawing) return;
+      var p = pos(e);
+      ctx.beginPath(); ctx.moveTo(last.x, last.y); ctx.lineTo(p.x, p.y); ctx.stroke();
+      last = p; inked = true; e.preventDefault();
+    }
+    function end(){
+      if(!drawing) return;
+      drawing = false;
+      if(inked) apply();
+    }
+    function apply(){
+      var img = $('sigImg');
+      img.src = cv.toDataURL('image/png');
+      img.classList.add('on');
+      $('sig').value = '';
+      $('sigStatus').textContent = 'Signed — this prints on every certificate.';
+      $('sigStatus').style.color = '#1c6b3a';
+    }
+
+    cv.addEventListener('pointerdown', start);
+    cv.addEventListener('pointermove', move);
+    cv.addEventListener('pointerup', end);
+    cv.addEventListener('pointerleave', end);
+    cv.addEventListener('pointercancel', end);
+
+    $('btnSigClear').addEventListener('click', function(){
+      ctx.clearRect(0,0,cv.width,cv.height);
+      inked = false;
+      var img = $('sigImg');
+      img.classList.remove('on');
+      img.removeAttribute('src');
+      $('sigStatus').textContent = 'Not signed yet.';
+      $('sigStatus').style.color = '';
+    });
+  })();
+
+  /* typed name and drawn signature are mutually exclusive — last one wins */
+  $('sig').addEventListener('input', function(){
+    if($('sig').value.trim() && $('sigImg').classList.contains('on')){
+      $('sigImg').classList.remove('on');
+      $('sigStatus').textContent = 'Using the typed name. Draw again to go back to the signature.';
+      $('sigStatus').style.color = '';
+    }
   });
 
   /* ---------- buttons ---------- */
@@ -570,7 +681,6 @@
     var label = nextLabel();
     var d = blankData();
     d.propaddr = addrFor(label);
-    if(active > -1){ d.sig = units[active].data.sig || ''; }
     pushUnit({ label:label, make:'', model:'', serial:'', data:d });
     say('Added ' + label + ' on the same site. Fill in its nameplate and CO reading.', 'ok');
     $('brand').focus();
@@ -625,16 +735,34 @@
     saveCurrent();
     var stack = $('printStack');
     stack.innerHTML = '';
+    var src = $('sheet');
+    var srcInputs = src.querySelectorAll('input');
+
     units.forEach(function(u){
-      var clone = $('sheet').cloneNode(true);
+      var clone = src.cloneNode(true);
       clone.removeAttribute('id');
+
+      /* carry every live value across — contractor block, signature, date */
+      var cloneInputs = clone.querySelectorAll('input');
+      for(var k=0;k<cloneInputs.length;k++){
+        var v = srcInputs[k] ? srcInputs[k].value : '';
+        cloneInputs[k].value = v;
+        cloneInputs[k].setAttribute('value', v);
+      }
+
+      /* then override the fields that differ per unit */
       UNIT_FIELDS.forEach(function(f){
         var el = clone.querySelector('#' + f);
         if(el){ el.value = u.data[f] || ''; el.setAttribute('value', u.data[f] || ''); el.removeAttribute('id'); }
       });
+
       var y = clone.querySelector('#cbYes'), n = clone.querySelector('#cbNo');
       if(y){ y.setAttribute('aria-checked', u.data.cert === 'yes' ? 'true':'false'); y.removeAttribute('id'); }
       if(n){ n.setAttribute('aria-checked', u.data.cert === 'no'  ? 'true':'false'); n.removeAttribute('id'); }
+
+      var si = clone.querySelector('#sigImg');
+      if(si) si.removeAttribute('id');
+
       stack.appendChild(clone);
     });
     document.body.classList.add('print-all');
