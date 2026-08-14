@@ -1,23 +1,3 @@
-<!--
-=================================================================
-CITY PAGE TEMPLATE
-=================================================================
-This file is the template for all 13 city pages. To replicate to
-another city, do a find/replace on ALL of these tokens:
-
-  Plymouth          → [NewCity]          (e.g. Livonia)
-  plymouth          → [newcity]          (lowercase, for URLs)
-  plymouth.html     → [newcity].html
-  Kellogg Park       → [Local Landmark]   (intro paragraph reference)
-  Main Street      → [Major Road]       (intro paragraph reference)
-
-ALSO update the PAGE_CITY constant in the Tempi script (search for
-"PAGE_CITY ="). That single constant drives Tempi's city-aware greeting.
-
-You only need to change the human-readable city references and the
-landmark/road in the intro. Everything else stays identical.
-=================================================================
--->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,12 +11,11 @@ landmark/road in the intro. Everything else stays identical.
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- SEO METADATA: Highly focused on Plymouth keywords -->
-    <title>HVAC Repair Plymouth, MI | Furnace & AC Service | Mechanical Temp</title>
-    <meta name="description" content="Mechanical Temp offers expert furnace and AC repair, installation, and maintenance in Plymouth, MI. 24/7 emergency HVAC service for Plymouth residents.">
+
+    <title>HVAC Repair Plymouth, MI | Furnace &amp; AC Service | Mechanical Temp</title>
+    <meta name="description" content="Mechanical Temp offers expert furnace and AC repair, installation, and maintenance in Plymouth, MI. 24-hour emergency HVAC service for Plymouth residents.">
     <link rel="canonical" href="https://mechanicaltemp.com/plymouth.html" />
-    
+
     <!-- Performance hints -->
     <link rel="preconnect" href="https://cdn.mechanicaltemp.com">
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
@@ -47,25 +26,29 @@ landmark/road in the intro. Everything else stays identical.
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    
-    <!-- Local business schema specific to this city -->
+
+    <!-- Same business entity as the homepage (@id matches). Only areaServed changes per city. -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "HVACBusiness",
-      "name": "Mechanical Temp - Plymouth HVAC Services",
-      "image": "https://cdn.mechanicaltemp.com/logos/black/full/black_logo_white_background.png",
-      "@id": "https://mechanicaltemp.com/plymouth.html",
-      "url": "https://mechanicaltemp.com/plymouth.html",
+      "@id": "https://mechanicaltemp.com/#business",
+      "name": "Mechanical Temp LLC",
+      "url": "https://mechanicaltemp.com/",
       "telephone": "+1-313-282-4758",
-      "priceRange": "$$",
+      "image": "https://cdn.mechanicaltemp.com/logos/black/full/black_logo_white_background.png",
+      "sameAs": ["https://www.facebook.com/mechanicaltemp/","https://www.instagram.com/mechanicaltemp/","https://www.youtube.com/@MechanicalTempHVAC/","https://www.linkedin.com/company/mechanical-temp/","https://x.com/MechanicalTemp"],
+      "description": "Licensed HVAC and mechanical contractor serving Metro Detroit. Residential and commercial service, commercial rooftop units, refrigeration, and building automation controls. Same-day service available; 24-hour emergency response.",
       "address": {"@type": "PostalAddress","streetAddress": "23093 Telegraph Rd","addressLocality": "Southfield","addressRegion": "MI","postalCode": "48033","addressCountry": "US"},
       "geo": {"@type": "GeoCoordinates","latitude": 42.4982,"longitude": -83.2882},
-      "areaServed": {"@type": "City", "name": "Plymouth"},
-      "openingHoursSpecification": {"@type": "OpeningHoursSpecification","dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens": "00:00","closes": "23:59"}
+      "hasCredential": {"@type": "EducationalOccupationalCredential","credentialCategory": "Michigan Mechanical Contractor License","identifier": "7117025"},
+      "openingHoursSpecification": [{"@type": "OpeningHoursSpecification","dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens": "08:00","closes": "20:00"}],
+      "paymentAccepted": "Cash, Check, Credit Card",
+      "priceRange": "$$",
+      "areaServed": {"@type": "City", "name": "Plymouth", "addressRegion": "MI"}
     }
     </script>
-    
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -167,16 +150,26 @@ landmark/road in the intro. Everything else stays identical.
             </div>
         </section>
 
+        <!-- FACTS STRIP -->
+        <section class="bg-slate-50 border-b border-slate-200 py-12 px-6">
+            <div class="max-w-3xl mx-auto space-y-4">
+                <p class="border-l-4 border-sky-500 pl-4 text-slate-700 leading-relaxed"><strong class="text-slate-900">Flat diagnostic fee, quoted up front.</strong> A tech comes out, finds the problem, and gives you a price before any work starts.</p>
+                <p class="border-l-4 border-sky-500 pl-4 text-slate-700 leading-relaxed"><strong class="text-slate-900">Same-day service most days.</strong> If we're on an install we'll tell you when we call back — we don't leave you guessing.</p>
+                <p class="border-l-4 border-sky-500 pl-4 text-slate-700 leading-relaxed"><strong class="text-slate-900">Open 8am&ndash;8pm, seven days a week.</strong> 24-hour emergency service when you need it.</p>
+                <p class="border-l-4 border-sky-500 pl-4 text-slate-700 leading-relaxed"><strong class="text-slate-900">Licensed Michigan mechanical contractor #7117025.</strong> Residential and commercial, including national facility management accounts.</p>
+            </div>
+        </section>
+
         <!-- INTRO CONTENT SECTION -->
         <section class="bg-white py-20 px-6">
             <div class="container mx-auto max-w-4xl text-center">
                 <h2 class="text-3xl md:text-4xl font-bold">Your Go-To HVAC Contractor in Plymouth</h2>
                 <p class="text-lg text-slate-600 mt-4 leading-relaxed">
-                    For homeowners and businesses throughout Plymouth, from the neighborhoods around Kellogg Park to the bustling commercial corridors along Main Street, Mechanical Temp is the trusted local name for reliable HVAC services. We understand the unique heating and cooling needs of Plymouth properties and are committed to providing fast, professional service to our neighbors.
+                    For homeowners and businesses throughout Plymouth, from the neighborhoods around Kellogg Park to the commercial corridors along Ann Arbor Trail, Mechanical Temp is the trusted local name for reliable HVAC services. We understand the heating and cooling needs of Plymouth properties and are committed to providing fast, professional service to our neighbors.
                 </p>
             </div>
         </section>
-        
+
         <!-- DETAILED SERVICES SECTION -->
         <section id="plymouth-services" class="bg-slate-50 py-20 px-6">
             <div class="container mx-auto">
@@ -184,19 +177,19 @@ landmark/road in the intro. Everything else stays identical.
                     <h2 class="text-3xl md:text-4xl font-bold">Complete HVAC Solutions for Plymouth</h2>
                     <p class="max-w-2xl mx-auto text-slate-600 mt-2">Whether you need an emergency repair, a seasonal tune-up, or a brand new system, our certified technicians are ready to help.</p>
                 </div>
-                
+
                 <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                     <div class="bg-white p-8 rounded-lg shadow-md">
-                        <h3 class="text-2xl font-bold mb-3 text-sky-700">Plymouth Furnace Repair & Service</h3>
-                        <p class="text-slate-600">Don't get left in the cold. We offer 24/7 emergency furnace repair in Plymouth for all makes and models. We also provide expert installation and preventative maintenance. <a href="furnace-services.html" class="text-sky-600 font-semibold">Learn more...</a></p>
+                        <h3 class="text-2xl font-bold mb-3 text-sky-700">Plymouth Furnace Repair &amp; Service</h3>
+                        <p class="text-slate-600">Don't get left in the cold. We offer 24-hour emergency furnace repair in Plymouth for all makes and models. We also provide expert installation and preventative maintenance. <a href="furnace-services.html" class="text-sky-600 font-semibold">Learn more...</a></p>
                     </div>
                     <div class="bg-white p-8 rounded-lg shadow-md">
-                        <h3 class="text-2xl font-bold mb-3 text-sky-700">Plymouth AC Repair & Service</h3>
+                        <h3 class="text-2xl font-bold mb-3 text-sky-700">Plymouth AC Repair &amp; Service</h3>
                         <p class="text-slate-600">When the summer heat hits, you need a reliable air conditioner. We provide fast AC repair, high-efficiency installations, and seasonal tune-ups for Plymouth residents. <a href="ac-services.html" class="text-sky-600 font-semibold">Learn more...</a></p>
                     </div>
                     <div class="bg-white p-8 rounded-lg shadow-md">
                         <h3 class="text-2xl font-bold mb-3 text-sky-700">Commercial HVAC in Plymouth</h3>
-                        <p class="text-slate-600">We are the trusted partner for Plymouth businesses, offering expert service for rooftop units (RTUs), preventative maintenance contracts, and complete system design. <a href="commercial-hvac.html" class="text-sky-600 font-semibold">Learn more...</a></p>
+                        <p class="text-slate-600">We are the trusted partner for Plymouth businesses, offering expert service for rooftop units (RTUs), refrigeration, building automation controls, and preventative maintenance contracts. <a href="commercial-hvac.html" class="text-sky-600 font-semibold">Learn more...</a></p>
                     </div>
                 </div>
             </div>
@@ -209,15 +202,15 @@ landmark/road in the intro. Everything else stays identical.
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
                     <div>
                         <h3 class="text-xl font-bold text-sky-400 mb-2">Fast Local Service</h3>
-                        <p class="text-slate-300">As a local company, we're just minutes away, ensuring fast response times for all your heating and cooling needs in Plymouth.</p>
+                        <p class="text-slate-300">We're based in Southfield and cover Plymouth daily, which means short response times for heating and cooling calls.</p>
                     </div>
                     <div>
                         <h3 class="text-xl font-bold text-sky-400 mb-2">Upfront Pricing</h3>
                         <p class="text-slate-300">We provide clear, honest pricing before any work begins, so you know exactly what to expect with no surprises.</p>
                     </div>
                     <div>
-                        <h3 class="text-xl font-bold text-sky-400 mb-2">Satisfaction Guaranteed</h3>
-                        <p class="text-slate-300">We stand behind our work. Your comfort and satisfaction are our top priorities on every job we do in Plymouth.</p>
+                        <h3 class="text-xl font-bold text-sky-400 mb-2">Licensed &amp; Insured</h3>
+                        <p class="text-slate-300">Michigan mechanical contractor license #7117025. Residential and commercial, including national facility management accounts.</p>
                     </div>
                 </div>
             </div>
@@ -249,7 +242,7 @@ landmark/road in the intro. Everything else stays identical.
                               <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
                               <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm3 0a1 1 0 011-1h1a1 1 0 110 2H8a1 1 0 01-1-1z" clip-rule="evenodd" />
                             </svg>
-                            Customer Portal · Pay Online
+                            Customer Portal &middot; Pay Online
                         </a>
                     </p>
                 </div>
@@ -258,9 +251,7 @@ landmark/road in the intro. Everything else stays identical.
         </div>
     </footer>
 
-    <!-- =================================================================== -->
-    <!-- TEMPI CHAT BUBBLE                                                    -->
-    <!-- =================================================================== -->
+    <!-- TEMPI CHAT BUBBLE -->
     <div id="chat-bubble" aria-label="Open chat with Tempi">
         <img src="https://cdn.mechanicaltemp.com/tempi/tempi-portrait.png" alt="Tempi">
         <span id="chat-badge" class="hidden">1</span>
@@ -274,35 +265,35 @@ landmark/road in the intro. Everything else stays identical.
             </div>
             <div class="chat-header-info">
                 <div class="name">Tempi</div>
-                <div class="status"><span class="status-dot"></span>Mechanical Temp · online</div>
+                <div class="status"><span class="status-dot"></span>Mechanical Temp &middot; online</div>
             </div>
             <button id="close-chat-btn" aria-label="Minimize chat">&times;</button>
         </div>
-        
+
         <a href="https://customer.mechanicaltemp.com/" target="_blank" rel="noopener noreferrer" class="tempi-portal-bar" onclick="if(typeof gtag!=='undefined')gtag('event','click_customer_portal',{'event_category':'engagement','event_label':'tempi_header'})">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm3 0a1 1 0 011-1h1a1 1 0 110 2H8a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
-            <span>Customer Portal · Pay Online</span>
+            <span>Customer Portal &middot; Pay Online</span>
             <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left: auto;"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
         </a>
-        
+
         <div id="chat-messages" class="chat-messages"></div>
-        
+
         <div class="chat-input-row">
             <textarea id="chat-input" placeholder="Type your message..." rows="1"></textarea>
             <button id="send-chat-btn" type="button">Send</button>
         </div>
-        
+
         <div class="chat-disclaimer">Powered by AI. For emergencies call (313) 282-4758.</div>
     </div>
-    
+
     <!-- SCHEDULER MODAL -->
     <div id="scheduler-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4 hidden">
         <div id="hvac-scheduler-widget" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
             <button onclick="closeScheduler()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 z-20" aria-label="Close scheduler"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
             <div class="bg-gradient-to-r from-sky-600 to-cyan-500 text-white p-6 sm:p-8 text-center shrink-0">
                 <h2 class="text-2xl sm:text-3xl font-bold">Schedule HVAC Service</h2>
-                <p class="text-sm sm:text-base opacity-90 mt-1">Weekdays 8am-4pm • Weekends 10am-2pm</p>
-                <div class="bg-black/20 text-xs sm:text-sm p-2 rounded-lg mt-3 inline-block">🔒 Secure Form • Spam Protected • Your Privacy Matters</div>
+                <p class="text-sm sm:text-base opacity-90 mt-1">Open 8am-8pm daily &bull; Appointments 8am-4pm weekdays, 10am-2pm weekends</p>
+                <div class="bg-black/20 text-xs sm:text-sm p-2 rounded-lg mt-3 inline-block">&#128274; Secure Form &bull; Spam Protected &bull; Your Privacy Matters</div>
             </div>
             <div class="p-6 sm:p-8 overflow-y-auto modal-body">
                 <div class="flex justify-center items-center mb-6">
@@ -337,12 +328,13 @@ landmark/road in the intro. Everything else stays identical.
                         <div><label class="font-semibold">Problem Description / Notes</label><textarea id="message" name="message" rows="3" placeholder="Please describe the HVAC issue..." class="w-full mt-1 p-3 border border-gray-300 rounded-lg"></textarea></div>
                         <div><label class="font-semibold">Security Check: What is <span id="math-question"></span>? *</label><input type="number" id="captcha" name="captcha" required placeholder="Enter the answer" class="w-full mt-1 p-3 border border-gray-300 rounded-lg"></div>
                         <div><label class="flex items-center cursor-pointer"><input type="checkbox" id="terms" name="terms" required class="mr-2 h-4 w-4"> I confirm this is a genuine service request.</label></div>
+                        <div><label class="flex items-start cursor-pointer text-sm text-slate-600"><input type="checkbox" id="sms-consent" name="sms-consent" class="mr-2 mt-1 h-4 w-4 shrink-0"> I agree to receive SMS updates about my service request from Mechanical Temp LLC. Msg &amp; data rates may apply. Msg frequency varies. Reply STOP to opt out, HELP for help. See our <a href="privacy.html" class="text-sky-600 underline" onclick="event.stopPropagation()">Privacy Policy</a> and <a href="terms.html" class="text-sky-600 underline" onclick="event.stopPropagation()">Terms</a>.</label></div>
                     </form>
                     <div class="flex justify-center gap-4 mt-6"><button onclick="prevStep()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-10 rounded-lg">Back</button><button id="submit-btn" onclick="submitAppointment()" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-10 rounded-lg">Book Appointment</button></div>
                 </div>
                 <div id="step-4" class="hidden">
                     <div class="text-center p-6">
-                        <div class="text-6xl text-green-500 mb-4">✓</div>
+                        <div class="text-6xl text-green-500 mb-4">&#10003;</div>
                         <h3 class="text-2xl font-bold">Service Request Submitted!</h3>
                         <p class="text-slate-600 mt-2">Thank you! We've received your request and will contact you shortly to confirm.</p>
                         <div class="bg-slate-100 p-4 rounded-lg text-left mt-6 text-sm"><h4 class="font-bold text-center mb-2">Your Service Request:</h4><p><strong>Service:</strong> <span id="final-service"></span></p><p><strong>Date:</strong> <span id="final-date"></span></p><p><strong>Time:</strong> <span id="final-time"></span></p><p><strong>Address:</strong> <span id="final-address"></span></p><p><strong>Name:</strong> <span id="final-name"></span></p><p><strong>Email:</strong> <span id="final-email"></span></p><p><strong>Phone:</strong> <span id="final-phone"></span></p></div>
@@ -352,22 +344,199 @@ landmark/road in the intro. Everything else stays identical.
             </div>
         </div>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
     // ===== SCHEDULER MODAL =====
-    const schedulerModal=document.getElementById("scheduler-modal");function openScheduler(){schedulerModal.classList.remove("hidden"),document.body.style.overflow="hidden"}function closeScheduler(e=!1){schedulerModal.classList.add("hidden"),document.body.style.overflow="auto",e&&resetForm()}schedulerModal.addEventListener("click",function(e){e.target===schedulerModal&&closeScheduler()}),emailjs.init("IJHcoSxlSQ9OPOJGS");let currentStep=1,selectedDate=null,selectedTime=null,appointmentData={},mathAnswer=0;const weekdayTimeSlots=["8:00 AM","9:00 AM","10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM"],weekendTimeSlots=["10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM"],unavailableDates=[];function generateCalendar(){const e=document.getElementById("calendar");e.innerHTML="";const t=new Date;t.setHours(0,0,0,0);["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(t=>{e.innerHTML+=`<div class="text-center font-semibold text-sm text-gray-500 p-2">${t}</div>`});const n=new Date(t.getFullYear(),t.getMonth(),1),o=n.getDay();for(let l=0;l<o;l++)e.insertAdjacentHTML("beforeend","<div></div>");for(let d=0;d<42;d++){const c=new Date(n);c.setDate(n.getDate()+d);const a=c.toISOString().split("T")[0],s=unavailableDates.includes(a)||c<t,r=document.createElement("div");r.className="text-center p-2 rounded-lg cursor-pointer transition-all duration-200",s?(r.classList.add("bg-gray-100","text-gray-300","cursor-not-allowed"),r.innerHTML=`<div class="font-bold text-lg">${c.getDate()}</div>`):(r.classList.add("border","border-gray-200","hover:bg-sky-100","hover:border-sky-500"),r.onclick=()=>selectDate(c,r),r.innerHTML=`<div class="text-xs text-gray-400">${c.toLocaleDateString("en",{month:"short"})}</div><div class="font-bold text-lg">${c.getDate()}</div>`),e.appendChild(r)}}function selectDate(e,t){document.querySelectorAll("#calendar .bg-sky-500").forEach(e=>{e.classList.remove("bg-sky-500","text-white","border-sky-500"),e.classList.add("border-gray-200")}),t.classList.add("bg-sky-500","text-white","border-sky-500"),t.classList.remove("border-gray-200"),selectedDate=e,document.getElementById("next-btn-1").disabled=!1,document.getElementById("selected-date").textContent=e.toLocaleDateString("en",{weekday:"long",year:"numeric",month:"long",day:"numeric"})}function generateTimeSlots(){const e=document.getElementById("time-slots");e.innerHTML="";const t=selectedDate.getDay(),n=0===t||6===t?weekendTimeSlots:weekdayTimeSlots;n.forEach(t=>{const o=document.createElement("div");o.className="p-3 text-center border-2 border-gray-300 rounded-lg cursor-pointer hover:border-sky-500 hover:bg-sky-100 font-semibold",o.textContent=t,o.onclick=()=>selectTime(t,o),e.appendChild(o)})}function selectTime(e,t){document.querySelectorAll("#time-slots .bg-sky-500").forEach(e=>{e.classList.remove("bg-sky-500","text-white","border-sky-500"),e.classList.add("border-gray-300")}),t.classList.add("bg-sky-500","text-white","border-sky-500"),t.classList.remove("border-gray-300"),selectedTime=e,document.getElementById("next-btn-2").disabled=!1,document.getElementById("confirm-date").textContent=selectedDate.toLocaleDateString("en",{weekday:"long",year:"numeric",month:"long",day:"numeric"}),document.getElementById("confirm-time").textContent=e}function updateProgress(){for(let e=1;e<=4;e++){const t=document.getElementById(`progress-${e}`),n=document.getElementById(`progress-line-${e-1}`);t.classList.remove("bg-sky-600","text-white","bg-green-500"),t.classList.add("bg-gray-200","text-gray-500"),e<currentStep?(t.classList.remove("bg-gray-200","text-gray-500"),t.classList.add("bg-green-500","text-white"),n&&n.classList.add("w-full","bg-green-500")):e===currentStep?(t.classList.remove("bg-gray-200","text-gray-500"),t.classList.add("bg-sky-600","text-white"),n&&n.classList.remove("w-full","bg-green-500")):n&&n.classList.remove("w-full","bg-green-500")}}function showStep(e){document.getElementById("step-1").classList.add("hidden"),document.getElementById("step-2").classList.add("hidden"),document.getElementById("step-3").classList.add("hidden"),document.getElementById("step-4").classList.add("hidden"),document.getElementById(`step-${e}`).classList.remove("hidden")}function nextStep(){(1!==currentStep||selectedDate)&&(2!==currentStep||selectedTime)&&(currentStep++,showStep(currentStep),updateProgress(),2===currentStep&&generateTimeSlots())}function prevStep(){1!==currentStep&&(currentStep--,showStep(currentStep),updateProgress())}function generateMathCaptcha(){const e=Math.floor(10*Math.random())+1,t=Math.floor(10*Math.random())+1;document.getElementById("math-question").textContent=`${e} + ${t}`,mathAnswer=e+t}function validateCaptcha(){const e=parseInt(document.getElementById("captcha").value);return e!==mathAnswer?(generateMathCaptcha(),document.getElementById("captcha").value="",document.getElementById("captcha").classList.add('border-red-500'),!1):(document.getElementById("captcha").classList.remove('border-red-500'),!0)}function submitAppointment(){const e=document.getElementById("contact-form");if(!e.checkValidity()||!validateCaptcha())return void e.reportValidity();const t=new FormData(e);appointmentData={date:selectedDate.toLocaleDateString("en",{weekday:"long",year:"numeric",month:"long",day:"numeric"}),time:selectedTime,serviceType:t.get("service-type"),name:t.get("name"),email:t.get("email"),phone:t.get("phone"),address:t.get("address"),message:t.get("message")||"No additional notes"};const n=document.getElementById("submit-btn");n.disabled=!0,n.textContent="Sending...",sendAppointmentEmail(appointmentData)}function sendAppointmentEmail(e){const t={from_name:e.name,from_email:e.email,phone:e.phone,service_type:e.serviceType,service_address:e.address,appointment_date:e.date,appointment_time:e.time,message:e.message,subject:`🔧 HVAC Service: ${e.serviceType} - ${e.date} ${e.time}`,source_page:`Plymouth city page`};emailjs.send("service_ziwf1pg","template_q5fbhd8",t).then(function(e){showConfirmation()},function(e){const t=document.getElementById("submit-btn");t.disabled=!1,t.textContent="Book Appointment"})}function showConfirmation(){document.getElementById("final-service").textContent=appointmentData.serviceType,document.getElementById("final-date").textContent=appointmentData.date,document.getElementById("final-time").textContent=appointmentData.time,document.getElementById("final-address").textContent=appointmentData.address,document.getElementById("final-name").textContent=appointmentData.name,document.getElementById("final-email").textContent=appointmentData.email,document.getElementById("final-phone").textContent=appointmentData.phone,gtag('event','schedule_appointment',{'event_category':'conversion','event_label':'plymouth_page'}),nextStep()}function resetForm(){currentStep=1,selectedDate=null,selectedTime=null,document.getElementById("contact-form").reset(),showStep(1),updateProgress(),document.getElementById("next-btn-1").disabled=!0,document.getElementById("next-btn-2").disabled=!0;const e=document.getElementById("submit-btn");e.disabled=!1,e.textContent="Book Appointment",generateCalendar(),generateMathCaptcha()}document.addEventListener("DOMContentLoaded",function(){generateCalendar(),generateMathCaptcha()});
+    const schedulerModal = document.getElementById("scheduler-modal");
+    function openScheduler(){ schedulerModal.classList.remove("hidden"); document.body.style.overflow = "hidden"; }
+    function closeScheduler(reset = false){ schedulerModal.classList.add("hidden"); document.body.style.overflow = "auto"; if (reset) resetForm(); }
+    schedulerModal.addEventListener("click", function(e){ if (e.target === schedulerModal) closeScheduler(); });
+    emailjs.init("IJHcoSxlSQ9OPOJGS");
+
+    let currentStep = 1, selectedDate = null, selectedTime = null, appointmentData = {}, mathAnswer = 0;
+    const weekdayTimeSlots = ["8:00 AM","9:00 AM","10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM"];
+    const weekendTimeSlots = ["10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM"];
+    const unavailableDates = [];
+
+    function generateCalendar(){
+        const el = document.getElementById("calendar"); el.innerHTML = "";
+        const today = new Date; today.setHours(0,0,0,0);
+        ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(d => { el.innerHTML += `<div class="text-center font-semibold text-sm text-gray-500 p-2">${d}</div>`; });
+        const first = new Date(today.getFullYear(), today.getMonth(), 1);
+        const offset = first.getDay();
+        for (let i = 0; i < offset; i++) el.insertAdjacentHTML("beforeend", "<div></div>");
+        for (let i = 0; i < 42; i++) {
+            const day = new Date(first); day.setDate(first.getDate() + i);
+            const iso = day.toISOString().split("T")[0];
+            const blocked = unavailableDates.includes(iso) || day < today;
+            const cell = document.createElement("div");
+            cell.className = "text-center p-2 rounded-lg cursor-pointer transition-all duration-200";
+            if (blocked) {
+                cell.classList.add("bg-gray-100","text-gray-300","cursor-not-allowed");
+                cell.innerHTML = `<div class="font-bold text-lg">${day.getDate()}</div>`;
+            } else {
+                cell.classList.add("border","border-gray-200","hover:bg-sky-100","hover:border-sky-500");
+                cell.onclick = () => selectDate(day, cell);
+                cell.innerHTML = `<div class="text-xs text-gray-400">${day.toLocaleDateString("en",{month:"short"})}</div><div class="font-bold text-lg">${day.getDate()}</div>`;
+            }
+            el.appendChild(cell);
+        }
+    }
+
+    function selectDate(date, cell){
+        document.querySelectorAll("#calendar .bg-sky-500").forEach(c => { c.classList.remove("bg-sky-500","text-white","border-sky-500"); c.classList.add("border-gray-200"); });
+        cell.classList.add("bg-sky-500","text-white","border-sky-500"); cell.classList.remove("border-gray-200");
+        selectedDate = date;
+        document.getElementById("next-btn-1").disabled = false;
+        document.getElementById("selected-date").textContent = date.toLocaleDateString("en",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
+    }
+
+    function generateTimeSlots(){
+        const el = document.getElementById("time-slots"); el.innerHTML = "";
+        const dow = selectedDate.getDay();
+        const slots = (dow === 0 || dow === 6) ? weekendTimeSlots : weekdayTimeSlots;
+        slots.forEach(t => {
+            const cell = document.createElement("div");
+            cell.className = "p-3 text-center border-2 border-gray-300 rounded-lg cursor-pointer hover:border-sky-500 hover:bg-sky-100 font-semibold";
+            cell.textContent = t;
+            cell.onclick = () => selectTime(t, cell);
+            el.appendChild(cell);
+        });
+    }
+
+    function selectTime(time, cell){
+        document.querySelectorAll("#time-slots .bg-sky-500").forEach(c => { c.classList.remove("bg-sky-500","text-white","border-sky-500"); c.classList.add("border-gray-300"); });
+        cell.classList.add("bg-sky-500","text-white","border-sky-500"); cell.classList.remove("border-gray-300");
+        selectedTime = time;
+        document.getElementById("next-btn-2").disabled = false;
+        document.getElementById("confirm-date").textContent = selectedDate.toLocaleDateString("en",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
+        document.getElementById("confirm-time").textContent = time;
+    }
+
+    function updateProgress(){
+        for (let i = 1; i <= 4; i++) {
+            const dot = document.getElementById(`progress-${i}`);
+            const line = document.getElementById(`progress-line-${i-1}`);
+            dot.classList.remove("bg-sky-600","text-white","bg-green-500");
+            dot.classList.add("bg-gray-200","text-gray-500");
+            if (i < currentStep) {
+                dot.classList.remove("bg-gray-200","text-gray-500");
+                dot.classList.add("bg-green-500","text-white");
+                if (line) line.classList.add("w-full","bg-green-500");
+            } else if (i === currentStep) {
+                dot.classList.remove("bg-gray-200","text-gray-500");
+                dot.classList.add("bg-sky-600","text-white");
+                if (line) line.classList.remove("w-full","bg-green-500");
+            } else if (line) {
+                line.classList.remove("w-full","bg-green-500");
+            }
+        }
+    }
+
+    function showStep(n){
+        for (let i = 1; i <= 4; i++) document.getElementById(`step-${i}`).classList.add("hidden");
+        document.getElementById(`step-${n}`).classList.remove("hidden");
+    }
+    function nextStep(){
+        if (currentStep === 1 && !selectedDate) return;
+        if (currentStep === 2 && !selectedTime) return;
+        currentStep++; showStep(currentStep); updateProgress();
+        if (currentStep === 2) generateTimeSlots();
+    }
+    function prevStep(){ if (currentStep === 1) return; currentStep--; showStep(currentStep); updateProgress(); }
+
+    function generateMathCaptcha(){
+        const a = Math.floor(10 * Math.random()) + 1, b = Math.floor(10 * Math.random()) + 1;
+        document.getElementById("math-question").textContent = `${a} + ${b}`;
+        mathAnswer = a + b;
+    }
+    function validateCaptcha(){
+        const val = parseInt(document.getElementById("captcha").value);
+        if (val !== mathAnswer) {
+            generateMathCaptcha();
+            document.getElementById("captcha").value = "";
+            document.getElementById("captcha").classList.add("border-red-500");
+            return false;
+        }
+        document.getElementById("captcha").classList.remove("border-red-500");
+        return true;
+    }
+
+    function submitAppointment(){
+        const form = document.getElementById("contact-form");
+        if (!form.checkValidity() || !validateCaptcha()) { form.reportValidity(); return; }
+        const fd = new FormData(form);
+        appointmentData = {
+            date: selectedDate.toLocaleDateString("en",{weekday:"long",year:"numeric",month:"long",day:"numeric"}),
+            time: selectedTime,
+            serviceType: fd.get("service-type"),
+            name: fd.get("name"),
+            email: fd.get("email"),
+            phone: fd.get("phone"),
+            address: fd.get("address"),
+            message: fd.get("message") || "No additional notes",
+            smsConsent: fd.get("sms-consent") ? "YES - customer opted in to SMS" : "No SMS consent"
+        };
+        const btn = document.getElementById("submit-btn");
+        btn.disabled = true; btn.textContent = "Sending...";
+        sendAppointmentEmail(appointmentData);
+    }
+
+    function sendAppointmentEmail(d){
+        const payload = {
+            from_name: d.name,
+            from_email: d.email,
+            phone: d.phone,
+            service_type: d.serviceType,
+            service_address: d.address,
+            appointment_date: d.date,
+            appointment_time: d.time,
+            message: d.message,
+            smsConsent: d.smsConsent,
+            subject: `HVAC Service: ${d.serviceType} - ${d.date} ${d.time}`,
+            source_page: `Plymouth city page`
+        };
+        emailjs.send("service_ziwf1pg","template_q5fbhd8",payload).then(
+            function(){ showConfirmation(); },
+            function(){ const b = document.getElementById("submit-btn"); b.disabled = false; b.textContent = "Book Appointment"; }
+        );
+    }
+
+    function showConfirmation(){
+        document.getElementById("final-service").textContent = appointmentData.serviceType;
+        document.getElementById("final-date").textContent = appointmentData.date;
+        document.getElementById("final-time").textContent = appointmentData.time;
+        document.getElementById("final-address").textContent = appointmentData.address;
+        document.getElementById("final-name").textContent = appointmentData.name;
+        document.getElementById("final-email").textContent = appointmentData.email;
+        document.getElementById("final-phone").textContent = appointmentData.phone;
+        gtag('event','schedule_appointment',{'event_category':'conversion','event_label':'plymouth_page'});
+        nextStep();
+    }
+
+    function resetForm(){
+        currentStep = 1; selectedDate = null; selectedTime = null;
+        document.getElementById("contact-form").reset();
+        showStep(1); updateProgress();
+        document.getElementById("next-btn-1").disabled = true;
+        document.getElementById("next-btn-2").disabled = true;
+        const btn = document.getElementById("submit-btn");
+        btn.disabled = false; btn.textContent = "Book Appointment";
+        generateCalendar(); generateMathCaptcha();
+    }
+
+    document.addEventListener("DOMContentLoaded", function(){ generateCalendar(); generateMathCaptcha(); });
 
     // ============== TEMPI CHAT WIDGET ==============
     (function() {
-        // ====== ONLY VARIABLE THAT CHANGES PER CITY ======
         const PAGE_CITY = 'Plymouth';
-        // ==================================================
-        
+        const PAGE_SLUG = 'plymouth';
+
         const CLAUDE_PROXY_URL = 'https://tempi.summer-unit-44dd.workers.dev/';
         const EMAILJS_SERVICE = 'service_ziwf1pg';
         const EMAILJS_TEMPLATE = 'template_j68qyhk';
-        
+
         const CAPABILITIES = {
             advertised: [
                 "Furnace repair, install, and maintenance",
@@ -393,7 +562,7 @@ landmark/road in the intro. Everything else stays identical.
                 "New gas line runs from the meter"
             ]
         };
-        
+
         const capabilitiesBlock = `
 ADVERTISED CORE SERVICES:
 ${CAPABILITIES.advertised.map(s => "- " + s).join("\n")}
@@ -404,14 +573,14 @@ ${CAPABILITIES.quiet.map(s => "- " + s).join("\n")}
 HARD NO SERVICES (politely decline):
 ${CAPABILITIES.decline.map(s => "- " + s).join("\n")}
 `;
-        
+
         const conversationHistory = [];
         let leadCaptured = false;
         let hasGreeted = false;
         let widgetEverOpened = false;
-        
+
         const PAGE_CONTEXT = `==== PAGE CONTEXT ====
-The customer is on the ${PAGE_CITY} city landing page (mechanicaltemp.com/${PAGE_CITY.toLowerCase().replace(/ /g,'-')}.html).
+The customer is on the ${PAGE_CITY} city landing page (mechanicaltemp.com/${PAGE_SLUG}.html).
 
 This is a LOCAL SEO landing page targeting "${PAGE_CITY} HVAC repair" searches. The customer landed here because they're looking for an HVAC company in or near ${PAGE_CITY}.
 
@@ -422,14 +591,15 @@ KEY BEHAVIORS:
 - If they ask "do you cover [their specific address/neighborhood in ${PAGE_CITY}]" — confidently YES, we cover ${PAGE_CITY} and the whole surrounding area
 - If they're in a NEARBY city not on our list — we still likely serve them, just verify with a phone call
 - Route most chats as SERVICE_LEAD with a slight urgency lean (they searched, they have a need)`;
-        
-        const SYSTEM_PROMPT = `You are Tempi, the friendly virtual customer service rep for Mechanical Temp, a commercial and residential HVAC company in Plymouth, MI serving Metro Detroit. You're warm, helpful, and a little playful — like a knowledgeable friend at the front desk who's also great at gently moving the conversation forward.
+
+        const SYSTEM_PROMPT = `You are Tempi, the friendly virtual customer service rep for Mechanical Temp, a commercial and residential HVAC company in Southfield, MI serving Metro Detroit. You're warm, helpful, and a little playful — like a knowledgeable friend at the front desk who's also great at gently moving the conversation forward.
 
 ABOUT MECHANICAL TEMP:
 - Address: 23093 Telegraph Rd, Southfield, MI 48033
 - Phone: (313) 282-4758
-- Hours: Weekdays 8am-4pm, Weekends 10am-2pm, 24/7 emergency service available
-- Service area: Plymouth, Dearborn, Livonia, Novi, Canton, Plymouth, Northville, West Bloomfield, Royal Oak, Ferndale, Westland, Farmington Hills, Redford and surrounding Metro Detroit
+- License: Michigan mechanical contractor #7117025
+- Hours: Open 8am-8pm every day. Service appointments are scheduled weekdays 8am-4pm and weekends 10am-2pm. 24-hour emergency service available.
+- Service area: Berkley, Beverly Hills, Bingham Farms, Birmingham, Canton, Dearborn, Dearborn Heights, Detroit, Farmington, Farmington Hills, Ferndale, Franklin, Garden City, Hazel Park, Huntington Woods, Inkster, Livonia, Madison Heights, Northville, Novi, Oak Park, Pleasant Ridge, Plymouth, Redford, Royal Oak, Southfield, West Bloomfield, Westland. If someone asks about a nearby city not on this list, don't say no — say we may be able to cover it and take their info.
 - Authorized AirQuest dealer (main brand for new installs), but our techs service ALL brands
 - Owner: Brian
 - Office email: office@mechanicaltemp.com
@@ -470,7 +640,7 @@ EVERY response MUST end with quick-reply buttons:
 
 Open with confidence that we serve their city:
 
-"Hi! 👋 I'm Tempi from Mechanical Temp. We serve ${PAGE_CITY} and the surrounding area — how can I help you today?"
+"Hi! I'm Tempi from Mechanical Temp. We serve ${PAGE_CITY} and the surrounding area — how can I help you today?"
 
 [BTN: Schedule service | Get a quote | Emergency repair | Just a question]
 
@@ -478,7 +648,7 @@ Open with confidence that we serve their city:
 ${capabilitiesBlock}
 
 REMEMBER: City pages get high-intent visitors. They searched for HVAC in ${PAGE_CITY}, they want service. Be confident, collect their info, route the lead. Every response has [BTN: ...] at the end.`;
-        
+
         const chatBubble = document.getElementById('chat-bubble');
         const chatWidget = document.getElementById('chat-widget');
         const closeBtn = document.getElementById('close-chat-btn');
@@ -486,9 +656,9 @@ REMEMBER: City pages get high-intent visitors. They searched for HVAC in ${PAGE_
         const inputEl = document.getElementById('chat-input');
         const sendBtn = document.getElementById('send-chat-btn');
         const chatBadge = document.getElementById('chat-badge');
-        
+
         const TEMPI_AVATAR_IMG = `<img src="https://cdn.mechanicaltemp.com/tempi/tempi-portrait.png" alt="Tempi" style="width:24px;height:24px;border-radius:50%;flex-shrink:0;object-fit:cover;border:1.5px solid #1e293b;">`;
-        
+
         function parseButtons(text) {
             const match = text.match(/\[BTN:\s*([^\]]+)\]/);
             if (!match) return { cleanText: text, buttons: [] };
@@ -500,19 +670,19 @@ REMEMBER: City pages get high-intent visitors. They searched for HVAC in ${PAGE_
                 .trim();
             return { cleanText, buttons };
         }
-        
+
         function escapeHtml(s) {
             const div = document.createElement('div');
             div.textContent = s;
             return div.innerHTML;
         }
-        
+
         function addBotMessage(text, buttons) {
             const row = document.createElement('div');
             row.className = 'msg-row';
             row.innerHTML = TEMPI_AVATAR_IMG + `<div class="msg-bubble bot">${escapeHtml(text)}</div>`;
             messagesEl.appendChild(row);
-            
+
             if (buttons && buttons.length > 0) {
                 const btnRow = document.createElement('div');
                 btnRow.className = 'inline-buttons';
@@ -530,7 +700,7 @@ REMEMBER: City pages get high-intent visitors. They searched for HVAC in ${PAGE_
             }
             scrollToBottom();
         }
-        
+
         function addUserMessage(text) {
             const row = document.createElement('div');
             row.className = 'msg-row user';
@@ -538,7 +708,7 @@ REMEMBER: City pages get high-intent visitors. They searched for HVAC in ${PAGE_
             messagesEl.appendChild(row);
             scrollToBottom();
         }
-        
+
         function showTyping() {
             const row = document.createElement('div');
             row.className = 'msg-row';
@@ -547,12 +717,12 @@ REMEMBER: City pages get high-intent visitors. They searched for HVAC in ${PAGE_
             messagesEl.appendChild(row);
             scrollToBottom();
         }
-        
+
         function hideTyping() { const t = document.getElementById('typing-row'); if (t) t.remove(); }
         function scrollToBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
         function showBadge(n) { chatBadge.textContent = n; chatBadge.classList.remove('hidden'); }
         function hideBadge() { chatBadge.classList.add('hidden'); }
-        
+
         function openWidget() {
             chatWidget.classList.remove('hidden');
             widgetEverOpened = true;
@@ -561,24 +731,24 @@ REMEMBER: City pages get high-intent visitors. They searched for HVAC in ${PAGE_
                 hasGreeted = true;
                 setTimeout(() => {
                     addBotMessage(
-                        `Hi! 👋 I'm Tempi from Mechanical Temp. We serve ${PAGE_CITY} and the surrounding area — how can I help you today?`,
+                        `Hi! I'm Tempi from Mechanical Temp. We serve ${PAGE_CITY} and the surrounding area — how can I help you today?`,
                         ["Schedule service", "Get a quote", "Emergency repair", "Just a question"]
                     );
                 }, 300);
             }
             setTimeout(() => inputEl.focus(), 100);
         }
-        
+
         function closeWidget() {
             chatWidget.classList.add('hidden');
             if (conversationHistory.length > 0 && !leadCaptured) showBadge('!');
         }
-        
+
         function toggleWidget() {
             if (chatWidget.classList.contains('hidden')) openWidget();
             else closeWidget();
         }
-        
+
         async function sendToClaude(userMessage) {
             conversationHistory.push({ role: 'user', content: userMessage });
             try {
@@ -599,31 +769,31 @@ REMEMBER: City pages get high-intent visitors. They searched for HVAC in ${PAGE_
                 return reply;
             } catch (err) {
                 console.error('Claude call failed:', err);
-                return "I'm having trouble connecting right now 😕 Please call us at (313) 282-4758 and we'll help you right away! [BTN: Try again | Call now]";
+                return "I'm having trouble connecting right now. Please call us at (313) 282-4758 and we'll help you right away! [BTN: Try again | Call now]";
             }
         }
-        
+
         function extractLeadInfo(conversation, leadType) {
             const fullText = conversation.map(m => m.content).join('\n');
             const phoneMatch = fullText.match(/(\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/);
             const typeLabels = {
-                'SERVICE_LEAD': '🚨 SERVICE LEAD',
-                'COMMERCIAL_DISPATCH': '🏢 COMMERCIAL DISPATCH - URGENT',
-                'PAPERWORK': '📋 PAPERWORK REQUEST',
-                'BILLING': '💰 BILLING INQUIRY',
-                'VENDOR_SALES': '🤝 VENDOR/SALES PITCH',
-                'EXISTING_CUSTOMER': '👤 EXISTING CUSTOMER FOLLOW-UP',
-                'GENERAL_INFO': 'ℹ️ GENERAL INFO REQUEST'
+                'SERVICE_LEAD': 'SERVICE LEAD',
+                'COMMERCIAL_DISPATCH': 'COMMERCIAL DISPATCH - URGENT',
+                'PAPERWORK': 'PAPERWORK REQUEST',
+                'BILLING': 'BILLING INQUIRY',
+                'VENDOR_SALES': 'VENDOR/SALES PITCH',
+                'EXISTING_CUSTOMER': 'EXISTING CUSTOMER FOLLOW-UP',
+                'GENERAL_INFO': 'GENERAL INFO REQUEST'
             };
-            const label = typeLabels[leadType] || '📩 CHAT INQUIRY';
+            const label = typeLabels[leadType] || 'CHAT INQUIRY';
             return {
                 from_name: `Tempi (${PAGE_CITY} Page) - ${label}`,
                 phone: phoneMatch ? phoneMatch[0] : 'See transcript',
-                message: `${label}\n=========================================\n\nSource: ${PAGE_CITY.toUpperCase()} CITY PAGE\nConversation Type: ${leadType}\nTime: ${new Date().toLocaleString('en-US', { timeZone: 'America/Detroit' })} ET\n\n--- FULL TRANSCRIPT ---\n\n` + 
+                message: `${label}\n=========================================\n\nSource: ${PAGE_CITY.toUpperCase()} CITY PAGE\nConversation Type: ${leadType}\nTime: ${new Date().toLocaleString('en-US', { timeZone: 'America/Detroit' })} ET\n\n--- FULL TRANSCRIPT ---\n\n` +
                     conversation.map(m => `[${m.role === 'user' ? 'CUSTOMER' : 'TEMPI'}]: ${m.content.replace(/\[LEAD_READY:[^\]]+\]/g,'').replace(/\[LEAD_READY\]/g,'').replace(/\[BTN:[^\]]+\]/g,'').trim()}`).join('\n\n')
             };
         }
-        
+
         async function fireLeadEmail(leadType) {
             if (leadCaptured) return;
             leadCaptured = true;
@@ -632,14 +802,14 @@ REMEMBER: City pages get high-intent visitors. They searched for HVAC in ${PAGE_
                 await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, leadData);
                 console.log(`Lead email sent: ${leadType}`);
                 if (typeof gtag !== 'undefined') {
-                    gtag('event', 'chat_lead', { 
+                    gtag('event', 'chat_lead', {
                         'event_category': 'conversion',
-                        'event_label': leadType + '_' + PAGE_CITY.toLowerCase().replace(/ /g,'_') + '_page'
+                        'event_label': leadType + '_' + PAGE_SLUG + '_page'
                     });
                 }
             } catch (err) { console.error('Lead email failed:', err); leadCaptured = false; }
         }
-        
+
         async function handleSend(text) {
             text = (text || inputEl.value).trim();
             if (!text) return;
@@ -662,13 +832,13 @@ REMEMBER: City pages get high-intent visitors. They searched for HVAC in ${PAGE_
             inputEl.disabled = false;
             inputEl.focus();
         }
-        
+
         chatBubble.addEventListener('click', toggleWidget);
         closeBtn.addEventListener('click', closeWidget);
         sendBtn.addEventListener('click', () => handleSend());
         inputEl.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } });
         inputEl.addEventListener('input', () => { inputEl.style.height = 'auto'; inputEl.style.height = Math.min(inputEl.scrollHeight, 80) + 'px'; });
-        
+
         setTimeout(() => { if (!widgetEverOpened) showBadge('1'); }, 12000);
     })();
     </script>
