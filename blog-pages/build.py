@@ -74,7 +74,11 @@ def parse_post(path):
         if ":" not in line:
             raise ValueError(f"bad frontmatter line: {line!r}")
         key, _, val = line.partition(":")
-        meta[key.strip().lower()] = val.strip()
+        val = val.strip()
+        # allow quoted values so titles containing a colon stay valid YAML
+        if len(val) >= 2 and val[0] == val[-1] and val[0] in ("'", '"'):
+            val = val[1:-1]
+        meta[key.strip().lower()] = val
 
     meta["slug"] = path.stem
     meta["body_md"] = parts[2].strip()
