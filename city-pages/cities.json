@@ -1,8 +1,8 @@
 [
-  { "city": "Berkley",          "slug": "berkley",          "landmark": "downtown Berkley",             "road": "Twelve Mile Road" },
+  { "city": "Berkley",          "slug": "berkley",          "landmark": "the Berkley Historical Museum", "road": "Twelve Mile Road" },
   { "city": "Beverly Hills",    "slug": "beverly-hills",    "landmark": "Beverly Park",                 "road": "Southfield Road" },
-  { "city": "Bingham Farms",    "slug": "bingham-farms",    "landmark": "the Bingham office corridor",  "road": "Telegraph Road" },
-  { "city": "Birmingham",       "slug": "birmingham",       "landmark": "Shain Park",                   "road": "Woodward Avenue" },
+  { "city": "Bingham Farms",    "slug": "bingham-farms",    "landmark": "the historic Bingham House",   "road": "Telegraph Road" },
+  { "city": "Birmingham",       "slug": "birmingham",       "landmark": "the Old Woodward shopping district", "road": "Maple Road" },
   { "city": "Canton",           "slug": "canton",           "landmark": "Cherry Hill Village",          "road": "Ford Road" },
   { "city": "Dearborn",         "slug": "dearborn",         "landmark": "The Henry Ford",               "road": "Michigan Avenue" },
   { "city": "Dearborn Heights", "slug": "dearborn-heights", "landmark": "Warren Valley",                "road": "Ford Road" },
