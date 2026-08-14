@@ -1,14 +1,13 @@
 ---
-title: Zap Static and Dry Skin: Why Your Michigan Home Needs a Whole-House Humidifier
+title: "Zap Static and Dry Skin: Why Your Michigan Home Needs a Whole-House Humidifier"
 subtitle: Stop relying on those tiny portable units. Upgrade your comfort and health this winter.
 description: Tired of dry skin, static shock, and scratchy throats? Discover why a whole-house humidifier is the secret to winter comfort in Michigan.
 category: Indoor Air Quality
 date: 2025-12-05
-image: https://images.unsplash.com/photo-1516455590571-18256e5bb9ff?q=80&w=2070&auto=format&fit=crop
+image: "https://images.unsplash.com/photo-1516455590571-18256e5bb9ff?q=80&w=2070&auto=format&fit=crop"
 excerpt: Tired of dry skin, static shock, and scratchy throats? Discover why a whole-house humidifier is the secret to winter comfort in Michigan.
 managed: true
 ---
-
 Winter in Michigan means two things: freezing temperatures outside and desert-dry air inside. As your furnace runs constantly to keep you warm, it also strips moisture from the air. This leads to itchy skin, painful static shocks, and increased susceptibility to colds and flu.
 
 While portable humidifiers can help a single room, a **whole-house humidifier** installed directly into your HVAC system is the ultimate solution.
