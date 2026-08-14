@@ -20,6 +20,7 @@ JSON-LD @id — all of which must NOT vary per city.
 
 import argparse
 import json
+import math
 import re
 import sys
 from pathlib import Path
@@ -28,7 +29,9 @@ HERE = Path(__file__).parent
 TEMPLATE = HERE / "template.html"
 CITIES = HERE / "cities.json"
 
-TOKENS = ("CITY", "SLUG", "LANDMARK", "ROAD")
+TOKENS = ("CITY", "SLUG", "LANDMARK", "ROAD", "NEARBY")
+
+NEARBY_COUNT = 6
 
 
 def load():
@@ -66,9 +69,30 @@ def extract_jsonld(html):
     return [json.loads(b) for b in blocks]
 
 
-def build_one(tpl, entry, outdir):
-    for key in ("city", "slug", "landmark", "road"):
-        if not entry.get(key):
+
+def distance(a, b):
+    """Rough great-circle miles between two city entries."""
+    lat1, lng1 = math.radians(a["lat"]), math.radians(a["lng"])
+    lat2, lng2 = math.radians(b["lat"]), math.radians(b["lng"])
+    dlat, dlng = lat2 - lat1, lng2 - lng1
+    h = math.sin(dlat / 2) ** 2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlng / 2) ** 2
+    return 3958.8 * 2 * math.asin(math.sqrt(h))
+
+
+def nearby_html(entry, all_cities, count=NEARBY_COUNT):
+    """Closest `count` other cities, rendered as links."""
+    others = [c for c in all_cities if c["slug"] != entry["slug"] and "lat" in c and "lng" in c]
+    others.sort(key=lambda c: distance(entry, c))
+    links = [
+        f'<a href="{c["slug"]}.html" class="text-sky-600 hover:text-sky-800 underline">{c["city"]}</a>'
+        for c in others[:count]
+    ]
+    return " &bull;\n                    ".join(links)
+
+
+def build_one(tpl, entry, outdir, all_cities):
+    for key in ("city", "slug", "landmark", "road", "lat", "lng"):
+        if entry.get(key) in (None, ""):
             print(f"  SKIP {entry.get('slug') or entry.get('city') or '?'}: missing '{key}'")
             return None
 
@@ -77,6 +101,7 @@ def build_one(tpl, entry, outdir):
     html = html.replace("{{SLUG}}", entry["slug"])
     html = html.replace("{{LANDMARK}}", entry["landmark"])
     html = html.replace("{{ROAD}}", entry["road"])
+    html = html.replace("{{NEARBY}}", nearby_html(entry, all_cities))
 
     leftover = re.findall(r"\{\{(\w+)\}\}", html)
     if leftover:
@@ -123,6 +148,8 @@ def main():
     if dupes:
         sys.exit(f"duplicate slugs in cities.json: {sorted(dupes)}")
 
+    all_cities = list(cities)
+
     if args.only:
         cities = [c for c in cities if c.get("slug") == args.only]
         if not cities:
@@ -133,7 +160,7 @@ def main():
 
     written, failed = [], 0
     for entry in cities:
-        path = build_one(tpl, entry, outdir)
+        path = build_one(tpl, entry, outdir, all_cities)
         if path:
             written.append(path)
             print(f"  ok   {path.name}")
