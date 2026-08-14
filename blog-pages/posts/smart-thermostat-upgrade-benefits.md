@@ -1,4 +1,3 @@
-[smart-thermostat-upgrade-benefits.md](https://github.com/user-attachments/files/31081058/smart-thermostat-upgrade-benefits.md)
 ---
 title: The Best Tech Gift for 2025? Why You Should Upgrade to a Smart Thermostat
 subtitle: Give the gift of lower energy bills and total comfort this holiday season.
