@@ -1,0 +1,71 @@
+{
+  "protocolVersion": "1.0",
+  "name": "Tempi — Mechanical Temp Service Desk",
+  "description": "Front-desk agent for Mechanical Temp LLC, a licensed HVAC and mechanical contractor (Michigan license #7117025) serving Metro Detroit. Accepts service requests, maintenance-contract inquiries, and quote requests for commercial and residential HVAC, refrigeration, boilers, water heaters, and building automation. Requests are reviewed by a human before any appointment or price is committed.",
+  "version": "0.1.0",
+  "provider": {
+    "organization": "Mechanical Temp LLC",
+    "url": "https://mechanicaltemp.com"
+  },
+  "url": "https://tempi-agent.summer-unit-44dd.workers.dev/a2a",
+  "supportedInterfaces": [
+    {
+      "url": "https://tempi-agent.summer-unit-44dd.workers.dev/a2a",
+      "protocolBinding": "JSONRPC",
+      "protocolVersion": "1.0"
+    }
+  ],
+  "documentationUrl": "https://mechanicaltemp.com/assistant.html",
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "stateTransitionHistory": false
+  },
+  "defaultInputModes": ["text/plain", "application/json"],
+  "defaultOutputModes": ["text/plain", "application/json"],
+  "skills": [
+    {
+      "id": "request_service",
+      "name": "Request service",
+      "description": "Report an equipment problem and request a technician. Include facility name, full address, equipment type, symptoms, urgency, and an on-site contact with phone number. Mechanical Temp confirms timing and pricing directly; no appointment is final until confirmed.",
+      "tags": ["hvac", "repair", "dispatch", "rtu", "refrigeration", "boiler", "water heater", "emergency"],
+      "examples": [
+        "RTU-1 at a retail store in Southfield, MI is blowing warm air; store manager on site, medium priority.",
+        "Walk-in cooler at a restaurant in Redford, MI is at 48°F and rising; urgent."
+      ],
+      "inputModes": ["text/plain", "application/json"],
+      "outputModes": ["text/plain", "application/json"]
+    },
+    {
+      "id": "request_maintenance_contract",
+      "name": "Request a maintenance contract",
+      "description": "Request a preventive-maintenance proposal. Include facility name and address, equipment inventory with counts (RTUs, splits, boilers, refrigeration, etc.), approximate square footage, desired visit frequency, and decision-maker contact.",
+      "tags": ["maintenance", "pm", "contract", "commercial", "proposal"],
+      "examples": [
+        "Need 2x/year PM on 12 RTUs and 4 split systems at a 60,000 sq ft office building in Troy, MI."
+      ],
+      "inputModes": ["text/plain", "application/json"],
+      "outputModes": ["text/plain", "application/json"]
+    },
+    {
+      "id": "request_quote",
+      "name": "Request a quote",
+      "description": "Request pricing for replacement, installation, or project work. Include site address, existing equipment details (make, model, tonnage or BTU if known), scope, and timeline.",
+      "tags": ["quote", "estimate", "replacement", "installation"],
+      "examples": [
+        "Quote to replace a 10-ton RTU on a single-story building in Livonia, MI within 30 days."
+      ],
+      "inputModes": ["text/plain", "application/json"],
+      "outputModes": ["text/plain", "application/json"]
+    }
+  ],
+  "serviceArea": {
+    "region": "Metro Detroit, Michigan",
+    "base": "23093 Telegraph Rd, Southfield, MI 48033"
+  },
+  "humanContact": {
+    "phone": "+1-313-282-4758",
+    "email": "office@mechanicaltemp.com",
+    "customerPortal": "https://customer.mechanicaltemp.com/"
+  }
+}
