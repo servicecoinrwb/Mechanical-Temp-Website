@@ -21,100 +21,47 @@
     "pushNotifications": false,
     "stateTransitionHistory": false
   },
-  "defaultInputModes": [
-    "text/plain",
-    "application/json"
-  ],
-  "defaultOutputModes": [
-    "text/plain",
-    "application/json"
-  ],
+  "defaultInputModes": ["text/plain", "application/json"],
+  "defaultOutputModes": ["text/plain", "application/json"],
   "skills": [
     {
       "id": "request_service",
       "name": "Request service",
       "description": "Report an equipment problem and request a technician. Send a data part: {skill:'request_service', customer, contact_phone, address, issue} plus optional contact_name, contact_email, urgency (normal|emergency), equipment, preferred_date (YYYY-MM-DD), preferred_time (HH:MM), requester. Returns a reference and a tentative window; nothing is scheduled until a Mechanical Temp team member confirms.",
-      "tags": [
-        "hvac",
-        "repair",
-        "dispatch",
-        "rtu",
-        "refrigeration",
-        "boiler",
-        "water heater",
-        "emergency"
-      ],
+      "tags": ["hvac", "repair", "dispatch", "rtu", "refrigeration", "boiler", "water heater", "emergency"],
       "examples": [
         "RTU-1 at a retail store in Southfield, MI is blowing warm air; store manager on site, medium priority.",
         "Walk-in cooler at a restaurant in Redford, MI is at 48°F and rising; urgent."
       ],
-      "inputModes": [
-        "text/plain",
-        "application/json"
-      ],
-      "outputModes": [
-        "text/plain",
-        "application/json"
-      ]
+      "inputModes": ["text/plain", "application/json"],
+      "outputModes": ["text/plain", "application/json"]
     },
     {
       "id": "check_availability",
       "name": "Check availability",
       "description": "Get open service windows for an address. Send a data part: {skill:'check_availability', address, urgency?}. Returns dates and times only; windows are tentative until confirmed.",
-      "tags": [
-        "availability",
-        "scheduling"
-      ],
-      "examples": [
-        "What openings do you have for 23093 Telegraph Rd, Southfield, MI?"
-      ],
-      "inputModes": [
-        "application/json"
-      ],
-      "outputModes": [
-        "application/json"
-      ]
+      "tags": ["availability", "scheduling"],
+      "examples": ["What openings do you have for 23093 Telegraph Rd, Southfield, MI?"],
+      "inputModes": ["application/json"],
+      "outputModes": ["application/json"]
     },
     {
       "id": "request_maintenance_contract",
       "name": "Request a maintenance contract",
       "description": "Request a preventive-maintenance proposal. Send a data part: {skill:'request_maintenance_contract', customer, contact_phone, address, details} plus optional contact_name, contact_email, equipment (e.g. '12 RTUs, 4 splits'), square_feet, visit_frequency, timeline, requester. Returns a reference; a Mechanical Temp team member follows up with a proposal. Nothing is committed until then.",
-      "tags": [
-        "maintenance",
-        "pm",
-        "contract",
-        "commercial",
-        "proposal"
-      ],
-      "examples": [
-        "Need 2x/year PM on 12 RTUs and 4 split systems at a 60,000 sq ft office building in Troy, MI."
-      ],
-      "inputModes": [
-        "application/json"
-      ],
-      "outputModes": [
-        "application/json"
-      ]
+      "tags": ["maintenance", "pm", "contract", "commercial", "proposal"],
+      "examples": ["Need 2x/year PM on 12 RTUs and 4 split systems at a 60,000 sq ft office building in Troy, MI."],
+      "inputModes": ["application/json"],
+      "outputModes": ["application/json"]
     },
     {
       "id": "request_quote",
       "name": "Request a quote",
       "description": "Request pricing for replacement, installation, or project work. Send a data part: {skill:'request_quote', customer, contact_phone, address, details} plus optional contact_name, contact_email, equipment (make/model/tonnage if known), timeline, requester. Returns a reference; a Mechanical Temp team member follows up with pricing. Nothing is committed until then.",
-      "tags": [
-        "quote",
-        "estimate",
-        "replacement",
-        "installation"
-      ],
-      "examples": [
-        "Quote to replace a 10-ton RTU on a single-story building in Livonia, MI within 30 days."
-      ],
-      "inputModes": [
-        "application/json"
-      ],
-      "outputModes": [
-        "application/json"
-      ]
+      "tags": ["quote", "estimate", "replacement", "installation"],
+      "examples": ["Quote to replace a 10-ton RTU on a single-story building in Livonia, MI within 30 days."],
+      "inputModes": ["application/json"],
+      "outputModes": ["application/json"]
     }
   ],
   "serviceArea": {
