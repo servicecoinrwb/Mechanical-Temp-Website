@@ -2,7 +2,7 @@
   "protocolVersion": "1.0",
   "name": "Tempi — Mechanical Temp Service Desk",
   "description": "Front-desk agent for Mechanical Temp LLC, a licensed HVAC and mechanical contractor (Michigan license #7117025) serving Metro Detroit. Accepts service requests, maintenance-contract inquiries, and quote requests for commercial and residential HVAC, refrigeration, boilers, water heaters, and building automation. Requests are reviewed by a human before any appointment or price is committed.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "provider": {
     "organization": "Mechanical Temp LLC",
     "url": "https://mechanicaltemp.com"
@@ -78,7 +78,7 @@
     {
       "id": "request_maintenance_contract",
       "name": "Request a maintenance contract",
-      "description": "Request a preventive-maintenance proposal. Include facility name and address, equipment inventory with counts (RTUs, splits, boilers, refrigeration, etc.), approximate square footage, desired visit frequency, and decision-maker contact. Currently handled by the office directly; the endpoint returns human contact details.",
+      "description": "Request a preventive-maintenance proposal. Send a data part: {skill:'request_maintenance_contract', customer, contact_phone, address, details} plus optional contact_name, contact_email, equipment (e.g. '12 RTUs, 4 splits'), square_feet, visit_frequency, timeline, requester. Returns a reference; a Mechanical Temp team member follows up with a proposal. Nothing is committed until then.",
       "tags": [
         "maintenance",
         "pm",
@@ -90,18 +90,16 @@
         "Need 2x/year PM on 12 RTUs and 4 split systems at a 60,000 sq ft office building in Troy, MI."
       ],
       "inputModes": [
-        "text/plain",
         "application/json"
       ],
       "outputModes": [
-        "text/plain",
         "application/json"
       ]
     },
     {
       "id": "request_quote",
       "name": "Request a quote",
-      "description": "Request pricing for replacement, installation, or project work. Include site address, existing equipment details (make, model, tonnage or BTU if known), scope, and timeline. Currently handled by the office directly; the endpoint returns human contact details.",
+      "description": "Request pricing for replacement, installation, or project work. Send a data part: {skill:'request_quote', customer, contact_phone, address, details} plus optional contact_name, contact_email, equipment (make/model/tonnage if known), timeline, requester. Returns a reference; a Mechanical Temp team member follows up with pricing. Nothing is committed until then.",
       "tags": [
         "quote",
         "estimate",
@@ -112,11 +110,9 @@
         "Quote to replace a 10-ton RTU on a single-story building in Livonia, MI within 30 days."
       ],
       "inputModes": [
-        "text/plain",
         "application/json"
       ],
       "outputModes": [
-        "text/plain",
         "application/json"
       ]
     }
