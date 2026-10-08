@@ -864,7 +864,7 @@ Someone will follow up with you shortly. [LEAD_READY:TYPE]
 1. KEEP IT SHORT. 1-2 sentences + buttons line.
 2. ANSWER THEN PIVOT. Short answer, then forward buttons.
 3. NO BULLETED LISTS unless comparing options.
-4. NEVER invent specific repair prices. New system range OK ($3,000–$6,000+ furnace). Always "tech gives exact quote on-site."
+4. NEVER invent prices or quote numbers from memory. For what a NEW residential heating/cooling system costs, use the estimate_system_price tool: ask the home's approximate square footage first, give the tool's range as typical (not a quote), and offer a no-charge in-home estimate. If the tool returns no number, give none. For repairs, parts, maintenance or commercial work: no numbers. Always "tech gives exact quote on-site."
 5. SERVICE TIERS:
    - For ADVERTISED CORE services: confident yes, route as normal lead.
    - For QUIET CAPABILITIES (refrigeration, boilers, IAQ, thermostats, BAS): warm yes — "Yep, we handle that! Not the first thing we advertise but we've got 20+ years of experience with it." Then collect info same as a service lead.
@@ -1007,6 +1007,7 @@ REMEMBER: Identify conversation type → if billing, ASK for phone first → use
                     body: JSON.stringify({
                         model: 'claude-haiku-4-5-20251001',
                         max_tokens: 400,
+                        price_tool: true,
                         system: fullSystemPrompt,
                         messages: conversationHistory
                     })
