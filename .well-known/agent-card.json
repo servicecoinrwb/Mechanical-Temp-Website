@@ -1,8 +1,8 @@
 {
   "protocolVersion": "1.0",
   "name": "Tempi — Mechanical Temp Service Desk",
-  "description": "Front-desk agent for Mechanical Temp LLC, a licensed HVAC and mechanical contractor (Michigan license #7117025) serving Metro Detroit. Accepts service requests, maintenance-contract inquiries, and quote requests for commercial and residential HVAC, refrigeration, boilers, water heaters, and building automation. Requests are reviewed by a human before any appointment or price is committed.",
-  "version": "0.3.0",
+  "description": "Front-desk agent for Mechanical Temp LLC, a licensed HVAC and mechanical contractor (Michigan license #7117025) serving Metro Detroit. Accepts service requests, maintenance-contract inquiries, and quote requests for commercial and residential HVAC, refrigeration, boilers, water heaters, and building automation, and gives typical price ranges for residential system replacements. Requests are reviewed by a human before any appointment or price is committed.",
+  "version": "0.4.0",
   "provider": {
     "organization": "Mechanical Temp LLC",
     "url": "https://mechanicaltemp.com"
@@ -62,6 +62,15 @@
       "examples": ["Quote to replace a 10-ton RTU on a single-story building in Livonia, MI within 30 days."],
       "inputModes": ["application/json"],
       "outputModes": ["application/json"]
+    },
+    {
+      "id": "estimate_price",
+      "name": "Residential system price range",
+      "description": "Typical installed price range for replacing a home's central AC and gas furnace (or a heat pump system) in Metro Detroit. Residential only. Send a data part: {skill:'estimate_price', sqft} plus optional year_built and current_tons. Returns a rounded low-high range, not a quote; homes large enough to need more than one system get no range. For an exact price, use request_quote, which leads to a no-charge in-home estimate.",
+      "tags": ["pricing", "estimate", "residential", "replacement", "furnace", "air conditioning"],
+      "examples": ["What does a new furnace and AC typically cost for an 1,800 sq ft house in Redford, MI?"],
+      "inputModes": ["application/json"],
+      "outputModes": ["text/plain", "application/json"]
     }
   ],
   "serviceArea": {
